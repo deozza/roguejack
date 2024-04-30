@@ -1,10 +1,14 @@
 <script lang="ts">
+	import { BattleStore } from '$lib/stores/battle';
 	import type { CharacterStore } from '$lib/stores/character';
 	import PlayingCard from '$lib/ui/playingCard/PlayingCard.svelte';
     import type { PageData } from './$types';
-	import { ProgressBar } from '@skeletonlabs/skeleton';
-    
+	import { ProgressBar, type ModalSettings } from '@skeletonlabs/skeleton';
+    import { initializeStores,getModalStore, Modal } from '@skeletonlabs/skeleton';
+
 	export let data: PageData;
+
+    const modalStore = getModalStore();
 
     function getMeterColor(player: CharacterStore): string {
         if (player.currentLife > player.maxLife * 0.75) {
@@ -21,43 +25,38 @@
     function draw() {
         const drawnCard = data.player.deck.drawTopCard();
         if(drawnCard !== undefined){
-            data.player.hand.cards = [...data.player.hand.cards, drawnCard];
+            data.player.hand = data.player.hand.addToHand(drawnCard);
+        }else{
+            data.player.currentLife = 0;
+            const modal: ModalSettings = {
+                type: 'component',
+                title: 'You lose',
+                body: 'There was no cards left to draw',
+                component: 'modalDeckOut'
+            };
+            modalStore.trigger(modal);
         }
     }
 
     function fight() {
-        const playerValue = 777;
-        const enemyValue = data.enemy.hand.getHandValue();
+        const battle = new BattleStore(data.player, data.enemy);
+        const damages = battle.getDamages();
 
-        if(playerValue === enemyValue){
-            return;
-        }
+        data.player.currentLife -= damages.damagesToPlayer;
+        data.enemy.currentLife -= damages.damagesToEnemy;
 
-        let damages: number = 0;
-        if(playerValue === 777) {
-            damages = (21 - enemyValue) * 2;
-        } else if(enemyValue === 777) {
-            damages = (21 - playerValue) * 2;
-        } else {
-            damages = playerValue - enemyValue;
-        }
-
-        if(damages > 0){
-            data.enemy.currentLife -= damages;
-            if(data.enemy.currentLife < 0){
-                data.enemy.currentLife = 0;
-            }
-        } else {
-            data.player.currentLife += damages;
-            if(data.player.currentLife < 0){
-                data.player.currentLife = 0;
-            }
+        if(data.player.currentLife <= 0){
+            const modal: ModalSettings = {
+                type: 'alert',
+                title: 'You lose',
+                body: 'You have been defeated',
+            };
+            modalStore.trigger(modal);
         }
     }
 
     
 </script>
-
 
 <h1 class="h1">BATTLE</h1>
 

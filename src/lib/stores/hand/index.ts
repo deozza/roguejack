@@ -2,17 +2,20 @@ import type { CardStore } from '../card';
 
 export class HandStore {
     public cards: Array<CardStore> = [];
-        
+    public score: number = 0;
+    public isBlackJack: boolean = false;
+    public isBusted: boolean = false;
+
     public getHandSize() {
         return this.cards.length;
     }
     
     public addToHand(card: CardStore): HandStore {
         this.cards.push(card);
-        return this;
+        return this.setScore();
     }
 
-    public getHandValue(): number {
+    public setScore(): HandStore {
         let score: number = 0;
         let figuresCount: number = 0;
         let acesCount: number = 0;
@@ -30,8 +33,10 @@ export class HandStore {
             }
         })
 
-        if(this.cards.length === (figuresCount + acesCount)) {
-            return 777;
+        if(this.cards.length === 2 && (figuresCount + acesCount) === 2) {
+            this.isBlackJack = true;
+            this.score = 21;
+            return this;
         }
 
         for(let i: number = 0; i < acesCount; i++) {
@@ -42,7 +47,13 @@ export class HandStore {
             }
         }
 
-        return score;
+        this.score = score;
+
+        if(this.score > 21) {
+            this.isBusted = true;
+        }
+
+        return this;
     }
 }
 

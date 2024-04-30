@@ -25,7 +25,7 @@ export const load: PageLoad = async () => {
 	enemy.currentLife = 5;
 	enemy.deck.createDeck();
 	enemy.deck.shuffleDeck();
-	card = player.deck.drawTopCard();
+	card = enemy.deck.drawTopCard();
 	if(card !== undefined) {
 		enemy.hand.addToHand(card);
 	}

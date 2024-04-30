@@ -1,7 +1,17 @@
 <script lang="ts">
+	import ModalDeckOut from '$lib/ui/modal/ModalDeckOut.svelte';
 	import '../app.postcss';
-	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
+	import { AppShell, AppBar, Modal, initializeStores, type ModalComponent } from '@skeletonlabs/skeleton';
+
+	initializeStores();
+
+	const modalRegistry: Record<string, ModalComponent> = {
+	// Set a unique modal ID, then pass the component reference
+	modalDeckOut: { ref: ModalDeckOut },
+	// ...
+};
 </script>
+<Modal components={modalRegistry}/>
 
 <!-- App Shell -->
 <AppShell>
