@@ -9,7 +9,7 @@
 		<!-- App Bar -->
 		<AppBar>
 			<svelte:fragment slot="lead">
-				<strong class="text-xl uppercase">Skeleton</strong>
+				<strong class="text-xl uppercase">Roguejack</strong>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				<a
@@ -39,6 +39,9 @@
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
-	<!-- Page Route Content -->
-	<slot />
+	<main class="container h-full mx-auto flex justify-center items-center">
+		<div class="space-y-10 text-center flex flex-col items-center w-11/12">
+			<slot />
+		</div>
+	</main>	
 </AppShell>
