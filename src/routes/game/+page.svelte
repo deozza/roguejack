@@ -3,18 +3,21 @@
 	import { EnemyStore, type CharacterStore } from '$lib/stores/character';
 	import PlayingCard from '$lib/ui/playingCard/PlayingCard.svelte';
     import type { PageData } from './$types';
-	import { ProgressBar, getToastStore, type ModalSettings, type ToastSettings } from '@skeletonlabs/skeleton';
+	import { ProgressBar, type ModalSettings } from '@skeletonlabs/skeleton';
     import { getModalStore } from '@skeletonlabs/skeleton';
 	import { onMount } from 'svelte';
     import "iconify-icon";
+	import Deck from '$lib/ui/deck/Deck.svelte';
+	import { fade } from 'svelte/transition';
+	import Damages from '$lib/ui/damages/Damages.svelte';
 
 	export let data: PageData;
     let card: CardStore|undefined;
-    let loadingCount: number = 5;
-    let loaderInterval : NodeJS.Timeout | null = null;
+    let endOfTurn: boolean = false;
+    let damageMessage: string = "";
+    let endOfBattle: boolean = false; 
 
     const modalStore = getModalStore();
-    const toastStore = getToastStore();
 
     onMount(() => {
         if(data.battle.battleState !== 'started') {
@@ -39,6 +42,7 @@
 
         data.battle.battleNumber = data.battle.battleNumber + 1;
         data.battle.turnNumber = 1;
+        endOfBattle = false;
     }
 
     function initBattle() {
@@ -91,9 +95,10 @@
             return;
         }
         const damages = data.battle.getDamages();
+        damageMessage = data.battle.getDamagesMessage(damages);
 
-        data.battle.player.currentLife -= damages.damagesToPlayer;
-        data.battle.enemy.currentLife -= damages.damagesToEnemy;
+        data.battle.player.currentLife = Math.max(data.battle.player.currentLife - damages.damagesToPlayer, 0);
+        data.battle.enemy.currentLife = Math.max(data.battle.enemy.currentLife - damages.damagesToEnemy, 0);
 
         if(data.battle.player.currentLife <= 0){
             const modal: ModalSettings = {
@@ -107,49 +112,30 @@
         }
 
         if(data.battle.enemy.currentLife <= 0){
-            const t: ToastSettings = {
-                message: 'You won this battle !',
-                autohide: false,
-                action: {
-                    label: 'Next battle',
-                    response: () => initNewBattle()
-                }
-            };
-            toastStore.trigger(t);
+            endOfBattle = true;
             return;
         }
 
         data.battle.battleState = 'reloading';
-
-        loaderInterval = setInterval(() => {
-            initNewTurn();
-        }, 1000);
+        endOfTurn = true;
     }
 
     function initNewTurn() {
-        loadingCount = loadingCount - 1;
-        if(loadingCount === 0 && loaderInterval !== null) {
-
-            data.battle.player.putHandIntoDiscard();
-            data.battle.enemy.putHandIntoDiscard();
-            data.battle.turnNumber = data.battle.turnNumber+1;
-            initBattle();
-            loadingCount = 5;
-            clearInterval(loaderInterval)
-        }
+        damageMessage = "";
+        data.battle.player.putHandIntoDiscard();
+        data.battle.enemy.putHandIntoDiscard();
+        data.battle.turnNumber = data.battle.turnNumber+1;
+        endOfTurn = false;
+        initBattle();
     }
 </script>
 
 <h1 class="h1">BATTLE {data.battle.battleNumber}</h1>
-<h2 class="h2">
-    Turn {data.battle.turnNumber}
-    {#if data.battle.battleState === 'reloading'}    
-        <span class="h4">
-            New turn in {loadingCount}
-            <iconify-icon icon="line-md:loading-loop"></iconify-icon>
-        </span>
-    {/if}
-</h2>
+<div class="flex flex-row items-center">
+    <h2 class="h2 items-center">
+        Turn {data.battle.turnNumber}
+    </h2>
+</div>
 
 <div class="flex flex-row flex-wrap w-full justify-between">
     <div class="flex flex-col w-1/3 items-center space-y-6">
@@ -161,11 +147,7 @@
                     <ProgressBar value={data.battle.player.currentLife} max={data.battle.player.maxLife} meter={getMeterColor(data.battle.player)} />
                 </div>
             </div>
-            <div class="flex flex-col items-center justify-center rounded-xl card-hover p-2 bg-gradient-to-br from-primary-900 to-tertiary-900 h-32 w-24">
-                <span class="h4 font-semibold">
-                    {data.battle.player.deck.getDeckSize()} / 52
-                </span>
-            </div>
+            <Deck deckSize={data.battle.player.deck.getDeckSize()} />
         </div>
 
         <div class="flex flex-row justify-left items-center overflow-x-auto w-full">
@@ -173,18 +155,8 @@
                 <PlayingCard card={card} />
             {/each}
         </div>
-        {#if data.battle.battleState === 'reloading'}
-            <div class="flex flex-row justify-center items-center w-full">
-                <span class="text-4xl text-red-500">
-                    {#if data.battle.player.hand.isBusted === false}
-                        <iconify-icon icon="game-icons:battle-axe"></iconify-icon>                    
-                        {data.battle.player.hand.score}
-                    {:else}
-                        <iconify-icon icon="game-icons:broken-axe"></iconify-icon>                    
-                        {data.battle.player.hand.score - 21}
-                    {/if}
-                </span>
-            </div>
+        {#if data.battle.battleState !== 'playing'}
+            <Damages currentHand={data.battle.player.hand} opponentHand={data.battle.enemy.hand}/>
         {/if}
     </div>
     <div class="flex flex-col justify-center">
@@ -203,29 +175,37 @@
                     <ProgressBar value={data.battle.enemy.currentLife} max={data.battle.enemy.maxLife} meter={getMeterColor(data.battle.enemy)} />
                 </div>
             </div>
-            <div class="flex flex-col items-center justify-center rounded-xl card-hover p-2 bg-gradient-to-br from-primary-900 to-tertiary-900 h-32 w-24">
-                <span class="h4 font-semibold">
-                    {data.battle.enemy.deck.getDeckSize()} / 52
-                </span>
-            </div>
+            <Deck deckSize={data.battle.enemy.deck.getDeckSize()} />
         </div>   
         <div class="flex flex-row justify-left items-center overflow-x-auto w-full">
             {#each data.battle.enemy.hand.cards as card}
                 <PlayingCard card={card} />
             {/each}
         </div>
-        {#if data.battle.battleState === 'reloading'}
-            <div class="flex flex-row justify-center items-center w-full">
-                <span class="text-4xl text-red-500">
-                    {#if data.battle.enemy.hand.isBusted === false}
-                        <iconify-icon icon="game-icons:battle-axe"></iconify-icon>
-                        {data.battle.enemy.hand.score}
-                    {:else}
-                        <iconify-icon icon="game-icons:broken-axe"></iconify-icon>
-                        {data.battle.enemy.hand.score - 21}
-                    {/if}
-                </span>
-            </div>
+        {#if data.battle.battleState !== 'playing'}
+            <Damages currentHand={data.battle.enemy.hand} opponentHand={data.battle.player.hand}/>
         {/if}
     </div>
 </div>
+
+{#if endOfTurn === true}
+    <div class="flex flex-row justify-between items-center bg-primary-900 rounded-md p-6 w-1/3" transition:fade>
+        <p class="text-xl font-semibold">
+            {damageMessage}
+        </p>
+        <button class="btn btn-md variant-filled-surface" on:click={initNewTurn}>New turn !</button>
+    </div>
+{/if}
+
+{#if endOfBattle === true}
+    <div class="flex flex-col justify-between items-center bg-success-500 rounded-md p-6 min-w-1/3 space-y-3" transition:fade>
+        <p class="text-xl text-black font-semibold">
+            {damageMessage}
+        </p>
+        <p class="text-xl text-black font-semibold">
+            You won this battle !
+        </p>
+        <button class="btn btn-md variant-filled-surface" on:click={initNewBattle}>New battle !</button>
+    </div>
+{/if}
+

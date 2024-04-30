@@ -60,6 +60,42 @@ export class BattleStore {
             damagesToEnemy: damagesToEnemy
         }
     }
+
+    public getDamagesMessage(damages: object): string {
+        let damageMessage = '';
+
+        if(damages.damagesToPlayer === 0 && damages.damagesToEnemy === 0) {
+            return 'No damages were inflicted.';
+        }
+
+        if(damages.damagesToPlayer > 0){
+            if(this.player.hand.isBusted) {
+                damageMessage += "You inflicted yourself ";
+            }else{
+                damageMessage += `You took `;
+            }
+
+            damageMessage += damages.damagesToPlayer + ' damages. '
+            if(this.enemy.hand.isBlackJack){
+                damageMessage += "Critical hit ! ";
+            }
+        }
+
+        if(damages.damagesToEnemy > 0){
+            if(this.enemy.hand.isBusted) {
+                damageMessage += "The enemy inflicted itself ";
+            }else{
+                damageMessage += `You inflicted `;
+            }
+
+            damageMessage += damages.damagesToEnemy + ' damages. '
+            if(this.enemy.hand.isBlackJack){
+                damageMessage += "Critical hit ! ";
+            }
+        }
+
+        return damageMessage;
+    }
 }
 
 export const battleStore = writable<BattleStore|null>(null);

@@ -2,7 +2,7 @@
 	import ModalDeckOut from '$lib/ui/modal/ModalDeckOut.svelte';
 	import ModalDied from '$lib/ui/modal/ModalDied.svelte';
 	import '../app.postcss';
-	import { AppShell, AppBar, Modal, initializeStores, type ModalComponent, Toast } from '@skeletonlabs/skeleton';
+	import { AppShell, AppBar, Modal, initializeStores, type ModalComponent } from '@skeletonlabs/skeleton';
 
 	initializeStores();
 
@@ -14,8 +14,6 @@
 	// ...
 };
 </script>
-<Toast />
-
 <Modal components={modalRegistry}/>
 
 <!-- App Shell -->
