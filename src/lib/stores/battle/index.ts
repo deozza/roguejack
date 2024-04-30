@@ -1,10 +1,14 @@
-import type { CharacterStore } from "../character";
+import { writable } from "svelte/store";
+import type { CharacterStore, EnemyStore } from "../character";
 
 export class BattleStore {
     public player: CharacterStore;
-    public enemy: CharacterStore;
+    public enemy: EnemyStore;
+    public battleNumber: number = 1;
+    public turnNumber: number = 1;
+    public battleState: string = 'started';
 
-    constructor(player: CharacterStore, enemy: CharacterStore) {
+    constructor(player: CharacterStore, enemy: EnemyStore) {
         this.player = player;
         this.enemy = enemy;
     }
@@ -12,6 +16,7 @@ export class BattleStore {
     public getDamages(): object {
         const playerPower: number = this.player.hand.score;
         const enemyPower: number = this.enemy.hand.score;
+
         let damagesToPlayer: number = 0;
         let damagesToEnemy: number = 0;
 
@@ -56,3 +61,5 @@ export class BattleStore {
         }
     }
 }
+
+export const battleStore = writable<BattleStore|null>(null);

@@ -1,16 +1,21 @@
 <script lang="ts">
 	import ModalDeckOut from '$lib/ui/modal/ModalDeckOut.svelte';
+	import ModalDied from '$lib/ui/modal/ModalDied.svelte';
 	import '../app.postcss';
-	import { AppShell, AppBar, Modal, initializeStores, type ModalComponent } from '@skeletonlabs/skeleton';
+	import { AppShell, AppBar, Modal, initializeStores, type ModalComponent, Toast } from '@skeletonlabs/skeleton';
 
 	initializeStores();
 
 	const modalRegistry: Record<string, ModalComponent> = {
 	// Set a unique modal ID, then pass the component reference
 	modalDeckOut: { ref: ModalDeckOut },
+	modalDied: { ref: ModalDied },
+
 	// ...
 };
 </script>
+<Toast />
+
 <Modal components={modalRegistry}/>
 
 <!-- App Shell -->
@@ -50,7 +55,7 @@
 		</AppBar>
 	</svelte:fragment>
 	<main class="container h-full mx-auto flex justify-center items-center">
-		<div class="space-y-10 text-center flex flex-col items-center w-11/12">
+		<div class="space-y-10 text-center flex flex-col items-center w-full">
 			<slot />
 		</div>
 	</main>	

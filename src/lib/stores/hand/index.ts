@@ -16,7 +16,7 @@ export class HandStore {
     }
 
     public setScore(): HandStore {
-        let score: number = 0;
+        this.score = 0;
         let figuresCount: number = 0;
         let acesCount: number = 0;
         const aceValue: number = 11;
@@ -26,28 +26,26 @@ export class HandStore {
             if (numberValue === 1) {
                 acesCount++;
             } else if (numberValue !== null && numberValue > 1) {
-                score += numberValue;
+                this.score += numberValue;
             } else if (figureValue) {
-                score += 10;
+                this.score += 10;
                 figuresCount++;
             }
         })
 
-        if(this.cards.length === 2 && (figuresCount + acesCount) === 2) {
+        if(this.cards.length === 2 && figuresCount === 1 && acesCount === 1) {
             this.isBlackJack = true;
             this.score = 21;
             return this;
         }
 
-        for(let i: number = 0; i < acesCount; i++) {
-            if (score + aceValue > 21) {
-                score += 1;
+        for(let i: number = 1; i <= acesCount; i++) {
+            if (this.score + aceValue > 21) {
+                this.score += 1;
             } else {
-                score += aceValue;
+                this.score += aceValue;
             }
         }
-
-        this.score = score;
 
         if(this.score > 21) {
             this.isBusted = true;
