@@ -2,8 +2,10 @@ import { CardStore } from '../card';
 
 export class DeckStore {
     public cards: Array<CardStore> = [];
+    public state: string = 'idle';
     
     public createDeck(): DeckStore {
+        this.state = 'creating';
         const suits: Array<string> = ['heart', 'diamond', 'club', 'spade'];
         const values: Array<string|number> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K'];
 
@@ -20,11 +22,15 @@ export class DeckStore {
             });
         });
 
+        this.state = 'idle';
+
         return this;
     }
     
     public shuffleDeck(): DeckStore {
+        this.state = 'shuffling';
         this.cards = this.cards.sort(() => Math.random() - 0.5);
+        this.state = 'idle';
         return this;
     }
     
@@ -32,8 +38,16 @@ export class DeckStore {
         return this.cards.length;
     }
     
-    public drawTopCard(): CardStore|undefined {
-        return this.cards.shift();
+    public drawTopCard(): CardStore|null {
+        this.state = 'drawing-top-card';
+        const card : CardStore | undefined = this.cards.shift();
+        if(card === undefined){
+            this.state = 'empty';
+            return null;
+        }
+        this.state = 'idle';
+
+        return card;
     }
 
     public addToDeck(card: CardStore): DeckStore {
@@ -41,5 +55,3 @@ export class DeckStore {
         return this;
     }
 }
-
-export const deckStore = new DeckStore();

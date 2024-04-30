@@ -11,5 +11,3 @@ export class DiscardStore {
         this.cards.push(card);
     }
 }
-
-export const discardStore = new DiscardStore();

@@ -1,16 +1,36 @@
-import { writable } from "svelte/store";
-import type { CharacterStore, EnemyStore } from "../character";
+import type {  EnemyStore } from "../character";
+import { TurnStore } from "../turn";
+import type { DeckStore } from "../deck";
 
 export class BattleStore {
-    public player: CharacterStore;
     public enemy: EnemyStore;
     public battleNumber: number = 1;
     public turnNumber: number = 1;
-    public battleState: string = 'started';
+    public state: string = 'idle';
+    public turns: Array<TurnStore> = [];
 
-    constructor(player: CharacterStore, enemy: EnemyStore) {
-        this.player = player;
+    constructor(enemy: EnemyStore) {
         this.enemy = enemy;
+    }
+
+    public initBattle(playerDeck: DeckStore): BattleStore {
+        this.state = 'initialization';
+        
+        const turn: TurnStore = new TurnStore();
+        this.state = 'player-drawing';
+
+        for(let i: number = 0; i < 2; i++) {
+            turn.playerTurn.addToHandCardTopCardFromDeck(playerDeck);
+        }
+
+        this.state = 'enemy-drawing';
+        turn.enemyTurn.addToHandCardTopCardFromDeck(this.enemy.deck);
+    
+        this.turns.push(turn);
+
+        this.state = 'initialized';
+
+        return this;
     }
 
     public getDamages(): object {
@@ -97,5 +117,3 @@ export class BattleStore {
         return damageMessage;
     }
 }
-
-export const battleStore = writable<BattleStore|null>(null);
