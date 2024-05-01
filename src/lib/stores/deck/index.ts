@@ -96,7 +96,7 @@ messageBusStore.subscribe((events) => {
       if(event.event === 'generate-player-deck'){
           playerDeckStore.generateDeck();
           event.state = 'resolved';
-
+          messageBusStore.addEvent('player-deck-generated');
       }
 
       if(event.event === 'player-deck-generated'){

@@ -2,6 +2,7 @@ import { get, writable } from 'svelte/store';
 import { messageBusStore } from '../messageBus';
 import { enemyHandStore, playerHandStore } from '../hand';
 import type { Card } from '../card';
+import { enemyDeckStore } from '../deck';
 
 type CharacterTurn = {
   score: number,
@@ -13,7 +14,6 @@ type Turn = {
   playerTurn: CharacterTurn,
   enemyTurn: CharacterTurn,
 }
-
 
 export const createTurnStore = () => {
   const { update, subscribe } = writable<Turn>({
@@ -87,6 +87,7 @@ function calculateScoreAccordingToHand(cards: Array<Card>) {
         if(cards.length === 2 && figuresCount === 1 && acesCount === 1) {
             isBlackJack = true;
             score = 21;
+            return { score, isBlackJack, isBusted };
         }
 
         for(let i: number = 1; i <= acesCount; i++) {
@@ -106,10 +107,6 @@ function calculateScoreAccordingToHand(cards: Array<Card>) {
 
 messageBusStore.subscribe((events) => {
     events.forEach((event) => {
-
-        if(event.state === 'pending'){
-          console.log(event.event)
-        }
 
         if(event.state !== 'sent'){
             return;
@@ -140,6 +137,17 @@ messageBusStore.subscribe((events) => {
 
         if(event.event === 'init-fight'){
           messageBusStore.updateEventState(event.id, 'pending');
+          turnStore.subscribe((value) => {
+            if(value.enemyTurn.score < 17){
+              const card: Card | null = enemyDeckStore.drawTopCard(enemyDeckStore.get(enemyDeckStore));
+              if(card === null){
+                messageBusStore.addEvent('enemy-deck-empty');
+              }else{
+                enemyHandStore.addToHand(card);
+                turnStore.updateEnemyScore();
+              }
+            }
+          })
         }
 
     });
