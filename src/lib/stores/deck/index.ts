@@ -1,57 +1,85 @@
-import { CardStore } from '../card';
+import { writable } from 'svelte/store';
+import { Card } from '../card';
 
-export class DeckStore {
-    public cards: Array<CardStore> = [];
-    public state: string = 'idle';
-    
-    public createDeck(): DeckStore {
-        this.state = 'creating';
+type Deck = {
+    cards: Array<Card>,
+    state: string
+}
+
+function createDeckStore() {
+    const { update, subscribe } = writable<Deck>({
+      cards: [],
+      state: 'idle',
+    });
+  
+    function generateDeck() {
+        update((store) => ({
+            ...store,
+            state: 'creating',
+          }));
+
         const suits: Array<string> = ['heart', 'diamond', 'club', 'spade'];
         const values: Array<string|number> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K'];
+        const cards: Array<Card> = [];
 
         suits.forEach((suit: string) => {
             values.forEach((value: string|number) => {
-                const card: CardStore = new CardStore();
+                const card: Card = new Card();
                 card.suit = suit;
                 if(typeof value === 'number') {
                     card.numberValue = value;
                 }else{
                     card.figureValue = value;
                 }
-                this.cards.push(card);
+                cards.push(card);
             });
         });
 
-        this.state = 'idle';
+  
+      update(() => ({
+        cards: cards,
+        state: 'idle'
+      }));
+    }
 
-        return this;
-    }
-    
-    public shuffleDeck(): DeckStore {
-        this.state = 'shuffling';
-        this.cards = this.cards.sort(() => Math.random() - 0.5);
-        this.state = 'idle';
-        return this;
-    }
-    
-    public getDeckSize(): number {
-        return this.cards.length;
-    }
-    
-    public drawTopCard(): CardStore|null {
-        this.state = 'drawing-top-card';
-        const card : CardStore | undefined = this.cards.shift();
+    function drawTopCard(deck: Deck): Card|null {
+        update((store) => ({
+            ...store,
+            state: 'drawing',
+          }));
+  
+        const card : Card | undefined = deck.cards[0];
+
         if(card === undefined){
-            this.state = 'empty';
+            update(() => ({
+                cards: [],
+                state: 'empty'
+              }));
             return null;
         }
-        this.state = 'idle';
 
+        update((store) => ({
+          cards: store.cards.slice(1),
+          state: 'idle'
+        }));
+  
         return card;
-    }
+      }
 
-    public addToDeck(card: CardStore): DeckStore {
-        this.cards.push(card);
-        return this;
+    function shuffleDeck(){
+
+        update((store) => ({
+            ...store,
+            cards: store.cards.sort(() => Math.random() -0.5),
+          }));
     }
-}
+  
+    return {
+        subscribe,
+        generateDeck,
+        shuffleDeck,
+        drawTopCard
+    };
+  }
+  
+export const playerDeckStore = createDeckStore();

@@ -1,20 +1,30 @@
-import type { CardStore } from '../card';
+import { writable } from 'svelte/store';
+import { Card } from '../card';
 
-export class HandStore {
-    public cards: Array<CardStore> = [];
-    public state: string = 'idle';
-
-    public getHandSize() {
-        return this.cards.length;
-    }
-    
-    public addToHand(card: CardStore): HandStore {
-        this.state = 'adding-card-to-hand';
-        this.cards.push(card);
-        this.state = 'idle';
-        
-        return this;
-    }
-
-
+type Hand = {
+    cards: Array<Card>,
+    state: string
 }
+
+function createHandStore() {
+    const { update, subscribe } = writable<Hand>({
+      cards: [],
+      state: 'idle',
+    });
+  
+    function addToHand(card: Card) {
+      update((store) => ({
+        ...store,
+        cards: [...store.cards, card],
+        state: 'idle'
+      }));
+    }
+  
+    return {
+      subscribe,
+      addToHand,
+    };
+  }
+  
+export const playerHandStore = createHandStore();
+export const enemyHandStore = createHandStore();
