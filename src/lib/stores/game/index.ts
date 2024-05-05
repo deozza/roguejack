@@ -1,27 +1,50 @@
-import { writable } from 'svelte/store';
-import { messageBusStore } from '../messageBus';
+import { get, writable } from 'svelte/store';
+import { stackedFMSStore } from '../stackedFMS';
 
 
 export const createGameStore = () => {
-    const { subscribe } = writable(null);
+    const { subscribe, update } = writable({
+      state: 'idle',
+    });
   
     return {
       subscribe,
+      update,
     };
   }
 
 export const gameStore = createGameStore();
 
-messageBusStore.subscribe((events) => {
-    events.forEach((event) => {
-        if(event.state !== 'sent'){
-            return;
-        }
+stackedFMSStore.subscribe((states) => {
+    const currentState = states[states.length - 1];
 
-        if(event.event === 'init-game'){
-            messageBusStore.updateEventState(event.id, 'pending');
-            messageBusStore.addEvent('generate-player-character');
-            messageBusStore.updateEventState(event.id, 'resolved');
-        }
-    });
-})
+    if(currentState === undefined){
+      return;
+    }
+
+    if(currentState.name === 'game.init'){
+      if(get(gameStore).state === 'init'){
+          stackedFMSStore.transitionToState({
+            id: '',
+            name: 'battle.init',
+            from: [],
+            to: [],
+            data: null
+          });
+
+          return;
+      }
+
+      gameStore.update(() => ({
+        state: 'init',
+      }));
+
+      stackedFMSStore.pushNewState({
+          id: '',
+          name: 'character.player.create',
+          from: [],
+          to: [],
+          data: null
+      });
+    }    
+});

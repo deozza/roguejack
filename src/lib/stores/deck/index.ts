@@ -1,6 +1,6 @@
 import { writable, get } from 'svelte/store';
 import { Card } from '../card';
-import { messageBusStore } from '../messageBus';
+import { stackedFMSStore } from '../stackedFMS';
 
 type Deck = {
     cards: Array<Card>,
@@ -43,29 +43,19 @@ export const createDeckStore = () => {
       }));
     }
 
-    function drawTopCard(deck: Deck): Card|null {
-        update((store) => ({
-            ...store,
-            state: 'drawing',
-          }));
-  
-        const card : Card | undefined = deck.cards[0];
-
-        if(card === undefined){
-            update(() => ({
-                cards: [],
-                state: 'empty'
-              }));
-            return null;
-        }
-
-        update((store) => ({
-          cards: store.cards.slice(1),
-          state: 'idle'
-        }));
-  
-        return card;
+    function drawTopCard(deck: Deck): Card|undefined {
+      if(deck.cards.length === 0){
+          return undefined;
       }
+
+      const card: Card = deck.cards[0];
+
+      update((store) => ({
+        ...store,
+        cards: deck.cards.slice(1),
+      }));
+      return card;
+    }
 
     function shuffleDeck(){
 
@@ -87,54 +77,77 @@ export const createDeckStore = () => {
 export const playerDeckStore = createDeckStore();
 export const enemyDeckStore = createDeckStore();
 
-messageBusStore.subscribe((events) => {
-  events.forEach((event) => {
-      if(event.state !== 'sent'){
-          return;
-      }
+stackedFMSStore.subscribe((states) => {
+  const currentState = states[states.length - 1];
 
-      if(event.event === 'generate-player-deck'){
-          playerDeckStore.generateDeck();
-          event.state = 'resolved';
-          messageBusStore.addEvent('player-deck-generated');
-      }
+  if(currentState === undefined){
+    return;
+  }
 
-      if(event.event === 'player-deck-generated'){
-          playerDeckStore.shuffleDeck();
-          event.state = 'resolved';
-          messageBusStore.addEvent('player-deck-shuffled');
-      }
+  if(currentState.name === 'deck.player.create'){
+    playerDeckStore.generateDeck();
+    stackedFMSStore.transitionToState({
+        id: '',
+        name: 'deck.player.shuffle',
+        from: [],
+        to: [],
+        data: null
+    });
+  }
 
-      if(event.event === 'generate-enemy-deck'){
-          enemyDeckStore.generateDeck();
-          event.state = 'resolved';
-          messageBusStore.addEvent('enemy-deck-generated');
-      }
+  if(currentState.name === 'deck.player.shuffle'){
+    playerDeckStore.shuffleDeck();
+    stackedFMSStore.removeTopState();
+  }
 
-      if(event.event === 'enemy-deck-generated'){
-          enemyDeckStore.shuffleDeck();
-          event.state = 'resolved';
-          messageBusStore.addEvent('enemy-deck-shuffled');
-      }
+  if(currentState.name === 'deck.enemy.create'){
+    enemyDeckStore.generateDeck();
+    stackedFMSStore.transitionToState({
+        id: '',
+        name: 'deck.enemy.shuffle',
+        from: [],
+        to: [],
+        data: null
+    });
+  }
 
-      if(event.event === 'player-draw'){
-          const card: Card | null = playerDeckStore.drawTopCard(playerDeckStore.get(playerDeckStore));
-          if(card !== null){
-            messageBusStore.addEvent('player-card-drawn', card);
-          }else{
-            messageBusStore.addEvent('player-deck-empty', null);
-          }
-          event.state = 'resolved';
-      }
+  if(currentState.name === 'deck.enemy.shuffle'){
+    enemyDeckStore.shuffleDeck();
+    stackedFMSStore.removeTopState();
+  }
 
-      if(event.event === 'enemy-draw'){
-        const card: Card | null = enemyDeckStore.drawTopCard(enemyDeckStore.get(enemyDeckStore));
-        if(card !== null){
-          messageBusStore.addEvent('enemy-card-drawn', card);
-        }else{
-          messageBusStore.addEvent('enemy-deck-empty', null);
-        }
-        event.state = 'resolved';
+  if(currentState.name === 'deck.player.draw-top-card'){
+    const card : Card | undefined = playerDeckStore.drawTopCard(get(playerDeckStore));
+    if(card !== undefined){
+        stackedFMSStore.transitionToState({
+            id: '',
+            name: 'hand.player.add-card',
+            from: ['deck.player.draw-top-card'],
+            to: [],
+            data: {card: card}
+        });
     }
-  });
-})
+
+  }
+
+  if(currentState.name === 'deck.enemy.draw-top-card'){
+    const card : Card | null = enemyDeckStore.drawTopCard(get(enemyDeckStore));
+    if(card === null){
+        stackedFMSStore.transitionToState({
+            id: '',
+            name: 'deck.enemy.empty',
+            from: ['deck.enemy.draw-top-card'],
+            to: [],
+            data: null
+        });
+        return;
+    }
+    stackedFMSStore.transitionToState({
+        id: '',
+        name: 'hand.enemy.add-card',
+        from: ['deck.enemy.draw-top-card'],
+        to: [],
+        data: {card: card}
+    });
+  }
+});

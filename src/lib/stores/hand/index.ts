@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import { Card } from '../card';
-import { messageBusStore } from '../messageBus';
+import { stackedFMSStore } from '../stackedFMS';
 
 type Hand = {
     cards: Array<Card>,
@@ -30,22 +30,36 @@ export const createHandStore = () => {
 export const playerHandStore = createHandStore();
 export const enemyHandStore = createHandStore();
 
-  messageBusStore.subscribe((events) => {
-    events.forEach((event) => {
-        if(event.state !== 'sent'){
-            return;
-        }
+stackedFMSStore.subscribe((states) => {
+  const currentState = states[states.length - 1];
 
-        if(event.event === 'player-card-drawn'){
-            playerHandStore.addToHand(event.content);
-            event.state = 'resolved';
-            messageBusStore.addEvent('player-card-added-to-hand', null);
-        }
+  if(currentState === undefined){
+    return;
+  }
 
-        if(event.event === 'enemy-card-drawn'){
-          enemyHandStore.addToHand(event.content);
-          event.state = 'resolved';
-          messageBusStore.addEvent('enemy-card-added-to-hand', null);
+  if(currentState.name === 'hand.player.add-card'){
+      if(currentState.data !== null){
+        playerHandStore.addToHand(currentState.data.card)
+        stackedFMSStore.transitionToState({
+            id: '',
+            name: 'turn.player.calculate-score',
+            from: [],
+            to: [],
+            data: null
+        });
       }
-    });
-})
+  }
+
+  if(currentState.name === 'hand.enemy.add-card'){
+    if(currentState.data !== null){
+      enemyHandStore.addToHand(currentState.data.card)
+      stackedFMSStore.transitionToState({
+          id: '',
+          name: 'turn.enemy.calculate-score',
+          from: [],
+          to: [],
+          data: null
+      });
+    }
+  }
+});

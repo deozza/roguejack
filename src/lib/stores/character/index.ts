@@ -1,5 +1,6 @@
 import { writable, get, derived } from 'svelte/store';
 import { messageBusStore } from '../messageBus';
+import { stackedFMSStore } from '../stackedFMS';
 
 type Character = {
     currentLife: number,
@@ -29,10 +30,18 @@ export const createCharacterStore = () => {
             name: 'Enemy',
           }));
     }
+
+    function dealDamage(newLife: number) {
+        update((store) => ({
+            ...store,
+            currentLife: Math.max(store.currentLife - newLife, 0)
+        }));
+    }
     return {
         subscribe,
         generateStandardEnemy,
         generateStandardPlayer,
+        dealDamage,
         get
     };
   }
@@ -63,20 +72,33 @@ export const enemyCharacterHealthBarColor = derived(enemyCharacterStore, ($enemy
     }
 });
 
-messageBusStore.subscribe((events) => {
-    events.forEach((event) => {
-        if(event.state !== 'sent'){
-            return;
-        }
 
-        if(event.event === 'generate-player-character'){
-            playerCharacterStore.generateStandardPlayer();
-            messageBusStore.updateEventState(event.id, 'resolved');
-        }
+stackedFMSStore.subscribe((states) => {
+    const currentState = states[states.length - 1];
 
-        if(event.event === 'generate-standard-enemy-character'){
-            enemyCharacterStore.generateStandardEnemy();
-            messageBusStore.updateEventState(event.id, 'resolved');
-        }
-    });
-})
+    if(currentState === undefined){
+      return;
+    }
+
+    if(currentState.name === 'character.player.create'){
+        playerCharacterStore.generateStandardPlayer();
+        stackedFMSStore.transitionToState({
+            id: '',
+            name: 'deck.player.create',
+            from: [],
+            to: [],
+            data: null
+        });
+    }    
+
+    if(currentState.name === 'character.enemy.create'){
+        enemyCharacterStore.generateStandardEnemy();
+        stackedFMSStore.transitionToState({
+            id: '',
+            name: 'deck.enemy.create',
+            from: [],
+            to: [],
+            data: null
+        });
+    }    
+});
