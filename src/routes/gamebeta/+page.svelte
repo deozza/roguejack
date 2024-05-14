@@ -4,6 +4,7 @@
 	import { enemyHandStore, playerHandStore } from '$lib/stores/hand';
 	import { turnStore } from '$lib/stores/turn';
 	import { messageBusStore } from '$lib/stores/messageBus';
+    import { playerDiscardStore, enemyDiscardStore } from '$lib/stores/discard';
 
 	import Deck from '$lib/ui/deck/Deck.svelte';
 	import PlayingCard from '$lib/ui/playingCard/PlayingCard.svelte';
@@ -54,7 +55,7 @@
     function startNextTurn() {
         stackedFMSStore.transitionToState({
             id: '',
-            name: 'turn.start',
+            name: 'turn.next',
             from: [],
             to: [],
             data: null

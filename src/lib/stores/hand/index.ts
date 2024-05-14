@@ -20,10 +20,19 @@ export const createHandStore = () => {
         state: 'idle'
       }));
     }
+
+    function removeFromHand(card: Card) {
+      update((store) => ({
+        ...store,
+        cards: store.cards.filter((c) => c !== card),
+        state: 'idle'
+      }));
+    } 
   
     return {
       subscribe,
       addToHand,
+      removeFromHand
     };
   }
 
@@ -60,6 +69,32 @@ stackedFMSStore.subscribe((states) => {
           to: [],
           data: null
       });
+    }
+  }
+
+  if(currentState.name === 'hand.player.remove-card'){
+    if(currentState.data !== null){
+      playerHandStore.removeFromHand(currentState.data.card)
+      stackedFMSStore.transitionToState({
+        id: '',
+        name: 'discard.player.add-card',
+        from: [],
+        to: [],
+        data: {card: currentState.data.card}
+      })
+    }
+  }
+
+  if(currentState.name === 'hand.enemy.remove-card'){
+    if(currentState.data !== null){
+      enemyHandStore.removeFromHand(currentState.data.card)
+      stackedFMSStore.transitionToState({
+        id: '',
+        name: 'discard.enemy.add-card',
+        from: [],
+        to: [],
+        data: {card: currentState.data.card}
+      })
     }
   }
 });

@@ -266,6 +266,42 @@ stackedFMSStore.subscribe((states) => {
     });
   }
 
+  if(currentState.name === 'turn.next'){
+
+    const playerHand = get(playerHandStore);
+    const enemyHand = get(enemyHandStore);
+
+    if(playerHand.cards.length > 0){
+      const playerCurrentCard = get(playerHandStore).cards[0];
+      stackedFMSStore.pushNewState({
+        id: '',
+        name: 'hand.player.remove-card',
+        from: ['turn.next'],
+        to: [],
+        data: {card: playerCurrentCard}
+      });
+    }else if(enemyHand.cards.length > 0){
+      const enemyCurrentCard = get(enemyHandStore).cards[0];
+      stackedFMSStore.pushNewState({
+        id: '',
+        name: 'hand.enemy.remove-card',
+        from: ['turn.next'],
+        to: [],
+        data: {card: enemyCurrentCard}
+      });
+      return;
+    } else {
+      stackedFMSStore.transitionToState({
+        id: '',
+        name: 'turn.start',
+        from: ['turn.next'],
+        to: [],
+        data: null
+      });
+    }
+
+  }
+
 });
 
 function getDamagesMessage(damagesToPlayer: number, damagesToEnemy: number, turn: Turn): string {
