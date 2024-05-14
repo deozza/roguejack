@@ -19,7 +19,7 @@ export const createStackedFMSStore = () => {
 
     function removeTopState(){
         update((states) => {
-            states.pop();
+            states = states.slice(0, states.length - 1);
             return states;
         });
     }

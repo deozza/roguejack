@@ -1,6 +1,5 @@
 import { get, writable } from 'svelte/store';
 import { stackedFMSStore } from '../stackedFMS';
-import { enemyCharacterStore } from '../character';
 import { enemyHandStore, playerHandStore } from '../hand';
 
 
@@ -25,11 +24,14 @@ stackedFMSStore.subscribe((states) => {
     }
 
     if(currentState.name === 'battle.init'){
-        if(get(battleStore).state === 'init'){
+
+        const battle = get(battleStore);
+
+        if(battle.state === 'init'){
+
             battleStore.update(() => ({
                 state: 'playing',
             }));
-
 
             stackedFMSStore.transitionToState({
                 id: '',
@@ -38,21 +40,20 @@ stackedFMSStore.subscribe((states) => {
                 to: [],
                 data: null
             });
-            return;
+        }else{
+          battleStore.update(() => ({
+            state: 'init',
+          }));
+    
+          stackedFMSStore.pushNewState({
+              id: '',
+              name: 'character.enemy.create',
+              from: [],
+              to: [],
+              data: null
+          });
+    
         }
-
-      battleStore.update(() => ({
-        state: 'init',
-      }));
-
-        stackedFMSStore.pushNewState({
-            id: '',
-            name: 'character.enemy.create',
-            from: [],
-            to: [],
-            data: null
-        });
-
     }
 
     if(currentState.name === 'battle.next'){
@@ -78,7 +79,6 @@ stackedFMSStore.subscribe((states) => {
           to: [],
           data: {card: enemyCurrentCard}
         });
-        return;
       } else {
         battleStore.update(() => ({
           state: 'idle',
