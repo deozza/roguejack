@@ -55,5 +55,5 @@ stackedFMSStore.subscribe((states) => {
     if(currentState === undefined){
         return;
     }
-    console.log(currentState.name + " " + new Date().getTime(), currentState);
+    console.log(currentState.name + " " + new Date().getTime(), states);
 })
