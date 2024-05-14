@@ -21,7 +21,7 @@ export const createDeckStore = () => {
 
         const suits: Array<string> = ['heart', 'diamond', 'club', 'spade'];
         const values: Array<string|number> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K'];
-        const cards: Array<Card> = [];
+        let cards: Array<Card> = [];
 
         suits.forEach((suit: string) => {
             values.forEach((value: string|number) => {
@@ -32,7 +32,7 @@ export const createDeckStore = () => {
                 }else{
                     card.figureValue = value;
                 }
-                cards.push(card);
+                cards = [...cards, card];
             });
         });
 

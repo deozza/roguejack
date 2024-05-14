@@ -17,6 +17,7 @@
 
     let loading = true;
     let turnResume: object | null = null;
+    let battleWon = false;
 
     onMount(() => {
         stackedFMSStore.subscribe((states) => {
@@ -28,6 +29,10 @@
 
             if(currentState.name === 'turn.end') {
                 turnResume = currentState.data;
+            }
+
+            if(currentState.name === 'battle.won') {
+                battleWon = true;
             }
         })
     });
@@ -53,9 +58,23 @@
 	}
 
     function startNextTurn() {
+        loading = true;
+        battleWon = false;
         stackedFMSStore.transitionToState({
             id: '',
             name: 'turn.next',
+            from: [],
+            to: [],
+            data: null
+        });
+    }
+
+    function startNextBattle() {
+        loading = true;
+        battleWon = false;
+        stackedFMSStore.transitionToState({
+            id: '',
+            name: 'battle.next',
             from: [],
             to: [],
             data: null
@@ -79,7 +98,7 @@
                 <h3 class="h3">{$playerCharacterStore.name}</h3>
                 <div class="flex flex-col w-48">
                     <h3>{$playerCharacterStore.currentLife} / {$playerCharacterStore.maxLife}</h3>
-                    <ProgressBar value={$playerCharacterStore.currentLife} max={$playerCharacterStore.currentLife} meter={$playerCharacterHealthBarColor} />
+                    <ProgressBar value={$playerCharacterStore.currentLife} max={$playerCharacterStore.maxLife} meter={$playerCharacterHealthBarColor} />
                 </div>
             </div>
             <Deck deckSize={$playerDeckStore.cards.length} />
@@ -130,5 +149,14 @@
             {turnResume.damageMessage}
         </p>
         <button class="btn btn-md variant-filled-surface" on:click={() => startNextTurn()}>New turn !</button>
+    </div>
+{/if}
+
+{#if battleWon === true}
+    <div class="flex flex-row justify-between items-center bg-primary-900 rounded-md p-6 w-1/3" transition:fade>
+        <p class="text-xl font-semibold">
+            You won this battle
+        </p>
+        <button class="btn btn-md variant-filled-surface" on:click={() => startNextBattle()}>Next battle !</button>
     </div>
 {/if}

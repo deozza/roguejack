@@ -242,7 +242,7 @@ stackedFMSStore.subscribe((states) => {
     }else if(turn.playerTurn.isBusted === false){
       if(turn.playerTurn.score > turn.enemyTurn.score){
         damagesToEnemy = turn.playerTurn.score - turn.enemyTurn.score;
-        if(turn.enemyTurn.isBlackJack){
+        if(turn.playerTurn.isBlackJack){
           damagesToEnemy = damagesToEnemy * 2;
         }
       }
@@ -252,18 +252,35 @@ stackedFMSStore.subscribe((states) => {
     enemyCharacterStore.dealDamage(damagesToEnemy);
     const damageMessage: string = getDamagesMessage(damagesToPlayer, damagesToEnemy, turn);
 
-    stackedFMSStore.transitionToState({
-      id: '',
-      name: 'turn.end',
-      from: ['turn.fight.damage-step'],
-      to: [],
-      data: {
-        turn,
-        damagesToPlayer,
-        damagesToEnemy,
-        damageMessage
-      }
-    });
+    if(get(enemyCharacterStore).currentLife <= 0){
+      stackedFMSStore.transitionToState({
+        id: '',
+        name: 'battle.won',
+        from: ['turn.fight.damage-step'],
+        to: [],
+        data: {
+          turn,
+          damagesToPlayer,
+          damagesToEnemy,
+          damageMessage
+        }
+      });
+    }else{
+      stackedFMSStore.transitionToState({
+        id: '',
+        name: 'turn.end',
+        from: ['turn.fight.damage-step'],
+        to: [],
+        data: {
+          turn,
+          damagesToPlayer,
+          damagesToEnemy,
+          damageMessage
+        }
+      });
+    }
+
+
   }
 
   if(currentState.name === 'turn.next'){

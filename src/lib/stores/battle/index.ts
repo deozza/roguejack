@@ -1,6 +1,7 @@
 import { get, writable } from 'svelte/store';
 import { stackedFMSStore } from '../stackedFMS';
 import { enemyCharacterStore } from '../character';
+import { enemyHandStore, playerHandStore } from '../hand';
 
 
 export const createBattleStore = () => {
@@ -52,5 +53,46 @@ stackedFMSStore.subscribe((states) => {
             data: null
         });
 
-    }    
+    }
+
+    if(currentState.name === 'battle.next'){
+
+      const playerHand = get(playerHandStore);
+      const enemyHand = get(enemyHandStore);
+  
+      if(playerHand.cards.length > 0){
+        const playerCurrentCard = get(playerHandStore).cards[0];
+        stackedFMSStore.pushNewState({
+          id: '',
+          name: 'hand.player.remove-card',
+          from: ['battle.next'],
+          to: [],
+          data: {card: playerCurrentCard}
+        });
+      }else if(enemyHand.cards.length > 0){
+        const enemyCurrentCard = get(enemyHandStore).cards[0];
+        stackedFMSStore.pushNewState({
+          id: '',
+          name: 'hand.enemy.remove-card',
+          from: ['battle.next'],
+          to: [],
+          data: {card: enemyCurrentCard}
+        });
+        return;
+      } else {
+        battleStore.update(() => ({
+          state: 'idle',
+        }));
+
+        stackedFMSStore.transitionToState({
+          id: '',
+          name: 'battle.init',
+          from: ['battle.next'],
+          to: [],
+          data: null
+        });
+      }
+  
+    }
+  
 });
