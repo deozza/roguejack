@@ -1,0 +1,5 @@
+events:
+  game.new:
+  game.pause:
+  game.resume:
+  game.forfeit:

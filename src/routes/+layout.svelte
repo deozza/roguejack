@@ -2,19 +2,26 @@
 	import ModalDeckOut from '$lib/ui/modal/ModalDeckOut.svelte';
 	import ModalDied from '$lib/ui/modal/ModalDied.svelte';
 	import '../app.postcss';
-	import { AppShell, AppBar, Modal, initializeStores, type ModalComponent } from '@skeletonlabs/skeleton';
+	import {
+		AppShell,
+		AppBar,
+		Modal,
+		initializeStores,
+		type ModalComponent
+	} from '@skeletonlabs/skeleton';
 
 	initializeStores();
 
 	const modalRegistry: Record<string, ModalComponent> = {
-	// Set a unique modal ID, then pass the component reference
-	modalDeckOut: { ref: ModalDeckOut },
-	modalDied: { ref: ModalDied },
+		// Set a unique modal ID, then pass the component reference
+		modalDeckOut: { ref: ModalDeckOut },
+		modalDied: { ref: ModalDied }
 
-	// ...
-};
+		// ...
+	};
 </script>
-<Modal components={modalRegistry}/>
+
+<Modal components={modalRegistry} />
 
 <!-- App Shell -->
 <AppShell>
@@ -24,13 +31,12 @@
 			<svelte:fragment slot="lead">
 				<strong class="text-xl uppercase">Roguejack</strong>
 			</svelte:fragment>
-			<svelte:fragment slot="trail">
-			</svelte:fragment>
+			<svelte:fragment slot="trail"></svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
 	<main class="container h-full mx-auto flex justify-center items-center">
 		<div class="space-y-10 text-center flex flex-col items-center w-full">
 			<slot />
 		</div>
-	</main>	
+	</main>
 </AppShell>
