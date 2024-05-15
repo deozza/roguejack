@@ -1,0 +1,17 @@
+version: "3"
+services:
+  roguejack:
+    image: node:20
+    container_name: roguejack
+    volumes:
+      - ./:/home/roguejack
+    working_dir: /home/roguejack
+    ports:
+      - 5173:5173
+    environment:
+      - PUID=1000
+      - GUID=1000
+      - TZ=Europe/Paris
+      - HOST=0.0.0.0
+    restart: unless-stopped
+    tty: true
