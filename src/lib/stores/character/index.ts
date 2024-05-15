@@ -1,46 +1,104 @@
-import { writable } from 'svelte/store';
-import type { CardStore } from '../card';
-import { DeckStore } from '../deck';
-import { DiscardStore } from '../discard';
-import { HandStore } from '../hand';
+import { writable, get, derived } from 'svelte/store';
+import { messageBusStore } from '../messageBus';
+import { stackedFMSStore } from '../stackedFMS';
 
-export class CharacterStore {
-    public deck: DeckStore = new DeckStore();
-    public discard: DiscardStore = new DiscardStore();
-    public hand: HandStore = new HandStore();
-    public currentLife: number = 20;
-    public maxLife: number = 20;
-    public name: string = '';
+type Character = {
+    currentLife: number,
+    maxLife: number,
+    name: string,
+}
 
-    public putHandIntoDiscard(): CharacterStore {
-        this.hand.cards.forEach((card: CardStore) => {
-            this.discard.addToDiscard(card);
+export const createCharacterStore = () => {
+    const { update, subscribe } = writable<Character>({
+      currentLife: 0,
+      maxLife: 0,
+      name: '',
+    });
+  
+    function generateStandardPlayer() {
+        update(() => ({
+            currentLife: 20,
+            maxLife: 20,
+            name: 'Player',
+          }));
+    }
+
+    function generateStandardEnemy() {
+        update(() => ({
+            currentLife: 5,
+            maxLife: 5,
+            name: 'Enemy',
+          }));
+    }
+
+    function dealDamage(newLife: number) {
+        update((store) => ({
+            ...store,
+            currentLife: Math.max(store.currentLife - newLife, 0)
+        }));
+    }
+    return {
+        subscribe,
+        generateStandardEnemy,
+        generateStandardPlayer,
+        dealDamage,
+        get
+    };
+  }
+
+export const playerCharacterStore = createCharacterStore();
+export const playerCharacterHealthBarColor = derived(playerCharacterStore, ($playerCharacterStore) => {
+    if ($playerCharacterStore.currentLife > $playerCharacterStore.maxLife * 0.75) {
+        return "bg-green-500";
+    } else if ($playerCharacterStore.currentLife > $playerCharacterStore.maxLife * 0.5) {
+        return "bg-yellow-500";
+    } else if ($playerCharacterStore.currentLife > $playerCharacterStore.maxLife * 0.25) {
+        return "bg-orange-500";
+    } else {
+        return "bg-red-500";
+    }
+});
+
+export const enemyCharacterStore = createCharacterStore();
+export const enemyCharacterHealthBarColor = derived(enemyCharacterStore, ($enemyCharacterStore) => {
+    if ($enemyCharacterStore.currentLife > $enemyCharacterStore.maxLife * 0.75) {
+        return "bg-green-500";
+    } else if ($enemyCharacterStore.currentLife > $enemyCharacterStore.maxLife * 0.5) {
+        return "bg-yellow-500";
+    } else if ($enemyCharacterStore.currentLife > $enemyCharacterStore.maxLife * 0.25) {
+        return "bg-orange-500";
+    } else {
+        return "bg-red-500";
+    }
+});
+
+
+stackedFMSStore.subscribe((states) => {
+    const currentState = states[states.length - 1];
+
+    if(currentState === undefined){
+      return;
+    }
+
+    if(currentState.name === 'character.player.create'){
+        playerCharacterStore.generateStandardPlayer();
+        stackedFMSStore.transitionToState({
+            id: '',
+            name: 'deck.player.create',
+            from: [],
+            to: [],
+            data: null
         });
-        this.hand = new HandStore()
-        return this;
-    }
-}
+    }    
 
-export class EnemyStore extends CharacterStore {
-    public minimumScore: number = 17;
-    
-    constructor() {
-        super();
-    }
-
-    public drawUntilMinimumScore(): EnemyStore {
-        while(this.hand.score < this.minimumScore) {
-            const drawnCard: CardStore | undefined = this.deck.drawTopCard();
-            if(drawnCard === undefined) {
-                throw new Error('No more cards in the deck');
-            }
-
-            this.hand.addToHand(drawnCard);
-        }
-        return this;
-    }
-
-}
-
-export const characterStore = writable<CharacterStore|null>(null);
-export const enemyStore = writable<EnemyStore|null>(null);
+    if(currentState.name === 'character.enemy.create'){
+        enemyCharacterStore.generateStandardEnemy();
+        stackedFMSStore.transitionToState({
+            id: '',
+            name: 'deck.enemy.create',
+            from: [],
+            to: [],
+            data: null
+        });
+    }    
+});

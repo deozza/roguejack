@@ -1,28 +1,29 @@
 <script lang="ts">
 	import type { HandStore } from "$lib/stores/hand";
+	import type { CharacterTurn, Turn } from "$lib/stores/turn";
 
-    export let currentHand: HandStore;
-    export let opponentHand: HandStore;
+    export let currentTurn: CharacterTurn;
+    export let opponentTurn: CharacterTurn;
 </script>
 
 <div class="flex flex-row justify-center items-center w-full">
     <span class="text-4xl text-red-500">
 
-        {#if opponentHand.isBusted === true}
-            {#if currentHand.isBusted === true}
+        {#if opponentTurn.isBusted === true}
+            {#if currentTurn.isBusted === true}
                 <iconify-icon icon="game-icons:broken-axe"></iconify-icon>
-                {currentHand.score - 21}
+                {currentTurn.score - 21}
             {/if}
         {:else}
-            {#if currentHand.isBusted === true}
+            {#if currentTurn.isBusted === true}
                 <iconify-icon icon="game-icons:broken-axe"></iconify-icon>
-                {currentHand.score - 21}
-            {:else if currentHand.isBlackJack === true}
+                {currentTurn.score - 21}
+            {:else if currentTurn.isBlackJack === true}
                 <iconify-icon icon="game-icons:magic-axe"></iconify-icon>
-                {currentHand.score}
+                {currentTurn.score}
             {:else}
                 <iconify-icon icon="game-icons:battle-axe"></iconify-icon>
-                {currentHand.score}
+                {currentTurn.score}
             {/if}
         {/if}
     </span>

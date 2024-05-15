@@ -1,101 +1,98 @@
-import { writable } from "svelte/store";
-import type { CharacterStore, EnemyStore } from "../character";
+import { get, writable } from 'svelte/store';
+import { stackedFMSStore } from '../stackedFMS';
+import { enemyHandStore, playerHandStore } from '../hand';
 
-export class BattleStore {
-    public player: CharacterStore;
-    public enemy: EnemyStore;
-    public battleNumber: number = 1;
-    public turnNumber: number = 1;
-    public battleState: string = 'started';
 
-    constructor(player: CharacterStore, enemy: EnemyStore) {
-        this.player = player;
-        this.enemy = enemy;
+export const createBattleStore = () => {
+    const { subscribe, update } = writable({
+        state: 'idle',
+    });
+  
+    return {
+      subscribe,
+      update
+    };
+  }
+
+export const battleStore = createBattleStore();
+
+stackedFMSStore.subscribe((states) => {
+    const currentState = states[states.length - 1];
+
+    if(currentState === undefined){
+      return;
     }
 
-    public getDamages(): object {
-        const playerPower: number = this.player.hand.score;
-        const enemyPower: number = this.enemy.hand.score;
+    if(currentState.name === 'battle.init'){
 
-        let damagesToPlayer: number = 0;
-        let damagesToEnemy: number = 0;
+        const battle = get(battleStore);
 
-        if(this.player.hand.isBusted === true) {
-            damagesToPlayer += playerPower - 21;
-        }
+        if(battle.state === 'init'){
 
-        if(this.enemy.hand.isBusted === true) {
-            damagesToEnemy += enemyPower - 21;
-        }
+            battleStore.update(() => ({
+                state: 'playing',
+            }));
 
-        if(enemyPower === playerPower) {
-            return {
-                damagesToPlayer: damagesToPlayer,
-                damagesToEnemy: damagesToEnemy
-            }
-        }
-
-        if(this.player.hand.isBusted === false) {
-            if(playerPower > enemyPower) {
-                damagesToEnemy += playerPower - enemyPower;
-            }
-
-            if(this.player.hand.isBlackJack) {
-                damagesToEnemy = damagesToEnemy * 2;
-            }
-        }
-
-        if(this.enemy.hand.isBusted === false) {
-            if(enemyPower > playerPower) {
-                damagesToPlayer += enemyPower - playerPower;
-            }
-
-            if(this.enemy.hand.isBlackJack) {
-                damagesToPlayer = damagesToPlayer * 2;
-            }
-        }
-
-        return {
-            damagesToPlayer: damagesToPlayer,
-            damagesToEnemy: damagesToEnemy
+            stackedFMSStore.transitionToState({
+                id: '',
+                name: 'turn.start',
+                from: [],
+                to: [],
+                data: null
+            });
+        }else{
+          battleStore.update(() => ({
+            state: 'init',
+          }));
+    
+          stackedFMSStore.pushNewState({
+              id: '',
+              name: 'character.enemy.create',
+              from: [],
+              to: [],
+              data: null
+          });
+    
         }
     }
 
-    public getDamagesMessage(damages: object): string {
-        let damageMessage = '';
+    if(currentState.name === 'battle.next'){
 
-        if(damages.damagesToPlayer === 0 && damages.damagesToEnemy === 0) {
-            return 'No damages were inflicted.';
-        }
+      const playerHand = get(playerHandStore);
+      const enemyHand = get(enemyHandStore);
+  
+      if(playerHand.cards.length > 0){
+        const playerCurrentCard = get(playerHandStore).cards[0];
+        stackedFMSStore.pushNewState({
+          id: '',
+          name: 'hand.player.remove-card',
+          from: ['battle.next'],
+          to: [],
+          data: {card: playerCurrentCard}
+        });
+      }else if(enemyHand.cards.length > 0){
+        const enemyCurrentCard = get(enemyHandStore).cards[0];
+        stackedFMSStore.pushNewState({
+          id: '',
+          name: 'hand.enemy.remove-card',
+          from: ['battle.next'],
+          to: [],
+          data: {card: enemyCurrentCard}
+        });
+      } else {
+        battleStore.update(() => ({
+          state: 'idle',
+        }));
 
-        if(damages.damagesToPlayer > 0){
-            if(this.player.hand.isBusted) {
-                damageMessage += "You inflicted yourself ";
-            }else{
-                damageMessage += `You took `;
-            }
-
-            damageMessage += damages.damagesToPlayer + ' damages. '
-            if(this.enemy.hand.isBlackJack){
-                damageMessage += "Critical hit ! ";
-            }
-        }
-
-        if(damages.damagesToEnemy > 0){
-            if(this.enemy.hand.isBusted) {
-                damageMessage += "The enemy inflicted itself ";
-            }else{
-                damageMessage += `You inflicted `;
-            }
-
-            damageMessage += damages.damagesToEnemy + ' damages. '
-            if(this.enemy.hand.isBlackJack){
-                damageMessage += "Critical hit ! ";
-            }
-        }
-
-        return damageMessage;
+        stackedFMSStore.transitionToState({
+          id: '',
+          name: 'battle.init',
+          from: ['battle.next'],
+          to: [],
+          data: null
+        });
+      }
+  
     }
-}
-
-export const battleStore = writable<BattleStore|null>(null);
+  
+});

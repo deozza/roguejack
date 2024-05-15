@@ -28,3 +28,21 @@ export const load: PageLoad = async () => {
 		battle: battle,
 	};
 };
+
+// import { CharacterStore } from '$lib/stores/character';
+// import { GameStore, gameStore } from '$lib/stores/game';
+// import type { PageLoad } from './$types';
+
+// export const load: PageLoad = async () => {
+// 	let game: GameStore	| null = null;
+// 	gameStore.subscribe((g)=>{game = g});
+
+// 	if(game === null) {
+// 		game = new GameStore(new CharacterStore);
+// 		game.initGame();
+// 	}
+
+// 	return {
+// 		game: game,
+// 	};
+// };

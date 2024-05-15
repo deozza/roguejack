@@ -15,7 +15,7 @@
     let card: CardStore|undefined;
     let endOfTurn: boolean = false;
     let damageMessage: string = "";
-    let endOfBattle: boolean = false; 
+    let endOfBattle: boolean = false;
 
     const modalStore = getModalStore();
 
