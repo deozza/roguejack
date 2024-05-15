@@ -12,7 +12,7 @@ onMount(()=>{
         const currentState = states[states.length - 1];
 
         if(currentState !== undefined && currentState.name == 'turn.start'){        
-            goto('/gamebeta');
+            goto('/game');
         }
     })
 })

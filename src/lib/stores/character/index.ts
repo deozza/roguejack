@@ -1,5 +1,4 @@
 import { writable, get, derived } from 'svelte/store';
-import { messageBusStore } from '../messageBus';
 import { stackedFMSStore } from '../stackedFMS';
 
 type Character = {
