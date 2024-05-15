@@ -1,100 +1,64 @@
-import { writable } from 'svelte/store';
-import { Card } from '../card';
-import { stackedFMSStore } from '../stackedFMS';
+import type { Card } from "../card";
 
-type Hand = {
-	cards: Array<Card>;
-	state: string;
-};
+export class Hand {
+    public cards: Card[] = [];
+    public value: number = 0;
+    public isBusted: boolean = false;
+    public isBlackjack: boolean = false;
 
-export const createHandStore = () => {
-	const { update, subscribe } = writable<Hand>({
-		cards: [],
-		state: 'idle'
-	});
+    public addCard(card: Card): void {
+        this.cards = [...this.cards, card];
+        this.calculateValue();
+    }
 
-	function addToHand(card: Card) {
-		update((store) => ({
-			...store,
-			cards: [...store.cards, card],
-			state: 'idle'
-		}));
-	}
+    public removeCard(card: Card): void {
+        this.cards = this.cards.filter((c: Card) => c.id !== card.id);
+        this.calculateValue();
+    }
 
-	function removeFromHand(card: Card) {
-		update((store) => ({
-			...store,
-			cards: store.cards.filter((c) => c !== card),
-			state: 'idle'
-		}));
-	}
+    public clearHand(): void {
+        this.cards = [];
+        this.calculateValue();
+    }
 
-	return {
-		subscribe,
-		addToHand,
-		removeFromHand
-	};
-};
+    private calculateValue(): void {
+        let figuresCount: number = 0;
+        let acesCount: number = 0;
+        const aceValue: number = 11;
 
-export const playerHandStore = createHandStore();
-export const enemyHandStore = createHandStore();
+        let value = 0;
+        this.isBusted = false;
+        this.isBlackjack = false;
 
-stackedFMSStore.subscribe((states) => {
-	const currentState = states[states.length - 1];
+        this.cards.forEach((card: Card) => {
+            if (card.face === 'A') {
+                acesCount++;
+            } else if (['J', 'Q', 'K'].includes(String(card.face))) {
+                figuresCount++;
+                value += 10;
+            }else {
+                value += Number(card.value);
+            }
+        });
 
-	if (currentState === undefined) {
-		return;
-	}
+        if (this.cards.length === 2 && figuresCount === 1 && acesCount === 1) {
+            this.isBlackjack = true;
+            this.value = 21;
+            return;
+        }
 
-	if (currentState.name === 'hand.player.add-card') {
-		if (currentState.data !== null) {
-			playerHandStore.addToHand(currentState.data.card);
-			stackedFMSStore.transitionToState({
-				id: '',
-				name: 'turn.player.calculate-score',
-				from: [],
-				to: [],
-				data: null
-			});
-		}
-	}
+        for (let i: number = 1; i <= acesCount; i++) {
+            if (value + aceValue > 21) {
+                value += 1;
+            } else {
+                value += aceValue;
+            }
+        }
 
-	if (currentState.name === 'hand.enemy.add-card') {
-		if (currentState.data !== null) {
-			enemyHandStore.addToHand(currentState.data.card);
-			stackedFMSStore.transitionToState({
-				id: '',
-				name: 'turn.enemy.calculate-score',
-				from: [],
-				to: [],
-				data: null
-			});
-		}
-	}
-
-	if (currentState.name === 'hand.player.remove-card') {
-		if (currentState.data !== null) {
-			playerHandStore.removeFromHand(currentState.data.card);
-			stackedFMSStore.transitionToState({
-				id: '',
-				name: 'discard.player.add-card',
-				from: [],
-				to: [],
-				data: { card: currentState.data.card }
-			});
-		}
-	}
-
-	if (currentState.name === 'hand.enemy.remove-card') {
-		if (currentState.data !== null) {
-			enemyHandStore.removeFromHand(currentState.data.card);
-			stackedFMSStore.transitionToState({
-				id: '',
-				name: 'discard.enemy.add-card',
-				from: [],
-				to: [],
-				data: { card: currentState.data.card }
-			});
-		}
-	}
-});
+        this.value = value;
+    
+        if (value > 21) {
+            this.isBusted = true;
+        }
+    }
+}
