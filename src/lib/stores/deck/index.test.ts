@@ -1,29 +1,30 @@
 import { describe, it, expect } from 'vitest';
-import { Deck } from './index';
+import { Deck, createDeckStore } from './index';
 import { Card, Face, Suit } from '../card';
+import { get } from 'svelte/store';
 
 
 describe('deck test', () => {
 	it('generate deck with all cards', () => {
-		const deck = new Deck();
+		const deck = createDeckStore();
 		const faces: Array<Face> = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
 		const suits: Array<Suit> = ['hearts', 'diamonds', 'clubs', 'spades'];
 
 		deck.generateDeck(suits, faces);
 
-		expect(deck.cards.length).toBe(52);
+		expect(get(deck).cards.length).toBe(52);
 	});
 
 	it('shuffle deck', () => {
-		const deck = new Deck();
+		const deck = createDeckStore();
 		const faces: Array<Face> = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
 		const suits: Array<Suit> = ['hearts', 'diamonds', 'clubs', 'spades'];
 
 		deck.generateDeck(suits, faces);
-		const originalDeck = [...deck.cards];
+		const originalDeck = [...get(deck)];
 		deck.shuffleDeck();
 
-		expect(deck.cards).not.toEqual(originalDeck);
+		expect(get(deck).cards).not.toEqual(originalDeck);
 	});
 
 	it('draw top card', () => {

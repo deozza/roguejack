@@ -3,10 +3,6 @@ import { createCharacterStore, getHealthColor } from './index';
 import { derived, get } from 'svelte/store';
 
 describe('character test', () => {
-
-	beforeEach(() => {
-	});
-
 	it('character takes normal damage amount', () => {
 		const character = createCharacterStore();
 		expect(get(character).currentHealth).toBe(10);
