@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { createCharacterStore, getHealthColor } from './index';
-import { derived, get } from 'svelte/store';
+import { createCharacterStore } from './index';
 
 describe('character test', () => {
 	it('character takes normal damage amount', () => {
@@ -70,5 +69,5 @@ describe('character test', () => {
 
 		character.takeDamage(10);
 		expect(character.getHealthColor()).toBe('bg-red-500');
-	});	
+	});
 });

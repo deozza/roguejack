@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest';
 import { createDeckStore, type Deck } from './index';
 import { Card, type Face, type Suit } from '../card';
 
-
 describe('deck test', () => {
 	it('generate deck with all cards', () => {
 		const deck = createDeckStore();
@@ -20,7 +19,7 @@ describe('deck test', () => {
 		const suits: Array<Suit> = ['hearts', 'diamonds', 'clubs', 'spades'];
 
 		deck.generateDeck(suits, faces);
-		const originalDeckCards: Card[] = { ...deck.getDeck().cards};
+		const originalDeckCards: Card[] = { ...deck.getDeck().cards };
 		deck.shuffleDeck();
 
 		expect(deck.getDeck().cards).not.toEqual(originalDeckCards);
@@ -32,7 +31,7 @@ describe('deck test', () => {
 		const suits: Array<Suit> = ['hearts', 'diamonds', 'clubs', 'spades'];
 
 		deck.generateDeck(suits, faces);
-		let currentDeck: Deck = { ...deck.getDeck()};
+		let currentDeck: Deck = { ...deck.getDeck() };
 		expect(currentDeck.cards.length).toBe(52);
 
 		const topCard: Card = currentDeck.cards[0];
@@ -56,7 +55,7 @@ describe('deck test', () => {
 		expect(drawnCard).toEqual(topCard);
 		expect(deck.getDeck().cards.length).toBe(0);
 
-		expect(deck.drawTopCard()).toBeNull()
+		expect(deck.drawTopCard()).toBeNull();
 	});
 
 	it('put card on top', () => {
@@ -76,6 +75,5 @@ describe('deck test', () => {
 
 		expect(deck.getDeck().cards[0]).toEqual(card);
 		expect(deck.getDeck().cards.length).toEqual(14);
-
-	})
+	});
 });

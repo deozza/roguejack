@@ -2,12 +2,11 @@ import { describe, it, expect } from 'vitest';
 import { Card, value } from '../card';
 import { createHandStore } from '.';
 
-
 describe('hand test', () => {
 	it('add card to hand', () => {
 		const hand = createHandStore();
 		expect(hand.getHand().cards.length).toBe(0);
-		
+
 		const card: Card = new Card();
 		card.face = 'A';
 		card.suit = 'hearts';
@@ -23,7 +22,7 @@ describe('hand test', () => {
 	it('remove card from hand', () => {
 		const hand = createHandStore();
 		expect(hand.getHand().cards.length).toBe(0);
-		
+
 		const card: Card = new Card();
 		card.face = 'A';
 		card.suit = 'hearts';
@@ -43,7 +42,7 @@ describe('hand test', () => {
 	it('clear hand', () => {
 		const hand = createHandStore();
 		expect(hand.getHand().cards.length).toBe(0);
-		
+
 		const card: Card = new Card();
 		card.face = 'A';
 		card.suit = 'hearts';
@@ -60,11 +59,10 @@ describe('hand test', () => {
 		expect(hand.getHand().cards.length).toBe(0);
 	});
 
-	
 	it('value changes on add', () => {
 		const hand = createHandStore();
 		expect(hand.getHand().value).toBe(0);
-		
+
 		const card: Card = new Card();
 		card.face = 'A';
 		card.suit = 'hearts';
@@ -79,7 +77,7 @@ describe('hand test', () => {
 	it('value changes on remove', () => {
 		const hand = createHandStore();
 		expect(hand.getHand().value).toBe(0);
-		
+
 		let card: Card = new Card();
 		card.face = 'A';
 		card.suit = 'hearts';
@@ -108,7 +106,7 @@ describe('hand test', () => {
 	it('value changes on clear', () => {
 		const hand = createHandStore();
 		expect(hand.getHand().value).toBe(0);
-		
+
 		let card: Card = new Card();
 		card.face = 'A';
 		card.suit = 'hearts';
@@ -325,7 +323,7 @@ describe('hand test', () => {
 	it('value changes according to aces count', () => {
 		const hand = createHandStore();
 		expect(hand.getHand().value).toBe(0);
-		
+
 		const card: Card = new Card();
 		card.face = 'A';
 		card.suit = 'hearts';
@@ -336,10 +334,9 @@ describe('hand test', () => {
 		expect(hand.getHand().value).toEqual(11);
 
 		const card2: Card = { ...card };
-		card2.id = 2
+		card2.id = 2;
 
 		hand.addCard(card2);
 		expect(hand.getHand().value).toEqual(12);
 	});
-	
 });
