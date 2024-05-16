@@ -7,12 +7,7 @@ describe('discard test', () => {
 		const discard = createDiscardStore();
 		expect(discard.getDiscard().cards.length).toBe(0);
 
-		const card: Card = new Card();
-		card.face = 'A';
-		card.suit = 'hearts';
-		card.value = value['A'];
-		card.id = 1;
-
+		const card: Card = new Card('hearts', 'A');
 		discard.discardCard(card);
 
 		expect(discard.getDiscard().cards.length).toBe(1);
@@ -23,19 +18,12 @@ describe('discard test', () => {
 		const discard = createDiscardStore();
 		expect(discard.getDiscard().cards.length).toBe(0);
 
-		const card: Card = new Card();
-		card.face = 'A';
-		card.suit = 'hearts';
-		card.value = value['A'];
-		card.id = 1;
-
+		const card: Card = new Card('hearts', 'A');
 		discard.discardCard(card);
-
 		expect(discard.getDiscard().cards.length).toBe(1);
 		expect(discard.getDiscard().cards[0]).toEqual(card);
 
 		discard.clearDiscard();
-
 		expect(discard.getDiscard().cards.length).toBe(0);
 	});
 });

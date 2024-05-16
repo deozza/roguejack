@@ -7,14 +7,8 @@ describe('hand test', () => {
 		const hand = createHandStore();
 		expect(hand.getHand().cards.length).toBe(0);
 
-		const card: Card = new Card();
-		card.face = 'A';
-		card.suit = 'hearts';
-		card.value = value['A'];
-		card.id = 1;
-
+		const card: Card = new Card('hearts', 'A');
 		hand.addCard(card);
-
 		expect(hand.getHand().cards.length).toBe(1);
 		expect(hand.getHand().cards[0]).toEqual(card);
 	});
@@ -23,14 +17,8 @@ describe('hand test', () => {
 		const hand = createHandStore();
 		expect(hand.getHand().cards.length).toBe(0);
 
-		const card: Card = new Card();
-		card.face = 'A';
-		card.suit = 'hearts';
-		card.value = value['A'];
-		card.id = 1;
-
+		const card: Card = new Card('hearts', 'A');
 		hand.addCard(card);
-
 		expect(hand.getHand().cards.length).toBe(1);
 		expect(hand.getHand().cards[0]).toEqual(card);
 
@@ -43,19 +31,12 @@ describe('hand test', () => {
 		const hand = createHandStore();
 		expect(hand.getHand().cards.length).toBe(0);
 
-		const card: Card = new Card();
-		card.face = 'A';
-		card.suit = 'hearts';
-		card.value = value['A'];
-		card.id = 1;
-
+		const card: Card = new Card('clubs', 'A');
 		hand.addCard(card);
-
 		expect(hand.getHand().cards.length).toBe(1);
 		expect(hand.getHand().cards[0]).toEqual(card);
 
 		hand.clearHand();
-
 		expect(hand.getHand().cards.length).toBe(0);
 	});
 
@@ -63,14 +44,8 @@ describe('hand test', () => {
 		const hand = createHandStore();
 		expect(hand.getHand().value).toBe(0);
 
-		const card: Card = new Card();
-		card.face = 'A';
-		card.suit = 'hearts';
-		card.value = value['A'];
-		card.id = 1;
-
+		const card: Card = new Card('hearts', 'A');
 		hand.addCard(card);
-
 		expect(hand.getHand().value).toEqual(11);
 	});
 
@@ -78,28 +53,15 @@ describe('hand test', () => {
 		const hand = createHandStore();
 		expect(hand.getHand().value).toBe(0);
 
-		let card: Card = new Card();
-		card.face = 'A';
-		card.suit = 'hearts';
-		card.value = value['A'];
-		card.id = 1;
-
+		let card: Card = new Card('hearts', 'A');
 		hand.addCard(card);
-
 		expect(hand.getHand().value).toEqual(11);
 
-		card = new Card();
-		card.face = '4';
-		card.suit = 'hearts';
-		card.value = value['4'];
-		card.id = 2;
-
+		card = new Card('hearts', '4');
 		hand.addCard(card);
-
 		expect(hand.getHand().value).toBe(15);
 
 		hand.removeCard(card);
-
 		expect(hand.getHand().value).toBe(11);
 	});
 
@@ -107,28 +69,15 @@ describe('hand test', () => {
 		const hand = createHandStore();
 		expect(hand.getHand().value).toBe(0);
 
-		let card: Card = new Card();
-		card.face = 'A';
-		card.suit = 'hearts';
-		card.value = value['A'];
-		card.id = 1;
-
+		let card: Card = new Card('hearts', 'A');
 		hand.addCard(card);
-
 		expect(hand.getHand().value).toEqual(11);
 
-		card = new Card();
-		card.face = '4';
-		card.suit = 'hearts';
-		card.value = value['4'];
-		card.id = 2;
-
+		card = new Card('hearts', '4');
 		hand.addCard(card);
-
 		expect(hand.getHand().value).toBe(15);
 
 		hand.clearHand();
-
 		expect(hand.getHand().value).toBe(0);
 	});
 
@@ -136,24 +85,16 @@ describe('hand test', () => {
 		const hand = createHandStore();
 		expect(hand.getHand().isBusted).toBe(false);
 
-		const card: Card = new Card();
-		card.face = 'K';
-		card.suit = 'hearts';
-		card.value = value['K'];
-		card.id = 1;
-
+		const card: Card = new Card('hearts', 'K')
 		hand.addCard(card);
-
 		expect(hand.getHand().value).toBe(10);
 		expect(hand.getHand().isBusted).toBe(false);
 
 		hand.addCard(card);
-
 		expect(hand.getHand().value).toBe(20);
 		expect(hand.getHand().isBusted).toBe(false);
 
 		hand.addCard(card);
-
 		expect(hand.getHand().value).toBe(30);
 		expect(hand.getHand().isBusted).toBe(true);
 	});
@@ -162,30 +103,18 @@ describe('hand test', () => {
 		const hand = createHandStore();
 		expect(hand.getHand().isBusted).toBe(false);
 
-		const card1: Card = new Card();
-		card1.face = 'K';
-		card1.suit = 'hearts';
-		card1.value = value['K'];
-		card1.id = 1;
-
+		const card1: Card = new Card('hearts', 'K')
 		hand.addCard(card1);
-
 		expect(hand.getHand().value).toBe(10);
 		expect(hand.getHand().isBusted).toBe(false);
 
-		let card2: Card = { ...card1 };
-		card2.id = 2;
-
+		let card2: Card = new Card('hearts', 'K')
 		hand.addCard(card2);
-
 		expect(hand.getHand().value).toBe(20);
 		expect(hand.getHand().isBusted).toBe(false);
 
-		let card3: Card = { ...card1 };
-		card3.id = 3;
-
+		let card3: Card = new Card('hearts', 'K')
 		hand.addCard(card3);
-
 		expect(hand.getHand().value).toBe(30);
 		expect(hand.getHand().isBusted).toBe(true);
 
@@ -199,30 +128,18 @@ describe('hand test', () => {
 		const hand = createHandStore();
 		expect(hand.getHand().isBusted).toBe(false);
 
-		const card1: Card = new Card();
-		card1.face = 'K';
-		card1.suit = 'hearts';
-		card1.value = value['K'];
-		card1.id = 1;
-
+		const card1: Card = new Card('hearts', 'K')
 		hand.addCard(card1);
-
 		expect(hand.getHand().value).toBe(10);
 		expect(hand.getHand().isBusted).toBe(false);
 
-		let card2: Card = { ...card1 };
-		card2.id = 2;
-
+		let card2: Card = new Card('hearts', 'K');
 		hand.addCard(card2);
-
 		expect(hand.getHand().value).toBe(20);
 		expect(hand.getHand().isBusted).toBe(false);
 
-		let card3: Card = { ...card1 };
-		card3.id = 3;
-
+		let card3: Card = new Card('hearts', 'K');
 		hand.addCard(card3);
-
 		expect(hand.getHand().value).toBe(30);
 		expect(hand.getHand().isBusted).toBe(true);
 
@@ -236,24 +153,13 @@ describe('hand test', () => {
 		const hand = createHandStore();
 		expect(hand.getHand().isBlackjack).toBe(false);
 
-		const card1: Card = new Card();
-		card1.face = 'K';
-		card1.suit = 'hearts';
-		card1.value = value['K'];
-		card1.id = 1;
-
+		const card1: Card = new Card('hearts', 'K');
 		hand.addCard(card1);
-
 		expect(hand.getHand().value).toBe(10);
 		expect(hand.getHand().isBlackjack).toBe(false);
 
-		let card2: Card = { ...card1 };
-		card2.face = 'A';
-		card2.value = value['A'];
-		card2.id = 2;
-
+		let card2: Card = new Card('hearts', 'A');
 		hand.addCard(card2);
-
 		expect(hand.getHand().value).toBe(21);
 		expect(hand.getHand().isBlackjack).toBe(true);
 	});
@@ -262,29 +168,17 @@ describe('hand test', () => {
 		const hand = createHandStore();
 		expect(hand.getHand().isBlackjack).toBe(false);
 
-		const card1: Card = new Card();
-		card1.face = 'K';
-		card1.suit = 'hearts';
-		card1.value = value['K'];
-		card1.id = 1;
-
+		const card1: Card = new Card('hearts', 'K');
 		hand.addCard(card1);
-
 		expect(hand.getHand().value).toBe(10);
 		expect(hand.getHand().isBlackjack).toBe(false);
 
-		let card2: Card = { ...card1 };
-		card2.face = 'A';
-		card2.value = value['A'];
-		card2.id = 2;
-
+		let card2: Card = new Card('hearts', 'A');
 		hand.addCard(card2);
-
 		expect(hand.getHand().value).toBe(21);
 		expect(hand.getHand().isBlackjack).toBe(true);
 
 		hand.removeCard(card2);
-
 		expect(hand.getHand().value).toBe(10);
 		expect(hand.getHand().isBlackjack).toBe(false);
 	});
@@ -293,29 +187,17 @@ describe('hand test', () => {
 		const hand = createHandStore();
 		expect(hand.getHand().isBlackjack).toBe(false);
 
-		const card1: Card = new Card();
-		card1.face = 'K';
-		card1.suit = 'hearts';
-		card1.value = value['K'];
-		card1.id = 1;
-
+		const card1: Card = new Card('hearts', 'K');
 		hand.addCard(card1);
-
 		expect(hand.getHand().value).toBe(10);
 		expect(hand.getHand().isBlackjack).toBe(false);
 
-		let card2: Card = { ...card1 };
-		card2.face = 'A';
-		card2.value = value['A'];
-		card2.id = 2;
-
+		let card2: Card = new Card('hearts', 'A');
 		hand.addCard(card2);
-
 		expect(hand.getHand().value).toBe(21);
 		expect(hand.getHand().isBlackjack).toBe(true);
 
 		hand.clearHand();
-
 		expect(hand.getHand().value).toBe(0);
 		expect(hand.getHand().isBlackjack).toBe(false);
 	});
@@ -324,18 +206,11 @@ describe('hand test', () => {
 		const hand = createHandStore();
 		expect(hand.getHand().value).toBe(0);
 
-		const card: Card = new Card();
-		card.face = 'A';
-		card.suit = 'hearts';
-		card.value = value['A'];
-		card.id = 1;
-
+		const card: Card = new Card('hearts', 'A');
 		hand.addCard(card);
 		expect(hand.getHand().value).toEqual(11);
 
-		const card2: Card = { ...card };
-		card2.id = 2;
-
+		const card2: Card = new Card('hearts', 'A');
 		hand.addCard(card2);
 		expect(hand.getHand().value).toEqual(12);
 	});

@@ -1,5 +1,13 @@
 export class Card {
-	public id: number | null = null;
+
+	constructor(suite: Suit, face: Face) {
+		this.id = crypto.randomUUID();
+		this.suit = suite;
+		this.face = face;
+		this.value = value[face];	
+	}
+
+	public id;
 	public suit: Suit | null = null;
 	public value: number | null = null;
 	public face: Face | null = null;

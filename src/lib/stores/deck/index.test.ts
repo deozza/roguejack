@@ -62,17 +62,11 @@ describe('deck test', () => {
 		const deck = createDeckStore();
 		const faces: Array<Face> = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
 		const suits: Array<Suit> = ['hearts'];
-
 		deck.generateDeck(suits, faces);
-
 		expect(deck.getDeck().cards.length).toEqual(13);
 
-		const card: Card = new Card();
-		card.face = 'A';
-		card.suit = 'diamonds';
-
+		const card: Card = new Card('diamonds', 'A');
 		deck.putCardOnTop(card);
-
 		expect(deck.getDeck().cards[0]).toEqual(card);
 		expect(deck.getDeck().cards.length).toEqual(14);
 	});
