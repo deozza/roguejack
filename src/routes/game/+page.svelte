@@ -1,87 +1,32 @@
 <script lang="ts">
-	import {
-		enemyCharacterHealthBarColor,
-		enemyCharacterStore,
-		playerCharacterHealthBarColor,
-		playerCharacterStore
-	} from '$lib/stores/character';
-	import { enemyDeckStore, playerDeckStore } from '$lib/stores/deck';
-	import { enemyHandStore, playerHandStore } from '$lib/stores/hand';
-	import { turnStore } from '$lib/stores/turn';
-	import { playerDiscardStore, enemyDiscardStore } from '$lib/stores/discard';
+
 
 	import Deck from '$lib/ui/deck/Deck.svelte';
 	import PlayingCard from '$lib/ui/playingCard/PlayingCard.svelte';
 	import { ProgressBar } from '@skeletonlabs/skeleton';
 	import { onMount } from 'svelte';
-	import { stackedFMSStore } from '$lib/stores/stackedFMS';
 	import Damages from '$lib/ui/damages/Damages.svelte';
 	import { fade } from 'svelte/transition';
 
-	let loading = true;
-	let turnResume: object | null = null;
-	let battleWon = false;
 
 	onMount(() => {
-		stackedFMSStore.subscribe((states) => {
-			const currentState = states[states.length - 1];
-			if (currentState.name === 'turn.playing') {
-				loading = false;
-				turnResume = null;
-			}
 
-			if (currentState.name === 'turn.end') {
-				turnResume = currentState.data;
-			}
-
-			if (currentState.name === 'battle.won') {
-				battleWon = true;
-			}
-		});
 	});
 
 	function draw() {
-		stackedFMSStore.pushNewState({
-			id: '',
-			name: 'turn.player.draw',
-			from: [],
-			to: [],
-			data: null
-		});
+
 	}
 
 	function fight() {
-		stackedFMSStore.transitionToState({
-			id: '',
-			name: 'turn.fight',
-			from: [],
-			to: [],
-			data: null
-		});
+
 	}
 
 	function startNextTurn() {
-		loading = true;
-		battleWon = false;
-		stackedFMSStore.transitionToState({
-			id: '',
-			name: 'turn.next',
-			from: [],
-			to: [],
-			data: null
-		});
+
 	}
 
 	function startNextBattle() {
-		loading = true;
-		battleWon = false;
-		stackedFMSStore.transitionToState({
-			id: '',
-			name: 'battle.next',
-			from: [],
-			to: [],
-			data: null
-		});
+
 	}
 </script>
 
@@ -163,13 +108,12 @@
 	</div>
 {/if}
 
-{#if turnResume !== null}
+{#if 1 === 2}
 	<div
 		class="flex flex-row justify-between items-center bg-primary-900 rounded-md p-6 w-1/3"
 		transition:fade
 	>
 		<p class="text-xl font-semibold">
-			{turnResume.damageMessage}
 		</p>
 		<button class="btn btn-md variant-filled-surface" on:click={() => startNextTurn()}
 			>New turn !</button
@@ -177,14 +121,4 @@
 	</div>
 {/if}
 
-{#if battleWon === true}
-	<div
-		class="flex flex-row justify-between items-center bg-primary-900 rounded-md p-6 w-1/3"
-		transition:fade
-	>
-		<p class="text-xl font-semibold">You won this battle</p>
-		<button class="btn btn-md variant-filled-surface" on:click={() => startNextBattle()}
-			>Next battle !</button
-		>
-	</div>
-{/if}
+
