@@ -1,4 +1,4 @@
-import { derived, writable } from "svelte/store";
+import { get, writable, type Writable } from "svelte/store";
 
 export type Character = {
     name: string;
@@ -8,7 +8,7 @@ export type Character = {
 };
 
 export const createCharacterStore = () => {
-    const { subscribe, set, update } = writable<Character>({
+    const store: Writable<Character> = writable<Character>({
         name: '',
         level: 1,
         maxHealth: 10,
@@ -16,40 +16,43 @@ export const createCharacterStore = () => {
     });
 
     function takeDamage(damage: number) {
-        update((state) => {
+        store.update((state) => {
             state.currentHealth = Math.max(state.currentHealth - damage, 0);
             return state;
         });
     }
 
     function heal(heal: number) {
-        update((state) => {
+        store.update((state) => {
             state.currentHealth = Math.min(state.currentHealth + heal, state.maxHealth);
             return state;
         });
     }
 
+    function getHealthColor(): string {
+        if (getCharacter().currentHealth / getCharacter().maxHealth > 0.75) {
+            return 'bg-green-500';
+        }
+        
+        if (getCharacter().currentHealth / getCharacter().maxHealth > 0.50) {
+            return 'bg-yellow-500';
+        } 
+        
+        if (getCharacter().currentHealth / getCharacter().maxHealth > 0.25) {
+            return 'bg-orange-500';
+        }
+    
+        return 'bg-red-500'
+    }
+
+    function getCharacter() {
+        return get(store);
+    }
+
     return {
-        subscribe,
-        set,
-        update,
         takeDamage,
-        heal
+        heal,
+        getHealthColor,
+        getCharacter,
     };
-}
-
-export function getHealthColor(character: Character) {
-    if (character.currentHealth / character.maxHealth > 0.75) {
-        return 'bg-green-500';
-    }
-    
-    if (character.currentHealth / character.maxHealth > 0.50) {
-        return 'bg-yellow-500';
-    } 
-    
-    if (character.currentHealth / character.maxHealth > 0.25) {
-        return 'bg-orange-500';
-    }
-
-    return 'bg-red-500'
 }

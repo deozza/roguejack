@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { Deck, createDeckStore } from './index';
-import { Card, Face, Suit } from '../card';
-import { get } from 'svelte/store';
+import { createDeckStore, type Deck } from './index';
+import { Card, type Face, type Suit } from '../card';
 
 
 describe('deck test', () => {
@@ -12,7 +11,7 @@ describe('deck test', () => {
 
 		deck.generateDeck(suits, faces);
 
-		expect(get(deck).cards.length).toBe(52);
+		expect(deck.getDeck().cards.length).toBe(52);
 	});
 
 	it('shuffle deck', () => {
@@ -21,61 +20,62 @@ describe('deck test', () => {
 		const suits: Array<Suit> = ['hearts', 'diamonds', 'clubs', 'spades'];
 
 		deck.generateDeck(suits, faces);
-		const originalDeck = [...get(deck)];
+		const originalDeckCards: Card[] = { ...deck.getDeck().cards};
 		deck.shuffleDeck();
 
-		expect(get(deck).cards).not.toEqual(originalDeck);
+		expect(deck.getDeck().cards).not.toEqual(originalDeckCards);
 	});
 
 	it('draw top card', () => {
-		const deck = new Deck();
+		const deck = createDeckStore();
 		const faces: Array<Face> = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
 		const suits: Array<Suit> = ['hearts', 'diamonds', 'clubs', 'spades'];
 
 		deck.generateDeck(suits, faces);
-		expect(deck.cards.length).toBe(52);
+		let currentDeck: Deck = { ...deck.getDeck()};
+		expect(currentDeck.cards.length).toBe(52);
 
-		const topCard = deck.cards[0];
-		const drawnCard = deck.drawTopCard();
+		const topCard: Card = currentDeck.cards[0];
+		const drawnCard: Card | null = deck.drawTopCard();
 
 		expect(drawnCard).toEqual(topCard);
-		expect(deck.cards.length).toBe(51);
+		expect(deck.getDeck().cards.length).toBe(51);
 	});
 
 	it('draw top card on empty deck', () => {
-		const deck = new Deck();
+		const deck = createDeckStore();
 		const faces: Array<Face> = ['A'];
 		const suits: Array<Suit> = ['hearts'];
 
 		deck.generateDeck(suits, faces);
-		expect(deck.cards.length).toBe(1);
+		expect(deck.getDeck().cards.length).toBe(1);
 
-		const topCard = deck.cards[0];
-		const drawnCard = deck.drawTopCard();
+		const topCard: Card = deck.getDeck().cards[0];
+		const drawnCard: Card | null = deck.drawTopCard();
 
 		expect(drawnCard).toEqual(topCard);
-		expect(deck.cards.length).toBe(0);
+		expect(deck.getDeck().cards.length).toBe(0);
 
 		expect(deck.drawTopCard()).toBeNull()
 	});
 
 	it('put card on top', () => {
-		const deck = new Deck();
+		const deck = createDeckStore();
 		const faces: Array<Face> = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
 		const suits: Array<Suit> = ['hearts'];
 
 		deck.generateDeck(suits, faces);
 
-		expect(deck.cards.length).toEqual(13);
+		expect(deck.getDeck().cards.length).toEqual(13);
 
-		const card = new Card();
+		const card: Card = new Card();
 		card.face = 'A';
 		card.suit = 'diamonds';
 
 		deck.putCardOnTop(card);
 
-		expect(deck.cards[0]).toEqual(card);
-		expect(deck.cards.length).toEqual(14);
+		expect(deck.getDeck().cards[0]).toEqual(card);
+		expect(deck.getDeck().cards.length).toEqual(14);
 
 	})
 });

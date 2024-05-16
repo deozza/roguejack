@@ -1,51 +1,67 @@
+import { get, writable, type Writable } from "svelte/store";
 import type { Card } from "../card";
 
-export class Hand {
-    public cards: Card[] = [];
-    public value: number = 0;
-    public isBusted: boolean = false;
-    public isBlackjack: boolean = false;
 
-    public addCard(card: Card): void {
-        this.cards = [...this.cards, card];
-        this.calculateValue();
+export type Hand = {
+    cards: Card[];
+    value: number;
+    isBusted: boolean;
+    isBlackjack: boolean;
+};
+
+export const createHandStore = () => {
+    const store: Writable<Hand> = writable<Hand>({
+        cards: [],
+        value: 0,
+        isBusted: false,
+        isBlackjack: false,
+    });
+
+    function addCard(card: Card) {
+        store.update((state) => {
+            state.cards = [...state.cards, card];
+            state.value = getValue();
+            state.isBusted = getIsBusted();
+            state.isBlackjack = getIsBlackjack();
+            return state;
+        });
     }
 
-    public removeCard(card: Card): void {
-        this.cards = this.cards.filter((c: Card) => c.id !== card.id);
-        this.calculateValue();
+    function removeCard(card: Card) {
+        store.update((state) => {
+            state.cards = state.cards.filter((c: Card) => c.id !== card.id);
+            state.value = getValue();
+            state.isBusted = getIsBusted();
+            state.isBlackjack = getIsBlackjack();
+            return state;
+        });
     }
 
-    public clearHand(): void {
-        this.cards = [];
-        this.calculateValue();
+    function clearHand() {
+        store.update((state) => {
+            state.cards = [];
+            state.value = 0;
+            state.isBusted = false;
+            state.isBlackjack = false;
+            return state;
+        });
     }
 
-    private calculateValue(): void {
-        let figuresCount: number = 0;
+    function getValue(): number {
+        const cards: Card[] = getHand().cards;
+
         let acesCount: number = 0;
         const aceValue: number = 11;
 
-        let value = 0;
-        this.isBusted = false;
-        this.isBlackjack = false;
+        let value: number = 0;
 
-        this.cards.forEach((card: Card) => {
+        cards.forEach((card: Card) => {
             if (card.face === 'A') {
                 acesCount++;
-            } else if (['J', 'Q', 'K'].includes(String(card.face))) {
-                figuresCount++;
-                value += 10;
             }else {
                 value += Number(card.value);
             }
         });
-
-        if (this.cards.length === 2 && figuresCount === 1 && acesCount === 1) {
-            this.isBlackjack = true;
-            this.value = 21;
-            return;
-        }
 
         for (let i: number = 1; i <= acesCount; i++) {
             if (value + aceValue > 21) {
@@ -55,10 +71,40 @@ export class Hand {
             }
         }
 
-        this.value = value;
-    
-        if (value > 21) {
-            this.isBusted = true;
-        }
+        return value;
     }
-}
+
+    function getIsBusted(): boolean {
+        return getHand().value > 21;
+    }
+
+    function getIsBlackjack(): boolean{
+
+        const cards: Card[] = getHand().cards;
+        let figuresCount: number = 0;
+        let acesCount: number = 0;
+
+        cards.forEach((card: Card) => {
+            if (card.face === 'A') {
+                acesCount++;
+            }
+            
+            if (['J', 'Q', 'K'].includes(String(card.face))) {
+                figuresCount++;
+            }
+        });
+
+        return cards.length === 2 && figuresCount === 1 && acesCount === 1;
+    }
+
+    function getHand(): Hand {
+        return get(store);
+    }
+
+    return {
+        addCard,
+        removeCard,
+        clearHand,
+        getHand,
+    };
+};

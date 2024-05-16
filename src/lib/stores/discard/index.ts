@@ -1,13 +1,37 @@
+import { get, writable } from "svelte/store";
 import type { Card } from "../card";
 
-export class Discard {
-    public cards: Card[] = [];
 
-    public discardCard(card: Card): void {
-        this.cards = [...this.cards, card];
+export type Discard = {
+    cards: Card[];
+};
+
+export const createDiscardStore = () => {
+    const store = writable<Discard>({
+        cards: [],
+    });
+
+    function discardCard(card: Card) {
+        store.update((state) => {
+            state.cards = [...state.cards, card];
+            return state;
+        });
     }
 
-    public clearDiscard(): void {
-        this.cards = [];
+    function clearDiscard() {
+        store.update((state) => {
+            state.cards = [];
+            return state;
+        });
     }
-}
+
+    function getDiscard() {
+        return get(store);
+    }
+
+    return {
+        getDiscard,
+        discardCard,
+        clearDiscard,
+    };
+};

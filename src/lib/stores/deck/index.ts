@@ -1,4 +1,4 @@
-import { writable } from "svelte/store";
+import { get, writable } from "svelte/store";
 import { Card, value, type Face, type Suit } from "../card";
 
 
@@ -7,12 +7,12 @@ export type Deck = {
 };
 
 export const createDeckStore = () => {
-    const { subscribe, set, update } = writable<Deck>({
+    const store = writable<Deck>({
         cards: [],
     });
 
     function generateDeck(suits: Array<Suit>, faces: Array<Face>) {
-        update((state) => {
+        store.update((state) => {
             let cardId: number = 1;
             suits.forEach((suit: Suit) => {
                 faces.forEach((face: Face) => {
@@ -32,35 +32,39 @@ export const createDeckStore = () => {
     }
 
     function shuffleDeck() {
-        update((state) => {
+        store.update((state) => {
             state.cards = state.cards.sort(() => Math.random() - 0.5);
             return state;
         });
     }
 
-    function drawTopCard() {
-        update((state) => {
-            const card = state.cards[0];
-            if (!card) {
-                return state;
-            }
+    function drawTopCard(): Card | null {
+        const card = getDeck().cards[0];
+        if (!card) {
+            return null;
+        }
 
+        store.update((state) => {
             state.cards = state.cards.slice(1);
             return state;
         });
+
+        return card;
     }
 
     function putCardOnTop(card: Card) {
-        update((state) => {
+        store.update((state) => {
             state.cards = [card, ...state.cards];
             return state;
         });
     }
 
+    function getDeck(): Deck {
+        return get(store);
+    }
+
     return {
-        subscribe,
-        set,
-        update,
+        getDeck,
         generateDeck,
         shuffleDeck,
         drawTopCard,
