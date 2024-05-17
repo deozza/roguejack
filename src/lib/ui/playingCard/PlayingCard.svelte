@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { CardStore } from '$lib/stores/card';
+	import type { Card } from '$lib/stores/card/model';
 	import 'iconify-icon';
 	import { slide } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
-	export let card: CardStore;
+	export let card: Card;
 </script>
 
 <div
@@ -14,9 +14,7 @@
 	<div class="text-start w-full">
 		<iconify-icon icon={'bi:suit-' + card.suit + '-fill'} />
 	</div>
-	<span class="h1 font-semibold"
-		>{card.numberValue !== null ? card.numberValue : card.figureValue}
-	</span>
+	<span class="h1 font-semibold">{card.face} </span>
 	<div class="text-end w-full">
 		<iconify-icon icon={'bi:suit-' + card.suit + '-fill'} class="backward" />
 	</div>

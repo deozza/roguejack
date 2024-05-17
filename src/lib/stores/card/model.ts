@@ -1,13 +1,12 @@
 export class Card {
-
 	constructor(suite: Suit, face: Face) {
 		this.id = crypto.randomUUID();
 		this.suit = suite;
 		this.face = face;
-		this.value = value[face];	
+		this.value = value[face];
 	}
 
-	public id;
+	public id: string;
 	public suit: Suit | null = null;
 	public value: number | null = null;
 	public face: Face | null = null;
@@ -17,7 +16,7 @@ export type Face = 'A' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | 
 
 export type Suit = 'hearts' | 'diamonds' | 'clubs' | 'spades';
 
-export const value: Record<Face, number> = {
+const value: Record<Face, number> = {
 	A: 11,
 	'2': 2,
 	'3': 3,
