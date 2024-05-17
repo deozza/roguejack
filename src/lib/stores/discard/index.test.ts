@@ -1,29 +1,32 @@
-import { describe, it, expect } from 'vitest';
-import { Card, value } from '../card';
-import { createDiscardStore } from './index';
+import { describe, it, expect, beforeEach } from 'vitest';
+import { Card } from '../card';
+import { discardStore } from './index';
 
 describe('discard test', () => {
+
+	beforeEach(() => {
+		discardStore.clearDiscard();
+	});
+
 	it('add card to discard', () => {
-		const discard = createDiscardStore();
-		expect(discard.getDiscard().cards.length).toBe(0);
+		expect(discardStore.getDiscard().cards.length).toBe(0);
 
 		const card: Card = new Card('hearts', 'A');
-		discard.discardCard(card);
+		discardStore.discardCard(card);
 
-		expect(discard.getDiscard().cards.length).toBe(1);
-		expect(discard.getDiscard().cards[0]).toEqual(card);
+		expect(discardStore.getDiscard().cards.length).toBe(1);
+		expect(discardStore.getDiscard().cards[0]).toEqual(card);
 	});
 
 	it('clear discard', () => {
-		const discard = createDiscardStore();
-		expect(discard.getDiscard().cards.length).toBe(0);
+		expect(discardStore.getDiscard().cards.length).toBe(0);
 
 		const card: Card = new Card('hearts', 'A');
-		discard.discardCard(card);
-		expect(discard.getDiscard().cards.length).toBe(1);
-		expect(discard.getDiscard().cards[0]).toEqual(card);
+		discardStore.discardCard(card);
+		expect(discardStore.getDiscard().cards.length).toBe(1);
+		expect(discardStore.getDiscard().cards[0]).toEqual(card);
 
-		discard.clearDiscard();
-		expect(discard.getDiscard().cards.length).toBe(0);
+		discardStore.clearDiscard();
+		expect(discardStore.getDiscard().cards.length).toBe(0);
 	});
 });

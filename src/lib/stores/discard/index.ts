@@ -5,7 +5,7 @@ export type Discard = {
 	cards: Card[];
 };
 
-export const createDiscardStore = () => {
+const createDiscardStore = () => {
 	const store = writable<Discard>({
 		cards: []
 	});
@@ -34,3 +34,5 @@ export const createDiscardStore = () => {
 		clearDiscard
 	};
 };
+
+export const discardStore = createDiscardStore();

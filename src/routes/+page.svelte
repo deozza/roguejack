@@ -1,13 +1,12 @@
 <script lang="ts">
 
 	import { goto } from '$app/navigation';
+	import { gameStore, type Game } from '$lib/stores/game';
 	import { onMount } from 'svelte';
 
-	onMount(() => {
-
-	});
 
 	function startNewGame() {
+
 
 	}
 </script>

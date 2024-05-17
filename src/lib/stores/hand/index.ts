@@ -8,7 +8,7 @@ export type Hand = {
 	isBlackjack: boolean;
 };
 
-export const createHandStore = () => {
+const createHandStore = () => {
 	const store: Writable<Hand> = writable<Hand>({
 		cards: [],
 		value: 0,
@@ -106,3 +106,5 @@ export const createHandStore = () => {
 		getHand
 	};
 };
+
+export const handStore = createHandStore();

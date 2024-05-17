@@ -5,21 +5,18 @@ export type Deck = {
 	cards: Card[];
 };
 
-export const createDeckStore = () => {
+const createDeckStore = () => {
 	const store = writable<Deck>({
 		cards: []
 	});
 
 	function generateDeck(suits: Array<Suit>, faces: Array<Face>) {
 		store.update((state) => {
+			state.cards = [];
 			let cardId: number = 1;
 			suits.forEach((suit: Suit) => {
 				faces.forEach((face: Face) => {
-					const card: Card = new Card();
-					card.suit = suit;
-					card.face = face;
-					card.value = value[face];
-					card.id = cardId;
+					const card: Card = new Card(suit, face);
 
 					state.cards = [...state.cards, card];
 					cardId++;
@@ -70,3 +67,5 @@ export const createDeckStore = () => {
 		putCardOnTop
 	};
 };
+
+export const deckStore = createDeckStore();
