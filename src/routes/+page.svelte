@@ -1,20 +1,17 @@
 <script lang="ts">
-	import { Character } from '$lib/stores/character/model';
-	import { Game } from '$lib/stores/game/model';
+	import { Character } from '$lib/models/character/model';
+	import { Game } from '$lib/models/game/model';
 	import { gameState } from '$lib/stores/game';
-	import { Deck } from '$lib/stores/deck/model';
-	import { Battle } from '$lib/stores/battle/model';
-	import { Turn } from '$lib/stores/turn/model';
+	import { Battle } from '$lib/models/battle/model';
+	import { Turn } from '$lib/models/turn/model';
+
+	import necromancer from '$lib/models/character/players/necromancer.json';
+	import rat from '$lib/models/character/enemies/rat.json';
 
 	function startNewGame() {
-
-		const deck: Deck = new Deck();
-		deck.generateDeck(['clubs', 'diamonds', 'hearts', 'spades'], ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']);
-		deck.shuffleDeck();
-
 		const player: Character = new Character();
-		player.generateCharacter();
-		player.deck = deck;
+		player.generateCharacter(necromancer);
+		player.deck.shuffleDeck();
 
 		const game: Game = new Game();
 		game.player = player;
@@ -23,13 +20,10 @@
 	}
 
 	function startNewBattle() {
-		const deck: Deck = new Deck();
-		deck.generateDeck(['clubs', 'diamonds', 'hearts', 'spades'], ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']);
-		deck.shuffleDeck();
-
 		const enemy: Character = new Character();
-		enemy.generateCharacter();
-		enemy.deck = deck;
+		enemy.generateCharacter(rat);
+		enemy.deck.shuffleDeck();
+
 		const battle: Battle = new Battle(enemy, $gameState!.battles.length);
 		$gameState?.addBattle(battle);
 

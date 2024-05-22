@@ -1,5 +1,5 @@
-import { Battle } from '../battle/model';
-import { Character } from '../character/model';
+import { Battle } from '$lib/models/battle/model';
+import { Character } from '$lib/models/character/model';
 
 export class Game {
 	id: string;

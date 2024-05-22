@@ -1,4 +1,4 @@
-import { Card, type Face, type Suit } from '../card/model';
+import { Card, type Face, type Suit } from '$lib/models/card/model';
 
 export class Deck {
 	cards: Array<Card> = [];

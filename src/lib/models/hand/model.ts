@@ -1,4 +1,4 @@
-import { Card } from '../card/model';
+import { Card } from '$lib/models/card/model';
 
 export class Hand {
 	cards: Card[] = [];

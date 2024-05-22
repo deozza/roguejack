@@ -1,5 +1,5 @@
-import { Deck } from '../deck/model';
-import { Discard } from '../discard/model';
+import { Deck } from '$lib/models/deck/model';
+import { Discard } from '$lib/models/discard/model';
 
 export class Character {
 	name: string;
@@ -9,12 +9,13 @@ export class Character {
 	deck: Deck;
 	discard: Discard;
 
-	public generateCharacter() {
-		this.name = 'Player';
-		this.level = 1;
-		this.maxHealth = 10;
-		this.currentHealth = 10;
+	public generateCharacter(characterType: object) {
+		this.name = characterType.name;
+		this.level = characterType.level;
+		this.maxHealth = characterType.maxHealth;
+		this.currentHealth = characterType.maxHealth;
 		this.deck = new Deck();
+		this.deck.generateDeck(characterType.deck.suits, characterType.deck.values);
 		this.discard = new Discard();
 	}
 
