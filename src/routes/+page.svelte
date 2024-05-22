@@ -1,62 +1,45 @@
 <script lang="ts">
-	import { Character } from '$lib/models/character/model';
-	import { Game } from '$lib/models/game/model';
-	import { gameState } from '$lib/stores/game';
-	import { Battle } from '$lib/models/battle/model';
-	import { Turn } from '$lib/models/turn/model';
+	import { gameStore, gameMachineState } from '$lib/stores/game';
 
-	import necromancer from '$lib/models/character/players/necromancer.json';
-	import rat from '$lib/models/character/enemies/rat.json';
+	import { GameCharacterSelectionState, GameIdleState, GameInitState } from '$lib/models/stateMachine/game/states';
+
+	import {characters} from '$lib/models/character/players';
+	import { Game } from '$lib/models/game/model';
+	import { Character } from '$lib/models/character/model';
 
 	function startNewGame() {
-		const player: Character = new Character();
-		player.generateCharacter(necromancer);
-		player.deck.shuffleDeck();
-
-		const game: Game = new Game();
-		game.player = player;
-
-		$gameState = game;
-	}
-
-	function startNewBattle() {
-		const enemy: Character = new Character();
-		enemy.generateCharacter(rat);
-		enemy.deck.shuffleDeck();
-
-		const battle: Battle = new Battle(enemy, $gameState!.battles.length);
-		$gameState?.addBattle(battle);
-
-		$gameState = $gameState;
-	}
-
-	function startNewTurn() {
-		const turn: Turn = new Turn($gameState!.getCurrentBattle()!.turns.length);
-		$gameState?.getCurrentBattle()?.addTurn(turn);
-		$gameState = $gameState;
-	}
-
-	function draw() {
-		const card = $gameState?.player.deck?.drawTopCard();
-		$gameState = $gameState;
-
-		if (card) {
-			$gameState?.getCurrentBattle()?.getCurrentTurn()?.playerHand.addCard(card);
-			$gameState = $gameState;
+		$gameMachineState.listenToEvent({name: 'NEW_GAME', data: null});
+		$gameMachineState = $gameMachineState;
+		if ($gameMachineState.currentState.constructor.name === GameCharacterSelectionState.name) {
+			$gameStore = new Game();
 		}
 	}
 
-	$: console.log('game', $gameState);
-	$: console.log('battle', $gameState?.getCurrentBattle());
-	$: console.log('turn', $gameState?.getCurrentBattle()?.getCurrentTurn());
-	$: console.log('deck', $gameState?.player.deck);
-	$: console.log('hand', $gameState?.getCurrentBattle()?.getCurrentTurn()?.playerHand);
+	function selectCharacter(character: object) {
+		$gameMachineState.listenToEvent({name: 'CHARACTER_SELECTED', data: null});
+		$gameMachineState = $gameMachineState;
+		if ($gameMachineState.currentState.constructor.name === GameInitState.name) {
+			const player = new Character();
+			player.generateCharacter(character);
+
+			$gameStore.player = player;
+			$gameStore = $gameStore;
+		}
+	}
+
+$: console.log('current state', $gameMachineState.currentState.constructor.name);
+$: console.log('game', $gameStore);
+
 </script>
 
-<button class="btn btn-xl variant-filled-success" on:click={startNewGame}> New game </button>
-<button class="btn btn-xl variant-filled-success" on:click={startNewBattle}> New Battle </button>
-<button class="btn btn-xl variant-filled-success" on:click={startNewTurn}> New Turn </button>
+{#if $gameMachineState.currentState.constructor.name === GameIdleState.name}
+	<button class="btn btn-xl variant-filled-success" on:click={startNewGame}> New game </button>
+{/if}
 
-<button class="btn btn-xl variant-filled-success" on:click={draw}> Draw </button>
-
+{#if $gameMachineState.currentState.constructor.name === GameCharacterSelectionState.name}
+	<h1> Select your character</h1>
+	{#each characters as character}
+		<button class="btn btn-xl variant-filled-success" on:click={() => selectCharacter(character)}> {character.name} </button>
+	{/each}
+{/if}
 
