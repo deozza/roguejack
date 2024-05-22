@@ -18,13 +18,10 @@
 	function selectCharacter(character: object) {
 		$gameMachineState.listenToEvent({name: 'CHARACTER_SELECTED', data: null});
 		$gameMachineState = $gameMachineState;
-		if ($gameMachineState.currentState.constructor.name === GameInitState.name) {
-			const player = new Character();
-			player.generateCharacter(character);
+		$gameMachineState.currentState.onStateExecute({character, game: $gameStore});
 
-			$gameStore.player = player;
-			$gameStore = $gameStore;
-		}
+		$gameMachineState.listenToEvent({name: 'START_GAME', data: null});
+		$gameMachineState = $gameMachineState;
 	}
 
 $: console.log('current state', $gameMachineState.currentState.constructor.name);

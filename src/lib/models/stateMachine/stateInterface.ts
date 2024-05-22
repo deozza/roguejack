@@ -1,5 +1,5 @@
 export interface StateInterface {
     onStateEnter;
-    onStateExecute(): void
+    onStateExecute(data: object): void
     onStateExit;
 }
