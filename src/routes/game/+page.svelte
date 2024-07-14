@@ -14,7 +14,7 @@
 	import TurnResultAlert from '$lib/ui/gameLayout/TurnResultAlert.svelte';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-			
+
 	let campIsOpened: boolean = false;
 
 	onMount(() => {
@@ -275,10 +275,9 @@
 	}
 
 	function recycleAtCamp() {
-		
-		for(let i = 0; i < 4; i++) {
+		for (let i = 0; i < 4; i++) {
 			const card: Card | null | undefined = $gameStore?.player.discard.drawTopCard();
-			if(card === null || card === undefined) {
+			if (card === null || card === undefined) {
 				break;
 			}
 
@@ -292,10 +291,11 @@
 
 		startBattle();
 	}
-
 </script>
+
 {#if campIsOpened === true}
-	<div class="absolute h-screen w-screen z-10 bg-surface-500"
+	<div
+		class="absolute h-screen w-screen z-10 bg-surface-500"
 		transition:fade={{ delay: 250, duration: 300 }}
 	>
 		<div class="flex flex-col items-center justify-center h-full w-full">
@@ -310,17 +310,19 @@
 					</div>
 				</div>
 				<div class="flex flex-row flex-wrap items-center justify-start w-7/12">
-					<button class="btn btn-xl variant-ghost-success" on:click={() => healAtCamp()}>Heal</button>
-					<button class="btn btn-xl variant-ghost-secondary" on:click={() => recycleAtCamp()}>Recycle discard</button>
+					<button class="btn btn-xl variant-ghost-success" on:click={() => healAtCamp()}
+						>Heal</button
+					>
+					<button class="btn btn-xl variant-ghost-secondary" on:click={() => recycleAtCamp()}
+						>Recycle discard</button
+					>
 				</div>
-
 			</div>
 		</div>
 	</div>
 {/if}
 
 <div class="container h-full mx-auto flex flex-col justify-left items-start space-y-10">
-	
 	<div class="flex flex-col items-center justify-center w-full">
 		<h1 class="h1">Battle {$gameStore?.battles.length}</h1>
 	</div>

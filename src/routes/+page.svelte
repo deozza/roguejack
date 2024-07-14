@@ -17,7 +17,6 @@
 	import { TurnMachineState } from '$lib/models/stateMachine/turn/turnMachineState';
 
 	afterNavigate((to) => {
-
 		if ($gameMachineState.currentState.constructor.name === GameLostState.name) {
 			$gameMachineState.listenToEvent({ name: 'QUIT_GAME', data: null });
 			$gameMachineState = $gameMachineState;
