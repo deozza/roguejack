@@ -3,6 +3,7 @@
 	import type { Card } from '$lib/models/card/model';
 	import { BattleIdleState } from '$lib/models/stateMachine/battle/states';
 	import { GamePlayingState } from '$lib/models/stateMachine/game/states';
+	import { TurnMachineState } from '$lib/models/stateMachine/turn/turnMachineState';
 	import { battleMachineState } from '$lib/stores/battle';
 	import { gameStore, gameMachineState } from '$lib/stores/game';
 	import { playerTurnMachineState, enemyTurnMachineState } from '$lib/stores/turn';
@@ -33,7 +34,6 @@
 	}
 
 	function startTurn() {
-		console.log('starting turn');
 		$playerTurnMachineState.listenToEvent({ name: 'NEW_TURN', data: null });
 		$playerTurnMachineState.currentState.onStateExecute({ game: $gameStore });
 		$playerTurnMachineState = $playerTurnMachineState;
@@ -79,6 +79,25 @@
 	}
 
 	function fight() {}
+
+    function prepareForNewTurn() {
+
+        $gameStore?.getCurrentBattle()?.getCurrentTurn().playerHand.cards.forEach(card => {
+            $gameStore?.player.discard.discardCard(card);
+        });
+        $gameStore?.getCurrentBattle()?.getCurrentTurn().playerHand.clearHand();
+
+        $gameStore?.getCurrentBattle()?.getCurrentTurn().enemyHand.cards.forEach(card => {
+            $gameStore?.getCurrentBattle()?.enemy.discard.discardCard(card);
+        });
+        $gameStore?.getCurrentBattle()?.getCurrentTurn().enemyHand.clearHand();
+
+        $gameStore = $gameStore;
+
+        playerTurnMachineState.set(new TurnMachineState());
+
+        startTurn();
+    }
 
 	$: console.log('current game state', $gameMachineState.currentState.constructor.name);
 	$: console.log('current battle state', $battleMachineState.currentState.constructor.name);
@@ -129,6 +148,6 @@
 		</div>
 	{/if}
 	<div class="flex flex-col items-center justify-center w-full">
-		<TurnResultAlert turnResult={$playerTurnMachineState.currentState.constructor.name} />
+		<TurnResultAlert turnResult={$playerTurnMachineState.currentState.constructor.name} on:click={() => prepareForNewTurn()} />
 	</div>
 </div>
