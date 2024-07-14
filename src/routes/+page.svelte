@@ -1,34 +1,54 @@
 <script lang="ts">
-import {stackedFMSStore} from '$lib/stores/stackedFMS';
-import {gameStore} from '$lib/stores/game';
-import {playerCharacterStore} from '$lib/stores/character';
-import {playerDeckStore} from '$lib/stores/deck';
-import {battleStore} from '$lib/stores/battle';
+	import { gameStore, gameMachineState } from '$lib/stores/game';
+	import { battleMachineState } from '$lib/stores/battle';
+
+	import {
+		GameCharacterSelectionState,
+		GameIdleState,
+		GamePlayingState
+	} from '$lib/models/stateMachine/game/states';
+
+	import { characters } from '$lib/models/character/players';
+	import { Game } from '$lib/models/game/model';
 	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
 
-onMount(()=>{
-    stackedFMSStore.subscribe((states)=>{
-        const currentState = states[states.length - 1];
+	function startNewGame() {
+		$gameMachineState.listenToEvent({ name: 'NEW_GAME', data: null });
+		$gameMachineState = $gameMachineState;
+		if ($gameMachineState.currentState.constructor.name === GameCharacterSelectionState.name) {
+			$gameStore = new Game();
+		}
+	}
 
-        if(currentState !== undefined && currentState.name == 'turn.start'){        
-            goto('/game');
-        }
-    })
-})
+	function selectCharacter(character: object) {
+		$gameMachineState.listenToEvent({ name: 'CHARACTER_SELECTED', data: null });
+		$gameMachineState = $gameMachineState;
+		$gameMachineState.currentState.onStateExecute({ character, game: $gameStore });
 
-function startNewGame() {
-    stackedFMSStore.pushNewState({
-        id:'',
-        name: 'game.init',
-        from: [],
-        to: [],
-        data: null
-    })
-}
+		$gameMachineState.listenToEvent({ name: 'START_GAME', data: null });
+		$gameMachineState = $gameMachineState;
+		if ($gameMachineState.currentState.constructor.name === GamePlayingState.name) {
+			goto('/game');
+		}
+	}
 </script>
 
+<div class="container h-full mx-auto flex flex-col justify-center items-center">
+	<section class="flex flex-col items-center justify-center h-full space-y-10">
+		{#if $gameMachineState.currentState.constructor.name === GameIdleState.name}
+			<button class="btn btn-xl variant-filled-success" on:click={startNewGame}> New game </button>
+		{/if}
 
-<button class="btn btn-xl variant-filled-success" on:click={startNewGame}>
-    New game
-</button>
+		{#if $gameMachineState.currentState.constructor.name === GameCharacterSelectionState.name}
+			<h1>Select your character</h1>
+			{#each characters as character}
+				<button
+					class="btn btn-xl variant-filled-success"
+					on:click={() => selectCharacter(character)}
+				>
+					{character.name}
+				</button>
+			{/each}
+		{/if}
+	</section>
+</div>

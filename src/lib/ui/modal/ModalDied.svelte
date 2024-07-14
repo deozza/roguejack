@@ -15,7 +15,7 @@
 	// Notes: Use `w-screen h-screen` to fit the visible canvas size.
 	const cBase = 'bg-surface-100-800-token w-screen h-screen flex justify-center items-center';
 
-	function redirectToHome(){
+	function redirectToHome() {
 		goto('/');
 		parent.onClose();
 	}
