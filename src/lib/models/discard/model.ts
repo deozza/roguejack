@@ -7,6 +7,17 @@ export class Discard {
 		this.cards = [...this.cards, card];
 	}
 
+	drawTopCard(): Card | null {
+		const card = this.cards[0];
+		if (!card) {
+			return null;
+		}
+
+		this.cards = this.cards.slice(1);
+
+		return card;
+	}
+
 	clearDiscard() {
 		this.cards = [];
 	}
