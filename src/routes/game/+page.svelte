@@ -19,12 +19,6 @@
 		startBattle();
 	}
 
-	$: console.log('Game store', $gameStore);
-	$: console.log('Battle machine state', $battleMachineState);
-	$: console.log('Player turn machine state', $playerTurnMachineState);
-	$: console.log('Enemy turn machine state', $enemyTurnMachineState);
-
-
 	function startBattle() {
 		$battleMachineState.listenToEvent({ name: 'NEW_BATTLE', data: null });
 		$battleMachineState.currentState.onStateExecute({ game: $gameStore });
@@ -100,7 +94,7 @@
 		$enemyTurnMachineState.currentState = new TurnPlayingState();
 		$enemyTurnMachineState = $enemyTurnMachineState;
 
-		while ($gameStore?.getCurrentBattle()?.getCurrentTurn().enemyHand.getValue() < 16) {
+		while ($gameStore?.getCurrentBattle()?.getCurrentTurn().enemyHand.getValue() < $gameStore?.getCurrentBattle()?.enemy.minAttack) {
 			enemyAutoDraw();
 		}
 		$enemyTurnMachineState.listenToEvent({ name: 'FIGHT', data: null });

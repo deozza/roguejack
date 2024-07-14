@@ -8,6 +8,7 @@ export class Character {
 	maxHealth: number;
 	deck: Deck;
 	discard: Discard;
+	minAttack: number | null = null;
 
 	public generateCharacter(characterType: object) {
 		this.name = characterType.name;
@@ -18,6 +19,10 @@ export class Character {
 		this.deck.generateDeck(characterType.deck.suits, characterType.deck.values);
 		this.deck.shuffleDeck();
 		this.discard = new Discard();
+
+		if (characterType.minAttack) {
+			this.minAttack = characterType.minAttack;
+		}
 	}
 
 	public takeDamage(damage: number) {

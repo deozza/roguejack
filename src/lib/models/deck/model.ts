@@ -2,6 +2,7 @@ import { Card, type Face, type Suit } from '$lib/models/card/model';
 
 export class Deck {
 	cards: Array<Card> = [];
+	maxCards: number = 0;
 
 	generateDeck(suits: Array<Suit>, faces: Array<Face>) {
 		this.cards = [];
@@ -14,6 +15,8 @@ export class Deck {
 				cardId++;
 			});
 		});
+
+		this.maxCards = this.cards.length;
 	}
 
 	shuffleDeck() {

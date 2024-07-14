@@ -4,6 +4,7 @@
 	import Deck from '../deck/Deck.svelte';
 	import Discard from '../deck/Discard.svelte';
 	import PlayingCard from '../playingCard/PlayingCard.svelte';
+	import Healthbar from '../character/Healthbar.svelte';
 
 	export let playerName: string;
 	export let currentHealth: number;
@@ -24,8 +25,11 @@
 	];
 </script>
 
-<div class="flex flex-col items-center justify-center w-full md:w-5/12">
-	<h3 class="h3">{playerName} {currentHealth}/{maxHealth}</h3>
+<div class="flex flex-col items-center justify-center w-full md:w-5/12 space-y-5">
+	<h3 class="h3 uppercase">
+		{playerName} 
+	</h3>
+	<Healthbar {currentHealth} {maxHealth} />
 	<div
 		class="flex {isEnemy
 			? 'flex-row-reverse'
