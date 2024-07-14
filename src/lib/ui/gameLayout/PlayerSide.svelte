@@ -16,7 +16,12 @@
 
 	export let isEnemy: boolean = false;
 
-	const endTurnStates: string[] = ['TurnWonState', 'TurnTiedState', 'TurnLostState', 'TurnBustedState'];
+	const endTurnStates: string[] = [
+		'TurnWonState',
+		'TurnTiedState',
+		'TurnLostState',
+		'TurnBustedState'
+	];
 </script>
 
 <div class="flex flex-col items-center justify-center w-5/12">

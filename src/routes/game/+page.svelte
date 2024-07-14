@@ -73,8 +73,10 @@
 			$playerTurnMachineState.listenToEvent({ name: 'BUST', data: null });
 			$playerTurnMachineState = $playerTurnMachineState;
 
-            $gameStore.player.takeDamage($gameStore.getCurrentBattle().getCurrentTurn().playerHand.getValue() - 21);
-            $gameStore = $gameStore;
+			$gameStore.player.takeDamage(
+				$gameStore.getCurrentBattle().getCurrentTurn().playerHand.getValue() - 21
+			);
+			$gameStore = $gameStore;
 
 			return;
 		}
@@ -84,159 +86,175 @@
 	}
 
 	function fight() {
-        $playerTurnMachineState.listenToEvent({ name: 'FIGHT', data: null });
-        $enemyTurnMachineState.currentState = new TurnPlayingState();
-        $enemyTurnMachineState = $enemyTurnMachineState;
+		$playerTurnMachineState.listenToEvent({ name: 'FIGHT', data: null });
+		$enemyTurnMachineState.currentState = new TurnPlayingState();
+		$enemyTurnMachineState = $enemyTurnMachineState;
 
-        while($gameStore?.getCurrentBattle()?.getCurrentTurn().enemyHand.getValue() < 16) {
-            enemyAutoDraw();
-        }
-        $enemyTurnMachineState.listenToEvent({ name: 'FIGHT', data: null });
-        $enemyTurnMachineState = $enemyTurnMachineState;
+		while ($gameStore?.getCurrentBattle()?.getCurrentTurn().enemyHand.getValue() < 16) {
+			enemyAutoDraw();
+		}
+		$enemyTurnMachineState.listenToEvent({ name: 'FIGHT', data: null });
+		$enemyTurnMachineState = $enemyTurnMachineState;
 
-        if($enemyTurnMachineState.currentState.constructor.name === 'TurnBustedState') {
-            $playerTurnMachineState.listenToEvent({ name: 'WIN', data: null });
-            $playerTurnMachineState = $playerTurnMachineState;
+		if ($enemyTurnMachineState.currentState.constructor.name === 'TurnBustedState') {
+			$playerTurnMachineState.listenToEvent({ name: 'WIN', data: null });
+			$playerTurnMachineState = $playerTurnMachineState;
 
-            $battleMachineState.listenToEvent({ name: 'WIN', data: null });
-            $battleMachineState = $battleMachineState;
+			$battleMachineState.listenToEvent({ name: 'WIN', data: null });
+			$battleMachineState = $battleMachineState;
 
-            $gameStore?.getCurrentBattle()?.enemy.takeDamage($gameStore.getCurrentBattle().getCurrentTurn().enemyHand.getValue() - 21);
-            $gameStore = $gameStore;
+			$gameStore
+				?.getCurrentBattle()
+				?.enemy.takeDamage(
+					$gameStore.getCurrentBattle().getCurrentTurn().enemyHand.getValue() - 21
+				);
+			$gameStore = $gameStore;
 
-            return;
-        }
+			return;
+		}
 
-        if($gameStore?.getCurrentBattle()?.getCurrentTurn().playerHand.getValue() === $gameStore?.getCurrentBattle()?.getCurrentTurn().enemyHand.getValue()) {
-            $playerTurnMachineState.listenToEvent({ name: 'TIE', data: null });
-            $playerTurnMachineState = $playerTurnMachineState;
+		if (
+			$gameStore?.getCurrentBattle()?.getCurrentTurn().playerHand.getValue() ===
+			$gameStore?.getCurrentBattle()?.getCurrentTurn().enemyHand.getValue()
+		) {
+			$playerTurnMachineState.listenToEvent({ name: 'TIE', data: null });
+			$playerTurnMachineState = $playerTurnMachineState;
 
-            $enemyTurnMachineState.listenToEvent({ name: 'TIE', data: null });
-            $enemyTurnMachineState = $enemyTurnMachineState;
-        }
-        
-        if($gameStore?.getCurrentBattle()?.getCurrentTurn().playerHand.getValue() > $gameStore?.getCurrentBattle()?.getCurrentTurn().enemyHand.getValue()) {
-            $playerTurnMachineState.listenToEvent({ name: 'WIN', data: null });
-            $playerTurnMachineState = $playerTurnMachineState;
+			$enemyTurnMachineState.listenToEvent({ name: 'TIE', data: null });
+			$enemyTurnMachineState = $enemyTurnMachineState;
+		}
 
-            $enemyTurnMachineState.listenToEvent({ name: 'LOSE', data: null });
-            $enemyTurnMachineState = $enemyTurnMachineState;
+		if (
+			$gameStore?.getCurrentBattle()?.getCurrentTurn().playerHand.getValue() >
+			$gameStore?.getCurrentBattle()?.getCurrentTurn().enemyHand.getValue()
+		) {
+			$playerTurnMachineState.listenToEvent({ name: 'WIN', data: null });
+			$playerTurnMachineState = $playerTurnMachineState;
 
-            let damage: number = $gameStore.getCurrentBattle().getCurrentTurn().playerHand.getValue() - $gameStore.getCurrentBattle().getCurrentTurn().enemyHand.getValue();
-            if($gameStore?.getCurrentBattle()?.getCurrentTurn().playerHand.getIsBlackjack() === true) {
-                damage = damage * 2;
-            }
+			$enemyTurnMachineState.listenToEvent({ name: 'LOSE', data: null });
+			$enemyTurnMachineState = $enemyTurnMachineState;
 
-            $gameStore?.getCurrentBattle()?.enemy.takeDamage(damage);
-            $gameStore = $gameStore;
-        }
+			let damage: number =
+				$gameStore.getCurrentBattle().getCurrentTurn().playerHand.getValue() -
+				$gameStore.getCurrentBattle().getCurrentTurn().enemyHand.getValue();
+			if ($gameStore?.getCurrentBattle()?.getCurrentTurn().playerHand.getIsBlackjack() === true) {
+				damage = damage * 2;
+			}
 
-        if($gameStore?.getCurrentBattle()?.getCurrentTurn().playerHand.getValue() < $gameStore?.getCurrentBattle()?.getCurrentTurn().enemyHand.getValue()) {
-            $playerTurnMachineState.listenToEvent({ name: 'LOSE', data: null });
-            $playerTurnMachineState = $playerTurnMachineState;
+			$gameStore?.getCurrentBattle()?.enemy.takeDamage(damage);
+			$gameStore = $gameStore;
+		}
 
-            $enemyTurnMachineState.listenToEvent({ name: 'WIN', data: null });
-            $enemyTurnMachineState = $enemyTurnMachineState;
+		if (
+			$gameStore?.getCurrentBattle()?.getCurrentTurn().playerHand.getValue() <
+			$gameStore?.getCurrentBattle()?.getCurrentTurn().enemyHand.getValue()
+		) {
+			$playerTurnMachineState.listenToEvent({ name: 'LOSE', data: null });
+			$playerTurnMachineState = $playerTurnMachineState;
 
-            let damage: number = $gameStore.getCurrentBattle().getCurrentTurn().enemyHand.getValue() - $gameStore.getCurrentBattle().getCurrentTurn().playerHand.getValue();
-            if($gameStore?.getCurrentBattle()?.getCurrentTurn().enemyHand.getIsBlackjack() === true) {
-                damage = damage * 2;
-            }
+			$enemyTurnMachineState.listenToEvent({ name: 'WIN', data: null });
+			$enemyTurnMachineState = $enemyTurnMachineState;
 
-            $gameStore?.player.takeDamage(damage);
-            $gameStore = $gameStore;
-        }
+			let damage: number =
+				$gameStore.getCurrentBattle().getCurrentTurn().enemyHand.getValue() -
+				$gameStore.getCurrentBattle().getCurrentTurn().playerHand.getValue();
+			if ($gameStore?.getCurrentBattle()?.getCurrentTurn().enemyHand.getIsBlackjack() === true) {
+				damage = damage * 2;
+			}
 
-        if($gameStore?.player.currentHealth <= 0) {
-            $battleMachineState.listenToEvent({ name: 'LOSE', data: null });
-            $battleMachineState = $battleMachineState;
+			$gameStore?.player.takeDamage(damage);
+			$gameStore = $gameStore;
+		}
 
-            $gameMachineState.listenToEvent({ name: 'END_GAME', data: null });
-            $gameMachineState = $gameMachineState;
+		if ($gameStore?.player.currentHealth <= 0) {
+			$battleMachineState.listenToEvent({ name: 'LOSE', data: null });
+			$battleMachineState = $battleMachineState;
 
-            return;
-        }
+			$gameMachineState.listenToEvent({ name: 'END_GAME', data: null });
+			$gameMachineState = $gameMachineState;
 
-        if($gameStore?.getCurrentBattle()?.enemy.currentHealth <= 0) {
-            $battleMachineState.listenToEvent({ name: 'WIN', data: null });
-            $battleMachineState = $battleMachineState;
-            return;
-        }
-    }
+			return;
+		}
 
-    function enemyAutoDraw() {
-        $enemyTurnMachineState.listenToEvent({ name: 'DRAW', data: null });
-        $enemyTurnMachineState = $enemyTurnMachineState;
+		if ($gameStore?.getCurrentBattle()?.enemy.currentHealth <= 0) {
+			$battleMachineState.listenToEvent({ name: 'WIN', data: null });
+			$battleMachineState = $battleMachineState;
+			return;
+		}
+	}
 
-        const card: Card | null | undefined = $gameStore?.getCurrentBattle()?.enemy.deck.drawTopCard();
-        if (card === null || card === undefined) {
-            $enemyTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
-            $enemyTurnMachineState = $enemyTurnMachineState;
+	function enemyAutoDraw() {
+		$enemyTurnMachineState.listenToEvent({ name: 'DRAW', data: null });
+		$enemyTurnMachineState = $enemyTurnMachineState;
 
-            $battleMachineState.listenToEvent({ name: 'WIN', data: null });
-            $battleMachineState = $battleMachineState;
+		const card: Card | null | undefined = $gameStore?.getCurrentBattle()?.enemy.deck.drawTopCard();
+		if (card === null || card === undefined) {
+			$enemyTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
+			$enemyTurnMachineState = $enemyTurnMachineState;
 
-            $playerTurnMachineState.listenToEvent({ name: 'WIN', data: null });
-            $playerTurnMachineState = $playerTurnMachineState;
+			$battleMachineState.listenToEvent({ name: 'WIN', data: null });
+			$battleMachineState = $battleMachineState;
 
-            return;
-        }
+			$playerTurnMachineState.listenToEvent({ name: 'WIN', data: null });
+			$playerTurnMachineState = $playerTurnMachineState;
 
-        $gameStore?.getCurrentBattle()?.getCurrentTurn().enemyHand.addCard(card);
-        $gameStore = $gameStore;
+			return;
+		}
 
-        if ($gameStore?.getCurrentBattle()?.getCurrentTurn().enemyHand.getIsBusted() === true) {
-            $enemyTurnMachineState.listenToEvent({ name: 'BUST', data: null });
-            $enemyTurnMachineState = $enemyTurnMachineState;
+		$gameStore?.getCurrentBattle()?.getCurrentTurn().enemyHand.addCard(card);
+		$gameStore = $gameStore;
 
-            return;
-        }
+		if ($gameStore?.getCurrentBattle()?.getCurrentTurn().enemyHand.getIsBusted() === true) {
+			$enemyTurnMachineState.listenToEvent({ name: 'BUST', data: null });
+			$enemyTurnMachineState = $enemyTurnMachineState;
 
-        $enemyTurnMachineState.listenToEvent({ name: 'PLAY', data: null });
-        $enemyTurnMachineState = $enemyTurnMachineState;
-    }
+			return;
+		}
 
-    function prepareForNewTurn() {
+		$enemyTurnMachineState.listenToEvent({ name: 'PLAY', data: null });
+		$enemyTurnMachineState = $enemyTurnMachineState;
+	}
 
-        $gameStore?.getCurrentBattle()?.getCurrentTurn().playerHand.cards.forEach(card => {
-            $gameStore?.player.discard.discardCard(card);
-        });
-        $gameStore?.getCurrentBattle()?.getCurrentTurn().playerHand.clearHand();
+	function prepareForNewTurn() {
+		$gameStore
+			?.getCurrentBattle()
+			?.getCurrentTurn()
+			.playerHand.cards.forEach((card) => {
+				$gameStore?.player.discard.discardCard(card);
+			});
+		$gameStore?.getCurrentBattle()?.getCurrentTurn().playerHand.clearHand();
 
-        $gameStore?.getCurrentBattle()?.getCurrentTurn().enemyHand.cards.forEach(card => {
-            $gameStore?.getCurrentBattle()?.enemy.discard.discardCard(card);
-        });
-        $gameStore?.getCurrentBattle()?.getCurrentTurn().enemyHand.clearHand();
+		$gameStore
+			?.getCurrentBattle()
+			?.getCurrentTurn()
+			.enemyHand.cards.forEach((card) => {
+				$gameStore?.getCurrentBattle()?.enemy.discard.discardCard(card);
+			});
+		$gameStore?.getCurrentBattle()?.getCurrentTurn().enemyHand.clearHand();
 
-        $gameStore = $gameStore;
+		$gameStore = $gameStore;
 
-        playerTurnMachineState.set(new TurnMachineState());
-        enemyTurnMachineState.set(new TurnMachineState());
-        startTurn();
-    }
+		playerTurnMachineState.set(new TurnMachineState());
+		enemyTurnMachineState.set(new TurnMachineState());
+		startTurn();
+	}
 
-    function prepareForNewBattle() {
-        $gameStore?.getCurrentBattle()?.getCurrentTurn().playerHand.cards.forEach(card => {
-            $gameStore?.player.discard.discardCard(card);
-        });
-        $gameStore?.getCurrentBattle()?.getCurrentTurn().playerHand.clearHand();
+	function prepareForNewBattle() {
+		$gameStore
+			?.getCurrentBattle()
+			?.getCurrentTurn()
+			.playerHand.cards.forEach((card) => {
+				$gameStore?.player.discard.discardCard(card);
+			});
+		$gameStore?.getCurrentBattle()?.getCurrentTurn().playerHand.clearHand();
 
-        $gameStore = $gameStore;
+		$gameStore = $gameStore;
 
-        playerTurnMachineState.set(new TurnMachineState());
-        enemyTurnMachineState.set(new TurnMachineState());
+		playerTurnMachineState.set(new TurnMachineState());
+		enemyTurnMachineState.set(new TurnMachineState());
 
-        startBattle();
-    }
-
-	$: console.log('current game state', $gameMachineState.currentState.constructor.name);
-	$: console.log('current battle state', $battleMachineState.currentState.constructor.name);
-	$: console.log(
-		'current player turn state',
-		$playerTurnMachineState.currentState.constructor.name
-	);
-	$: console.log('game', $gameStore);
-	$: console.log('current turn', $gameStore?.getCurrentBattle()?.getCurrentTurn());
+		startBattle();
+	}
 </script>
 
 <div class="container h-full mx-auto flex flex-col justify-left items-start">
@@ -262,7 +280,13 @@
 			/>
 
 			<div class="flex flex-col items-center justify-center w-2/12">
-				<button class="btn btn-xl variant-filled-error" on:click={() => fight()} disabled={$playerTurnMachineState.currentState.constructor.name !== 'TurnPlayingState'}> Fight </button>
+				<button
+					class="btn btn-xl variant-filled-error"
+					on:click={() => fight()}
+					disabled={$playerTurnMachineState.currentState.constructor.name !== 'TurnPlayingState'}
+				>
+					Fight
+				</button>
 			</div>
 
 			<PlayerSide
@@ -278,24 +302,30 @@
 		</div>
 	{/if}
 
-    <div class="flex flex-col items-center justify-center w-full">
-        <BattleResultAlert battleResult={$battleMachineState.currentState.constructor.name} on:click={() => prepareForNewBattle()} />
-    </div>
+	<div class="flex flex-col items-center justify-center w-full">
+		<BattleResultAlert
+			battleResult={$battleMachineState.currentState.constructor.name}
+			on:click={() => prepareForNewBattle()}
+		/>
+	</div>
 
-    {#if $battleMachineState.currentState.constructor.name === 'BattlePlayingState'}        
-        <div class="flex flex-col items-center justify-center w-full">
-            <TurnResultAlert turnResult={$playerTurnMachineState.currentState.constructor.name} on:click={() => prepareForNewTurn()} />
-        </div>
-    {/if}
+	{#if $battleMachineState.currentState.constructor.name === 'BattlePlayingState'}
+		<div class="flex flex-col items-center justify-center w-full">
+			<TurnResultAlert
+				turnResult={$playerTurnMachineState.currentState.constructor.name}
+				on:click={() => prepareForNewTurn()}
+			/>
+		</div>
+	{/if}
 
-    {#if $gameMachineState.currentState.constructor.name === 'GameLostState'}        
-        <div class="flex flex-col items-center justify-center w-full">
-            <div
-                class="flex flex-row flex-wrap items-center justify-between w-1/2 variant-ghost-error p-6 rounded"
-            >
-                <p class="p">You lost this game</p>
-                <a on:click class="btn variant-filled-surface rounded-md" href="/"> New game </a>
-            </div>
-        </div>
-    {/if}
+	{#if $gameMachineState.currentState.constructor.name === 'GameLostState'}
+		<div class="flex flex-col items-center justify-center w-full">
+			<div
+				class="flex flex-row flex-wrap items-center justify-between w-1/2 variant-ghost-error p-6 rounded"
+			>
+				<p class="p">You lost this game</p>
+				<a on:click class="btn variant-filled-surface rounded-md" href="/"> New game </a>
+			</div>
+		</div>
+	{/if}
 </div>

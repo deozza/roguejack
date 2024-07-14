@@ -31,9 +31,6 @@
 			goto('/game');
 		}
 	}
-
-	$: console.log('current state', $gameMachineState.currentState.constructor.name);
-	$: console.log('game', $gameStore);
 </script>
 
 <div class="container h-full mx-auto flex flex-col justify-center items-center">

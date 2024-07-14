@@ -16,7 +16,7 @@
 	</div>
 	<span class="h1 font-semibold">{card.face} </span>
 	<div class="text-end w-full">
-		<Icon icon={'bi:suit-' + card.suit + '-fill'}  class="backward"/>
+		<Icon icon={'bi:suit-' + card.suit + '-fill'} class="backward" />
 	</div>
 </div>
 
