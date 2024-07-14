@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { gameStore, gameMachineState } from '$lib/stores/game';
+	import { battleMachineState } from '$lib/stores/battle';
 
-	import { GameCharacterSelectionState, GameIdleState, GameInitState } from '$lib/models/stateMachine/game/states';
+	import { GameCharacterSelectionState, GameIdleState, GamePlayingState } from '$lib/models/stateMachine/game/states';
 
 	import {characters} from '$lib/models/character/players';
 	import { Game } from '$lib/models/game/model';
-	import { Character } from '$lib/models/character/model';
+	import { goto } from '$app/navigation';
 
 	function startNewGame() {
 		$gameMachineState.listenToEvent({name: 'NEW_GAME', data: null});
@@ -22,6 +23,9 @@
 
 		$gameMachineState.listenToEvent({name: 'START_GAME', data: null});
 		$gameMachineState = $gameMachineState;
+		if($gameMachineState.currentState.constructor.name === GamePlayingState.name) {
+			goto('/game');
+		}
 	}
 
 $: console.log('current state', $gameMachineState.currentState.constructor.name);

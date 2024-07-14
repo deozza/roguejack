@@ -16,6 +16,7 @@ export class Character {
 		this.currentHealth = characterType.maxHealth;
 		this.deck = new Deck();
 		this.deck.generateDeck(characterType.deck.suits, characterType.deck.values);
+		this.deck.shuffleDeck();
 		this.discard = new Discard();
 	}
 

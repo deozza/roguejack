@@ -1,6 +1,7 @@
 import { type EventInterface } from "../eventInterface";
 import { type StateInterface } from "../stateInterface";
 import { type StateMachineInterface } from "../stateMachineInterface";
+import { BattlePlayingState } from "./states";
 import { BattleIdleState } from "./states/battleIdleState";
 import { BattleInitState } from "./states/battleInitState";
 import { BattleLostState } from "./states/battleLostState";
@@ -15,11 +16,17 @@ export class BattleMachineState implements StateMachineInterface{
             'NEW_BATTLE': BattleInitState
         },
         BattleInitState: {
+            'PLAY': BattlePlayingState
+        },
+        BattlePlayingState: {
             'WIN': BattleWonState,
             'LOSE': BattleLostState
         },
         BattleWonState: {
             'NEW_BATTLE': BattleInitState
+        },
+        BattleLostState: {
+            'RESET': BattleIdleState
         }
     };
 

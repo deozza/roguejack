@@ -19,16 +19,6 @@ export class GameInitState implements StateInterface {
         player.generateCharacter(characterChosen);
         game.player = player;
 
-        const enemy: Character = new Character();
-        enemy.generateCharacter(rat);
-
-        const battle = new Battle(enemy, 1);
-
-        const turn: Turn = new Turn(1);
-        battle.addTurn(turn);
-
-        game.addBattle(battle);
-
         gameStore.set(game);
     }
 
