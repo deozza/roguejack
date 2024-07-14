@@ -5,6 +5,8 @@ import { gameStore } from '$lib/stores/game';
 import { type StateInterface } from '../../stateInterface';
 
 export class TurnInitState implements StateInterface {
+	public name: string = 'TurnInitState';
+
 	public onStateEnter = (): void => {
 		console.log('Turn Idle State Entered');
 	};

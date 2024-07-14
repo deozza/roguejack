@@ -30,7 +30,7 @@ export class BattleMachineState implements StateMachineInterface {
 	};
 
 	public listenToEvent(event: EventInterface): void {
-		const currentStateName = this.currentState.constructor.name;
+		const currentStateName = this.currentState.name;
 		const nextState = this.stateMachine[currentStateName][event.name];
 		if (nextState) {
 			this.currentState.onStateExit();

@@ -1,6 +1,8 @@
 import { type StateInterface } from '../../stateInterface';
 
 export class TurnDrawingState implements StateInterface {
+	public name: string = 'TurnDrawingState';
+
 	public onStateEnter = (): void => {
 		console.log('Turn Idle State Entered');
 	};

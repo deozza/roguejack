@@ -6,6 +6,8 @@ import rat from '$lib/models/character/enemies/rat.json';
 import { gameStore } from '$lib/stores/game';
 
 export class BattleInitState implements StateInterface {
+	public name: string = 'BattleInitState';
+	
 	public onStateEnter = (): void => {
 		console.log('Game Idle State Entered');
 	};

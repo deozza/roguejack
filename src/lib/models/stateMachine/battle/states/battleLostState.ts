@@ -1,6 +1,8 @@
 import { type StateInterface } from '../../stateInterface';
 
 export class BattleLostState implements StateInterface {
+	public name: string = 'BattleLostState';
+	
 	public onStateEnter = (): void => {
 		console.log('Game Idle State Entered');
 	};

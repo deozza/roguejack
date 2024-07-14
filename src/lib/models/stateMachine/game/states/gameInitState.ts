@@ -7,6 +7,8 @@ import { Turn } from '$lib/models/turn/model';
 import { gameStore } from '$lib/stores/game';
 
 export class GameInitState implements StateInterface {
+	public name: string = 'GameInitState';
+	
 	public onStateEnter = (): void => {
 		console.log('Game Init State Entered');
 	};
