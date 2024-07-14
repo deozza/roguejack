@@ -1,6 +1,6 @@
 <script lang="ts">
+	import Icon from '@iconify/svelte';
 	import type { Card } from '$lib/stores/card/model';
-	import 'iconify-icon';
 	import { slide } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
@@ -12,11 +12,11 @@
 	transition:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'x' }}
 >
 	<div class="text-start w-full">
-		<iconify-icon icon={'bi:suit-' + card.suit + '-fill'} />
+		<Icon icon={'bi:suit-' + card.suit + '-fill'} />
 	</div>
 	<span class="h1 font-semibold">{card.face} </span>
 	<div class="text-end w-full">
-		<iconify-icon icon={'bi:suit-' + card.suit + '-fill'} class="backward" />
+		<Icon icon={'bi:suit-' + card.suit + '-fill'}  class="backward"/>
 	</div>
 </div>
 

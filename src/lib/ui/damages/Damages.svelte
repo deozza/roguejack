@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Hand } from '$lib/stores/hand/model';
+	import Icon from '@iconify/svelte';
 
 	export let currentTurn: Hand;
 	export let opponentTurn: Hand;
@@ -9,17 +10,17 @@
 	<span class="text-4xl text-red-500">
 		{#if opponentTurn.isBusted === true}
 			{#if currentTurn.isBusted === true}
-				<iconify-icon icon="game-icons:broken-axe"></iconify-icon>
+				<Icon icon="game-icons:broken-axe" />
 				{currentTurn.value - 21}
 			{/if}
 		{:else if currentTurn.isBusted === true}
-			<iconify-icon icon="game-icons:broken-axe"></iconify-icon>
+			<Icon icon="game-icons:broken-axe" />
 			{currentTurn.value - 21}
 		{:else if currentTurn.isBlackjack === true}
-			<iconify-icon icon="game-icons:magic-axe"></iconify-icon>
+			<Icon icon="game-icons:magix-axe" />
 			{currentTurn.value}
 		{:else}
-			<iconify-icon icon="game-icons:battle-axe"></iconify-icon>
+			<Icon icon="game-icons:battle-axe" />
 			{currentTurn.value}
 		{/if}
 	</span>

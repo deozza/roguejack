@@ -15,6 +15,7 @@
 		"test:unit": "vitest"
 	},
 	"devDependencies": {
+		"@iconify/svelte": "^4.0.2",
 		"@playwright/test": "^1.28.1",
 		"@skeletonlabs/skeleton": "2.10.1",
 		"@skeletonlabs/tw-plugin": "0.4.0",
@@ -27,10 +28,9 @@
 		"@typescript-eslint/parser": "^7.0.0",
 		"@vitest/coverage-v8": "^2.0.2",
 		"autoprefixer": "10.4.19",
-		"eslint": "^9.7.0",
+		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.35.1",
-		"iconify-icon": "^2.1.0",
 		"postcss": "8.4.39",
 		"prettier": "^3.1.1",
 		"prettier-plugin-svelte": "^3.1.2",
