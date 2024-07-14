@@ -24,14 +24,14 @@
 	];
 </script>
 
-<div class="flex flex-col items-center justify-center w-5/12">
+<div class="flex flex-col items-center justify-center w-full md:w-5/12">
 	<h3 class="h3">{playerName} {currentHealth}/{maxHealth}</h3>
 	<div
 		class="flex {isEnemy
 			? 'flex-row-reverse'
 			: 'flex-row'}  flex-wrap items-center justify-start w-full space-x-5"
 	>
-		<div class="flex flex-col items-center justify-center space-y-5 h-full w-2/12">
+		<div class="flex flex-col items-center justify-center space-y-5 h-full w-4/12 md:w-2/12">
 			<button on:click disabled={currentStateName !== 'TurnPlayingState'} type="button">
 				<Deck {deckSize} />
 			</button>
@@ -39,9 +39,9 @@
 			<Discard {discardSize} />
 		</div>
 		<div
-			class="snap-x scroll-px-4 snap-mandatory scroll-smooth flex gap-4 overflow-x-auto px-4 py-10 w-9/12"
+			class="snap-x scroll-px-4 snap-mandatory scroll-smooth flex gap-4 overflow-x-auto w-1/2 md:w-9/12"
 		>
-			{#each playerHand.cards as card}
+			{#each [...playerHand.cards].reverse() as card}
 				<PlayingCard {card} />
 			{/each}
 		</div>

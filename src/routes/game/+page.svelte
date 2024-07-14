@@ -257,7 +257,7 @@
 	}
 </script>
 
-<div class="container h-full mx-auto flex flex-col justify-left items-start">
+<div class="container h-full mx-auto flex flex-col justify-left items-start space-y-10">
 	<div class="flex flex-col items-center justify-center w-full">
 		<h1 class="h1">Battle {$gameStore?.battles.length}</h1>
 	</div>
@@ -279,7 +279,7 @@
 				on:click={() => drawCard()}
 			/>
 
-			<div class="flex flex-col items-center justify-center w-2/12">
+			<div class="flex flex-col items-center justify-center w-full md:w-2/12">
 				<button
 					class="btn btn-xl variant-filled-error"
 					on:click={() => fight()}
@@ -321,7 +321,7 @@
 	{#if $gameMachineState.currentState.constructor.name === 'GameLostState'}
 		<div class="flex flex-col items-center justify-center w-full">
 			<div
-				class="flex flex-row flex-wrap items-center justify-between w-1/2 variant-ghost-error p-6 rounded"
+				class="flex flex-row flex-wrap items-center justify-between w-full md:w-1/2 variant-ghost-error p-6 rounded"
 			>
 				<p class="p">You lost this game</p>
 				<a on:click class="btn variant-filled-surface rounded-md" href="/"> New game </a>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
-	import type { Card } from '$lib/stores/card/model';
+	import type { Card } from '$lib/models/card/model';
 	import { slide } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
@@ -8,7 +8,7 @@
 </script>
 
 <div
-	class="bg-white flex flex-col items-center justify-between rounded-xl card-hover p-4 min-h-48 min-w-36 m-1 {card.suit}"
+	class="bg-white flex flex-col items-center justify-between rounded-xl card-hover p-4 min-h-24 min-w-16 md:min-h-48 md:min-w-36 m-1 {card.suit}"
 	transition:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'x' }}
 >
 	<div class="text-start w-full">
