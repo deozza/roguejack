@@ -8,9 +8,14 @@
 	import { battleMachineState } from '$lib/stores/battle';
 	import { gameStore, gameMachineState } from '$lib/stores/game';
 	import { playerTurnMachineState, enemyTurnMachineState } from '$lib/stores/turn';
+	import Deck from '$lib/ui/deck/Deck.svelte';
+	import Discard from '$lib/ui/deck/Discard.svelte';
 	import BattleResultAlert from '$lib/ui/gameLayout/BattleResultAlert.svelte';
 	import PlayerSide from '$lib/ui/gameLayout/PlayerSide.svelte';
 	import TurnResultAlert from '$lib/ui/gameLayout/TurnResultAlert.svelte';
+	import { fade } from 'svelte/transition';
+			
+	let campIsOpened: boolean = false;
 
 	afterNavigate((to) => {
 		if ($gameMachineState.currentState.constructor.name !== GamePlayingState.name) {
@@ -239,7 +244,8 @@
 		startTurn();
 	}
 
-	function prepareForNewBattle() {
+	function openCamp() {
+		campIsOpened = true;
 		$gameStore
 			?.getCurrentBattle()
 			?.getCurrentTurn()
@@ -252,12 +258,63 @@
 
 		playerTurnMachineState.set(new TurnMachineState());
 		enemyTurnMachineState.set(new TurnMachineState());
+	}
+
+	function healAtCamp() {
+		$gameStore?.player.heal(2);
+		$gameStore = $gameStore;
+		campIsOpened = false;
 
 		startBattle();
 	}
+
+	function recycleAtCamp() {
+		
+		for(let i = 0; i < 4; i++) {
+			const card: Card | null | undefined = $gameStore?.player.discard.drawTopCard();
+			if(card === null || card === undefined) {
+				break;
+			}
+
+			$gameStore?.player.deck.putCardOnTop(card);
+		}
+
+		$gameStore?.player.deck.shuffleDeck();
+
+		$gameStore = $gameStore;
+		campIsOpened = false;
+
+		startBattle();
+	}
+
 </script>
+{#if campIsOpened === true}
+	<div class="absolute h-screen w-screen z-10 bg-surface-500"
+		transition:fade={{ delay: 250, duration: 300 }}
+	>
+		<div class="flex flex-col items-center justify-center h-full w-full">
+			<h1 class="h1">Camp</h1>
+			<div class="flex flex-row flex-wrap items-center justify-around w-full">
+				<div class="flex flex-col items-center justify-center w-4/12">
+					<h2 class="h2">Status</h2>
+					<div class="flex flex-col items-center justify-center">
+						<p class="p">Health: {$gameStore.player.currentHealth}/{$gameStore.player.maxHealth}</p>
+						<Deck deckSize={$gameStore.player.deck.cards.length} />
+						<Discard discardSize={$gameStore.player.discard.cards.length} />
+					</div>
+				</div>
+				<div class="flex flex-row flex-wrap items-center justify-start w-7/12">
+					<button class="btn btn-xl variant-ghost-success" on:click={() => healAtCamp()}>Heal</button>
+					<button class="btn btn-xl variant-ghost-secondary" on:click={() => recycleAtCamp()}>Recycle discard</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+{/if}
 
 <div class="container h-full mx-auto flex flex-col justify-left items-start space-y-10">
+	
 	<div class="flex flex-col items-center justify-center w-full">
 		<h1 class="h1">Battle {$gameStore?.battles.length}</h1>
 	</div>
@@ -305,7 +362,7 @@
 	<div class="flex flex-col items-center justify-center w-full">
 		<BattleResultAlert
 			battleResult={$battleMachineState.currentState.constructor.name}
-			on:click={() => prepareForNewBattle()}
+			on:click={() => openCamp()}
 		/>
 	</div>
 
