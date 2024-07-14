@@ -1,7 +1,6 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import type { Card } from '$lib/models/card/model';
-	import { BattleMachineState } from '$lib/models/stateMachine/battle/battleMachineState';
-	import { BattleIdleState } from '$lib/models/stateMachine/battle/states';
 	import { TurnPlayingState } from '$lib/models/stateMachine/turn/states/turnPlayingState';
 	import { TurnMachineState } from '$lib/models/stateMachine/turn/turnMachineState';
 	import { battleMachineState } from '$lib/stores/battle';
@@ -12,19 +11,19 @@
 	import BattleResultAlert from '$lib/ui/gameLayout/BattleResultAlert.svelte';
 	import PlayerSide from '$lib/ui/gameLayout/PlayerSide.svelte';
 	import TurnResultAlert from '$lib/ui/gameLayout/TurnResultAlert.svelte';
-	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 
 	let campIsOpened: boolean = false;
 
-	onMount(() => {
-		if (
-			$gameStore?.getCurrentBattle() === null &&
-			$battleMachineState.currentState.constructor.name === BattleIdleState.name
-		) {
-			startBattle();
-		}
-	});
+	if(browser) {
+		startBattle();
+	}
+
+	$: console.log('Game store', $gameStore);
+	$: console.log('Battle machine state', $battleMachineState);
+	$: console.log('Player turn machine state', $playerTurnMachineState);
+	$: console.log('Enemy turn machine state', $enemyTurnMachineState);
+
 
 	function startBattle() {
 		$battleMachineState.listenToEvent({ name: 'NEW_BATTLE', data: null });
@@ -49,7 +48,7 @@
 		$playerTurnMachineState.listenToEvent({ name: 'DRAW', data: null });
 		$playerTurnMachineState = $playerTurnMachineState;
 
-		if ($playerTurnMachineState.currentState.constructor.name !== 'TurnDrawingState') {
+		if ($playerTurnMachineState.currentState.name !== 'TurnDrawingState') {
 			return;
 		}
 
@@ -107,7 +106,7 @@
 		$enemyTurnMachineState.listenToEvent({ name: 'FIGHT', data: null });
 		$enemyTurnMachineState = $enemyTurnMachineState;
 
-		if ($enemyTurnMachineState.currentState.constructor.name === 'TurnBustedState') {
+		if ($enemyTurnMachineState.currentState.name === 'TurnBustedState') {
 			$playerTurnMachineState.listenToEvent({ name: 'WIN', data: null });
 			$playerTurnMachineState = $playerTurnMachineState;
 
@@ -331,7 +330,7 @@
 		<h2 class="h2">Turn {$gameStore?.getCurrentBattle()?.turns.length}</h2>
 	</div>
 
-	{#if $playerTurnMachineState.currentState.constructor.name !== 'TurnIdleState'}
+	{#if $playerTurnMachineState.currentState.name !== 'TurnIdleState'}
 		<div class="flex flex-row flex-wrap items-center justify-between w-full">
 			<PlayerSide
 				playerName={$gameStore.player.name}
@@ -340,7 +339,7 @@
 				playerHand={$gameStore.getCurrentBattle().getCurrentTurn().playerHand}
 				deckSize={$gameStore.player.deck.cards.length}
 				discardSize={$gameStore.player.discard.cards.length}
-				currentStateName={$playerTurnMachineState.currentState.constructor.name}
+				currentStateName={$playerTurnMachineState.currentState.name}
 				on:click={() => drawCard()}
 			/>
 
@@ -348,20 +347,20 @@
 				<button
 					class="btn btn-xl variant-filled-error"
 					on:click={() => fight()}
-					disabled={$playerTurnMachineState.currentState.constructor.name !== 'TurnPlayingState'}
+					disabled={$playerTurnMachineState.currentState.name !== 'TurnPlayingState'}
 				>
 					Fight
 				</button>
 			</div>
 
 			<PlayerSide
-				playerName={$gameStore?.getCurrentBattle().enemy.name}
-				currentHealth={$gameStore?.getCurrentBattle().enemy.currentHealth}
-				maxHealth={$gameStore?.getCurrentBattle().enemy.maxHealth}
+				playerName={$gameStore.getCurrentBattle().enemy.name}
+				currentHealth={$gameStore.getCurrentBattle().enemy.currentHealth}
+				maxHealth={$gameStore.getCurrentBattle().enemy.maxHealth}
 				playerHand={$gameStore.getCurrentBattle().getCurrentTurn().enemyHand}
-				deckSize={$gameStore?.getCurrentBattle().enemy.deck.cards.length}
-				discardSize={$gameStore?.getCurrentBattle().enemy.discard.cards.length}
-				currentStateName={$enemyTurnMachineState.currentState.constructor.name}
+				deckSize={$gameStore.getCurrentBattle().enemy.deck.cards.length}
+				discardSize={$gameStore.getCurrentBattle().enemy.discard.cards.length}
+				currentStateName={$enemyTurnMachineState.currentState.name}
 				isEnemy={true}
 			/>
 		</div>
@@ -369,21 +368,21 @@
 
 	<div class="flex flex-col items-center justify-center w-full">
 		<BattleResultAlert
-			battleResult={$battleMachineState.currentState.constructor.name}
+			battleResult={$battleMachineState.currentState.name}
 			on:click={() => openCamp()}
 		/>
 	</div>
 
-	{#if $battleMachineState.currentState.constructor.name === 'BattlePlayingState'}
+	{#if $battleMachineState.currentState.name === 'BattlePlayingState'}
 		<div class="flex flex-col items-center justify-center w-full">
 			<TurnResultAlert
-				turnResult={$playerTurnMachineState.currentState.constructor.name}
+				turnResult={$playerTurnMachineState.currentState.name}
 				on:click={() => prepareForNewTurn()}
 			/>
 		</div>
 	{/if}
 
-	{#if $gameMachineState.currentState.constructor.name === 'GameLostState'}
+	{#if $gameMachineState.currentState.name === 'GameLostState'}
 		<div class="flex flex-col items-center justify-center w-full">
 			<div
 				class="flex flex-row flex-wrap items-center justify-between w-full md:w-1/2 variant-ghost-error p-6 rounded"
