@@ -1,9 +1,9 @@
 {
-    "name": "Soldier",
-    "maxHealth": 20,
-    "level": 1,
-    "deck": {
-        "suits": ["heart", "diamond", "club", "spade"],
-        "values": [ "A", 2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"] 
-    }
+	"name": "Soldier",
+	"maxHealth": 20,
+	"level": 1,
+	"deck": {
+		"suits": ["heart", "diamond", "club", "spade"],
+		"values": ["A", 2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"]
+	}
 }

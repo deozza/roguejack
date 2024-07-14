@@ -1,4 +1,4 @@
-import { Hand } from "$lib/models/hand/model";
+import { Hand } from '$lib/models/hand/model';
 
 export class Turn {
 	id: string;

@@ -1,6 +1,6 @@
 import { type StateInterface } from '../../stateInterface';
 
-export class TurnLostState implements StateInterface {
+export class TurnTiedState implements StateInterface {
 	public onStateEnter = (): void => {
 		console.log('Turn Idle State Entered');
 	};

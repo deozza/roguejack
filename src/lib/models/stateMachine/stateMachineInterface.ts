@@ -1,8 +1,8 @@
-import type { EventInterface } from "./eventInterface";
-import type { StateInterface } from "./stateInterface";
+import type { EventInterface } from './eventInterface';
+import type { StateInterface } from './stateInterface';
 
 export interface StateMachineInterface {
-    currentState: StateInterface;
-    stateMachine: object;
-    listenToEvent(event: EventInterface): void;
+	currentState: StateInterface;
+	stateMachine: object;
+	listenToEvent(event: EventInterface): void;
 }

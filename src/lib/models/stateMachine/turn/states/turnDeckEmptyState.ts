@@ -1,15 +1,15 @@
-import { type StateInterface } from "../../stateInterface";
+import { type StateInterface } from '../../stateInterface';
 
 export class TurnDeckEmptyState implements StateInterface {
-    public onStateEnter = (): void => {
-        console.log('Turn Idle State Entered');
-    }
+	public onStateEnter = (): void => {
+		console.log('Turn Idle State Entered');
+	};
 
-    public onStateExecute(): void {
-        console.log('Turn Idle State Executed');
-    }
+	public onStateExecute(): void {
+		console.log('Turn Idle State Executed');
+	}
 
-    public onStateExit = (): void => {
-        console.log('Turn Idle State Exited');
-    }
+	public onStateExit = (): void => {
+		console.log('Turn Idle State Exited');
+	};
 }

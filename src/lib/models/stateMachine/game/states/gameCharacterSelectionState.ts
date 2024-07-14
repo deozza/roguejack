@@ -1,15 +1,15 @@
-import { type StateInterface } from "../../stateInterface";
+import { type StateInterface } from '../../stateInterface';
 
 export class GameCharacterSelectionState implements StateInterface {
-    public onStateEnter = (): void => {
-        console.log('Game Selection State Entered');
-    }
+	public onStateEnter = (): void => {
+		console.log('Game Selection State Entered');
+	};
 
-    public onStateExecute(): void {
-        console.log('Game Selection State Executed');
-    }
+	public onStateExecute(): void {
+		console.log('Game Selection State Executed');
+	}
 
-    public onStateExit = (): void => {
-        console.log('Game Selection State Exited');
-    }
+	public onStateExit = (): void => {
+		console.log('Game Selection State Exited');
+	};
 }
