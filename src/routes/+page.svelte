@@ -1,16 +1,28 @@
 <script lang="ts">
 	import { gameStore, gameMachineState } from '$lib/stores/game';
-	import { battleMachineState } from '$lib/stores/battle';
 
 	import {
 		GameCharacterSelectionState,
 		GameIdleState,
+		GameLostState,
 		GamePlayingState
 	} from '$lib/models/stateMachine/game/states';
 
 	import { characters } from '$lib/models/character/players';
 	import { Game } from '$lib/models/game/model';
-	import { goto } from '$app/navigation';
+	import { afterNavigate, goto } from '$app/navigation';
+	import { battleMachineState } from '$lib/stores/battle';
+	import { enemyTurnMachineState, playerTurnMachineState } from '$lib/stores/turn';
+	import { BattleMachineState } from '$lib/models/stateMachine/battle/battleMachineState';
+	import { TurnMachineState } from '$lib/models/stateMachine/turn/turnMachineState';
+
+	afterNavigate((to) => {
+
+		if ($gameMachineState.currentState.constructor.name === GameLostState.name) {
+			$gameMachineState.listenToEvent({ name: 'QUIT_GAME', data: null });
+			$gameMachineState = $gameMachineState;
+		}
+	});
 
 	function startNewGame() {
 		$gameMachineState.listenToEvent({ name: 'NEW_GAME', data: null });
@@ -27,6 +39,11 @@
 
 		$gameMachineState.listenToEvent({ name: 'START_GAME', data: null });
 		$gameMachineState = $gameMachineState;
+
+		battleMachineState.set(new BattleMachineState());
+		playerTurnMachineState.set(new TurnMachineState());
+		enemyTurnMachineState.set(new TurnMachineState());
+
 		if ($gameMachineState.currentState.constructor.name === GamePlayingState.name) {
 			goto('/game');
 		}

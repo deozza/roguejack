@@ -1,8 +1,7 @@
 <script lang="ts">
-	import { afterNavigate } from '$app/navigation';
 	import type { Card } from '$lib/models/card/model';
+	import { BattleMachineState } from '$lib/models/stateMachine/battle/battleMachineState';
 	import { BattleIdleState } from '$lib/models/stateMachine/battle/states';
-	import { GamePlayingState } from '$lib/models/stateMachine/game/states';
 	import { TurnPlayingState } from '$lib/models/stateMachine/turn/states/turnPlayingState';
 	import { TurnMachineState } from '$lib/models/stateMachine/turn/turnMachineState';
 	import { battleMachineState } from '$lib/stores/battle';
@@ -13,15 +12,12 @@
 	import BattleResultAlert from '$lib/ui/gameLayout/BattleResultAlert.svelte';
 	import PlayerSide from '$lib/ui/gameLayout/PlayerSide.svelte';
 	import TurnResultAlert from '$lib/ui/gameLayout/TurnResultAlert.svelte';
+	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 			
 	let campIsOpened: boolean = false;
 
-	afterNavigate((to) => {
-		if ($gameMachineState.currentState.constructor.name !== GamePlayingState.name) {
-			//
-		}
-
+	onMount(() => {
 		if (
 			$gameStore?.getCurrentBattle() === null &&
 			$battleMachineState.currentState.constructor.name === BattleIdleState.name
@@ -82,6 +78,16 @@
 				$gameStore.getCurrentBattle().getCurrentTurn().playerHand.getValue() - 21
 			);
 			$gameStore = $gameStore;
+
+			if ($gameStore?.player.currentHealth <= 0) {
+				$battleMachineState.listenToEvent({ name: 'LOSE', data: null });
+				$battleMachineState = $battleMachineState;
+
+				$gameMachineState.listenToEvent({ name: 'END_GAME', data: null });
+				$gameMachineState = $gameMachineState;
+
+				return;
+			}
 
 			return;
 		}
