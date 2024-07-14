@@ -7,7 +7,7 @@ describe('hand model test', () => {
 		const hand: Hand = new Hand();
 		expect(hand.cards.length).toBe(0);
 
-		const card: Card = new Card('hearts', 'A');
+		const card: Card = new Card('heart', 'A');
 		hand.addCard(card);
 		expect(hand.cards.length).toBe(1);
 		expect(hand.cards[0]).toEqual(card);
@@ -17,7 +17,7 @@ describe('hand model test', () => {
 		const hand: Hand = new Hand();
 		expect(hand.cards.length).toBe(0);
 
-		const card: Card = new Card('hearts', 'A');
+		const card: Card = new Card('heart', 'A');
 		hand.addCard(card);
 		expect(hand.cards.length).toBe(1);
 		expect(hand.cards[0]).toEqual(card);
@@ -31,7 +31,7 @@ describe('hand model test', () => {
 		const hand: Hand = new Hand();
 		expect(hand.cards.length).toBe(0);
 
-		const card: Card = new Card('clubs', 'A');
+		const card: Card = new Card('club', 'A');
 		hand.addCard(card);
 		expect(hand.cards.length).toBe(1);
 		expect(hand.cards[0]).toEqual(card);
@@ -44,7 +44,7 @@ describe('hand model test', () => {
 		const hand: Hand = new Hand();
 		expect(hand.value).toBe(0);
 
-		const card: Card = new Card('hearts', 'A');
+		const card: Card = new Card('heart', 'A');
 		hand.addCard(card);
 		expect(hand.value).toEqual(11);
 	});
@@ -53,11 +53,11 @@ describe('hand model test', () => {
 		const hand: Hand = new Hand();
 		expect(hand.value).toBe(0);
 
-		let card: Card = new Card('hearts', 'A');
+		let card: Card = new Card('heart', 'A');
 		hand.addCard(card);
 		expect(hand.value).toEqual(11);
 
-		card = new Card('hearts', '4');
+		card = new Card('heart', '4');
 		hand.addCard(card);
 		expect(hand.value).toBe(15);
 
@@ -69,11 +69,11 @@ describe('hand model test', () => {
 		const hand: Hand = new Hand();
 		expect(hand.value).toBe(0);
 
-		let card: Card = new Card('hearts', 'A');
+		let card: Card = new Card('heart', 'A');
 		hand.addCard(card);
 		expect(hand.value).toEqual(11);
 
-		card = new Card('hearts', '4');
+		card = new Card('heart', '4');
 		hand.addCard(card);
 		expect(hand.value).toBe(15);
 
@@ -85,7 +85,7 @@ describe('hand model test', () => {
 		const hand: Hand = new Hand();
 		expect(hand.isBusted).toBe(false);
 
-		const card: Card = new Card('hearts', 'K');
+		const card: Card = new Card('heart', 'K');
 		hand.addCard(card);
 		expect(hand.value).toBe(10);
 		expect(hand.isBusted).toBe(false);
@@ -103,17 +103,17 @@ describe('hand model test', () => {
 		const hand: Hand = new Hand();
 		expect(hand.isBusted).toBe(false);
 
-		const card1: Card = new Card('hearts', 'K');
+		const card1: Card = new Card('heart', 'K');
 		hand.addCard(card1);
 		expect(hand.value).toBe(10);
 		expect(hand.isBusted).toBe(false);
 
-		let card2: Card = new Card('hearts', 'K');
+		let card2: Card = new Card('heart', 'K');
 		hand.addCard(card2);
 		expect(hand.value).toBe(20);
 		expect(hand.isBusted).toBe(false);
 
-		let card3: Card = new Card('hearts', 'K');
+		let card3: Card = new Card('heart', 'K');
 		hand.addCard(card3);
 		expect(hand.value).toBe(30);
 		expect(hand.isBusted).toBe(true);
@@ -128,17 +128,17 @@ describe('hand model test', () => {
 		const hand: Hand = new Hand();
 		expect(hand.isBusted).toBe(false);
 
-		const card1: Card = new Card('hearts', 'K');
+		const card1: Card = new Card('heart', 'K');
 		hand.addCard(card1);
 		expect(hand.value).toBe(10);
 		expect(hand.isBusted).toBe(false);
 
-		let card2: Card = new Card('hearts', 'K');
+		let card2: Card = new Card('heart', 'K');
 		hand.addCard(card2);
 		expect(hand.value).toBe(20);
 		expect(hand.isBusted).toBe(false);
 
-		let card3: Card = new Card('hearts', 'K');
+		let card3: Card = new Card('heart', 'K');
 		hand.addCard(card3);
 		expect(hand.value).toBe(30);
 		expect(hand.isBusted).toBe(true);
@@ -153,12 +153,12 @@ describe('hand model test', () => {
 		const hand: Hand = new Hand();
 		expect(hand.isBlackjack).toBe(false);
 
-		const card1: Card = new Card('hearts', 'K');
+		const card1: Card = new Card('heart', 'K');
 		hand.addCard(card1);
 		expect(hand.value).toBe(10);
 		expect(hand.isBlackjack).toBe(false);
 
-		let card2: Card = new Card('hearts', 'A');
+		let card2: Card = new Card('heart', 'A');
 		hand.addCard(card2);
 		expect(hand.value).toBe(21);
 		expect(hand.isBlackjack).toBe(true);
@@ -168,12 +168,12 @@ describe('hand model test', () => {
 		const hand: Hand = new Hand();
 		expect(hand.isBlackjack).toBe(false);
 
-		const card1: Card = new Card('hearts', 'K');
+		const card1: Card = new Card('heart', 'K');
 		hand.addCard(card1);
 		expect(hand.value).toBe(10);
 		expect(hand.isBlackjack).toBe(false);
 
-		let card2: Card = new Card('hearts', 'A');
+		let card2: Card = new Card('heart', 'A');
 		hand.addCard(card2);
 		expect(hand.value).toBe(21);
 		expect(hand.isBlackjack).toBe(true);
@@ -187,12 +187,12 @@ describe('hand model test', () => {
 		const hand: Hand = new Hand();
 		expect(hand.isBlackjack).toBe(false);
 
-		const card1: Card = new Card('hearts', 'K');
+		const card1: Card = new Card('heart', 'K');
 		hand.addCard(card1);
 		expect(hand.value).toBe(10);
 		expect(hand.isBlackjack).toBe(false);
 
-		let card2: Card = new Card('hearts', 'A');
+		let card2: Card = new Card('heart', 'A');
 		hand.addCard(card2);
 		expect(hand.value).toBe(21);
 		expect(hand.isBlackjack).toBe(true);
@@ -206,11 +206,11 @@ describe('hand model test', () => {
 		const hand: Hand = new Hand();
 		expect(hand.value).toBe(0);
 
-		const card: Card = new Card('hearts', 'A');
+		const card: Card = new Card('heart', 'A');
 		hand.addCard(card);
 		expect(hand.value).toEqual(11);
 
-		const card2: Card = new Card('hearts', 'A');
+		const card2: Card = new Card('heart', 'A');
 		hand.addCard(card2);
 		expect(hand.value).toEqual(12);
 	});

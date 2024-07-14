@@ -34,9 +34,5 @@
 			<svelte:fragment slot="trail"></svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
-	<main class="container h-full mx-auto flex justify-center items-center">
-		<div class="space-y-10 text-center flex flex-col items-center w-full">
-			<slot />
-		</div>
-	</main>
+	<slot />
 </AppShell>

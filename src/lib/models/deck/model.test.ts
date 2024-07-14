@@ -5,7 +5,7 @@ import { Deck } from './model';
 describe('deck model test', () => {
 	it('generate deck with all cards', () => {
 		const faces: Array<Face> = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
-		const suits: Array<Suit> = ['hearts', 'diamonds', 'clubs', 'spades'];
+		const suits: Array<Suit> = ['heart', 'diamond', 'club', 'spade'];
 
 		const deck: Deck = new Deck();
 		deck.generateDeck(suits, faces);
@@ -15,7 +15,7 @@ describe('deck model test', () => {
 
 	it('shuffle deck', () => {
 		const faces: Array<Face> = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
-		const suits: Array<Suit> = ['hearts', 'diamonds', 'clubs', 'spades'];
+		const suits: Array<Suit> = ['heart', 'diamond', 'club', 'spade'];
 
 		const deck: Deck = new Deck();
 		deck.generateDeck(suits, faces);
@@ -27,7 +27,7 @@ describe('deck model test', () => {
 
 	it('draw top card', () => {
 		const faces: Array<Face> = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
-		const suits: Array<Suit> = ['hearts', 'diamonds', 'clubs', 'spades'];
+		const suits: Array<Suit> = ['heart', 'diamond', 'club', 'spade'];
 
 		const deck: Deck = new Deck();
 		deck.generateDeck(suits, faces);
@@ -43,7 +43,7 @@ describe('deck model test', () => {
 
 	it('draw top card on empty deck', () => {
 		const faces: Array<Face> = ['A'];
-		const suits: Array<Suit> = ['hearts'];
+		const suits: Array<Suit> = ['heart'];
 
 		const deck: Deck = new Deck();
 		deck.generateDeck(suits, faces);
@@ -60,13 +60,13 @@ describe('deck model test', () => {
 
 	it('put card on top', () => {
 		const faces: Array<Face> = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
-		const suits: Array<Suit> = ['hearts'];
+		const suits: Array<Suit> = ['heart'];
 
 		const deck: Deck = new Deck();
 		deck.generateDeck(suits, faces);
 		expect(deck.cards.length).toEqual(13);
 
-		const card: Card = new Card('diamonds', 'A');
+		const card: Card = new Card('diamond', 'A');
 		deck.putCardOnTop(card);
 		expect(deck.cards[0]).toEqual(card);
 		expect(deck.cards.length).toEqual(14);

@@ -32,15 +32,20 @@ $: console.log('current state', $gameMachineState.currentState.constructor.name)
 $: console.log('game', $gameStore);
 
 </script>
+<div class="container h-full mx-auto flex flex-col justify-center items-center">
 
-{#if $gameMachineState.currentState.constructor.name === GameIdleState.name}
-	<button class="btn btn-xl variant-filled-success" on:click={startNewGame}> New game </button>
-{/if}
+	<section class="flex flex-col items-center justify-center h-full space-y-10">
 
-{#if $gameMachineState.currentState.constructor.name === GameCharacterSelectionState.name}
-	<h1> Select your character</h1>
-	{#each characters as character}
-		<button class="btn btn-xl variant-filled-success" on:click={() => selectCharacter(character)}> {character.name} </button>
-	{/each}
-{/if}
+		{#if $gameMachineState.currentState.constructor.name === GameIdleState.name}
+			<button class="btn btn-xl variant-filled-success" on:click={startNewGame}> New game </button>
+		{/if}
 
+		{#if $gameMachineState.currentState.constructor.name === GameCharacterSelectionState.name}
+			<h1> Select your character</h1>
+			{#each characters as character}
+				<button class="btn btn-xl variant-filled-success" on:click={() => selectCharacter(character)}> {character.name} </button>
+			{/each}
+		{/if}
+
+	</section>
+</div>
