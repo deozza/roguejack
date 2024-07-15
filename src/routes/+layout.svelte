@@ -6,14 +6,17 @@
 	import { fade } from 'svelte/transition';
 	import { GamePausedState } from '$lib/models/stateMachine/game/states';
 
+	let pauseIcon: string = 'game-icons:pause-button';
+	let pauseStatus: boolean = false;
+
 	function enterPause() {
-		if($gameMachineState.currentState.name === 'GamePausedState') {
-			$gameMachineState.listenToEvent({ name: 'RESUME_GAME', data: null });
-			$gameMachineState = $gameMachineState;
+		pauseStatus = !pauseStatus;
+		if(pauseStatus === true) {
+			pauseIcon = 'game-icons:play-button';
 			return;
 		}
-		$gameMachineState.listenToEvent({ name: 'PAUSE_GAME', data: null });
-		$gameMachineState = $gameMachineState;
+
+		pauseIcon = 'game-icons:pause-button';
 	}
 </script>
 
@@ -26,14 +29,15 @@
 				<strong class="text-xl uppercase">Roguejack</strong>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
+				<span>v0.3.0</span>
 				<button class="btn" on:click={() => enterPause()}>
-					<Icon icon="mdi:menu" />
+					<Icon icon={pauseIcon} width=32 height=32 />
 				</button>
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
 
-	{#if $gameMachineState.currentState.name === GamePausedState.name}
+	{#if pauseStatus === true}
 		<section
 			class="absolute h-full w-full z-50 bg-surface-500/90"
 			transition:fade={{ delay: 250, duration: 300 }}

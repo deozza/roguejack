@@ -15,13 +15,16 @@ export class GameMachineState implements StateMachineInterface {
 
 	public stateMachine: object = {
 		GameIdleState: {
-			NEW_GAME: GameCharacterSelectionState
+			NEW_GAME: GameCharacterSelectionState,
+			PAUSE_GAME: GamePausedState
 		},
 		GameCharacterSelectionState: {
-			CHARACTER_SELECTED: GameInitState
+			CHARACTER_SELECTED: GameInitState,
+			PAUSE_GAME: GamePausedState
 		},
 		GameInitState: {
-			START_GAME: GamePlayingState
+			START_GAME: GamePlayingState,
+			PAUSE_GAME: GamePausedState
 		},
 		GamePlayingState: {
 			PAUSE_GAME: GamePausedState,
