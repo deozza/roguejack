@@ -1,19 +1,21 @@
 <script lang="ts">
 	import HomeScreen from "$lib/ui/gameLayout/screens/HomeScreen.svelte";
-	import { GameCharacterSelectionState, GameIdleState, GamePausedState, GamePlayingState } from "$lib/models/stateMachine/game/states";
+	import { GameCharacterSelectionState, GameIdleState, GamePlayingState } from "$lib/models/stateMachine/game/states";
 	import CharacterSelectScreen from "$lib/ui/gameLayout/screens/CharacterSelectScreen.svelte";
 	import type { SvelteComponent } from "svelte";
-	import { BattlePlayingState } from "$lib/models/stateMachine/battle/states";
+	import { BattleCampingState, BattlePlayingState } from "$lib/models/stateMachine/battle/states";
 	import BattleScreen from "$lib/ui/gameLayout/screens/BattleScreen.svelte";
 	import { battleMachineState } from "$lib/stores/stateMachine/battle";
 	import { gameMachineState } from "$lib/stores/stateMachine/game";
 	import { gameStore } from "$lib/stores/game";
 	import { enemyTurnMachineState, playerTurnMachineState } from "$lib/stores/stateMachine/turn";
+	import CampScreen from "$lib/ui/gameLayout/screens/CampScreen.svelte";
 
 	const screensToRender: Record<string, SvelteComponent> = {
 		[GameIdleState.name]: HomeScreen,
 		[GameCharacterSelectionState.name]: CharacterSelectScreen,
 		[BattlePlayingState.name]: BattleScreen,
+		[BattleCampingState.name]: CampScreen
 	};
 
 	function getSceenToRender(): SvelteComponent {

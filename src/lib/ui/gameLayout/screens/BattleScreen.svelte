@@ -151,6 +151,8 @@
 			$battleMachineState.listenToEvent({ name: 'WIN', data: null });
 			$battleMachineState = $battleMachineState;
 
+			redirectToCampOrShop();
+
 			return ;
 		}
 
@@ -167,6 +169,9 @@
 		if($gameStore.getCurrentBattle()?.enemy.currentHealth <= 0) {
 			$battleMachineState.listenToEvent({ name: 'WIN', data: null });
 			$battleMachineState = $battleMachineState;
+			
+			redirectToCampOrShop();
+			
 			return;
 		}
 
@@ -178,6 +183,17 @@
 			$gameMachineState = $gameMachineState;
 
 			return;
+		}
+	}
+
+	function redirectToCampOrShop() {
+		gameStore.endTurn();
+		if($gameStore.battles.length % 5 === 0) {
+			$battleMachineState.listenToEvent({ name: 'SHOP', data: null });
+			$battleMachineState = $battleMachineState;
+		}else{
+			$battleMachineState.listenToEvent({ name: 'CAMP', data: null });
+			$battleMachineState = $battleMachineState;
 		}
 	}
     

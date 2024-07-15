@@ -144,6 +144,50 @@ function createGameStore() {
 		});
 	}
 
+	const healPercentages = (percentage: number, user: string) => {
+		update(game => {
+			const healNumber: number = Math.floor(game.player.maxHealth / 100 * percentage);
+
+			if(user === 'player') {
+				game.player.heal(healNumber);
+			} else {
+				game.getCurrentBattle().enemy.heal(healNumber);
+			}
+
+			return game;
+		});
+	}
+
+	const recycleDiscard = (numberOfCards: number, user: string) => {
+		update(game => {
+			if(user === 'player') {
+
+				for(let i = 0; i < numberOfCards; i++) {
+					const card: Card | null = game.player.discard.drawTopCard();
+					if(card === null) {
+						game.player.deck.shuffleDeck();
+						return game;
+					}
+					game.player.deck.putCardOnTop(card);
+
+				}
+				game.player.deck.shuffleDeck();
+			} else {
+				for(let i = 0; i < numberOfCards; i++) {
+					const card: Card | null = game.getCurrentBattle().enemy.discard.drawTopCard();
+					if(card === null) {
+						game.player.deck.shuffleDeck();
+						return game;
+					}
+					game.getCurrentBattle().enemy.deck.putCardOnTop(card);
+				}
+				game.player.deck.shuffleDeck();
+			}
+
+			return game;
+		});
+	}
+
 	return {
 		subscribe,
 		reset,
@@ -156,7 +200,9 @@ function createGameStore() {
 		inflictDamagesToBustedEnemy,
 		inflictDamagesToPlayer,
 		inflictDamagesToEnemy,
-		endTurn
+		endTurn,
+		healPercentages,
+		recycleDiscard
 	};
 }
 
