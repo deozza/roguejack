@@ -2,6 +2,7 @@ import { type EventInterface } from '../eventInterface';
 import { type StateInterface } from '../stateInterface';
 import { type StateMachineInterface } from '../stateMachineInterface';
 import { TurnBustedState } from './states/turnBustedState';
+import { TurnDamageState } from './states/turnDamageState';
 import { TurnDeckEmptyState } from './states/turnDeckEmptyState';
 import { TurnDrawingState } from './states/turnDrawingState';
 import { TurnFightingState } from './states/turnFightingState';
@@ -31,7 +32,13 @@ export class TurnMachineState implements StateMachineInterface {
 			BUST: TurnBustedState,
 			DECK_EMPTY: TurnDeckEmptyState
 		},
+		TurnBustedState: {
+			DAMAGE: TurnDamageState
+		},
 		TurnFightingState: {
+			DAMAGE: TurnDamageState
+		},
+		TurnDamageState: {
 			WIN: TurnWonState,
 			TIE: TurnTiedState,
 			LOSE: TurnLostState
@@ -40,9 +47,6 @@ export class TurnMachineState implements StateMachineInterface {
 			NEW_TURN: TurnInitState
 		},
 		TurnTiedState: {
-			NEW_TURN: TurnInitState
-		},
-		TurnBustedState: {
 			NEW_TURN: TurnInitState
 		},
 		TurnLostState: {

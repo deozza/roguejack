@@ -3,6 +3,7 @@ import type { Card } from "$lib/models/card/model";
 import { characters } from "$lib/models/character/enemies";
 import { Character } from "$lib/models/character/model";
 import { Game } from "$lib/models/game/model";
+import type { Hand } from "$lib/models/hand/model";
 import { Turn } from "$lib/models/turn/model";
 import { get } from "svelte/store";
 import { writable } from 'svelte/store';
@@ -99,23 +100,22 @@ function createGameStore() {
 
 	}
 
-	const inflictDamagesToBustedPlayer = () => {
+	const updateFightData = () => {
 		update(game => {
-			const damages: number = game.getCurrentBattle().getCurrentTurn().playerHand.getValue() - 21;
-			game.player.takeDamage(damages);
+			const playerHand: Hand = game.getCurrentBattle()?.getCurrentTurn().playerHand;
+			const enemyHand: Hand = game.getCurrentBattle()?.getCurrentTurn().enemyHand;
+
+			game.getCurrentBattle()?.getCurrentTurn().fight
+				.setWinner(playerHand, enemyHand)
+				.setBaseDamageToEnemy(playerHand, enemyHand)
+				.setBaseDamageToPlayer(playerHand, enemyHand)
+				.setMultiplierForEnemy(enemyHand)
+				.setMultiplierForPlayer(playerHand);
+
 			return game;
-		});
+		})
 	}
 
-	const inflictDamagesToBustedEnemy = () => {
-		subscribe(game => {
-			const damages: number = game.getCurrentBattle().getCurrentTurn().enemyHand.getValue() - 21;
-			
-			inflictDamagesToEnemy(damages);
-			return game;
-		});
-	}
-	
 	const inflictDamagesToEnemy = (damages: number) => {
 		update(game => {
 			game.getCurrentBattle().enemy.takeDamage(damages);
@@ -196,8 +196,7 @@ function createGameStore() {
 		createTurn,
 		playerDrawCard,
 		enemyAutoDraw,
-		inflictDamagesToBustedPlayer,
-		inflictDamagesToBustedEnemy,
+		updateFightData,
 		inflictDamagesToPlayer,
 		inflictDamagesToEnemy,
 		endTurn,

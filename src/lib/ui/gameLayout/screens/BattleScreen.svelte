@@ -7,8 +7,8 @@
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
 	import { TurnDeckEmptyState } from '$lib/models/stateMachine/turn/states/turnDeckEmptyState';
 	import CenterSide from '../battleScreen/CenterSide.svelte';
+	import type { Hand } from '$lib/models/hand/model';
 	import { TurnPlayingState } from '$lib/models/stateMachine/turn/states/turnPlayingState';
-	import { TurnInitState } from '$lib/models/stateMachine/turn/states/turnInitState';
 
 	function drawCard() {
 		$playerTurnMachineState.listenToEvent({ name: 'DRAW', data: null });
@@ -28,9 +28,8 @@
 		if($gameStore.getCurrentBattle()?.getCurrentTurn().playerHand.getIsBusted() === true) {
 			$playerTurnMachineState.listenToEvent({ name: 'BUST', data: null });
 			$playerTurnMachineState = $playerTurnMachineState;
-			$playerTurnMachineState.currentState.onStateExecute({'user': 'player'});
 
-			updateBattleState();
+			calculateAndApplyDamages();
 
 			return;
 		}
@@ -56,7 +55,7 @@
 				$playerTurnMachineState.listenToEvent({ name: 'WIN', data: null });
 				$playerTurnMachineState = $playerTurnMachineState;
 
-				updateBattleState();
+				calculateAndApplyDamages();
 			}
 
 			return;
@@ -65,12 +64,8 @@
 		if($gameStore.getCurrentBattle()?.getCurrentTurn().enemyHand.getIsBusted() === true) {
 			$enemyTurnMachineState.listenToEvent({ name: 'BUST', data: null });
 			$enemyTurnMachineState = $enemyTurnMachineState;
-			$enemyTurnMachineState.currentState.onStateExecute({'user': 'enemy'});
 
-			$playerTurnMachineState.listenToEvent({ name: 'WIN', data: null });
-			$playerTurnMachineState = $playerTurnMachineState;
-
-			updateBattleState();
+			calculateAndApplyDamages();
 
 			return;
 		}
@@ -85,48 +80,39 @@
 	}
 
 	function calculateAndApplyDamages() {
-		const playerHandValue = $gameStore.getCurrentBattle()?.getCurrentTurn().playerHand.getValue();
-		const enemyHandValue = $gameStore.getCurrentBattle()?.getCurrentTurn().enemyHand.getValue();
+		$playerTurnMachineState.listenToEvent({ name: 'DAMAGE', data: null });
+		$playerTurnMachineState = $playerTurnMachineState;
+		$playerTurnMachineState.currentState.onStateExecute({});
 
-		if(playerHandValue === enemyHandValue) {
-			$playerTurnMachineState.listenToEvent({ name: 'TIE', data: null });
-			$playerTurnMachineState = $playerTurnMachineState;
+		$enemyTurnMachineState.listenToEvent({ name: 'DAMAGE', data: null });
+		$enemyTurnMachineState = $enemyTurnMachineState;
 
-			$enemyTurnMachineState.listenToEvent({ name: 'TIE', data: null });
-			$enemyTurnMachineState = $enemyTurnMachineState;
-
-			return;
-		}
-
-		if(playerHandValue > enemyHandValue) {
+		if($gameStore.getCurrentBattle()?.getCurrentTurn().fight.playerHasWon === true) {
 			$playerTurnMachineState.listenToEvent({ name: 'WIN', data: null });
 			$playerTurnMachineState = $playerTurnMachineState;
 
 			$enemyTurnMachineState.listenToEvent({ name: 'LOSE', data: null });
 			$enemyTurnMachineState = $enemyTurnMachineState;
-
-			let damage: number = playerHandValue - enemyHandValue;
-			if($gameStore.getCurrentBattle()?.getCurrentTurn().playerHand.getIsBlackjack() === true) {
-				damage = damage * 2;
-			}
-
-			gameStore.inflictDamagesToEnemy(damage);
 		}
 
-		if(playerHandValue < enemyHandValue) {
+		if($gameStore.getCurrentBattle()?.getCurrentTurn().fight.enemyHasWon === true) {
 			$playerTurnMachineState.listenToEvent({ name: 'LOSE', data: null });
 			$playerTurnMachineState = $playerTurnMachineState;
 
 			$enemyTurnMachineState.listenToEvent({ name: 'WIN', data: null });
 			$enemyTurnMachineState = $enemyTurnMachineState;
-
-			let damage: number = enemyHandValue - playerHandValue;
-			if($gameStore.getCurrentBattle()?.getCurrentTurn().enemyHand.getIsBlackjack() === true) {
-				damage = damage * 2;
-			}
-
-			gameStore.inflictDamagesToPlayer(damage);
 		}
+
+		if($gameStore.getCurrentBattle()?.getCurrentTurn().fight.playerHasWon === $gameStore.getCurrentBattle()?.getCurrentTurn().fight.enemyHasWon) {
+			$playerTurnMachineState.listenToEvent({ name: 'TIE', data: null });
+			$playerTurnMachineState = $playerTurnMachineState;
+
+			$enemyTurnMachineState.listenToEvent({ name: 'TIE', data: null });
+			$enemyTurnMachineState = $enemyTurnMachineState;
+		}
+
+		gameStore.inflictDamagesToEnemy($gameStore.getCurrentBattle()?.getCurrentTurn().fight.baseDamageToEnemy * $gameStore.getCurrentBattle()?.getCurrentTurn().fight.multiplierForPlayer);
+		gameStore.inflictDamagesToPlayer($gameStore.getCurrentBattle()?.getCurrentTurn().fight.baseDamageToPlayer * $gameStore.getCurrentBattle()?.getCurrentTurn().fight.multiplierForEnemy);
 
 		updateBattleState();
 	}
@@ -141,6 +127,7 @@
 		$playerTurnMachineState = $playerTurnMachineState;
 		$playerTurnMachineState.currentState.onStateExecute({'user': 'player'});
 
+		enemyTurnMachineState.update((state) => {state.currentState = new TurnPlayingState(); return state;})
 	}
 
 	function updateBattleState() {
