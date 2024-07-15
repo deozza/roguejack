@@ -4,14 +4,14 @@ export class BattleWonState implements StateInterface {
 	public name: string = 'BattleWonState';
 	
 	public onStateEnter = (): void => {
-		console.log('Game Idle State Entered');
+		console.log(` ${this.name} entered`);
 	};
 
 	public onStateExecute(): void {
-		console.log('Game Idle State Executed');
+		console.log(` ${this.name} executed`);
 	}
 
 	public onStateExit = (): void => {
-		console.log('Game Idle State Exited');
+		console.log(` ${this.name} exited`);
 	};
 }

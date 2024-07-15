@@ -1,30 +1,23 @@
-import { Battle } from '$lib/models/battle/model';
-import { Character } from '$lib/models/character/model';
-import type { Game } from '$lib/models/game/model';
+import { battleMachineState } from '$lib/stores/stateMachine/battle';
+import { enemyTurnMachineState, playerTurnMachineState } from '$lib/stores/stateMachine/turn';
+import { BattleMachineState } from '../../battle/battleMachineState';
 import { type StateInterface } from '../../stateInterface';
-import rat from '$lib/models/character/enemies/rat.json';
-import { Turn } from '$lib/models/turn/model';
-import { gameStore } from '$lib/stores/game';
+import { TurnMachineState } from '../../turn/turnMachineState';
 
 export class GameInitState implements StateInterface {
 	public name: string = 'GameInitState';
 	
 	public onStateEnter = (): void => {
-		console.log('Game Init State Entered');
+		console.log(` ${this.name} entered`);
 	};
 
 	public onStateExecute(data: object): void {
-		const characterChosen: object = data['character'] as object;
-		const game: Game = data['game'] as Game;
-
-		const player = new Character();
-		player.generateCharacter(characterChosen);
-		game.player = player;
-
-		gameStore.set(game);
+		battleMachineState.set(new BattleMachineState());
+		playerTurnMachineState.set(new TurnMachineState());
+		enemyTurnMachineState.set(new TurnMachineState());
 	}
 
 	public onStateExit = (): void => {
-		console.log('Game Init State Exited');
+		console.log(` ${this.name} exited`);
 	};
 }

@@ -9,7 +9,7 @@
 	import Deck from '$lib/ui/deck/Deck.svelte';
 	import Discard from '$lib/ui/deck/Discard.svelte';
 	import BattleResultAlert from '$lib/ui/gameLayout/BattleResultAlert.svelte';
-	import PlayerSide from '$lib/ui/gameLayout/PlayerSide.svelte';
+	import PlayerSide from '$lib/ui/gameLayout/battleScreen/PlayerSide.svelte';
 	import TurnResultAlert from '$lib/ui/gameLayout/TurnResultAlert.svelte';
 	import { fade } from 'svelte/transition';
 

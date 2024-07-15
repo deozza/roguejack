@@ -1,10 +1,10 @@
 <script lang="ts">
 	import type { Hand } from '$lib/models/hand/model';
 	import Icon from '@iconify/svelte';
-	import Deck from '../deck/Deck.svelte';
-	import Discard from '../deck/Discard.svelte';
-	import PlayingCard from '../playingCard/PlayingCard.svelte';
-	import Healthbar from '../character/Healthbar.svelte';
+	import Deck from '../../deck/Deck.svelte';
+	import Discard from '../../deck/Discard.svelte';
+	import PlayingCard from '../../playingCard/PlayingCard.svelte';
+	import Healthbar from '../../character/Healthbar.svelte';
 
 	export let playerName: string;
 	export let currentHealth: number;

@@ -4,14 +4,14 @@ export class TurnTiedState implements StateInterface {
 	public name: string = 'TurnTiedState';
 	
 	public onStateEnter = (): void => {
-		console.log('Turn Idle State Entered');
+		console.log(` ${this.name} entered`);
 	};
 
 	public onStateExecute(): void {
-		console.log('Turn Idle State Executed');
+		console.log(` ${this.name} executed`);
 	}
 
 	public onStateExit = (): void => {
-		console.log('Turn Idle State Exited');
+		console.log(` ${this.name} exited`);
 	};
 }

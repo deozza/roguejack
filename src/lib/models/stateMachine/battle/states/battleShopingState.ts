@@ -1,14 +1,14 @@
 import { type StateInterface } from '../../stateInterface';
 
-export class TurnFightingState implements StateInterface {
-	public name: string = 'TurnFightingState';
-
+export class BattleShopingState implements StateInterface {
+	public name: string = 'BattleShopingState';
+	
 	public onStateEnter = (): void => {
 		console.log(` ${this.name} entered`);
 	};
 
-	public onStateExecute(data: object): void {
-
+	public onStateExecute(): void {
+		console.log(` ${this.name} executed`);
 	}
 
 	public onStateExit = (): void => {

@@ -1,70 +1,37 @@
 <script lang="ts">
-	import { gameStore, gameMachineState } from '$lib/stores/game';
+	import HomeScreen from "$lib/ui/gameLayout/screens/HomeScreen.svelte";
+	import { GameCharacterSelectionState, GameIdleState, GamePausedState, GamePlayingState } from "$lib/models/stateMachine/game/states";
+	import CharacterSelectScreen from "$lib/ui/gameLayout/screens/CharacterSelectScreen.svelte";
+	import type { SvelteComponent } from "svelte";
+	import { BattlePlayingState } from "$lib/models/stateMachine/battle/states";
+	import BattleScreen from "$lib/ui/gameLayout/screens/BattleScreen.svelte";
+	import { battleMachineState } from "$lib/stores/stateMachine/battle";
+	import { gameMachineState } from "$lib/stores/stateMachine/game";
+	import { gameStore } from "$lib/stores/game";
+	import { enemyTurnMachineState, playerTurnMachineState } from "$lib/stores/stateMachine/turn";
 
-	import {
-		GameCharacterSelectionState,
-		GameIdleState,
-		GameLostState,
-		GamePlayingState
-	} from '$lib/models/stateMachine/game/states';
+	const screensToRender: Record<string, SvelteComponent> = {
+		[GameIdleState.name]: HomeScreen,
+		[GameCharacterSelectionState.name]: CharacterSelectScreen,
+		[BattlePlayingState.name]: BattleScreen,
+	};
 
-	import { characters } from '$lib/models/character/players';
-	import { Game } from '$lib/models/game/model';
-	import { afterNavigate, goto } from '$app/navigation';
-	import { battleMachineState } from '$lib/stores/battle';
-	import { enemyTurnMachineState, playerTurnMachineState } from '$lib/stores/turn';
-	import { BattleMachineState } from '$lib/models/stateMachine/battle/battleMachineState';
-	import { TurnMachineState } from '$lib/models/stateMachine/turn/turnMachineState';
+	function getSceenToRender(): SvelteComponent {
 
-	afterNavigate((to) => {
-		if ($gameMachineState.currentState.constructor.name === GameLostState.name) {
-			$gameMachineState.listenToEvent({ name: 'QUIT_GAME', data: null });
-			$gameMachineState = $gameMachineState;
+		if($gameMachineState.currentState && $gameMachineState.currentState.name !== GamePlayingState.name) {
+			return screensToRender[$gameMachineState.currentState.name];
 		}
-	});
 
-	function startNewGame() {
-		$gameMachineState.listenToEvent({ name: 'NEW_GAME', data: null });
-		$gameMachineState = $gameMachineState;
-		if ($gameMachineState.currentState.constructor.name === GameCharacterSelectionState.name) {
-			$gameStore = new Game();
-		}
+		return screensToRender[$battleMachineState.currentState.name];
 	}
 
-	function selectCharacter(character: object) {
-		$gameMachineState.listenToEvent({ name: 'CHARACTER_SELECTED', data: null });
-		$gameMachineState = $gameMachineState;
-		$gameMachineState.currentState.onStateExecute({ character, game: $gameStore });
+	$: console.log('game : ', $gameStore);
+	$: console.log('game state : ', $gameMachineState);
+	$: console.log('battle state : ', $battleMachineState);
+	$: console.log('player turn state : ', $playerTurnMachineState);
+	$: console.log('enemy turn state : ', $enemyTurnMachineState);
 
-		$gameMachineState.listenToEvent({ name: 'START_GAME', data: null });
-		$gameMachineState = $gameMachineState;
-
-		battleMachineState.set(new BattleMachineState());
-		playerTurnMachineState.set(new TurnMachineState());
-		enemyTurnMachineState.set(new TurnMachineState());
-
-		if ($gameMachineState.currentState.constructor.name === GamePlayingState.name) {
-			goto('/game');
-		}
-	}
+	
 </script>
 
-<div class="container h-full mx-auto flex flex-col justify-center items-center">
-	<section class="flex flex-col items-center justify-center h-full space-y-10">
-		{#if $gameMachineState.currentState.constructor.name === GameIdleState.name}
-			<button class="btn btn-xl variant-filled-success" on:click={startNewGame}> New game </button>
-		{/if}
-
-		{#if $gameMachineState.currentState.constructor.name === GameCharacterSelectionState.name}
-			<h1>Select your character</h1>
-			{#each characters as character}
-				<button
-					class="btn btn-xl variant-filled-success"
-					on:click={() => selectCharacter(character)}
-				>
-					{character.name}
-				</button>
-			{/each}
-		{/if}
-	</section>
-</div>
+<svelte:component this={getSceenToRender()} />
