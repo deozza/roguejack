@@ -9,6 +9,7 @@
 	export let playerName: string;
 	export let currentHealth: number;
 	export let maxHealth: number;
+	export let healthColor: string;
 	export let playerHand: Hand;
 	export let deckSize: number;
 	export let discardSize: number;
@@ -25,11 +26,11 @@
 	];
 </script>
 
-<div class="flex flex-col items-center justify-center w-full md:w-5/12 space-y-5">
+<div class="flex flex-col items-center justify-center w-full md:w-5/12">
 	<h3 class="h3 uppercase">
 		{playerName} 
 	</h3>
-	<Healthbar {currentHealth} {maxHealth} />
+	<Healthbar {currentHealth} {maxHealth} {healthColor}/>
 	<div
 		class="flex {isEnemy
 			? 'flex-row-reverse'

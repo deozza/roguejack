@@ -12,6 +12,5 @@ export class TurnTiedState implements StateInterface {
 	}
 
 	public onStateExit = (): void => {
-		console.log(` ${this.name} exited`);
 	};
 }

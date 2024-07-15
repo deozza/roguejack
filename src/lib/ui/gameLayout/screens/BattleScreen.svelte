@@ -7,6 +7,8 @@
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
 	import { TurnDeckEmptyState } from '$lib/models/stateMachine/turn/states/turnDeckEmptyState';
 	import CenterSide from '../battleScreen/CenterSide.svelte';
+	import { TurnPlayingState } from '$lib/models/stateMachine/turn/states/turnPlayingState';
+	import { TurnInitState } from '$lib/models/stateMachine/turn/states/turnInitState';
 
 	function drawCard() {
 		$playerTurnMachineState.listenToEvent({ name: 'DRAW', data: null });
@@ -18,6 +20,8 @@
 			if(e.message === 'PLAYER_EMPTY_DECK') {
 				$playerTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
 				$playerTurnMachineState = $playerTurnMachineState;
+
+				updateBattleState();
 			}
 		}
 
@@ -25,6 +29,8 @@
 			$playerTurnMachineState.listenToEvent({ name: 'BUST', data: null });
 			$playerTurnMachineState = $playerTurnMachineState;
 			$playerTurnMachineState.currentState.onStateExecute({'user': 'player'});
+
+			updateBattleState();
 
 			return;
 		}
@@ -49,6 +55,8 @@
 
 				$playerTurnMachineState.listenToEvent({ name: 'WIN', data: null });
 				$playerTurnMachineState = $playerTurnMachineState;
+
+				updateBattleState();
 			}
 
 			return;
@@ -61,6 +69,8 @@
 
 			$playerTurnMachineState.listenToEvent({ name: 'WIN', data: null });
 			$playerTurnMachineState = $playerTurnMachineState;
+
+			updateBattleState();
 
 			return;
 		}
@@ -117,6 +127,20 @@
 
 			gameStore.inflictDamagesToPlayer(damage);
 		}
+
+		updateBattleState();
+	}
+
+	function newTurn() {
+		gameStore.endTurn();
+		$playerTurnMachineState.listenToEvent({ name: 'NEW_TURN', data: null });
+		$playerTurnMachineState = $playerTurnMachineState;
+		$playerTurnMachineState.currentState.onStateExecute({'user': 'player'});
+
+		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: null });
+		$playerTurnMachineState = $playerTurnMachineState;
+		$playerTurnMachineState.currentState.onStateExecute({'user': 'player'});
+
 	}
 
 	function updateBattleState() {
@@ -174,6 +198,7 @@
 			playerName={$gameStore.player.name}
 			currentHealth={$gameStore.player.currentHealth}
 			maxHealth={$gameStore.player.maxHealth}
+			healthColor={$gameStore.player.getHealthColor()}
 			playerHand={$gameStore.getCurrentBattle().getCurrentTurn().playerHand}
 			deckSize={$gameStore.player.deck.cards.length}
 			discardSize={$gameStore.player.discard.cards.length}
@@ -182,13 +207,14 @@
 		/>
 
 		<div class="flex flex-col items-center justify-center w-full md:w-2/12">
-			<CenterSide on:fight={() => fight()} />
+			<CenterSide on:fight={() => fight()} on:camp={() => camp()} on:newTurn={() => newTurn()}/>
 		</div>
 
 		<PlayerSide
 			playerName={$gameStore.getCurrentBattle().enemy.name}
 			currentHealth={$gameStore.getCurrentBattle().enemy.currentHealth}
 			maxHealth={$gameStore.getCurrentBattle().enemy.maxHealth}
+			healthColor={$gameStore.getCurrentBattle().enemy.getHealthColor()}
 			playerHand={$gameStore.getCurrentBattle().getCurrentTurn().enemyHand}
 			deckSize={$gameStore.getCurrentBattle().enemy.deck.cards.length}
 			discardSize={$gameStore.getCurrentBattle().enemy.discard.cards.length}

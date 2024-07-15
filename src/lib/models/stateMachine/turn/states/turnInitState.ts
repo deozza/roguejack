@@ -11,21 +11,7 @@ export class TurnInitState implements StateInterface {
 	};
 
 	public onStateExecute(data: object): void {
-
-		if(data['user'] !== 'player') {
-			enemyTurnMachineState.update((state) => {
-				state.currentState = new TurnPlayingState();
-				return state;
-			})
-			return;
-		}
-
-		gameStore.createTurn();
-
-		playerTurnMachineState.update((state) => {
-			state.currentState = new TurnPlayingState();
-			return state;
-		})
+		gameStore.createTurn(data['user']);
 	}
 
 	public onStateExit = (): void => {

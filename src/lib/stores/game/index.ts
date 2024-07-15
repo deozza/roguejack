@@ -2,9 +2,9 @@ import { Battle } from "$lib/models/battle/model";
 import type { Card } from "$lib/models/card/model";
 import { characters } from "$lib/models/character/enemies";
 import { Character } from "$lib/models/character/model";
-import type { Deck } from "$lib/models/deck/model";
 import { Game } from "$lib/models/game/model";
 import { Turn } from "$lib/models/turn/model";
+import { get } from "svelte/store";
 import { writable } from 'svelte/store';
 
 
@@ -46,7 +46,7 @@ function createGameStore() {
 		return enemy;
 	}
 
-	const createTurn = () => {
+	const createTurn = (user: string) => {
 		update(game => {
 
 			if(game.getCurrentBattle() === null) {
@@ -59,8 +59,11 @@ function createGameStore() {
 			return game;
 		});
 
-		playerDrawCard();
-		playerDrawCard();
+		if(user === 'player') {
+			playerDrawCard();
+			playerDrawCard();
+		}
+
 	}
 
 	const playerDrawCard = () => {
@@ -88,13 +91,12 @@ function createGameStore() {
 	}
 
 	const enemyAutoDraw = () => {
-		subscribe(game => {
-			if(game.getCurrentBattle().getCurrentTurn().enemyHand.getValue() <= game.getCurrentBattle().enemy.minAttack) {
-				enemyDrawCard();
-			}
+		const game = get(gameStore);
 
-			return game;
-		});
+		while(game.getCurrentBattle().getCurrentTurn().enemyHand.getValue() < game.getCurrentBattle().enemy.minAttack) {
+			enemyDrawCard();
+		}
+
 	}
 
 	const inflictDamagesToBustedPlayer = () => {
@@ -128,6 +130,20 @@ function createGameStore() {
 		});
 	}
 
+	const endTurn = () => {
+		update(game => {
+			game.getCurrentBattle().getCurrentTurn().playerHand.cards.forEach((card: Card) => {
+				game.player.discard.discardCard(card);
+			})
+
+			game.getCurrentBattle().getCurrentTurn().enemyHand.cards.forEach((card: Card) => {
+				game.getCurrentBattle()?.enemy.discard.discardCard(card);
+			})
+
+			return game;
+		});
+	}
+
 	return {
 		subscribe,
 		reset,
@@ -139,7 +155,8 @@ function createGameStore() {
 		inflictDamagesToBustedPlayer,
 		inflictDamagesToBustedEnemy,
 		inflictDamagesToPlayer,
-		inflictDamagesToEnemy
+		inflictDamagesToEnemy,
+		endTurn
 	};
 }
 

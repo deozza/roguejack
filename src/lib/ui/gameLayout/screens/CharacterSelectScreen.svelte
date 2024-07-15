@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { characters } from '$lib/models/character/players';
 	import { GameCharacterSelectionState } from '$lib/models/stateMachine/game/states';
+	import { TurnPlayingState } from '$lib/models/stateMachine/turn/states/turnPlayingState';
 	import { battleMachineState } from '$lib/stores/stateMachine/battle';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
 	import { enemyTurnMachineState, playerTurnMachineState } from '$lib/stores/stateMachine/turn';
@@ -31,9 +32,11 @@
 		$playerTurnMachineState = $playerTurnMachineState;
 		$playerTurnMachineState.currentState.onStateExecute({'user': 'player'});
 
-		$enemyTurnMachineState.listenToEvent({ name: 'NEW_TURN', data: null });
-		$enemyTurnMachineState = $enemyTurnMachineState;
-		$enemyTurnMachineState.currentState.onStateExecute({'user': 'enemy'});
+		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: null });
+		$playerTurnMachineState = $playerTurnMachineState;
+		$playerTurnMachineState.currentState.onStateExecute({'user': 'player'});
+
+		enemyTurnMachineState.update((state) => {state.currentState = new TurnPlayingState(); return state;})
 	}
 </script>
 
