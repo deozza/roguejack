@@ -27,10 +27,6 @@
 
 		return screensToRender[battleCurrentState.name];
 	}
-
-	$: console.log('gameMachineState', $gameMachineState.currentState);
-	$: console.log('battleMachineState', $battleMachineState.currentState);
-	$: console.log('getScreenToRender', screenToRender);
 </script>
 
 <svelte:component this={screenToRender} />

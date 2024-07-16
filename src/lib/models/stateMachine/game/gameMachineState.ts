@@ -20,15 +20,18 @@ export class GameMachineState implements StateMachineInterface {
 		},
 		GameCharacterSelectionState: {
 			CHARACTER_SELECTED: GameInitState,
-			PAUSE_GAME: GamePausedState
+			PAUSE_GAME: GamePausedState,
+			QUIT_GAME: GameIdleState
 		},
 		GameInitState: {
 			START_GAME: GamePlayingState,
-			PAUSE_GAME: GamePausedState
+			PAUSE_GAME: GamePausedState,
+			QUIT_GAME: GameIdleState
 		},
 		GamePlayingState: {
 			PAUSE_GAME: GamePausedState,
-			END_GAME: GameLostState
+			END_GAME: GameLostState,
+			QUIT_GAME: GameIdleState
 		},
 		GamePausedState: {
 			RESUME_GAME: GamePlayingState

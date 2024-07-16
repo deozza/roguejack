@@ -2,10 +2,11 @@
 	import Icon from '@iconify/svelte';
 	import '../app.postcss';
 	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
-	import { fade } from 'svelte/transition';
 	import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
 
 	import { storePopup } from '@skeletonlabs/skeleton';
+	import PauseScreen from '$lib/ui/gameLayout/screens/PauseScreen.svelte';
+	import { gameMachineState } from '$lib/stores/stateMachine/game';
 	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
 	let pauseIcon: string = 'game-icons:pause-button';
@@ -20,13 +21,21 @@
 
 		pauseIcon = 'game-icons:pause-button';
 	}
+
+	function quit() {
+		$gameMachineState.listenToEvent({ name: 'QUIT_GAME', data: null });
+		$gameMachineState = $gameMachineState;
+
+		enterPause();
+	}
+
 </script>
 
 <!-- App Shell -->
 <AppShell>
 	<svelte:fragment slot="header">
 		<!-- App Bar -->
-		<AppBar>
+		<AppBar padding='p-1 md:p-4'>
 			<svelte:fragment slot="lead">
 				<strong class="text-xl uppercase">Roguejack</strong>
 			</svelte:fragment>
@@ -40,14 +49,7 @@
 	</svelte:fragment>
 
 	{#if pauseStatus === true}
-		<section
-			class="absolute h-full w-full z-50 bg-surface-500/90"
-			transition:fade={{ delay: 250, duration: 300 }}
-		>
-			<div class="flex flex-col items-center justify-center h-full w-full">
-				<h1 class="h1">Pause</h1>
-			</div>
-		</section>
+		<PauseScreen on:resume={() => enterPause()} on:quit={() => quit()} />
 	{/if}
 	<slot />
 </AppShell>
