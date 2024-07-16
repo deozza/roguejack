@@ -3,3 +3,5 @@ import type { Writable } from 'svelte/store';
 import { writable } from 'svelte/store';
 
 export const playerSideEffectsStore: Writable<EffectInterface[]> = writable<EffectInterface[]>([]);
+
+export const enemySideEffectsStore: Writable<EffectInterface[]> = writable<EffectInterface[]>([]);

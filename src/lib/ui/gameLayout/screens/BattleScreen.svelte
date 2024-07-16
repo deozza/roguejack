@@ -8,7 +8,7 @@
 	import { TurnDeckEmptyState } from '$lib/models/stateMachine/turn/states/turnDeckEmptyState';
 	import CenterSide from '../battleScreen/CenterSide.svelte';
 	import { TurnPlayingState } from '$lib/models/stateMachine/turn/states/turnPlayingState';
-	import { playerSideEffectsStore } from '$lib/stores/sideEffects';
+	import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 	import { fade } from 'svelte/transition';
 
 	function drawCard() {
@@ -56,7 +56,7 @@
 				$playerTurnMachineState.listenToEvent({ name: 'WIN', data: null });
 				$playerTurnMachineState = $playerTurnMachineState;
 
-				calculateAndApplyDamages();
+				updateBattleState();
 			}
 
 			return;
@@ -92,6 +92,7 @@
 		if ($gameStore.getCurrentBattle()?.getCurrentTurn().fight.playerHasWon === true) {
 			$playerTurnMachineState.listenToEvent({ name: 'WIN', data: null });
 			$playerTurnMachineState = $playerTurnMachineState;
+			$playerTurnMachineState.currentState.onStateEnter({ user: 'player' });
 
 			$enemyTurnMachineState.listenToEvent({ name: 'LOSE', data: null });
 			$enemyTurnMachineState = $enemyTurnMachineState;
@@ -103,6 +104,7 @@
 
 			$enemyTurnMachineState.listenToEvent({ name: 'WIN', data: null });
 			$enemyTurnMachineState = $enemyTurnMachineState;
+			$enemyTurnMachineState.currentState.onStateEnter({ user: 'enemy' });
 		}
 
 		if (
@@ -145,7 +147,7 @@
 	}
 
 	function updateBattleState() {
-		if ($enemyTurnMachineState.currentState.name === TurnDeckEmptyState.name) {
+		if ($enemyTurnMachineState.currentState.name === 'TurnDeckEmptyState') {
 			$playerTurnMachineState.listenToEvent({ name: 'WIN', data: null });
 			$playerTurnMachineState = $playerTurnMachineState;
 
@@ -157,7 +159,7 @@
 			return;
 		}
 
-		if ($playerTurnMachineState.currentState.name === TurnDeckEmptyState.name) {
+		if ($playerTurnMachineState.currentState.name === 'TurnDeckEmptyState') {
 			$playerTurnMachineState.listenToEvent({ name: 'LOSE', data: null });
 			$playerTurnMachineState = $playerTurnMachineState;
 
@@ -247,7 +249,7 @@
 			discardSize={$gameStore.getCurrentBattle().enemy.discard.cards.length}
 			currentStateName={$enemyTurnMachineState.currentState.name}
 			fight={$gameStore.getCurrentBattle().getCurrentTurn().fight}
-			sideEffects={[]}
+			sideEffects={$enemySideEffectsStore}
 			isEnemy={true}
 		/>
 	</div>

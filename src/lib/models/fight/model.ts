@@ -74,14 +74,14 @@ export class Fight {
 
 	public setMultiplierForPlayer(playerHand: Hand): Fight {
 		if (this.playerHasWon && playerHand.getIsBlackjack()) {
-			this.multiplierForPlayer += 2;
+			this.multiplierForPlayer += 1;
 		}
 		return this;
 	}
 
 	public setMultiplierForEnemy(enemyHand: Hand): Fight {
 		if (this.enemyHasWon && enemyHand.getIsBlackjack()) {
-			this.multiplierForEnemy += 2;
+			this.multiplierForEnemy += 1;
 		}
 		return this;
 	}

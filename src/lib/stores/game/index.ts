@@ -1,6 +1,8 @@
 import { Battle } from '$lib/models/battle/model';
 import type { Card } from '$lib/models/card/model';
-import { characters } from '$lib/models/character/enemies';
+import { characters as semiboss } from '$lib/models/character/enemies/semiboss';
+import { characters as basic } from '$lib/models/character/enemies/basic';
+import { characters as boss } from '$lib/models/character/enemies/boss';
 import { Character } from '$lib/models/character/model';
 import { Game } from '$lib/models/game/model';
 import type { Hand } from '$lib/models/hand/model';
@@ -37,10 +39,23 @@ function createGameStore() {
 
 	const generateEnemy = (game: Game): Character => {
 		const enemy: Character = new Character();
-		const enemyLevel: number = Math.max(Math.round(game.battles.length / 5), 1);
-		const enemyModels = characters.filter(
-			(character) => character.level <= enemyLevel && character.level >= enemyLevel - 1
-		);
+		const enemyLevel: number = Math.max(Math.round(game.battles.length / 10), 1);
+
+		let enemyModels: object[] = [];
+
+		if((game.battles.length + 1) % 10 === 0) {
+			enemyModels = boss.filter(
+				(character) => character.level <= enemyLevel && character.level >= enemyLevel - 1
+			);
+		} else if((game.battles.length + 1) % 5 === 0) {
+			enemyModels = semiboss.filter(
+				(character) => character.level <= enemyLevel && character.level >= enemyLevel - 1
+			);
+		} else {
+			enemyModels = basic.filter(
+				(character) => character.level <= enemyLevel && character.level >= enemyLevel - 1
+			);
+		}
 
 		const enemyModel = enemyModels[Math.floor(Math.random() * enemyModels.length)];
 		enemy.generateCharacter(enemyModel);
