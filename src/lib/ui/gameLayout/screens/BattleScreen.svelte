@@ -10,6 +10,7 @@
 	import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 	import { fade } from 'svelte/transition';
 	import DiscardPreview from '../battleScreen/DiscardPreview.svelte';
+	import { TurnMachineState } from '$lib/models/stateMachine/turn/turnMachineState';
 
 	let openedEnemyDiscardView: boolean = false;
 	let openedPlayerDiscardView: boolean = false;
@@ -20,8 +21,12 @@
 		gameStore.removeFromInventory(effect, 'player');
 
 		updateBattleState();
-	}
 
+		if($battleMachineState.currentState.name !== 'BattlePlayingState') {
+			playerTurnMachineState.set(new TurnMachineState());
+			enemyTurnMachineState.set(new TurnMachineState());
+		}
+	}
 
 	function drawCard() {
 		$playerTurnMachineState.listenToEvent({ name: 'DRAW', data: null });
@@ -203,6 +208,9 @@
 
 	function redirectToCampOrShop() {
 		gameStore.endTurn();
+		$battleMachineState.listenToEvent({ name: 'CAMP', data: null });
+		$battleMachineState = $battleMachineState;
+		return;
 		if ($gameStore.battles.length % 5 === 0) {
 			$battleMachineState.listenToEvent({ name: 'SHOP', data: null });
 			$battleMachineState = $battleMachineState;
@@ -219,6 +227,9 @@
 	function openPlayerDiscardView() {
 		openedPlayerDiscardView = !openedPlayerDiscardView;
 	}
+
+	$: console.log('game : ', $gameStore);
+
 </script>
 
 {#if openedPlayerDiscardView}

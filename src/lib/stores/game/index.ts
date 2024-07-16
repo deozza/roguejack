@@ -224,7 +224,10 @@ function createGameStore() {
 
 	const removeFromInventory = (object: EffectInterface, user: string) => {
 		update((game) => {
-			game.player.inventory = game.player.inventory.filter((item) => item !== object);
+			const index = game.player.inventory.findIndex((item) => item === object);
+			if (index !== -1) {
+				game.player.inventory.splice(index, 1);
+			}
 			return game;
 		})
 	}

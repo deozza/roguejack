@@ -55,17 +55,20 @@
 				<Icon icon="mdi:close" width="24" height="24" />
 			</button>
 		</h1>
-		<div class="flex h-full flex-row flex-wrap items-center justify-center overscroll-none overflow-y-scroll pb-24">
+		<div class="flex h-full flex-col flex-wrap items-center justify-center overscroll-none overflow-y-scroll pb-24">
 			
 			{#each player.inventory as object}
-				<div class="card p-4 variant-filled-primary">
-					<p>{object.name}</p>
-					<p>{object.description}</p>
-					<div class="arrow variant-filled-primary" />
+				<div class="flex flex-row flex-wrap items-center justify-center space-y-4">
+					<div class="card p-4 variant-filled-primary">
+						<p>{object.name}</p>
+						<p>{object.description}</p>
+						<div class="arrow variant-filled-primary" />
+					</div>
+					<button class="btn" on:click={() => dispatch('triggerEffect', {object})}>
+						<Icon icon="{object.icon}" width="64" height="64" />
+					</button>
+
 				</div>
-				<button class="btn" on:click={() => dispatch('triggerEffect', {object})}>
-					<Icon icon="{object.icon}" width="64" height="64" />
-				</button>
 			{/each}
 		</div>
 	</div>
