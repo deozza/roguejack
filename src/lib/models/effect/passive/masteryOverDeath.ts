@@ -11,6 +11,7 @@ export default class MasteryOverDeath implements EffectInterface {
 	enableOnBattleState: string = BattlePlayingState.name;
 	enableOnPlayerTurnState: string = TurnDamageState.name;
 	enableOnEnemyTurnState: string = TurnDamageState.name;
+	icon: string = 'game-icons:graveyard';
 
 	public effect(data: object): void {
 		const game: Game = get(gameStore);

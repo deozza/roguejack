@@ -1,5 +1,5 @@
 import { Hand } from '$lib/models/hand/model';
-import { Fight } from '../fight/model';
+import { Fight } from '$lib/models/fight/model';
 
 export class Turn {
 	id: string;

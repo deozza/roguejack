@@ -50,7 +50,7 @@
 				<div class="arrow variant-filled-primary" />
 			</div>
 			<button class="btn" use:popup={popupClick}>
-				<Icon icon="game-icons:spell-book" width="64" height="64" />
+				<Icon icon="{sideEffect.icon}" width="64" height="64" />
 			</button>
 		{/each}
 	</div>

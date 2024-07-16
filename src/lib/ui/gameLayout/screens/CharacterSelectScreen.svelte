@@ -23,6 +23,9 @@
 	function preSelectCharacter(character: object) {
 		selectedCharacter = character;
 		passive = sideEffects[character.passive];
+
+		console.log(passive)
+
 		deck = [];
 		character.deck.suits.forEach((suit: Suit) => {
 			character.deck.values.forEach((value: Face) => {
@@ -102,15 +105,19 @@
 		<h1 class="h1">Select your character</h1>
 		<div class="flex flex-row items-center justify-between w-full">
 			{#if selectedCharacter !== null}
-				<div class="flex flex-col flex-wrap items-start justify-start">
-					<h2 class="h2">{selectedCharacter.name}</h2>
-					<p class="flex flex-row items-center justify-center text-error-500">
-						<Icon icon="game-icons:hearts" width="16" height="16"/> {selectedCharacter.maxHealth}/{selectedCharacter.maxHealth}
-					</p>
-					<button class="btn" on:click={() => openDeckPreview()}>See deck</button>
+				<div class="flex flex-col flex-wrap items-start justify-start space-y-8 w-1/3">
+					<div class="flex flex-col flex-wrap items-start justify-start w-full space-y-4">
+						<h2 class="h2">{selectedCharacter.name}</h2>
+						<p class="flex flex-row items-center justify-center text-error-500">
+							<Icon icon="game-icons:hearts" width="16" height="16"/> {selectedCharacter.maxHealth}/{selectedCharacter.maxHealth}
+						</p>
+						<hr class="w-full">	
+					</div>
+
 					{#if passive !== undefined && passive !== null}
-						<p class="text-sm w-8/12"><span class="text-lg">{passive.name}</span> : {passive.description}</p>
+						<p><Icon icon="{passive.icon}" height="32" width="32" /> {passive.description}</p>
 					{/if}
+					<button class="btn variant-ringed-tertiary" on:click={() => openDeckPreview()}>See deck</button>
 				</div>
 				<button class="btn variant-filled-success rounded-md" on:click={() => selectCharacter()}>
 					Confirm

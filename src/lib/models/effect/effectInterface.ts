@@ -4,6 +4,7 @@ export default interface EffectInterface {
 	enableOnBattleState: string;
 	enableOnPlayerTurnState: string;
 	enableOnEnemyTurnState: string;
+	icon: string;
 
 	effect(data: object): void;
 }
