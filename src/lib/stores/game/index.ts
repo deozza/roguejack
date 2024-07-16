@@ -212,9 +212,7 @@ function createGameStore() {
 		});
 	};
 
-	const addToInventory = (objectName: string, user: string) => {
-		const object: EffectInterface = triggerEffects[objectName];
-
+	const addToInventory = (object: EffectInterface, user: string) => {
 		update((game) => {
 			game.player.inventory = [...game.player.inventory, object];
 			return game;

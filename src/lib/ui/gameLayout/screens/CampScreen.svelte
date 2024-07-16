@@ -8,9 +8,12 @@
 	import { fade } from 'svelte/transition';
 	import DiscardPreview from '../battleScreen/DiscardPreview.svelte';
 	import DeckPreview from '../battleScreen/DeckPreview.svelte';
+	import { triggerEffects } from '$lib/models/effect';
+	import type EffectInterface from '$lib/models/effect/effectInterface';
 
 	let openedDeckView: boolean = false;
 	let openedDiscardView: boolean = false;
+	const objectToLoot: EffectInterface = getObjectToLoot();
 
 	function openDeckView() {
 		openedDeckView = !openedDeckView;
@@ -31,8 +34,13 @@
 		startNewBattle();
 	}
 
-	function addToInventory(objectName: string) {
-		gameStore.addToInventory(objectName, 'player');
+	function getObjectToLoot(): EffectInterface {
+		const keys = Object.keys(triggerEffects);
+		return triggerEffects[keys[(keys.length * Math.random()) << 0]];
+	}
+
+	function addToInventory(object: EffectInterface) {
+		gameStore.addToInventory(object, 'player');
 
 		startNewBattle();
 	}
@@ -100,8 +108,9 @@
 				<button class="btn btn-xl variant-ghost-secondary" on:click={() => recycleAtCamp()}
 					>Recycle discard (shuffle last 4 cards from discard to deck)</button
 				>
-				<button class="btn btn-xl variant-ghost-tertiary" on:click={() => addToInventory('knife')}
-					>Knife</button
+				<button
+					class="btn btn-xl variant-ghost-tertiary"
+					on:click={() => addToInventory(objectToLoot)}>{objectToLoot.name}</button
 				>
 			</div>
 		</div>

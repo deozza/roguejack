@@ -16,10 +16,10 @@ export default class Bravery implements EffectInterface {
 		const game: Game = get(gameStore);
 		if (data['user'] === 'player') {
 			if ((game.battles.length + 1) % 5 === 0) {
-				gameStore.addToInventory('sword', 'player');
+				gameStore.addToInventory(new Sword(), 'player');
 			}
 		} else {
-			gameStore.addToInventory('sword', 'ennemy');
+			gameStore.addToInventory(new Sword(), 'ennemy');
 		}
 	}
 }
