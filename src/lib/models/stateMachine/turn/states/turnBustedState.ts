@@ -1,17 +1,14 @@
+import { gameStore } from '$lib/stores/game';
 import { type StateInterface } from '../../stateInterface';
 
 export class TurnBustedState implements StateInterface {
 	public name: string = 'TurnBustedState';
 
 	public onStateEnter = (): void => {
-		console.log('Turn Idle State Entered');
+		console.log(` ${this.name} entered`);
 	};
 
-	public onStateExecute(): void {
-		console.log('Turn Idle State Executed');
-	}
+	public onStateExecute(data: object): void {}
 
-	public onStateExit = (): void => {
-		console.log('Turn Idle State Exited');
-	};
+	public onStateExit = (): void => {};
 }

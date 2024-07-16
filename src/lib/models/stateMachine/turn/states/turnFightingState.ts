@@ -4,14 +4,12 @@ export class TurnFightingState implements StateInterface {
 	public name: string = 'TurnFightingState';
 
 	public onStateEnter = (): void => {
-		console.log('Turn Idle State Entered');
+		console.log(` ${this.name} entered`);
 	};
 
-	public onStateExecute(): void {
-		console.log('Turn Idle State Executed');
-	}
+	public onStateExecute(data: object): void {}
 
 	public onStateExit = (): void => {
-		console.log('Turn Idle State Exited');
+		console.log(` ${this.name} exited`);
 	};
 }

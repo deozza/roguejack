@@ -2,16 +2,16 @@ import { type StateInterface } from '../../stateInterface';
 
 export class GamePausedState implements StateInterface {
 	public name: string = 'GamePausedState';
-	
+
 	public onStateEnter = (): void => {
-		console.log('Game Pause State Entered');
+		console.log(` ${this.name} entered`);
 	};
 
 	public onStateExecute(): void {
-		console.log('Game Pause State Executed');
+		console.log(` ${this.name} executed`);
 	}
 
 	public onStateExit = (): void => {
-		console.log('Game Pause State Exited');
+		console.log(` ${this.name} exited`);
 	};
 }

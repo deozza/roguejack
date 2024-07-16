@@ -1,17 +1,18 @@
+import { gameStore } from '$lib/stores/game';
+import { playerTurnMachineState } from '$lib/stores/stateMachine/turn';
 import { type StateInterface } from '../../stateInterface';
+import { TurnPlayingState } from '../../turn/states/turnPlayingState';
 
 export class BattlePlayingState implements StateInterface {
 	public name: string = 'BattlePlayingState';
-	
+
 	public onStateEnter = (): void => {
-		console.log('Game Idle State Entered');
+		console.log(` ${this.name} entered`);
 	};
 
-	public onStateExecute(): void {
-		console.log('Game Idle State Executed');
-	}
+	public onStateExecute(): void {}
 
 	public onStateExit = (): void => {
-		console.log('Game Idle State Exited');
+		console.log(` ${this.name} exited`);
 	};
 }

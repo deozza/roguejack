@@ -1,11 +1,15 @@
 import { type EventInterface } from '../eventInterface';
 import { type StateInterface } from '../stateInterface';
 import { type StateMachineInterface } from '../stateMachineInterface';
-import { BattlePlayingState } from './states';
-import { BattleIdleState } from './states/battleIdleState';
-import { BattleInitState } from './states/battleInitState';
-import { BattleLostState } from './states/battleLostState';
-import { BattleWonState } from './states/battleWonState';
+import {
+	BattleCampingState,
+	BattleIdleState,
+	BattleInitState,
+	BattleLostState,
+	BattlePlayingState,
+	BattleShopingState,
+	BattleWonState
+} from './states';
 
 export class BattleMachineState implements StateMachineInterface {
 	public currentState: StateInterface = new BattleIdleState();
@@ -22,6 +26,13 @@ export class BattleMachineState implements StateMachineInterface {
 			LOSE: BattleLostState
 		},
 		BattleWonState: {
+			CAMP: BattleCampingState,
+			SHOP: BattleShopingState
+		},
+		BattleCampingState: {
+			NEW_BATTLE: BattleInitState
+		},
+		BattleShopingState: {
 			NEW_BATTLE: BattleInitState
 		},
 		BattleLostState: {
@@ -33,9 +44,7 @@ export class BattleMachineState implements StateMachineInterface {
 		const currentStateName = this.currentState.name;
 		const nextState = this.stateMachine[currentStateName][event.name];
 		if (nextState) {
-			this.currentState.onStateExit();
 			this.currentState = new nextState();
-			this.currentState.onStateEnter();
 		}
 	}
 }

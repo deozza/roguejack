@@ -15,13 +15,16 @@ export class GameMachineState implements StateMachineInterface {
 
 	public stateMachine: object = {
 		GameIdleState: {
-			NEW_GAME: GameCharacterSelectionState
+			NEW_GAME: GameCharacterSelectionState,
+			PAUSE_GAME: GamePausedState
 		},
 		GameCharacterSelectionState: {
-			CHARACTER_SELECTED: GameInitState
+			CHARACTER_SELECTED: GameInitState,
+			PAUSE_GAME: GamePausedState
 		},
 		GameInitState: {
-			START_GAME: GamePlayingState
+			START_GAME: GamePlayingState,
+			PAUSE_GAME: GamePausedState
 		},
 		GamePlayingState: {
 			PAUSE_GAME: GamePausedState,
@@ -39,9 +42,7 @@ export class GameMachineState implements StateMachineInterface {
 		const currentStateName = this.currentState.name;
 		const nextState = this.stateMachine[currentStateName][event.name];
 		if (nextState) {
-			this.currentState.onStateExit();
 			this.currentState = new nextState();
-			this.currentState.onStateEnter();
 		}
 	}
 }

@@ -1,7 +1,7 @@
 import { type StateInterface } from '../../stateInterface';
 
-export class TurnDeckEmptyState implements StateInterface {
-	public name: string = 'TurnDeckEmptyState';
+export class BattleShopingState implements StateInterface {
+	public name: string = 'BattleShopingState';
 
 	public onStateEnter = (): void => {
 		console.log(` ${this.name} entered`);
