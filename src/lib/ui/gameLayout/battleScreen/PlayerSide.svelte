@@ -37,7 +37,7 @@
 	};
 </script>
 
-<div class="flex flex-col items-center justify-center h-full w-full md:w-5/12">
+<div class="flex flex-col items-center justify-center md:h-full w-full md:w-5/12">
 	<div
 		class="flex {isEnemy
 			? 'flex-row-reverse'

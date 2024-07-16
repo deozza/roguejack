@@ -202,7 +202,12 @@
 	class="container h-full mx-auto flex flex-col justify-left items-start space-y-10"
 	id="battle-screen"
 >
+<div class="flex md:hidden flex-col items-center justify-center w-full md:mb-20">
+	<h1 class="h1">Battle {$gameStore?.battles.length}</h1>
+	<h2 class="h2">Turn {$gameStore?.getCurrentBattle()?.turns.length}</h2>
+</div>
 	<div class="flex flex-row flex-wrap items-center justify-between h-full w-full">
+		
 		<PlayerSide
 			playerName={$gameStore.player.name}
 			currentHealth={$gameStore.player.currentHealth}
@@ -217,8 +222,8 @@
 			on:click={() => drawCard()}
 		/>
 
-		<div class="flex flex-col items-center justify-center h-full w-full md:w-2/12">
-			<div class="flex flex-col items-center justify-center w-full mb-20">
+		<div class="flex flex-col items-center justify-center md:h-full w-full md:w-2/12">
+			<div class="hidden md:flex flex-col items-center justify-center w-full md:mb-20">
 				<h1 class="h1">Battle {$gameStore?.battles.length}</h1>
 				<h2 class="h2">Turn {$gameStore?.getCurrentBattle()?.turns.length}</h2>
 			</div>
