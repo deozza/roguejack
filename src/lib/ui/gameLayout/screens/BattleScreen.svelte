@@ -9,6 +9,7 @@
 	import CenterSide from '../battleScreen/CenterSide.svelte';
 	import { TurnPlayingState } from '$lib/models/stateMachine/turn/states/turnPlayingState';
 	import { playerSideEffectsStore } from '$lib/stores/sideEffects';
+	import { fade } from 'svelte/transition';
 
 	function drawCard() {
 		$playerTurnMachineState.listenToEvent({ name: 'DRAW', data: null });
@@ -201,6 +202,7 @@
 <section
 	class="container h-full mx-auto flex flex-col justify-left items-start space-y-10"
 	id="battle-screen"
+	transition:fade={{ delay: 250, duration: 300 }}
 >
 <div class="flex md:hidden flex-col items-center justify-center w-full md:mb-20">
 	<h1 class="h1">Battle {$gameStore?.battles.length}</h1>

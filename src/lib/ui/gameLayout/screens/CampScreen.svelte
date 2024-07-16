@@ -5,6 +5,7 @@
 	import { enemyTurnMachineState, playerTurnMachineState } from '$lib/stores/stateMachine/turn';
 	import Deck from '$lib/ui/deck/Deck.svelte';
 	import Discard from '$lib/ui/deck/Discard.svelte';
+	import { fade } from 'svelte/transition';
 
 	function healAtCamp() {
 		gameStore.healPercentages(10, 'player');
@@ -43,6 +44,7 @@
 <section
 	class="container h-full mx-auto flex flex-col justify-left items-start space-y-10"
 	id="camp-screen"
+	transition:fade={{ delay: 250, duration: 300 }}
 >
 	<div class="flex flex-col items-center justify-center h-full w-full">
 		<h1 class="h1">Camp</h1>
@@ -56,9 +58,9 @@
 				</div>
 			</div>
 			<div class="flex flex-row flex-wrap items-center justify-start w-7/12">
-				<button class="btn btn-xl variant-ghost-success" on:click={() => healAtCamp()}>Heal</button>
+				<button class="btn btn-xl variant-ghost-success" on:click={() => healAtCamp()}>Drink potion (+10%hp)</button>
 				<button class="btn btn-xl variant-ghost-secondary" on:click={() => recycleAtCamp()}
-					>Recycle discard</button
+					>Recycle discard (shuffle last 4 cards from discard to deck)</button
 				>
 			</div>
 		</div>
