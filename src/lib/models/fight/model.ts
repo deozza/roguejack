@@ -1,4 +1,4 @@
-import type { Hand } from '../hand/model';
+import type { Hand } from '$lib/models/hand/model';
 
 export class Fight {
 	basePowerForPlayer: number = 0;
