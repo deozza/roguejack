@@ -12,9 +12,10 @@
 	import { sideEffects } from '$lib/models/effect';
 	import PlayingCard from '$lib/ui/playingCard/PlayingCard.svelte';
 	import { Card, type Face, type Suit } from '$lib/models/card/model';
+	import DeckPreview from '../battleScreen/DeckPreview.svelte';
 
 	let selectedCharacter: object = {}
-	let deck: Card[] = [];
+	let cards: Card[] = [];
 	let passive: EffectInterface|null = null;
 	let openedDeckPreview: boolean = false;
 	
@@ -24,10 +25,10 @@
 		selectedCharacter = character;
 		passive = sideEffects[character.passive];
 
-		deck = [];
+		cards = [];
 		character.deck.suits.forEach((suit: Suit) => {
 			character.deck.values.forEach((value: Face) => {
-				deck = [...deck, new Card(suit, value )];
+				cards = [...cards, new Card(suit, value )];
 			});
 		});
 	}
@@ -73,25 +74,7 @@
 </script>
 
 {#if openedDeckPreview}
-	<section
-		class="absolute h-full w-full z-10 bg-surface-500/90"
-		transition:fade={{ delay: 250, duration: 300 }}
-	>
-		<div class="flex flex-col items-center justify-center h-full w-full">
-			<h1 class="h1 p-4">
-				Deck preview
-				<button class="btn" on:click={() => openDeckPreview()}>
-					<Icon icon="mdi:close" width="24" height="24" />
-				</button>
-			</h1>
-			<div class="flex h-full flex-row flex-wrap items-center justify-center overscroll-none overflow-y-scroll pb-24">
-				{#each deck as card}
-					<PlayingCard {card} />
-				{/each}
-
-			</div>
-		</div>
-	</section>
+	<DeckPreview {cards} on:close={() => openDeckPreview()}/>
 {/if}
 
 <section

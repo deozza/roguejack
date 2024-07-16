@@ -5,11 +5,15 @@
 	import { enemyTurnMachineState } from '$lib/stores/stateMachine/turn';
 	import { battleMachineState } from '$lib/stores/stateMachine/battle';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
-	import { TurnDeckEmptyState } from '$lib/models/stateMachine/turn/states/turnDeckEmptyState';
 	import CenterSide from '../battleScreen/CenterSide.svelte';
 	import { TurnPlayingState } from '$lib/models/stateMachine/turn/states/turnPlayingState';
 	import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 	import { fade } from 'svelte/transition';
+	import DiscardPreview from '../battleScreen/DiscardPreview.svelte';
+
+	let openedEnemyDiscardView: boolean = false;
+	let openedPlayerDiscardView: boolean = false;
+
 
 	function drawCard() {
 		$playerTurnMachineState.listenToEvent({ name: 'DRAW', data: null });
@@ -199,7 +203,23 @@
 			$battleMachineState = $battleMachineState;
 		}
 	}
+
+	function openEnemyDiscardView() {
+		openedEnemyDiscardView = !openedEnemyDiscardView;
+	}
+
+	function openPlayerDiscardView() {
+		openedPlayerDiscardView = !openedPlayerDiscardView;
+	}
 </script>
+
+{#if openedPlayerDiscardView}
+	<DiscardPreview isPlayer={openedPlayerDiscardView} cards={$gameStore.player.discard.cards} on:close={() => openPlayerDiscardView()} />
+{/if}
+
+{#if openedEnemyDiscardView}
+	<DiscardPreview cards={$gameStore.getCurrentBattle().enemy.discard.cards} on:close={() => openEnemyDiscardView()} />
+{/if}
 
 <section
 	class="container h-full mx-auto flex flex-col justify-left items-start space-y-10"
@@ -223,7 +243,8 @@
 			currentStateName={$playerTurnMachineState.currentState.name}
 			fight={$gameStore.getCurrentBattle().getCurrentTurn().fight}
 			sideEffects={$playerSideEffectsStore}
-			on:click={() => drawCard()}
+			on:draw={() => drawCard()}
+			on:playerDiscardView={() => openPlayerDiscardView()}
 		/>
 
 		<div class="flex flex-col items-center justify-center md:h-full w-full md:w-2/12">
@@ -251,6 +272,7 @@
 			fight={$gameStore.getCurrentBattle().getCurrentTurn().fight}
 			sideEffects={$enemySideEffectsStore}
 			isEnemy={true}
+			on:enemyDiscardView={() => openEnemyDiscardView()}
 		/>
 	</div>
 </section>

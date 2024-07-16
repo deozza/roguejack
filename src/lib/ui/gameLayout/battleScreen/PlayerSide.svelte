@@ -8,6 +8,7 @@
 	import type { Fight } from '$lib/models/fight/model';
 	import type EffectInterface from '$lib/models/effect/effectInterface';
 	import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
+	import { createEventDispatcher } from 'svelte';
 
 	export let playerName: string;
 	export let currentHealth: number;
@@ -22,6 +23,8 @@
 	export let currentStateName: string;
 
 	export let isEnemy: boolean = false;
+
+	const dispatch = createEventDispatcher();
 
 	const endTurnStates: string[] = [
 		'TurnWonState',
@@ -65,11 +68,13 @@
 			: 'flex-row'}  flex-wrap items-center justify-start w-full space-x-5 my-20"
 	>
 		<div class="flex flex-col items-center justify-center space-y-5 h-full w-4/12 md:w-2/12">
-			<button on:click disabled={currentStateName !== 'TurnPlayingState'} type="button">
+			<button on:click={() => dispatch('draw')} disabled={currentStateName !== 'TurnPlayingState'} type="button">
 				<Deck {deckSize} />
 			</button>
 
-			<Discard {discardSize} />
+			<button on:click={() => dispatch(isEnemy ? 'enemyDiscardView' : 'playerDiscardView')} disabled={currentStateName !== 'TurnPlayingState'} type="button">
+				<Discard {discardSize} />
+			</button>
 		</div>
 		<div
 			class="snap-x scroll-px-4 snap-mandatory scroll-smooth flex gap-4 overflow-x-auto w-1/2 md:w-9/12"

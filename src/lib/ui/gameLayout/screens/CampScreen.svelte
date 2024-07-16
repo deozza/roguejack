@@ -6,6 +6,19 @@
 	import Deck from '$lib/ui/deck/Deck.svelte';
 	import Discard from '$lib/ui/deck/Discard.svelte';
 	import { fade } from 'svelte/transition';
+	import DiscardPreview from '../battleScreen/DiscardPreview.svelte';
+	import DeckPreview from '../battleScreen/DeckPreview.svelte';
+
+	let openedDeckView: boolean = false;
+	let openedDiscardView: boolean = false;
+
+	function openDeckView() {
+		openedDeckView = !openedDeckView;
+	}
+
+	function openDiscardView() {
+		openedDiscardView = !openedDiscardView;
+	}
 
 	function healAtCamp() {
 		gameStore.healPercentages(10, 'player');
@@ -41,6 +54,14 @@
 	}
 </script>
 
+{#if openedDiscardView}
+	<DiscardPreview isPlayer={true} cards={$gameStore.player.discard.cards} on:close={() => openDiscardView()} />
+{/if}
+
+{#if openedDeckView}
+	<DeckPreview cards={$gameStore.player.deck.cards} on:close={() => openDeckView()} />
+{/if}
+
 <section
 	class="container h-full mx-auto flex flex-col justify-left items-start space-y-10"
 	id="camp-screen"
@@ -53,8 +74,12 @@
 				<h2 class="h2">Status</h2>
 				<div class="flex flex-col items-center justify-center">
 					<p class="p">Health: {$gameStore.player.currentHealth}/{$gameStore.player.maxHealth}</p>
-					<Deck deckSize={$gameStore.player.deck.cards.length} />
-					<Discard discardSize={$gameStore.player.discard.cards.length} />
+					<button on:click={() => openDeckView()}  type="button">
+						<Deck deckSize={$gameStore.player.deck.cards.length} />
+					</button>
+					<button on:click={() => openDiscardView()}  type="button">
+						<Discard discardSize={$gameStore.player.discard.cards.length} />
+					</button>
 				</div>
 			</div>
 			<div class="flex flex-row flex-wrap items-center justify-start w-7/12">
