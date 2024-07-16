@@ -24,8 +24,6 @@
 		selectedCharacter = character;
 		passive = sideEffects[character.passive];
 
-		console.log(passive)
-
 		deck = [];
 		character.deck.suits.forEach((suit: Suit) => {
 			character.deck.values.forEach((value: Face) => {
@@ -39,7 +37,7 @@
 	}
 
 	function selectCharacter() {
-		$gameMachineState.currentState.onStateExecute({ selectedCharacter });
+		$gameMachineState.currentState.onStateExecute({ character: selectedCharacter });
 
 		$gameMachineState.listenToEvent({ name: 'CHARACTER_SELECTED', data: null });
 		$gameMachineState = $gameMachineState;

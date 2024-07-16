@@ -8,14 +8,13 @@ import { gameStore } from '$lib/stores/game';
 export default class MasteryOverDeath implements EffectInterface {
 	name: string = 'Mastery Over Death';
 	description: string = 'Deal 1 more base power for every 5 cards in the discard.';
-	enableOnBattleState: string = BattlePlayingState.name;
-	enableOnPlayerTurnState: string = TurnDamageState.name;
-	enableOnEnemyTurnState: string = TurnDamageState.name;
+	enableOnBattleState: string = 'BattlePlayingState';
+	enableOnPlayerTurnState: string = 'TurnDamageState';
+	enableOnEnemyTurnState: string = 'TurnDamageState';
 	icon: string = 'game-icons:graveyard';
 
 	public effect(data: object): void {
 		const game: Game = get(gameStore);
-
 		if (data['user'] === 'player') {
 			const bonusPower: number = Math.floor(game.player.discard.cards.length / 5);
 			gameStore.update((game) => {
