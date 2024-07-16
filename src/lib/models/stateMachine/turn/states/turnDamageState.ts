@@ -7,10 +7,10 @@ export class TurnDamageState implements StateInterface {
 	public name: string = 'TurnDamageState';
 
 	public onStateEnter = (data: object): void => {
-		const sideEffects = get(playerSideEffectsStore);
+		const passiveEffects = get(playerSideEffectsStore);
 		const stateToEnable: string =
 			data['user'] === 'player' ? 'enableOnPlayerTurnState' : 'enableOnEnemyTurnState';
-		sideEffects.forEach((sideEffect) => {
+		passiveEffects.forEach((sideEffect) => {
 			if (sideEffect[stateToEnable] === this.name) {
 				sideEffect.effect(data);
 			}

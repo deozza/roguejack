@@ -14,6 +14,14 @@
 	let openedEnemyDiscardView: boolean = false;
 	let openedPlayerDiscardView: boolean = false;
 
+	function triggerEffect(effect: any) {
+		effect.effect({ user: 'player'});
+
+		gameStore.removeFromInventory(effect, 'player');
+
+		updateBattleState();
+	}
+
 
 	function drawCard() {
 		$playerTurnMachineState.listenToEvent({ name: 'DRAW', data: null });
@@ -233,18 +241,14 @@
 	<div class="flex flex-row flex-wrap items-center justify-between h-full w-full">
 		
 		<PlayerSide
-			playerName={$gameStore.player.name}
-			currentHealth={$gameStore.player.currentHealth}
-			maxHealth={$gameStore.player.maxHealth}
-			healthColor={$gameStore.player.getHealthColor()}
+			player={$gameStore.player}
 			playerHand={$gameStore.getCurrentBattle().getCurrentTurn().playerHand}
-			deckSize={$gameStore.player.deck.cards.length}
-			discardSize={$gameStore.player.discard.cards.length}
 			currentStateName={$playerTurnMachineState.currentState.name}
 			fight={$gameStore.getCurrentBattle().getCurrentTurn().fight}
-			sideEffects={$playerSideEffectsStore}
+			passiveEffects={$playerSideEffectsStore}
 			on:draw={() => drawCard()}
 			on:playerDiscardView={() => openPlayerDiscardView()}
+			on:triggerEffect={(e) => triggerEffect(e.detail.object)}
 		/>
 
 		<div class="flex flex-col items-center justify-center md:h-full w-full md:w-2/12">
@@ -261,16 +265,11 @@
 		</div>
 
 		<PlayerSide
-			playerName={$gameStore.getCurrentBattle().enemy.name}
-			currentHealth={$gameStore.getCurrentBattle().enemy.currentHealth}
-			maxHealth={$gameStore.getCurrentBattle().enemy.maxHealth}
-			healthColor={$gameStore.getCurrentBattle().enemy.getHealthColor()}
+			player={$gameStore.getCurrentBattle().enemy}
 			playerHand={$gameStore.getCurrentBattle().getCurrentTurn().enemyHand}
-			deckSize={$gameStore.getCurrentBattle().enemy.deck.cards.length}
-			discardSize={$gameStore.getCurrentBattle().enemy.discard.cards.length}
 			currentStateName={$enemyTurnMachineState.currentState.name}
 			fight={$gameStore.getCurrentBattle().getCurrentTurn().fight}
-			sideEffects={$enemySideEffectsStore}
+			passiveEffects={$enemySideEffectsStore}
 			isEnemy={true}
 			on:enemyDiscardView={() => openEnemyDiscardView()}
 		/>

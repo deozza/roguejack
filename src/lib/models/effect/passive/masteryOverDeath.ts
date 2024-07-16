@@ -1,6 +1,4 @@
 import type { Game } from '$lib/models/game/model';
-import { BattlePlayingState } from '$lib/models/stateMachine/battle/states';
-import { TurnDamageState } from '$lib/models/stateMachine/turn/states/turnDamageState';
 import { get } from 'svelte/store';
 import type EffectInterface from '../effectInterface';
 import { gameStore } from '$lib/stores/game';

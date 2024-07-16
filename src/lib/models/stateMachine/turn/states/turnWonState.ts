@@ -7,18 +7,18 @@ export class TurnWonState implements StateInterface {
 
 	public onStateEnter = (data: object): void => {
 
-		let sideEffects = null;
+		let passiveEffects = null;
 		let stateToEnable = null;
 
 		if(data['user'] === 'player') {
-			sideEffects = get(playerSideEffectsStore);
+			passiveEffects = get(playerSideEffectsStore);
 			stateToEnable = 'enableOnPlayerTurnState';
 		}else{
-			sideEffects = get(enemySideEffectsStore);
+			passiveEffects = get(enemySideEffectsStore);
 			stateToEnable = 'enableOnEnemyTurnState';
 		}
 
-		sideEffects.forEach((sideEffect) => {
+		passiveEffects.forEach((sideEffect) => {
 			if (sideEffect[stateToEnable] === this.name) {
 				sideEffect.effect(data);
 			}

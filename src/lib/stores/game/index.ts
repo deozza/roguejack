@@ -9,6 +9,8 @@ import type { Hand } from '$lib/models/hand/model';
 import { Turn } from '$lib/models/turn/model';
 import { get } from 'svelte/store';
 import { writable } from 'svelte/store';
+import type EffectInterface from '$lib/models/effect/effectInterface';
+import { triggerEffects } from '$lib/models/effect';
 
 function createGameStore() {
 	const { subscribe, set, update } = writable<Game>(new Game());
@@ -210,6 +212,23 @@ function createGameStore() {
 		});
 	};
 
+	const addToInventory = (objectName: string, user: string) => {
+
+		const object: EffectInterface = triggerEffects[objectName];
+
+		update((game) => {
+			game.player.inventory = [...game.player.inventory, object];
+			return game;
+		});
+	}
+
+	const removeFromInventory = (object: EffectInterface, user: string) => {
+		update((game) => {
+			game.player.inventory = game.player.inventory.filter((item) => item !== object);
+			return game;
+		})
+	}
+
 	return {
 		subscribe,
 		reset,
@@ -224,7 +243,9 @@ function createGameStore() {
 		inflictDamagesToEnemy,
 		endTurn,
 		healPercentages,
-		recycleDiscard
+		recycleDiscard,
+		addToInventory,
+		removeFromInventory
 	};
 }
 

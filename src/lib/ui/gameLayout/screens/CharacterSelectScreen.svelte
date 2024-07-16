@@ -9,7 +9,7 @@
 	import { enemyTurnMachineState, playerTurnMachineState } from '$lib/stores/stateMachine/turn';
 	import Icon from '@iconify/svelte';
 	import { fade } from 'svelte/transition';
-	import { sideEffects } from '$lib/models/effect';
+	import { passiveEffects } from '$lib/models/effect';
 	import PlayingCard from '$lib/ui/playingCard/PlayingCard.svelte';
 	import { Card, type Face, type Suit } from '$lib/models/card/model';
 	import DeckPreview from '../battleScreen/DeckPreview.svelte';
@@ -23,7 +23,7 @@
 
 	function preSelectCharacter(character: object) {
 		selectedCharacter = character;
-		passive = sideEffects[character.passive];
+		passive = passiveEffects[character.passive];
 
 		cards = [];
 		character.deck.suits.forEach((suit: Suit) => {

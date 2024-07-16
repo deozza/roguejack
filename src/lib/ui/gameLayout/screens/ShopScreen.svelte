@@ -58,10 +58,7 @@
 				</div>
 			</div>
 			<div class="flex flex-row flex-wrap items-center justify-start w-7/12">
-				<button class="btn btn-xl variant-ghost-success" on:click={() => healAtCamp()}>Drink potion (+10%hp)</button>
-				<button class="btn btn-xl variant-ghost-secondary" on:click={() => recycleAtCamp()}
-					>Recycle discard (shuffle last 4 cards from discard to deck)</button
-				>
+				
 			</div>
 		</div>
 	</div>

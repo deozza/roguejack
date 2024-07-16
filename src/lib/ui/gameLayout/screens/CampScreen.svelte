@@ -31,6 +31,12 @@
 		startNewBattle();
 	}
 
+	function addToInventory(objectName: string) {
+		gameStore.addToInventory(objectName, 'player');
+
+		startNewBattle();
+	}
+
 	function startNewBattle() {
 		$battleMachineState.listenToEvent({ name: 'NEW_BATTLE', data: null });
 		$battleMachineState = $battleMachineState;
@@ -87,6 +93,7 @@
 				<button class="btn btn-xl variant-ghost-secondary" on:click={() => recycleAtCamp()}
 					>Recycle discard (shuffle last 4 cards from discard to deck)</button
 				>
+				<button class="btn btn-xl variant-ghost-tertiary" on:click={() => addToInventory('knife')}>Knife</button>
 			</div>
 		</div>
 	</div>
