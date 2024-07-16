@@ -223,7 +223,11 @@
 				<h2 class="h2">Turn {$gameStore?.getCurrentBattle()?.turns.length}</h2>
 			</div>
 
-			<CenterSide on:fight={() => fight()} on:camp={() => redirectToCampOrShop()} on:newTurn={() => newTurn()} />
+			<CenterSide
+				on:fight={() => fight()}
+				on:camp={() => redirectToCampOrShop()}
+				on:newTurn={() => newTurn()}
+			/>
 		</div>
 
 		<PlayerSide

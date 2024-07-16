@@ -1,36 +1,36 @@
 <script lang="ts">
 	import HomeScreen from '$lib/ui/gameLayout/screens/HomeScreen.svelte';
-	import {
-		GameCharacterSelectionState,
-		GameIdleState,
-		GamePlayingState
-	} from '$lib/models/stateMachine/game/states';
+	import { GamePlayingState } from '$lib/models/stateMachine/game/states';
 	import CharacterSelectScreen from '$lib/ui/gameLayout/screens/CharacterSelectScreen.svelte';
 	import type { SvelteComponent } from 'svelte';
-	import { BattleCampingState, BattlePlayingState } from '$lib/models/stateMachine/battle/states';
 	import BattleScreen from '$lib/ui/gameLayout/screens/BattleScreen.svelte';
 	import { battleMachineState } from '$lib/stores/stateMachine/battle';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
 	import CampScreen from '$lib/ui/gameLayout/screens/CampScreen.svelte';
 
 	const screensToRender: Record<string, SvelteComponent> = {
-		[GameIdleState.name]: HomeScreen,
-		[GameCharacterSelectionState.name]: CharacterSelectScreen,
-		[BattlePlayingState.name]: BattleScreen,
-		[BattleCampingState.name]: CampScreen
+		GameIdleState: HomeScreen,
+		GameCharacterSelectionState: CharacterSelectScreen,
+		BattlePlayingState: BattleScreen,
+		BattleCampingState: CampScreen
 	};
 
-	function getSceenToRender(): SvelteComponent {
-		console.log('coucou')
-		if (
-			$gameMachineState.currentState &&
-			$gameMachineState.currentState.name !== GamePlayingState.name
-		) {
-			return screensToRender[$gameMachineState.currentState.name];
+	$: screenToRender = getScreenToRender(
+		$gameMachineState.currentState,
+		$battleMachineState.currentState
+	);
+
+	function getScreenToRender(gameCurrentState, battleCurrentState): SvelteComponent {
+		if (gameCurrentState && gameCurrentState.name !== 'GamePlayingState') {
+			return screensToRender[gameCurrentState.name];
 		}
 
-		return screensToRender[$battleMachineState.currentState.name];
+		return screensToRender[battleCurrentState.name];
 	}
+
+	$: console.log('gameMachineState', $gameMachineState.currentState);
+	$: console.log('battleMachineState', $battleMachineState.currentState);
+	$: console.log('getScreenToRender', screenToRender);
 </script>
 
-<svelte:component this={getSceenToRender()} />
+<svelte:component this={screenToRender} />

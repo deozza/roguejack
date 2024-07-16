@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { characters } from '$lib/models/character/players';
-	import { GameCharacterSelectionState } from '$lib/models/stateMachine/game/states';
 	import { TurnPlayingState } from '$lib/models/stateMachine/turn/states/turnPlayingState';
 	import { gameStore } from '$lib/stores/game';
 	import { playerSideEffectsStore } from '$lib/stores/sideEffects';
@@ -9,10 +8,6 @@
 	import { enemyTurnMachineState, playerTurnMachineState } from '$lib/stores/stateMachine/turn';
 
 	function selectCharacter(character: object) {
-		if ($gameMachineState.currentState.name !== GameCharacterSelectionState.name) {
-			throw new Error('Invalid state');
-		}
-
 		$gameMachineState.currentState.onStateExecute({ character });
 
 		$gameMachineState.listenToEvent({ name: 'CHARACTER_SELECTED', data: null });
