@@ -7,12 +7,16 @@
 	import { battleMachineState } from '$lib/stores/stateMachine/battle';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
 	import CampScreen from '$lib/ui/gameLayout/screens/CampScreen.svelte';
+	import GameLostScreen from '$lib/ui/gameLayout/screens/GameLostScreen.svelte';
+	import ShopScreen from '$lib/ui/gameLayout/screens/ShopScreen.svelte';
 
 	const screensToRender: Record<string, SvelteComponent> = {
 		GameIdleState: HomeScreen,
 		GameCharacterSelectionState: CharacterSelectScreen,
 		BattlePlayingState: BattleScreen,
-		BattleCampingState: CampScreen
+		BattleCampingState: CampScreen,
+		BattleShopingState: ShopScreen,
+		GameLostState: GameLostScreen
 	};
 
 	$: screenToRender = getScreenToRender(
