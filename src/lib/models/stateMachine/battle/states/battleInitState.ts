@@ -24,9 +24,11 @@ export class BattleInitState implements StateInterface {
 		const game: Game = get(gameStore);
 
 		if (game.getCurrentBattle()?.enemy.sideEffect !== null) {
-			enemySideEffectsStore.update((enemySideEffectsStore) => [...enemySideEffectsStore, game.getCurrentBattle()?.enemy.sideEffect]);
+			enemySideEffectsStore.update((enemySideEffectsStore) => [
+				...enemySideEffectsStore,
+				game.getCurrentBattle()?.enemy.sideEffect
+			]);
 		}
-
 	}
 
 	public onStateExit = (): void => {

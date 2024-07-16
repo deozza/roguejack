@@ -45,11 +45,11 @@ function createGameStore() {
 
 		let enemyModels: object[] = [];
 
-		if((game.battles.length + 1) % 10 === 0) {
+		if ((game.battles.length + 1) % 10 === 0) {
 			enemyModels = boss.filter(
 				(character) => character.level <= enemyLevel && character.level >= enemyLevel - 1
 			);
-		} else if((game.battles.length + 1) % 5 === 0) {
+		} else if ((game.battles.length + 1) % 5 === 0) {
 			enemyModels = semiboss.filter(
 				(character) => character.level <= enemyLevel && character.level >= enemyLevel - 1
 			);
@@ -213,14 +213,13 @@ function createGameStore() {
 	};
 
 	const addToInventory = (objectName: string, user: string) => {
-
 		const object: EffectInterface = triggerEffects[objectName];
 
 		update((game) => {
 			game.player.inventory = [...game.player.inventory, object];
 			return game;
 		});
-	}
+	};
 
 	const removeFromInventory = (object: EffectInterface, user: string) => {
 		update((game) => {
@@ -229,8 +228,8 @@ function createGameStore() {
 				game.player.inventory.splice(index, 1);
 			}
 			return game;
-		})
-	}
+		});
+	};
 
 	return {
 		subscribe,

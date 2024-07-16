@@ -14,18 +14,14 @@
 
 	let openedEnemyDiscardView: boolean = false;
 	let openedPlayerDiscardView: boolean = false;
+	const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
 	function triggerEffect(effect: any) {
-		effect.effect({ user: 'player'});
+		effect.effect({ user: 'player' });
 
 		gameStore.removeFromInventory(effect, 'player');
 
 		updateBattleState();
-
-		if($battleMachineState.currentState.name !== 'BattlePlayingState') {
-			playerTurnMachineState.set(new TurnMachineState());
-			enemyTurnMachineState.set(new TurnMachineState());
-		}
 	}
 
 	function drawCard() {
@@ -56,7 +52,7 @@
 		$playerTurnMachineState = $playerTurnMachineState;
 	}
 
-	function fight() {
+	async function fight() {
 		$playerTurnMachineState.listenToEvent({ name: 'FIGHT', data: null });
 		$playerTurnMachineState = $playerTurnMachineState;
 
@@ -73,7 +69,7 @@
 				$playerTurnMachineState.listenToEvent({ name: 'WIN', data: null });
 				$playerTurnMachineState = $playerTurnMachineState;
 
-				updateBattleState();
+				await updateBattleState();
 			}
 
 			return;
@@ -83,7 +79,7 @@
 			$enemyTurnMachineState.listenToEvent({ name: 'BUST', data: null });
 			$enemyTurnMachineState = $enemyTurnMachineState;
 
-			calculateAndApplyDamages();
+			await calculateAndApplyDamages();
 
 			return;
 		}
@@ -94,10 +90,10 @@
 		$enemyTurnMachineState.listenToEvent({ name: 'FIGHT', data: null });
 		$enemyTurnMachineState = $enemyTurnMachineState;
 
-		calculateAndApplyDamages();
+		await calculateAndApplyDamages();
 	}
 
-	function calculateAndApplyDamages() {
+	async function calculateAndApplyDamages() {
 		$playerTurnMachineState.listenToEvent({ name: 'DAMAGE', data: null });
 		$playerTurnMachineState = $playerTurnMachineState;
 		$playerTurnMachineState.currentState.onStateEnter({ user: 'player' });
@@ -144,7 +140,7 @@
 				$gameStore.getCurrentBattle()?.getCurrentTurn().fight.multiplierForEnemy
 		);
 
-		updateBattleState();
+		await updateBattleState();
 	}
 
 	function newTurn() {
@@ -163,7 +159,7 @@
 		});
 	}
 
-	function updateBattleState() {
+	async function updateBattleState() {
 		if ($enemyTurnMachineState.currentState.name === 'TurnDeckEmptyState') {
 			$playerTurnMachineState.listenToEvent({ name: 'WIN', data: null });
 			$playerTurnMachineState = $playerTurnMachineState;
@@ -171,7 +167,7 @@
 			$battleMachineState.listenToEvent({ name: 'WIN', data: null });
 			$battleMachineState = $battleMachineState;
 
-			redirectToCampOrShop();
+			await redirectToCampOrShop();
 
 			return;
 		}
@@ -190,8 +186,7 @@
 			$battleMachineState.listenToEvent({ name: 'WIN', data: null });
 			$battleMachineState = $battleMachineState;
 
-			redirectToCampOrShop();
-
+			await redirectToCampOrShop();
 			return;
 		}
 
@@ -206,8 +201,12 @@
 		}
 	}
 
-	function redirectToCampOrShop() {
+	async function redirectToCampOrShop() {
 		gameStore.endTurn();
+		playerTurnMachineState.set(new TurnMachineState());
+		enemyTurnMachineState.set(new TurnMachineState());
+		await delay(5000);
+
 		$battleMachineState.listenToEvent({ name: 'CAMP', data: null });
 		$battleMachineState = $battleMachineState;
 		return;
@@ -229,28 +228,33 @@
 	}
 
 	$: console.log('game : ', $gameStore);
-
 </script>
 
 {#if openedPlayerDiscardView}
-	<DiscardPreview isPlayer={openedPlayerDiscardView} cards={$gameStore.player.discard.cards} on:close={() => openPlayerDiscardView()} />
+	<DiscardPreview
+		isPlayer={openedPlayerDiscardView}
+		cards={$gameStore.player.discard.cards}
+		on:close={() => openPlayerDiscardView()}
+	/>
 {/if}
 
 {#if openedEnemyDiscardView}
-	<DiscardPreview cards={$gameStore.getCurrentBattle().enemy.discard.cards} on:close={() => openEnemyDiscardView()} />
+	<DiscardPreview
+		cards={$gameStore.getCurrentBattle().enemy.discard.cards}
+		on:close={() => openEnemyDiscardView()}
+	/>
 {/if}
 
 <section
-	class="container h-full mx-auto flex flex-col justify-left items-start space-y-10"
+	class="container h-full mx-auto flex flex-col justify-center items-center space-y-10"
 	id="battle-screen"
 	transition:fade={{ delay: 250, duration: 300 }}
 >
-<div class="flex md:hidden flex-col items-center justify-center w-full md:mb-20">
-	<h1 class="h1">Battle {$gameStore?.battles.length}</h1>
-	<h2 class="h2">Turn {$gameStore?.getCurrentBattle()?.turns.length}</h2>
-</div>
-	<div class="flex flex-row flex-wrap items-center justify-between h-full w-full">
-		
+	<div class="flex md:hidden flex-col items-center justify-center w-full md:mb-20">
+		<h1 class="h1">Battle {$gameStore?.battles.length}</h1>
+		<h2 class="h2">Turn {$gameStore?.getCurrentBattle()?.turns.length}</h2>
+	</div>
+	<div class="flex flex-row flex-wrap items-center justify-between w-full">
 		<PlayerSide
 			player={$gameStore.player}
 			playerHand={$gameStore.getCurrentBattle().getCurrentTurn().playerHand}
@@ -262,17 +266,13 @@
 			on:triggerEffect={(e) => triggerEffect(e.detail.object)}
 		/>
 
-		<div class="flex flex-col items-center justify-center md:h-full w-full md:w-2/12">
+		<div class="flex flex-col items-center justify-center md:h-full w-full md:w-2/12 spacing-y-4">
 			<div class="hidden md:flex flex-col items-center justify-center w-full md:mb-20">
 				<h1 class="h1">Battle {$gameStore?.battles.length}</h1>
 				<h2 class="h2">Turn {$gameStore?.getCurrentBattle()?.turns.length}</h2>
 			</div>
 
-			<CenterSide
-				on:fight={() => fight()}
-				on:camp={() => redirectToCampOrShop()}
-				on:newTurn={() => newTurn()}
-			/>
+			<CenterSide on:fight={() => fight()} on:newTurn={() => newTurn()} />
 		</div>
 
 		<PlayerSide

@@ -1,1 +1,1 @@
-export type Rarities = 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary' | 'mythic';;
+export type Rarities = 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary' | 'mythic';

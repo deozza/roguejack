@@ -28,14 +28,13 @@
 
 		enterPause();
 	}
-
 </script>
 
 <!-- App Shell -->
 <AppShell>
 	<svelte:fragment slot="header">
 		<!-- App Bar -->
-		<AppBar padding='p-1 md:p-4'>
+		<AppBar padding="p-1 md:p-4">
 			<svelte:fragment slot="lead">
 				<strong class="text-xl uppercase">Roguejack</strong>
 			</svelte:fragment>

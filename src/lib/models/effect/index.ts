@@ -8,7 +8,7 @@ import Sword from './trigger/sword';
 export const passiveEffects = {
 	masteryOverDeath: new MasteryOverDeath(),
 	vampirism: new Vampirism(),
-	bravery: new Bravery(),
+	bravery: new Bravery()
 };
 
 export const triggerEffects = {

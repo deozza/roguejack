@@ -40,7 +40,7 @@
 	function startNewBattle() {
 		$battleMachineState.listenToEvent({ name: 'NEW_BATTLE', data: null });
 		$battleMachineState = $battleMachineState;
-		$battleMachineState.currentState.onStateEnter({'user': 'player'});
+		$battleMachineState.currentState.onStateEnter({ user: 'player' });
 		$battleMachineState.currentState.onStateExecute({});
 
 		$battleMachineState.listenToEvent({ name: 'PLAY', data: null });
@@ -62,7 +62,11 @@
 </script>
 
 {#if openedDiscardView}
-	<DiscardPreview isPlayer={true} cards={$gameStore.player.discard.cards} on:close={() => openDiscardView()} />
+	<DiscardPreview
+		isPlayer={true}
+		cards={$gameStore.player.discard.cards}
+		on:close={() => openDiscardView()}
+	/>
 {/if}
 
 {#if openedDeckView}
@@ -81,20 +85,24 @@
 				<h2 class="h2">Status</h2>
 				<div class="flex flex-col items-center justify-center">
 					<p class="p">Health: {$gameStore.player.currentHealth}/{$gameStore.player.maxHealth}</p>
-					<button on:click={() => openDeckView()}  type="button">
+					<button on:click={() => openDeckView()} type="button">
 						<Deck deckSize={$gameStore.player.deck.cards.length} />
 					</button>
-					<button on:click={() => openDiscardView()}  type="button">
+					<button on:click={() => openDiscardView()} type="button">
 						<Discard discardSize={$gameStore.player.discard.cards.length} />
 					</button>
 				</div>
 			</div>
 			<div class="flex flex-row flex-wrap items-center justify-start w-7/12">
-				<button class="btn btn-xl variant-ghost-success" on:click={() => healAtCamp()}>Drink potion (+10%hp)</button>
+				<button class="btn btn-xl variant-ghost-success" on:click={() => healAtCamp()}
+					>Drink potion (+10%hp)</button
+				>
 				<button class="btn btn-xl variant-ghost-secondary" on:click={() => recycleAtCamp()}
 					>Recycle discard (shuffle last 4 cards from discard to deck)</button
 				>
-				<button class="btn btn-xl variant-ghost-tertiary" on:click={() => addToInventory('knife')}>Knife</button>
+				<button class="btn btn-xl variant-ghost-tertiary" on:click={() => addToInventory('knife')}
+					>Knife</button
+				>
 			</div>
 		</div>
 	</div>

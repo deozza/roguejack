@@ -6,14 +6,13 @@ export class TurnWonState implements StateInterface {
 	public name: string = 'TurnWonState';
 
 	public onStateEnter = (data: object): void => {
-
 		let passiveEffects = null;
 		let stateToEnable = null;
 
-		if(data['user'] === 'player') {
+		if (data['user'] === 'player') {
 			passiveEffects = get(playerSideEffectsStore);
 			stateToEnable = 'enableOnPlayerTurnState';
-		}else{
+		} else {
 			passiveEffects = get(enemySideEffectsStore);
 			stateToEnable = 'enableOnEnemyTurnState';
 		}
@@ -23,7 +22,6 @@ export class TurnWonState implements StateInterface {
 				sideEffect.effect(data);
 			}
 		});
-		
 	};
 
 	public onStateExecute(): void {
