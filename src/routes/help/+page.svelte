@@ -1,17 +1,8 @@
 <script lang="ts">
-	import { GameCharacterSelectionState } from '$lib/models/stateMachine/game/states';
-	import { gameStore } from '$lib/stores/game';
-	import { gameMachineState } from '$lib/stores/stateMachine/game';
-	import { fade } from 'svelte/transition';
+	import { fade } from "svelte/transition";
 
-	function startNewGame() {
-		$gameMachineState.listenToEvent({ name: 'NEW_GAME', data: null });
-		$gameMachineState = $gameMachineState;
-		if ($gameMachineState.currentState.constructor.name === GameCharacterSelectionState.name) {
-			gameStore.reset();
-		}
-	}
 </script>
+
 
 <section
 	class="container h-full mx-auto flex flex-col justify-center items-center space-y-10"
@@ -19,9 +10,8 @@
 	transition:fade={{ delay: 250, duration: 300 }}
 
 >
-
 	<div class="flex flex-col items-center justify-center">
-		<h1 class="h1">Welcome to Roguejack</h1>
+		<h1 class="h1">How to play</h1>
 	</div>
 
 	<div class="flex flex-col items-center justify-center text-center w-9/12 space-y-4">
@@ -30,14 +20,7 @@
 		<p class="p text-lg">But beware ! Do not lose all your health or run out of cards !</p>
 	</div>
 
-	<div class="flex flex-col items-center justify-center">
-		<button class="btn btn-xl variant-filled-success" on:click={() => startNewGame()}>
-			New game
-		</button>
-	</div>
-	
-	<div class="flex flex-col items-center justify-center">
-		<h2 class="h2">How to play</h2>
+    <div class="flex flex-col items-center justify-center">
 		<ul class="list-disc">
 			<li>Select a character</li>
 			<li>Draw cards by clicking on your deck until your hand seems powerull enough</li>
@@ -46,5 +29,4 @@
 			<li>Repeat until one of you dies</li>
 		</ul>
 	</div>
-
 </section>
