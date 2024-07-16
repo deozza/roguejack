@@ -3,7 +3,7 @@ import { type StateInterface } from '../../stateInterface';
 
 export class GameCharacterSelectionState implements StateInterface {
 	public name: string = 'GameCharacterSelectionState';
-	
+
 	public onStateEnter = (): void => {
 		console.log(` ${this.name} entered`);
 	};

@@ -2,7 +2,7 @@ import { type StateInterface } from '../../stateInterface';
 
 export class TurnTiedState implements StateInterface {
 	public name: string = 'TurnTiedState';
-	
+
 	public onStateEnter = (): void => {
 		console.log(` ${this.name} entered`);
 	};
@@ -11,6 +11,5 @@ export class TurnTiedState implements StateInterface {
 		console.log(` ${this.name} executed`);
 	}
 
-	public onStateExit = (): void => {
-	};
+	public onStateExit = (): void => {};
 }

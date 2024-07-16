@@ -6,7 +6,7 @@ import { TurnMachineState } from '../../turn/turnMachineState';
 
 export class GameInitState implements StateInterface {
 	public name: string = 'GameInitState';
-	
+
 	public onStateEnter = (): void => {
 		console.log(` ${this.name} entered`);
 	};

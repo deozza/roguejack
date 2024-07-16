@@ -2,16 +2,18 @@
 	import Icon from '@iconify/svelte';
 	import '../app.postcss';
 	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
-	import { gameMachineState } from '$lib/stores/stateMachine/game';
 	import { fade } from 'svelte/transition';
-	import { GamePausedState } from '$lib/models/stateMachine/game/states';
+	import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
+
+	import { storePopup } from '@skeletonlabs/skeleton';
+	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
 	let pauseIcon: string = 'game-icons:pause-button';
 	let pauseStatus: boolean = false;
 
 	function enterPause() {
 		pauseStatus = !pauseStatus;
-		if(pauseStatus === true) {
+		if (pauseStatus === true) {
 			pauseIcon = 'game-icons:play-button';
 			return;
 		}
@@ -31,7 +33,7 @@
 			<svelte:fragment slot="trail">
 				<span>v0.3.0</span>
 				<button class="btn" on:click={() => enterPause()}>
-					<Icon icon={pauseIcon} width=32 height=32 />
+					<Icon icon={pauseIcon} width="32" height="32" />
 				</button>
 			</svelte:fragment>
 		</AppBar>

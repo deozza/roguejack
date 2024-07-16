@@ -5,14 +5,12 @@ import { TurnPlayingState } from '../../turn/states/turnPlayingState';
 
 export class BattlePlayingState implements StateInterface {
 	public name: string = 'BattlePlayingState';
-	
+
 	public onStateEnter = (): void => {
 		console.log(` ${this.name} entered`);
 	};
 
-	public onStateExecute(): void {
-		
-	}
+	public onStateExecute(): void {}
 
 	public onStateExit = (): void => {
 		console.log(` ${this.name} exited`);

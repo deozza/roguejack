@@ -2,7 +2,7 @@ import { type StateInterface } from '../../stateInterface';
 
 export class GameLostState implements StateInterface {
 	public name: string = 'GameLostState';
-	
+
 	public onStateEnter = (): void => {
 		console.log(` ${this.name} entered`);
 	};

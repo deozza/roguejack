@@ -11,6 +11,5 @@ export class TurnLostState implements StateInterface {
 		console.log(` ${this.name} executed`);
 	}
 
-	public onStateExit = (): void => {
-	};
+	public onStateExit = (): void => {};
 }

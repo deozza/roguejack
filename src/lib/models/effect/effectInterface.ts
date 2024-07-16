@@ -1,8 +1,9 @@
 export default interface EffectInterface {
-    name: string;
-    description: string;
-    enableOnBattleState: string;
-    enableOnTurnState: string;
-    
-    effect(data: object): void;
+	name: string;
+	description: string;
+	enableOnBattleState: string;
+	enableOnPlayerTurnState: string;
+	enableOnEnemyTurnState: string;
+
+	effect(data: object): void;
 }

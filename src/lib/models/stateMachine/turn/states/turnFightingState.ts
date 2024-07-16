@@ -7,9 +7,7 @@ export class TurnFightingState implements StateInterface {
 		console.log(` ${this.name} entered`);
 	};
 
-	public onStateExecute(data: object): void {
-
-	}
+	public onStateExecute(data: object): void {}
 
 	public onStateExit = (): void => {
 		console.log(` ${this.name} exited`);

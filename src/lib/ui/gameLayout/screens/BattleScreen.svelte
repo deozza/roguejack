@@ -1,23 +1,23 @@
 <script lang="ts">
-    import { gameStore } from '$lib/stores/game';
+	import { gameStore } from '$lib/stores/game';
 	import PlayerSide from '../battleScreen/PlayerSide.svelte';
-    import { playerTurnMachineState } from '$lib/stores/stateMachine/turn';
-    import { enemyTurnMachineState } from '$lib/stores/stateMachine/turn';
+	import { playerTurnMachineState } from '$lib/stores/stateMachine/turn';
+	import { enemyTurnMachineState } from '$lib/stores/stateMachine/turn';
 	import { battleMachineState } from '$lib/stores/stateMachine/battle';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
 	import { TurnDeckEmptyState } from '$lib/models/stateMachine/turn/states/turnDeckEmptyState';
 	import CenterSide from '../battleScreen/CenterSide.svelte';
-	import type { Hand } from '$lib/models/hand/model';
 	import { TurnPlayingState } from '$lib/models/stateMachine/turn/states/turnPlayingState';
+	import { playerSideEffectsStore } from '$lib/stores/sideEffects';
 
 	function drawCard() {
 		$playerTurnMachineState.listenToEvent({ name: 'DRAW', data: null });
 		$playerTurnMachineState = $playerTurnMachineState;
 
 		try {
-			$playerTurnMachineState.currentState.onStateExecute({'user': 'player'});
-		}catch(e: any) {
-			if(e.message === 'PLAYER_EMPTY_DECK') {
+			$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
+		} catch (e: any) {
+			if (e.message === 'PLAYER_EMPTY_DECK') {
 				$playerTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
 				$playerTurnMachineState = $playerTurnMachineState;
 
@@ -25,7 +25,7 @@
 			}
 		}
 
-		if($gameStore.getCurrentBattle()?.getCurrentTurn().playerHand.getIsBusted() === true) {
+		if ($gameStore.getCurrentBattle()?.getCurrentTurn().playerHand.getIsBusted() === true) {
 			$playerTurnMachineState.listenToEvent({ name: 'BUST', data: null });
 			$playerTurnMachineState = $playerTurnMachineState;
 
@@ -46,9 +46,9 @@
 		$enemyTurnMachineState = $enemyTurnMachineState;
 
 		try {
-			$enemyTurnMachineState.currentState.onStateExecute({'user': 'enemy'});
-		}catch(e: any) {
-			if(e.message === 'ENEMY_EMPTY_DECK') {
+			$enemyTurnMachineState.currentState.onStateExecute({ user: 'enemy' });
+		} catch (e: any) {
+			if (e.message === 'ENEMY_EMPTY_DECK') {
 				$enemyTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
 				$enemyTurnMachineState = $enemyTurnMachineState;
 
@@ -61,7 +61,7 @@
 			return;
 		}
 
-		if($gameStore.getCurrentBattle()?.getCurrentTurn().enemyHand.getIsBusted() === true) {
+		if ($gameStore.getCurrentBattle()?.getCurrentTurn().enemyHand.getIsBusted() === true) {
 			$enemyTurnMachineState.listenToEvent({ name: 'BUST', data: null });
 			$enemyTurnMachineState = $enemyTurnMachineState;
 
@@ -82,12 +82,13 @@
 	function calculateAndApplyDamages() {
 		$playerTurnMachineState.listenToEvent({ name: 'DAMAGE', data: null });
 		$playerTurnMachineState = $playerTurnMachineState;
+		$playerTurnMachineState.currentState.onStateEnter({ user: 'player' });
 		$playerTurnMachineState.currentState.onStateExecute({});
 
 		$enemyTurnMachineState.listenToEvent({ name: 'DAMAGE', data: null });
 		$enemyTurnMachineState = $enemyTurnMachineState;
 
-		if($gameStore.getCurrentBattle()?.getCurrentTurn().fight.playerHasWon === true) {
+		if ($gameStore.getCurrentBattle()?.getCurrentTurn().fight.playerHasWon === true) {
 			$playerTurnMachineState.listenToEvent({ name: 'WIN', data: null });
 			$playerTurnMachineState = $playerTurnMachineState;
 
@@ -95,7 +96,7 @@
 			$enemyTurnMachineState = $enemyTurnMachineState;
 		}
 
-		if($gameStore.getCurrentBattle()?.getCurrentTurn().fight.enemyHasWon === true) {
+		if ($gameStore.getCurrentBattle()?.getCurrentTurn().fight.enemyHasWon === true) {
 			$playerTurnMachineState.listenToEvent({ name: 'LOSE', data: null });
 			$playerTurnMachineState = $playerTurnMachineState;
 
@@ -103,7 +104,10 @@
 			$enemyTurnMachineState = $enemyTurnMachineState;
 		}
 
-		if($gameStore.getCurrentBattle()?.getCurrentTurn().fight.playerHasWon === $gameStore.getCurrentBattle()?.getCurrentTurn().fight.enemyHasWon) {
+		if (
+			$gameStore.getCurrentBattle()?.getCurrentTurn().fight.playerHasWon ===
+			$gameStore.getCurrentBattle()?.getCurrentTurn().fight.enemyHasWon
+		) {
 			$playerTurnMachineState.listenToEvent({ name: 'TIE', data: null });
 			$playerTurnMachineState = $playerTurnMachineState;
 
@@ -111,8 +115,14 @@
 			$enemyTurnMachineState = $enemyTurnMachineState;
 		}
 
-		gameStore.inflictDamagesToEnemy($gameStore.getCurrentBattle()?.getCurrentTurn().fight.baseDamageToEnemy * $gameStore.getCurrentBattle()?.getCurrentTurn().fight.multiplierForPlayer);
-		gameStore.inflictDamagesToPlayer($gameStore.getCurrentBattle()?.getCurrentTurn().fight.baseDamageToPlayer * $gameStore.getCurrentBattle()?.getCurrentTurn().fight.multiplierForEnemy);
+		gameStore.inflictDamagesToEnemy(
+			$gameStore.getCurrentBattle()?.getCurrentTurn().fight.baseDamageToEnemy *
+				$gameStore.getCurrentBattle()?.getCurrentTurn().fight.multiplierForPlayer
+		);
+		gameStore.inflictDamagesToPlayer(
+			$gameStore.getCurrentBattle()?.getCurrentTurn().fight.baseDamageToPlayer *
+				$gameStore.getCurrentBattle()?.getCurrentTurn().fight.multiplierForEnemy
+		);
 
 		updateBattleState();
 	}
@@ -121,17 +131,20 @@
 		gameStore.endTurn();
 		$playerTurnMachineState.listenToEvent({ name: 'NEW_TURN', data: null });
 		$playerTurnMachineState = $playerTurnMachineState;
-		$playerTurnMachineState.currentState.onStateExecute({'user': 'player'});
+		$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
 
 		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: null });
 		$playerTurnMachineState = $playerTurnMachineState;
-		$playerTurnMachineState.currentState.onStateExecute({'user': 'player'});
+		$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
 
-		enemyTurnMachineState.update((state) => {state.currentState = new TurnPlayingState(); return state;})
+		enemyTurnMachineState.update((state) => {
+			state.currentState = new TurnPlayingState();
+			return state;
+		});
 	}
 
 	function updateBattleState() {
-		if($enemyTurnMachineState.currentState.name === TurnDeckEmptyState.name) {
+		if ($enemyTurnMachineState.currentState.name === TurnDeckEmptyState.name) {
 			$playerTurnMachineState.listenToEvent({ name: 'WIN', data: null });
 			$playerTurnMachineState = $playerTurnMachineState;
 
@@ -140,29 +153,29 @@
 
 			redirectToCampOrShop();
 
-			return ;
+			return;
 		}
 
-		if($playerTurnMachineState.currentState.name === TurnDeckEmptyState.name) {
+		if ($playerTurnMachineState.currentState.name === TurnDeckEmptyState.name) {
 			$playerTurnMachineState.listenToEvent({ name: 'LOSE', data: null });
 			$playerTurnMachineState = $playerTurnMachineState;
 
 			$battleMachineState.listenToEvent({ name: 'LOSE', data: null });
 			$battleMachineState = $battleMachineState;
 
-			return ;
-		}
-
-		if($gameStore.getCurrentBattle()?.enemy.currentHealth <= 0) {
-			$battleMachineState.listenToEvent({ name: 'WIN', data: null });
-			$battleMachineState = $battleMachineState;
-			
-			redirectToCampOrShop();
-			
 			return;
 		}
 
-		if($gameStore.player.currentHealth <= 0) {
+		if ($gameStore.getCurrentBattle()?.enemy.currentHealth <= 0) {
+			$battleMachineState.listenToEvent({ name: 'WIN', data: null });
+			$battleMachineState = $battleMachineState;
+
+			redirectToCampOrShop();
+
+			return;
+		}
+
+		if ($gameStore.player.currentHealth <= 0) {
 			$battleMachineState.listenToEvent({ name: 'LOSE', data: null });
 			$battleMachineState = $battleMachineState;
 
@@ -175,28 +188,21 @@
 
 	function redirectToCampOrShop() {
 		gameStore.endTurn();
-		if($gameStore.battles.length % 5 === 0) {
+		if ($gameStore.battles.length % 5 === 0) {
 			$battleMachineState.listenToEvent({ name: 'SHOP', data: null });
 			$battleMachineState = $battleMachineState;
-		}else{
+		} else {
 			$battleMachineState.listenToEvent({ name: 'CAMP', data: null });
 			$battleMachineState = $battleMachineState;
 		}
 	}
-    
 </script>
 
-
-<section class="container h-full mx-auto flex flex-col justify-left items-start space-y-10" id="battle-screen">
-	<div class="flex flex-col items-center justify-center w-full">
-		<h1 class="h1">Battle {$gameStore?.battles.length}</h1>
-	</div>
-
-	<div class="flex flex-col items-center justify-center w-full">
-		<h2 class="h2">Turn {$gameStore?.getCurrentBattle()?.turns.length}</h2>
-	</div>
-
-	<div class="flex flex-row flex-wrap items-center justify-between w-full">
+<section
+	class="container h-full mx-auto flex flex-col justify-left items-start space-y-10"
+	id="battle-screen"
+>
+	<div class="flex flex-row flex-wrap items-center justify-between h-full w-full">
 		<PlayerSide
 			playerName={$gameStore.player.name}
 			currentHealth={$gameStore.player.currentHealth}
@@ -206,11 +212,18 @@
 			deckSize={$gameStore.player.deck.cards.length}
 			discardSize={$gameStore.player.discard.cards.length}
 			currentStateName={$playerTurnMachineState.currentState.name}
+			fight={$gameStore.getCurrentBattle().getCurrentTurn().fight}
+			sideEffects={$playerSideEffectsStore}
 			on:click={() => drawCard()}
 		/>
 
-		<div class="flex flex-col items-center justify-center w-full md:w-2/12">
-			<CenterSide on:fight={() => fight()} on:camp={() => camp()} on:newTurn={() => newTurn()}/>
+		<div class="flex flex-col items-center justify-center h-full w-full md:w-2/12">
+			<div class="flex flex-col items-center justify-center w-full mb-20">
+				<h1 class="h1">Battle {$gameStore?.battles.length}</h1>
+				<h2 class="h2">Turn {$gameStore?.getCurrentBattle()?.turns.length}</h2>
+			</div>
+
+			<CenterSide on:fight={() => fight()} on:camp={() => redirectToCampOrShop()} on:newTurn={() => newTurn()} />
 		</div>
 
 		<PlayerSide
@@ -222,8 +235,9 @@
 			deckSize={$gameStore.getCurrentBattle().enemy.deck.cards.length}
 			discardSize={$gameStore.getCurrentBattle().enemy.discard.cards.length}
 			currentStateName={$enemyTurnMachineState.currentState.name}
+			fight={$gameStore.getCurrentBattle().getCurrentTurn().fight}
+			sideEffects={[]}
 			isEnemy={true}
 		/>
 	</div>
-
 </section>

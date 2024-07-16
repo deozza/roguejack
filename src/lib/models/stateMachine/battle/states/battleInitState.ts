@@ -3,7 +3,7 @@ import { gameStore } from '$lib/stores/game';
 
 export class BattleInitState implements StateInterface {
 	public name: string = 'BattleInitState';
-	
+
 	public onStateEnter = (): void => {
 		console.log(` ${this.name} entered`);
 	};

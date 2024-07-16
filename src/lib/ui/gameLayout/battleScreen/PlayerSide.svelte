@@ -5,6 +5,9 @@
 	import Discard from '../../deck/Discard.svelte';
 	import PlayingCard from '../../playingCard/PlayingCard.svelte';
 	import Healthbar from '../../character/Healthbar.svelte';
+	import type { Fight } from '$lib/models/fight/model';
+	import type EffectInterface from '$lib/models/effect/effectInterface';
+	import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
 
 	export let playerName: string;
 	export let currentHealth: number;
@@ -13,6 +16,8 @@
 	export let playerHand: Hand;
 	export let deckSize: number;
 	export let discardSize: number;
+	export let fight: Fight;
+	export let sideEffects: EffectInterface[];
 
 	export let currentStateName: string;
 
@@ -24,17 +29,40 @@
 		'TurnLostState',
 		'TurnBustedState'
 	];
+
+	const popupClick: PopupSettings = {
+		event: 'click',
+		target: 'popupClick',
+		placement: 'top'
+	};
 </script>
 
-<div class="flex flex-col items-center justify-center w-full md:w-5/12">
-	<h3 class="h3 uppercase">
-		{playerName} 
-	</h3>
-	<Healthbar {currentHealth} {maxHealth} {healthColor}/>
+<div class="flex flex-col items-center justify-center h-full w-full md:w-5/12">
 	<div
 		class="flex {isEnemy
 			? 'flex-row-reverse'
-			: 'flex-row'}  flex-wrap items-center justify-start w-full space-x-5"
+			: 'flex-row'} flex-wrap items-center justify-start w-full space-x-5 min-h-16"
+	>
+		{#each sideEffects as sideEffect}
+			<div class="card p-4 variant-filled-primary" data-popup="popupClick">
+				<p>{sideEffect.name}</p>
+				<p>{sideEffect.description}</p>
+				<div class="arrow variant-filled-primary" />
+			</div>
+			<button class="btn" use:popup={popupClick}>
+				<Icon icon="game-icons:spell-book" width="64" height="64" />
+			</button>
+		{/each}
+	</div>
+	<h3 class="h3 uppercase">
+		{playerName}
+	</h3>
+	<Healthbar {currentHealth} {maxHealth} {healthColor} />
+
+	<div
+		class="flex {isEnemy
+			? 'flex-row-reverse'
+			: 'flex-row'}  flex-wrap items-center justify-start w-full space-x-5 my-20"
 	>
 		<div class="flex flex-col items-center justify-center space-y-5 h-full w-4/12 md:w-2/12">
 			<button on:click disabled={currentStateName !== 'TurnPlayingState'} type="button">
@@ -52,7 +80,17 @@
 		</div>
 		{#if endTurnStates.includes(currentStateName)}
 			<div class="flex flex-row flex-wrap items-center justify-center w-full text-4xl text-red-500">
-				<p class="p">{playerHand.getValue()}</p>
+				{#if isEnemy}
+					<p class="p">
+						{playerHand.value}
+						{fight.basePowerForEnemy !== 0 ? `+ ${fight.basePowerForEnemy}` : ''}
+					</p>
+				{:else}
+					<p class="p">
+						{playerHand.value}
+						{fight.basePowerForPlayer !== 0 ? `+ ${fight.basePowerForPlayer}` : ''}
+					</p>
+				{/if}
 				<Icon icon="game-icons:battle-axe" />
 			</div>
 		{/if}

@@ -1,5 +1,7 @@
 import { Deck } from '$lib/models/deck/model';
 import { Discard } from '$lib/models/discard/model';
+import { sideEffects } from '../effect';
+import type EffectInterface from '../effect/effectInterface';
 
 export class Character {
 	name: string;
@@ -9,6 +11,7 @@ export class Character {
 	deck: Deck;
 	discard: Discard;
 	minAttack: number | null = null;
+	sideEffect: EffectInterface | null = null;
 
 	public generateCharacter(characterType: object) {
 		this.name = characterType.name;
@@ -22,6 +25,10 @@ export class Character {
 
 		if (characterType.minAttack) {
 			this.minAttack = characterType.minAttack;
+		}
+
+		if (characterType.passive) {
+			this.sideEffect = sideEffects[characterType.passive];
 		}
 	}
 

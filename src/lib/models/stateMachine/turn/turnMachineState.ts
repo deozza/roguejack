@@ -58,9 +58,7 @@ export class TurnMachineState implements StateMachineInterface {
 		const currentStateName = this.currentState.name;
 		const nextState = this.stateMachine[currentStateName][event.name];
 		if (nextState) {
-			this.currentState.onStateExit();
 			this.currentState = new nextState();
-			this.currentState.onStateEnter();
 		}
 	}
 }

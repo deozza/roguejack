@@ -9,16 +9,12 @@ export class TurnDrawingState implements StateInterface {
 	};
 
 	public onStateExecute(data: object): void {
-		if(data['user'] === 'player') {
+		if (data['user'] === 'player') {
 			gameStore.playerDrawCard();
 			return;
 		}
 
-		console.log('in draw state');
-
-		if(data['user'] === 'enemy') {
-			console.log('enemy drawing');
-
+		if (data['user'] === 'enemy') {
 			gameStore.enemyAutoDraw();
 		}
 	}
