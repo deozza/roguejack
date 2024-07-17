@@ -2,14 +2,17 @@ import type { Game } from '$lib/models/game/model';
 import { get } from 'svelte/store';
 import type EffectInterface from '../effectInterface';
 import { gameStore } from '$lib/stores/game';
+import type { Rarities } from '../raritiesType';
 
 export default class Vampirism implements EffectInterface {
+	technicalName: string = 'vampirism';
 	name: string = 'Vampirism';
 	description: string = 'Heal the amount of damages inflicted.';
 	enableOnBattleState: string = 'BattlePlayingState';
 	enableOnPlayerTurnState: string = 'TurnLostState';
 	enableOnEnemyTurnState: string = 'TurnWonState';
 	icon: string = 'game-icons:bleeding-wound';
+	rarity: Rarities = 'rare';
 
 	public effect(data: object): void {
 		const game: Game = get(gameStore);

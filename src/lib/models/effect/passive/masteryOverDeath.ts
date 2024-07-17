@@ -2,14 +2,17 @@ import type { Game } from '$lib/models/game/model';
 import { get } from 'svelte/store';
 import type EffectInterface from '../effectInterface';
 import { gameStore } from '$lib/stores/game';
+import type { Rarities } from '../raritiesType';
 
 export default class MasteryOverDeath implements EffectInterface {
+	technicalName: string = 'masteryOverDeath';
 	name: string = 'Mastery Over Death';
 	description: string = 'Deal 1 more base power for every 5 cards in the discard.';
 	enableOnBattleState: string = 'BattlePlayingState';
 	enableOnPlayerTurnState: string = 'TurnDamageState';
 	enableOnEnemyTurnState: string = 'TurnDamageState';
 	icon: string = 'game-icons:graveyard';
+	rarity: Rarities = 'rare';
 
 	public effect(data: object): void {
 		const game: Game = get(gameStore);

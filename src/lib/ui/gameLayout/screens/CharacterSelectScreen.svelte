@@ -10,20 +10,19 @@
 	import Icon from '@iconify/svelte';
 	import { fade } from 'svelte/transition';
 	import { passiveEffects } from '$lib/models/effect';
-	import PlayingCard from '$lib/ui/playingCard/PlayingCard.svelte';
 	import { Card, type Face, type Suit } from '$lib/models/card/model';
 	import DeckPreview from '../battleScreen/DeckPreview.svelte';
 
 	let selectedCharacter: object = {};
 	let cards: Card[] = [];
-	let passive: EffectInterface | null = null;
+	let passive: EffectInterface | undefined = undefined;
 	let openedDeckPreview: boolean = false;
 
 	preSelectCharacter(characters[0]);
 
 	function preSelectCharacter(character: object) {
 		selectedCharacter = character;
-		passive = passiveEffects[character.passive];
+		passive = passiveEffects.find((effect) => effect.technicalName === character.passive);
 
 		cards = [];
 		character.deck.suits.forEach((suit: Suit) => {

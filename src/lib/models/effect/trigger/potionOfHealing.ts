@@ -1,15 +1,16 @@
 import type EffectInterface from '../effectInterface';
 import { gameStore } from '$lib/stores/game';
-import type { Rarities } from './raritiesType';
+import type { Rarities } from '../raritiesType';
 
 export default class PotionOfHealing implements EffectInterface {
+	technicalName: string = 'potionOfHealing';
 	name: string = 'Potion of healing';
 	description: string = 'Restore 10% of your health.';
 	enableOnBattleState: string = 'BattlePlayingState';
 	enableOnPlayerTurnState: string = 'TurnPlayingState';
 	enableOnEnemyTurnState: string = 'TurnPlayingState';
 	icon: string = 'game-icons:potion-ball';
-	rarities: Rarities = 'common';
+	rarity: Rarities = 'common';
 
 	public effect(data: object): void {
 		if (data['user'] === 'enemy') {

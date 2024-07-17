@@ -1,4 +1,5 @@
 import MasteryOverDeath from '$lib/models/effect/passive/masteryOverDeath';
+import type EffectInterface from './effectInterface';
 import Bravery from './passive/bravery';
 import Vampirism from './passive/vampirism';
 import Dagger from './trigger/dagger';
@@ -8,17 +9,17 @@ import PotionOfHealing from './trigger/potionOfHealing';
 import PotionOfSuperiorfHealing from './trigger/potionOfSuperiorHealing copy';
 import Sword from './trigger/sword';
 
-export const passiveEffects = {
-	masteryOverDeath: new MasteryOverDeath(),
-	vampirism: new Vampirism(),
-	bravery: new Bravery()
-};
+export const passiveEffects: EffectInterface[] = [
+	new MasteryOverDeath(),
+	new Vampirism(),
+	new Bravery()
+];
 
-export const triggerEffects = {
-	knife: new Knife(),
-	dagger: new Dagger(),
-	sword: new Sword(),
-	potionOfHealing: new PotionOfHealing(),
-	potionOfGreaterHealing: new PotionOfGreaterHealing(),
-	potionOfSuperiorHealing: new PotionOfSuperiorfHealing()
-};
+export const triggerEffects: EffectInterface[] = [
+	new Knife(),
+	new Dagger(),
+	new Sword(),
+	new PotionOfHealing(),
+	new PotionOfGreaterHealing(),
+	new PotionOfSuperiorfHealing()
+];

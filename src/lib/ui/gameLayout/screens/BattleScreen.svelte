@@ -226,8 +226,6 @@
 	function openPlayerDiscardView() {
 		openedPlayerDiscardView = !openedPlayerDiscardView;
 	}
-
-	$: console.log('game : ', $gameStore);
 </script>
 
 {#if openedPlayerDiscardView}
