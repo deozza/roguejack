@@ -10,23 +10,33 @@
 	import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 	import { fade } from 'svelte/transition';
 	import DiscardPreview from '../battleScreen/DiscardPreview.svelte';
+	import { delay, scrollToElement } from '$lib/utils';
+	import BattlePower from '../battleScreen/BattlePower.svelte';
 
 	let openedEnemyDiscardView: boolean = false;
 	let openedPlayerDiscardView: boolean = false;
 
+	function triggerEffect(effect: any) {
+		effect.effect({ user: 'player' });
 
-	function drawCard() {
+		gameStore.removeFromInventory(effect, 'player');
+
+		updateBattleState();
+	}
+
+	async function drawCard() {
 		$playerTurnMachineState.listenToEvent({ name: 'DRAW', data: null });
 		$playerTurnMachineState = $playerTurnMachineState;
 
 		try {
-			$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
+			await $playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
 		} catch (e: any) {
 			if (e.message === 'PLAYER_EMPTY_DECK') {
 				$playerTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
 				$playerTurnMachineState = $playerTurnMachineState;
 
 				updateBattleState();
+				return;
 			}
 		}
 
@@ -34,6 +44,7 @@
 			$playerTurnMachineState.listenToEvent({ name: 'BUST', data: null });
 			$playerTurnMachineState = $playerTurnMachineState;
 
+			scrollToElement('fighting');
 			calculateAndApplyDamages();
 
 			return;
@@ -43,7 +54,9 @@
 		$playerTurnMachineState = $playerTurnMachineState;
 	}
 
-	function fight() {
+	async function fight() {
+		scrollToElement('fighting');
+
 		$playerTurnMachineState.listenToEvent({ name: 'FIGHT', data: null });
 		$playerTurnMachineState = $playerTurnMachineState;
 
@@ -51,7 +64,7 @@
 		$enemyTurnMachineState = $enemyTurnMachineState;
 
 		try {
-			$enemyTurnMachineState.currentState.onStateExecute({ user: 'enemy' });
+			await $enemyTurnMachineState.currentState.onStateExecute({ user: 'enemy' });
 		} catch (e: any) {
 			if (e.message === 'ENEMY_EMPTY_DECK') {
 				$enemyTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
@@ -60,17 +73,16 @@
 				$playerTurnMachineState.listenToEvent({ name: 'WIN', data: null });
 				$playerTurnMachineState = $playerTurnMachineState;
 
-				updateBattleState();
+				await updateBattleState();
+				return;
 			}
-
-			return;
 		}
 
 		if ($gameStore.getCurrentBattle()?.getCurrentTurn().enemyHand.getIsBusted() === true) {
 			$enemyTurnMachineState.listenToEvent({ name: 'BUST', data: null });
 			$enemyTurnMachineState = $enemyTurnMachineState;
 
-			calculateAndApplyDamages();
+			await calculateAndApplyDamages();
 
 			return;
 		}
@@ -81,10 +93,10 @@
 		$enemyTurnMachineState.listenToEvent({ name: 'FIGHT', data: null });
 		$enemyTurnMachineState = $enemyTurnMachineState;
 
-		calculateAndApplyDamages();
+		await calculateAndApplyDamages();
 	}
 
-	function calculateAndApplyDamages() {
+	async function calculateAndApplyDamages() {
 		$playerTurnMachineState.listenToEvent({ name: 'DAMAGE', data: null });
 		$playerTurnMachineState = $playerTurnMachineState;
 		$playerTurnMachineState.currentState.onStateEnter({ user: 'player' });
@@ -131,14 +143,26 @@
 				$gameStore.getCurrentBattle()?.getCurrentTurn().fight.multiplierForEnemy
 		);
 
-		updateBattleState();
+		await updateBattleState();
 	}
 
-	function newTurn() {
+	async function newTurn() {
+		scrollToElement('top');
 		gameStore.endTurn();
 		$playerTurnMachineState.listenToEvent({ name: 'NEW_TURN', data: null });
 		$playerTurnMachineState = $playerTurnMachineState;
-		$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
+
+		try {
+			await $playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
+		} catch (e: any) {
+			if (e.message === 'PLAYER_EMPTY_DECK') {
+				$playerTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
+				$playerTurnMachineState = $playerTurnMachineState;
+
+				updateBattleState();
+				return;
+			}
+		}
 
 		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: null });
 		$playerTurnMachineState = $playerTurnMachineState;
@@ -150,25 +174,23 @@
 		});
 	}
 
-	function updateBattleState() {
+	async function updateBattleState() {
 		if ($enemyTurnMachineState.currentState.name === 'TurnDeckEmptyState') {
-			$playerTurnMachineState.listenToEvent({ name: 'WIN', data: null });
-			$playerTurnMachineState = $playerTurnMachineState;
-
 			$battleMachineState.listenToEvent({ name: 'WIN', data: null });
 			$battleMachineState = $battleMachineState;
 
-			redirectToCampOrShop();
+			await redirectToCampOrShop();
 
 			return;
 		}
 
 		if ($playerTurnMachineState.currentState.name === 'TurnDeckEmptyState') {
-			$playerTurnMachineState.listenToEvent({ name: 'LOSE', data: null });
-			$playerTurnMachineState = $playerTurnMachineState;
-
 			$battleMachineState.listenToEvent({ name: 'LOSE', data: null });
 			$battleMachineState = $battleMachineState;
+
+			await delay(5000);
+			$gameMachineState.listenToEvent({ name: 'END_GAME', data: null });
+			$gameMachineState = $gameMachineState;
 
 			return;
 		}
@@ -177,8 +199,7 @@
 			$battleMachineState.listenToEvent({ name: 'WIN', data: null });
 			$battleMachineState = $battleMachineState;
 
-			redirectToCampOrShop();
-
+			await redirectToCampOrShop();
 			return;
 		}
 
@@ -193,8 +214,15 @@
 		}
 	}
 
-	function redirectToCampOrShop() {
+	async function redirectToCampOrShop() {
 		gameStore.endTurn();
+		await delay(5000);
+
+		$battleMachineState.listenToEvent({ name: 'CAMP', data: null });
+		$battleMachineState = $battleMachineState;
+
+		scrollToElement('top');
+		return;
 		if ($gameStore.battles.length % 5 === 0) {
 			$battleMachineState.listenToEvent({ name: 'SHOP', data: null });
 			$battleMachineState = $battleMachineState;
@@ -214,63 +242,60 @@
 </script>
 
 {#if openedPlayerDiscardView}
-	<DiscardPreview isPlayer={openedPlayerDiscardView} cards={$gameStore.player.discard.cards} on:close={() => openPlayerDiscardView()} />
+	<DiscardPreview
+		isPlayer={openedPlayerDiscardView}
+		cards={$gameStore.player.discard.cards}
+		on:close={() => openPlayerDiscardView()}
+	/>
 {/if}
 
 {#if openedEnemyDiscardView}
-	<DiscardPreview cards={$gameStore.getCurrentBattle().enemy.discard.cards} on:close={() => openEnemyDiscardView()} />
+	<DiscardPreview
+		cards={$gameStore.getCurrentBattle().enemy.discard.cards}
+		on:close={() => openEnemyDiscardView()}
+	/>
 {/if}
 
 <section
-	class="container h-full mx-auto flex flex-col justify-left items-start space-y-10"
+	class="container h-full mx-auto flex flex-col justify-center items-center"
 	id="battle-screen"
 	transition:fade={{ delay: 250, duration: 300 }}
 >
-<div class="flex md:hidden flex-col items-center justify-center w-full md:mb-20">
-	<h1 class="h1">Battle {$gameStore?.battles.length}</h1>
-	<h2 class="h2">Turn {$gameStore?.getCurrentBattle()?.turns.length}</h2>
-</div>
-	<div class="flex flex-row flex-wrap items-center justify-between h-full w-full">
-		
+	<div class="flex md:hidden flex-col items-center justify-center w-full">
+		<h1 class="h1">Battle {$gameStore?.battles.length}</h1>
+		<h2 class="h2">Turn {$gameStore?.getCurrentBattle()?.turns.length}</h2>
+	</div>
+	<div class="flex flex-row flex-wrap items-center justify-between w-full">
 		<PlayerSide
-			playerName={$gameStore.player.name}
-			currentHealth={$gameStore.player.currentHealth}
-			maxHealth={$gameStore.player.maxHealth}
-			healthColor={$gameStore.player.getHealthColor()}
+			player={$gameStore.player}
 			playerHand={$gameStore.getCurrentBattle().getCurrentTurn().playerHand}
-			deckSize={$gameStore.player.deck.cards.length}
-			discardSize={$gameStore.player.discard.cards.length}
 			currentStateName={$playerTurnMachineState.currentState.name}
 			fight={$gameStore.getCurrentBattle().getCurrentTurn().fight}
-			sideEffects={$playerSideEffectsStore}
+			passiveEffects={$playerSideEffectsStore}
 			on:draw={() => drawCard()}
 			on:playerDiscardView={() => openPlayerDiscardView()}
+			on:triggerEffect={(e) => triggerEffect(e.detail.object)}
 		/>
 
-		<div class="flex flex-col items-center justify-center md:h-full w-full md:w-2/12">
+		<div class="flex flex-col items-center justify-center md:h-full w-full md:w-4/12" id="fighting">
 			<div class="hidden md:flex flex-col items-center justify-center w-full md:mb-20">
 				<h1 class="h1">Battle {$gameStore?.battles.length}</h1>
 				<h2 class="h2">Turn {$gameStore?.getCurrentBattle()?.turns.length}</h2>
 			</div>
 
-			<CenterSide
-				on:fight={() => fight()}
-				on:camp={() => redirectToCampOrShop()}
-				on:newTurn={() => newTurn()}
-			/>
+			<div class="flex flex-col md:flex-row md:flex-wrap w-full items-center justify-center">
+				<BattlePower hand={$gameStore.getCurrentBattle().getCurrentTurn().playerHand} basePower={$gameStore.getCurrentBattle().getCurrentTurn().fight.basePowerForPlayer} currentStateName={$playerTurnMachineState.currentState.name} />
+				<CenterSide on:fight={() => fight()} on:newTurn={async () => await newTurn()}/>
+				<BattlePower hand={$gameStore.getCurrentBattle().getCurrentTurn().enemyHand} basePower={$gameStore.getCurrentBattle().getCurrentTurn().fight.basePowerForEnemy} currentStateName={$enemyTurnMachineState.currentState.name} />
+			</div>
 		</div>
 
 		<PlayerSide
-			playerName={$gameStore.getCurrentBattle().enemy.name}
-			currentHealth={$gameStore.getCurrentBattle().enemy.currentHealth}
-			maxHealth={$gameStore.getCurrentBattle().enemy.maxHealth}
-			healthColor={$gameStore.getCurrentBattle().enemy.getHealthColor()}
+			player={$gameStore.getCurrentBattle().enemy}
 			playerHand={$gameStore.getCurrentBattle().getCurrentTurn().enemyHand}
-			deckSize={$gameStore.getCurrentBattle().enemy.deck.cards.length}
-			discardSize={$gameStore.getCurrentBattle().enemy.discard.cards.length}
 			currentStateName={$enemyTurnMachineState.currentState.name}
 			fight={$gameStore.getCurrentBattle().getCurrentTurn().fight}
-			sideEffects={$enemySideEffectsStore}
+			passiveEffects={$enemySideEffectsStore}
 			isEnemy={true}
 			on:enemyDiscardView={() => openEnemyDiscardView()}
 		/>

@@ -1,17 +1,18 @@
 import type { Game } from '$lib/models/game/model';
-import { BattlePlayingState } from '$lib/models/stateMachine/battle/states';
-import { TurnDamageState } from '$lib/models/stateMachine/turn/states/turnDamageState';
 import { get } from 'svelte/store';
 import type EffectInterface from '../effectInterface';
 import { gameStore } from '$lib/stores/game';
+import type { Rarities } from '../raritiesType';
 
 export default class Vampirism implements EffectInterface {
+	technicalName: string = 'vampirism';
 	name: string = 'Vampirism';
 	description: string = 'Heal the amount of damages inflicted.';
 	enableOnBattleState: string = 'BattlePlayingState';
 	enableOnPlayerTurnState: string = 'TurnLostState';
 	enableOnEnemyTurnState: string = 'TurnWonState';
 	icon: string = 'game-icons:bleeding-wound';
+	rarity: Rarities = 'rare';
 
 	public effect(data: object): void {
 		const game: Game = get(gameStore);
@@ -19,17 +20,17 @@ export default class Vampirism implements EffectInterface {
 
 		if (data['user'] === 'player') {
 			gameStore.update((game) => {
-				if(game.getCurrentBattle().getCurrentTurn().fight.playerHasWon === true) {
+				if (game.getCurrentBattle().getCurrentTurn().fight.playerHasWon === true) {
 					healNumber = game.getCurrentBattle().getCurrentTurn().fight.baseDamageToEnemy;
-					game.player.heal(healNumber)
+					game.player.heal(healNumber);
 				}
 				return game;
 			});
 		} else {
 			gameStore.update((game) => {
-				if(game.getCurrentBattle().getCurrentTurn().fight.enemyHasWon === true) {
+				if (game.getCurrentBattle().getCurrentTurn().fight.enemyHasWon === true) {
 					healNumber = game.getCurrentBattle().getCurrentTurn().fight.baseDamageToPlayer;
-					game.getCurrentBattle()?.enemy.heal(healNumber)
+					game.getCurrentBattle()?.enemy.heal(healNumber);
 				}
 				return game;
 			});

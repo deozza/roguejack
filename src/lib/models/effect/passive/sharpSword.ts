@@ -2,29 +2,34 @@ import type { Game } from '$lib/models/game/model';
 import { get } from 'svelte/store';
 import type EffectInterface from '../effectInterface';
 import { gameStore } from '$lib/stores/game';
+import Sword from '../trigger/sword';
 import type { Rarities } from '../raritiesType';
 
-export default class MasteryOverDeath implements EffectInterface {
-	technicalName: string = 'masteryOverDeath';
-	name: string = 'Mastery Over Death';
-	description: string = 'Deal 1 more base power for every 5 cards in the discard.';
+export default class SharpSword implements EffectInterface {
+	technicalName: string = 'sharpSword';
+	name: string = 'Sharp sword';
+	description: string = 'Deals 1 more damage if winning hand has a spade card';
 	enableOnBattleState: string = 'BattlePlayingState';
 	enableOnPlayerTurnState: string = 'TurnDamageState';
 	enableOnEnemyTurnState: string = 'TurnDamageState';
-	icon: string = 'game-icons:graveyard';
+	icon: string = 'game-icons:piercing-sword';
 	rarity: Rarities = 'rare';
 
 	public effect(data: object): void {
-		const game: Game = get(gameStore);
+		let bonusPower: number = 0;
 		if (data['user'] === 'player') {
-			const bonusPower: number = Math.floor(game.player.discard.cards.length / 5);
 			gameStore.update((game) => {
+				if (game.getCurrentBattle().getCurrentTurn().playerHand.cards.some((card) => card.suit === 'spade')) {
+					bonusPower = 1;
+				}
 				game.getCurrentBattle().getCurrentTurn().fight.basePowerForPlayer += bonusPower;
 				return game;
 			});
 		} else {
-			const bonusPower: number = Math.floor(game.getCurrentBattle().enemy.discard.cards.length / 5);
 			gameStore.update((game) => {
+				if (game.getCurrentBattle().getCurrentTurn().enemyHand.cards.some((card) => card.suit === 'spade')) {
+					bonusPower = 1;
+				}
 				game.getCurrentBattle().getCurrentTurn().fight.basePowerForEnemy += bonusPower;
 				return game;
 			});

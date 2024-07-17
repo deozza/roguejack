@@ -21,6 +21,7 @@
 	function startNewBattle() {
 		$battleMachineState.listenToEvent({ name: 'NEW_BATTLE', data: null });
 		$battleMachineState = $battleMachineState;
+		$battleMachineState.currentState.onStateEnter({ user: 'player' });
 		$battleMachineState.currentState.onStateExecute({});
 
 		$battleMachineState.listenToEvent({ name: 'PLAY', data: null });
@@ -57,12 +58,7 @@
 					<Discard discardSize={$gameStore.player.discard.cards.length} />
 				</div>
 			</div>
-			<div class="flex flex-row flex-wrap items-center justify-start w-7/12">
-				<button class="btn btn-xl variant-ghost-success" on:click={() => healAtCamp()}>Drink potion (+10%hp)</button>
-				<button class="btn btn-xl variant-ghost-secondary" on:click={() => recycleAtCamp()}
-					>Recycle discard (shuffle last 4 cards from discard to deck)</button
-				>
-			</div>
+			<div class="flex flex-row flex-wrap items-center justify-start w-7/12"></div>
 		</div>
 	</div>
 </section>

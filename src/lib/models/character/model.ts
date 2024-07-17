@@ -1,6 +1,6 @@
 import { Deck } from '$lib/models/deck/model';
 import { Discard } from '$lib/models/discard/model';
-import { sideEffects } from '../effect';
+import { passiveEffects } from '../effect';
 import type EffectInterface from '../effect/effectInterface';
 
 export class Character {
@@ -12,6 +12,7 @@ export class Character {
 	discard: Discard;
 	minAttack: number | null = null;
 	sideEffect: EffectInterface | null = null;
+	inventory: object[] = [];
 
 	public generateCharacter(characterType: object) {
 		this.name = characterType.name;
@@ -28,7 +29,12 @@ export class Character {
 		}
 
 		if (characterType.passive) {
-			this.sideEffect = sideEffects[characterType.passive];
+			const sideEffect: EffectInterface | undefined = passiveEffects.find(
+				(effect) => effect.technicalName === characterType.passive
+			);
+			if (sideEffect) {
+				this.sideEffect = sideEffect;
+			}
 		}
 	}
 

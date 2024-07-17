@@ -9,11 +9,15 @@
 	import CampScreen from '$lib/ui/gameLayout/screens/CampScreen.svelte';
 	import GameLostScreen from '$lib/ui/gameLayout/screens/GameLostScreen.svelte';
 	import ShopScreen from '$lib/ui/gameLayout/screens/ShopScreen.svelte';
+	import type { BattleLostState, BattleWonState } from '$lib/models/stateMachine/battle/states';
+	import { scrollToElement } from '$lib/utils';
 
 	const screensToRender: Record<string, SvelteComponent> = {
 		GameIdleState: HomeScreen,
 		GameCharacterSelectionState: CharacterSelectScreen,
 		BattlePlayingState: BattleScreen,
+		BattleWonState: BattleScreen,
+		BattleLostState: BattleScreen,
 		BattleCampingState: CampScreen,
 		BattleShopingState: ShopScreen,
 		GameLostState: GameLostScreen
@@ -32,5 +36,6 @@
 		return screensToRender[battleCurrentState.name];
 	}
 </script>
-
-<svelte:component this={screenToRender} />
+<div id="top">
+	<svelte:component this={screenToRender} />
+</div>

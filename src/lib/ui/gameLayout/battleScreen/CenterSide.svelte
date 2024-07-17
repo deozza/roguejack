@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { TurnPlayingState } from '$lib/models/stateMachine/turn/states/turnPlayingState';
 	import { battleMachineState } from '$lib/stores/stateMachine/battle';
 	import { playerTurnMachineState } from '$lib/stores/stateMachine/turn';
 	import { createEventDispatcher } from 'svelte';
+	import { fade } from 'svelte/transition';
 
 	const dispatch = createEventDispatcher();
 
@@ -21,11 +21,37 @@
 		dispatch('newTurn');
 	}
 </script>
+	{#if $battleMachineState.currentState.name === 'BattlePlayingState'}
+		{#if $playerTurnMachineState.currentState.name === 'TurnPlayingState'}
+			<button
+				transition:fade={{ delay: 250, duration: 300 }}
+				class="btn btn-xl variant-filled-error"
+				on:click={() => fight()}
+			>
+				Fight
+			</button>
+		{/if}
 
-{#if $playerTurnMachineState.currentState.name === 'TurnPlayingState'}
-	<button class="btn btn-xl variant-filled-error" on:click={() => fight()}> Fight </button>
-{/if}
+		{#if endTurnStates.includes($playerTurnMachineState.currentState.name)}
+			<button
+				in:fade={{ delay: 250, duration: 300 }}
+				class="btn btn-xl variant-filled-warning"
+				on:click={() => newTurn()}
+			>
+				New turn
+			</button>
+		{/if}
+	{/if}
 
-{#if endTurnStates.includes($playerTurnMachineState.currentState.name)}
-	<button class="btn btn-xl variant-filled-warning" on:click={() => newTurn()}> New turn </button>
-{/if}
+	{#if $battleMachineState.currentState.name === 'BattleWonState'}
+		<div in:fade={{ delay: 250, duration: 300 }} class="variant-ghost-success p-4">
+			<p class="p text-xl">You won!</p>
+		</div>
+	{/if}
+
+	{#if $battleMachineState.currentState.name === 'BattleLostState'}
+		<div in:fade={{ delay: 250, duration: 300 }} class="variant-ghost-error p-4">
+			<p class="p text-xl">You lost!</p>
+		</div>
+	{/if}
+

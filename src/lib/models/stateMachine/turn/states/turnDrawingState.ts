@@ -8,14 +8,14 @@ export class TurnDrawingState implements StateInterface {
 		console.log(` ${this.name} entered`);
 	};
 
-	public onStateExecute(data: object): void {
+	public async onStateExecute(data: object): Promise<void> {
 		if (data['user'] === 'player') {
 			gameStore.playerDrawCard();
 			return;
 		}
 
 		if (data['user'] === 'enemy') {
-			gameStore.enemyAutoDraw();
+			await gameStore.enemyAutoDraw();
 		}
 	}
 

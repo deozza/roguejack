@@ -9,31 +9,30 @@
 	import { enemyTurnMachineState, playerTurnMachineState } from '$lib/stores/stateMachine/turn';
 	import Icon from '@iconify/svelte';
 	import { fade } from 'svelte/transition';
-	import { sideEffects } from '$lib/models/effect';
-	import PlayingCard from '$lib/ui/playingCard/PlayingCard.svelte';
+	import { passiveEffects } from '$lib/models/effect';
 	import { Card, type Face, type Suit } from '$lib/models/card/model';
 	import DeckPreview from '../battleScreen/DeckPreview.svelte';
 
-	let selectedCharacter: object = {}
+	let selectedCharacter: object = {};
 	let cards: Card[] = [];
-	let passive: EffectInterface|null = null;
+	let passive: EffectInterface | undefined = undefined;
 	let openedDeckPreview: boolean = false;
-	
+
 	preSelectCharacter(characters[0]);
 
 	function preSelectCharacter(character: object) {
 		selectedCharacter = character;
-		passive = sideEffects[character.passive];
+		passive = passiveEffects.find((effect) => effect.technicalName === character.passive);
 
 		cards = [];
 		character.deck.suits.forEach((suit: Suit) => {
 			character.deck.values.forEach((value: Face) => {
-				cards = [...cards, new Card(suit, value )];
+				cards = [...cards, new Card(suit, value)];
 			});
 		});
 	}
 
-	function openDeckPreview(){
+	function openDeckPreview() {
 		openedDeckPreview = !openedDeckPreview;
 	}
 
@@ -53,6 +52,7 @@
 
 		$battleMachineState.listenToEvent({ name: 'NEW_BATTLE', data: null });
 		$battleMachineState = $battleMachineState;
+		$battleMachineState.currentState.onStateEnter({ user: 'player' });
 		$battleMachineState.currentState.onStateExecute({});
 
 		$battleMachineState.listenToEvent({ name: 'PLAY', data: null });
@@ -74,7 +74,7 @@
 </script>
 
 {#if openedDeckPreview}
-	<DeckPreview {cards} on:close={() => openDeckPreview()}/>
+	<DeckPreview {cards} on:close={() => openDeckPreview()} />
 {/if}
 
 <section
@@ -84,21 +84,24 @@
 >
 	<div class="flex flex-col items-center justify-center h-full space-y-10 w-full">
 		<h1 class="h1">Select your character</h1>
-		<div class="flex flex-row items-center justify-between w-full">
+		<div class="flex flex-row items-center justify-around w-full">
 			{#if selectedCharacter !== null}
 				<div class="flex flex-col flex-wrap items-start justify-start space-y-8 w-1/3">
 					<div class="flex flex-col flex-wrap items-start justify-start w-full space-y-4">
 						<h2 class="h2">{selectedCharacter.name}</h2>
 						<p class="flex flex-row items-center justify-center text-error-500">
-							<Icon icon="game-icons:hearts" width="16" height="16"/> {selectedCharacter.maxHealth}/{selectedCharacter.maxHealth}
+							<Icon icon="game-icons:hearts" width="16" height="16" />
+							{selectedCharacter.maxHealth}/{selectedCharacter.maxHealth}
 						</p>
-						<hr class="w-full">	
+						<hr class="w-full" />
 					</div>
 
 					{#if passive !== undefined && passive !== null}
-						<p><Icon icon="{passive.icon}" height="32" width="32" /> {passive.description}</p>
+						<p><Icon icon={passive.icon} height="32" width="32" /> {passive.description}</p>
 					{/if}
-					<button class="btn variant-ringed-tertiary" on:click={() => openDeckPreview()}>See deck</button>
+					<button class="btn variant-ringed-tertiary" on:click={() => openDeckPreview()}
+						>See deck</button
+					>
 				</div>
 				<button class="btn variant-filled-success rounded-md" on:click={() => selectCharacter()}>
 					Confirm
@@ -107,7 +110,12 @@
 		</div>
 		<div class="flex flex-row flex-wrap items-center justify-center w-full space-x-5">
 			{#each characters as character}
-				<button class="btn {selectedCharacter.name === character.name ? 'variant-filled-tertiary' : 'variant-ringed-tertiary' } rounded-md" on:click={() => preSelectCharacter(character)}>
+				<button
+					class="btn {selectedCharacter.name === character.name
+						? 'variant-filled-tertiary'
+						: 'variant-ringed-tertiary'} rounded-md"
+					on:click={() => preSelectCharacter(character)}
+				>
 					<Icon icon={character.icon} width="32" height="32" />
 				</button>
 			{/each}

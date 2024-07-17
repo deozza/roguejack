@@ -1,11 +1,10 @@
 <script>
-	import { gameMachineState } from "$lib/stores/stateMachine/game";
-	import { createEventDispatcher } from "svelte";
-	import { page } from "$app/stores";
-	import { fade } from "svelte/transition";
+	import { gameMachineState } from '$lib/stores/stateMachine/game';
+	import { createEventDispatcher } from 'svelte';
+	import { page } from '$app/stores';
+	import { fade } from 'svelte/transition';
 
 	const dispatch = createEventDispatcher();
-
 </script>
 
 <section
@@ -14,8 +13,8 @@
 >
 	<div class="flex flex-col items-center justify-center h-full w-full space-y-10">
 		<h1 class="h1">Pause</h1>
-		
-		{#if $page.url.pathname ===  '/help'}
+
+		{#if $page.url.pathname === '/help'}
 			<a class="btn" href="/" on:click={() => dispatch('resume')}>Back to game</a>
 		{:else}
 			<button class="btn" on:click={() => dispatch('resume')}>Resume game</button>

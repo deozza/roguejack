@@ -21,7 +21,8 @@ export class TurnMachineState implements StateMachineInterface {
 			NEW_TURN: TurnInitState
 		},
 		TurnInitState: {
-			PLAY: TurnPlayingState
+			PLAY: TurnPlayingState,
+			DECK_EMPTY: TurnDeckEmptyState
 		},
 		TurnPlayingState: {
 			DRAW: TurnDrawingState,

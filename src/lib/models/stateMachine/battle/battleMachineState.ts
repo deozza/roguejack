@@ -19,7 +19,8 @@ export class BattleMachineState implements StateMachineInterface {
 			NEW_BATTLE: BattleInitState
 		},
 		BattleInitState: {
-			PLAY: BattlePlayingState
+			PLAY: BattlePlayingState,
+			DECK_EMPTY: BattleLostState
 		},
 		BattlePlayingState: {
 			WIN: BattleWonState,

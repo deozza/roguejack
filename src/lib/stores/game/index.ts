@@ -9,6 +9,8 @@ import type { Hand } from '$lib/models/hand/model';
 import { Turn } from '$lib/models/turn/model';
 import { get } from 'svelte/store';
 import { writable } from 'svelte/store';
+import type EffectInterface from '$lib/models/effect/effectInterface';
+import { delay } from '$lib/utils';
 
 function createGameStore() {
 	const { subscribe, set, update } = writable<Game>(new Game());
@@ -39,15 +41,15 @@ function createGameStore() {
 
 	const generateEnemy = (game: Game): Character => {
 		const enemy: Character = new Character();
-		const enemyLevel: number = Math.max(Math.round(game.battles.length / 10), 1);
+		const enemyLevel: number = Math.max(Math.round(game.battles.length / 5), 1);
 
 		let enemyModels: object[] = [];
 
-		if((game.battles.length + 1) % 10 === 0) {
+		if ((game.battles.length + 1) % 10 === 0) {
 			enemyModels = boss.filter(
 				(character) => character.level <= enemyLevel && character.level >= enemyLevel - 1
 			);
-		} else if((game.battles.length + 1) % 5 === 0) {
+		} else if ((game.battles.length + 1) % 5 === 0) {
 			enemyModels = semiboss.filter(
 				(character) => character.level <= enemyLevel && character.level >= enemyLevel - 1
 			);
@@ -83,6 +85,7 @@ function createGameStore() {
 
 	const playerDrawCard = () => {
 		update((game) => {
+
 			let card: Card | null = game.player.deck.drawTopCard();
 			if (card === null) {
 				throw new Error('PLAYER_EMPTY_DECK');
@@ -105,13 +108,14 @@ function createGameStore() {
 		});
 	};
 
-	const enemyAutoDraw = () => {
+	const enemyAutoDraw = async () => {
 		const game = get(gameStore);
 
 		while (
 			game.getCurrentBattle().getCurrentTurn().enemyHand.getValue() <
 			game.getCurrentBattle().enemy.minAttack
 		) {
+			await delay(1000);
 			enemyDrawCard();
 		}
 	};
@@ -210,6 +214,23 @@ function createGameStore() {
 		});
 	};
 
+	const addToInventory = (object: EffectInterface, user: string) => {
+		update((game) => {
+			game.player.inventory = [...game.player.inventory, object];
+			return game;
+		});
+	};
+
+	const removeFromInventory = (object: EffectInterface, user: string) => {
+		update((game) => {
+			const index = game.player.inventory.findIndex((item) => item === object);
+			if (index !== -1) {
+				game.player.inventory.splice(index, 1);
+			}
+			return game;
+		});
+	};
+
 	return {
 		subscribe,
 		reset,
@@ -224,7 +245,9 @@ function createGameStore() {
 		inflictDamagesToEnemy,
 		endTurn,
 		healPercentages,
-		recycleDiscard
+		recycleDiscard,
+		addToInventory,
+		removeFromInventory
 	};
 }
 
