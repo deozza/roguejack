@@ -10,7 +10,7 @@ import { Turn } from '$lib/models/turn/model';
 import { get } from 'svelte/store';
 import { writable } from 'svelte/store';
 import type EffectInterface from '$lib/models/effect/effectInterface';
-import { triggerEffects } from '$lib/models/effect';
+import { delay } from '$lib/utils';
 
 function createGameStore() {
 	const { subscribe, set, update } = writable<Game>(new Game());
@@ -107,13 +107,14 @@ function createGameStore() {
 		});
 	};
 
-	const enemyAutoDraw = () => {
+	const enemyAutoDraw = async () => {
 		const game = get(gameStore);
 
 		while (
 			game.getCurrentBattle().getCurrentTurn().enemyHand.getValue() <
 			game.getCurrentBattle().enemy.minAttack
 		) {
+			await delay(1000);
 			enemyDrawCard();
 		}
 	};

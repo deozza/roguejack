@@ -84,7 +84,7 @@
 >
 	<div class="flex flex-col items-center justify-center h-full space-y-10 w-full">
 		<h1 class="h1">Select your character</h1>
-		<div class="flex flex-row items-center justify-between w-full">
+		<div class="flex flex-row items-center justify-around w-full">
 			{#if selectedCharacter !== null}
 				<div class="flex flex-col flex-wrap items-start justify-start space-y-8 w-1/3">
 					<div class="flex flex-col flex-wrap items-start justify-start w-full space-y-4">

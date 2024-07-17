@@ -11,10 +11,12 @@
 	import { fade } from 'svelte/transition';
 	import DiscardPreview from '../battleScreen/DiscardPreview.svelte';
 	import { TurnMachineState } from '$lib/models/stateMachine/turn/turnMachineState';
+	import { delay } from '$lib/utils';
+	import { browser } from '$app/environment';
+	import BattlePower from '../battleScreen/BattlePower.svelte';
 
 	let openedEnemyDiscardView: boolean = false;
 	let openedPlayerDiscardView: boolean = false;
-	const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
 	function triggerEffect(effect: any) {
 		effect.effect({ user: 'player' });
@@ -24,12 +26,12 @@
 		updateBattleState();
 	}
 
-	function drawCard() {
+	async function drawCard() {
 		$playerTurnMachineState.listenToEvent({ name: 'DRAW', data: null });
 		$playerTurnMachineState = $playerTurnMachineState;
 
 		try {
-			$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
+			await $playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
 		} catch (e: any) {
 			if (e.message === 'PLAYER_EMPTY_DECK') {
 				$playerTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
@@ -43,6 +45,7 @@
 			$playerTurnMachineState.listenToEvent({ name: 'BUST', data: null });
 			$playerTurnMachineState = $playerTurnMachineState;
 
+			scrollToElement('fighting');
 			calculateAndApplyDamages();
 
 			return;
@@ -53,6 +56,8 @@
 	}
 
 	async function fight() {
+		scrollToElement('fighting');
+
 		$playerTurnMachineState.listenToEvent({ name: 'FIGHT', data: null });
 		$playerTurnMachineState = $playerTurnMachineState;
 
@@ -60,7 +65,7 @@
 		$enemyTurnMachineState = $enemyTurnMachineState;
 
 		try {
-			$enemyTurnMachineState.currentState.onStateExecute({ user: 'enemy' });
+			await $enemyTurnMachineState.currentState.onStateExecute({ user: 'enemy' });
 		} catch (e: any) {
 			if (e.message === 'ENEMY_EMPTY_DECK') {
 				$enemyTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
@@ -91,6 +96,13 @@
 		$enemyTurnMachineState = $enemyTurnMachineState;
 
 		await calculateAndApplyDamages();
+	}
+
+	function scrollToElement(id: string) {
+		if(browser) {
+			const element = document.getElementById(id);
+			element.scrollIntoView({ behavior: 'smooth' });
+		}
 	}
 
 	async function calculateAndApplyDamages() {
@@ -144,6 +156,7 @@
 	}
 
 	function newTurn() {
+		scrollToElement('top');
 		gameStore.endTurn();
 		$playerTurnMachineState.listenToEvent({ name: 'NEW_TURN', data: null });
 		$playerTurnMachineState = $playerTurnMachineState;
@@ -244,11 +257,11 @@
 {/if}
 
 <section
-	class="container h-full mx-auto flex flex-col justify-center items-center space-y-10"
+	class="container h-full mx-auto flex flex-col justify-center items-center"
 	id="battle-screen"
 	transition:fade={{ delay: 250, duration: 300 }}
 >
-	<div class="flex md:hidden flex-col items-center justify-center w-full md:mb-20">
+	<div class="flex md:hidden flex-col items-center justify-center w-full"  id="top">
 		<h1 class="h1">Battle {$gameStore?.battles.length}</h1>
 		<h2 class="h2">Turn {$gameStore?.getCurrentBattle()?.turns.length}</h2>
 	</div>
@@ -264,13 +277,17 @@
 			on:triggerEffect={(e) => triggerEffect(e.detail.object)}
 		/>
 
-		<div class="flex flex-col items-center justify-center md:h-full w-full md:w-2/12 spacing-y-4">
+		<div class="flex flex-col items-center justify-center md:h-full w-full md:w-2/12 spacing-y-4" id="fighting">
 			<div class="hidden md:flex flex-col items-center justify-center w-full md:mb-20">
 				<h1 class="h1">Battle {$gameStore?.battles.length}</h1>
 				<h2 class="h2">Turn {$gameStore?.getCurrentBattle()?.turns.length}</h2>
 			</div>
 
-			<CenterSide on:fight={() => fight()} on:newTurn={() => newTurn()} />
+			<div class="flex flex-col md:flex-row md:flex-wrap w-full items-center justify-center max-sm:space-y-4 md:space-x-5">
+				<BattlePower hand={$gameStore.getCurrentBattle().getCurrentTurn().playerHand} basePower={$gameStore.getCurrentBattle().getCurrentTurn().fight.basePowerForPlayer} currentStateName={$playerTurnMachineState.currentState.name} />
+				<CenterSide on:fight={() => fight()} on:newTurn={() => newTurn()}/>
+				<BattlePower hand={$gameStore.getCurrentBattle().getCurrentTurn().enemyHand} basePower={$gameStore.getCurrentBattle().getCurrentTurn().fight.basePowerForEnemy} currentStateName={$enemyTurnMachineState.currentState.name} />
+			</div>
 		</div>
 
 		<PlayerSide

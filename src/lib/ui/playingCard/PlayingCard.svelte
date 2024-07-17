@@ -5,11 +5,12 @@
 	import { quintOut } from 'svelte/easing';
 
 	export let card: Card;
+	export let delay: number = 500;
+	export let duration: number = 1000;
 </script>
 
 <div
-	class="bg-white flex flex-col items-center justify-between rounded-xl card-hover p-4 min-h-24 min-w-16 md:min-h-48 md:min-w-36 m-1 {card.suit}"
-	transition:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'x' }}
+	class="bg-white flex flex-col items-center justify-between rounded-xl card-hover p-4 min-h-32 min-w-24 m-1 {card.suit}"
 >
 	<div class="text-start w-full">
 		<Icon icon={'bi:suit-' + card.suit + '-fill'} />

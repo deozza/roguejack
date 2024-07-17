@@ -6,7 +6,7 @@ import Dagger from './trigger/dagger';
 import Knife from './trigger/knife';
 import PotionOfGreaterHealing from './trigger/potionOfGreaterHealing';
 import PotionOfHealing from './trigger/potionOfHealing';
-import PotionOfSuperiorfHealing from './trigger/potionOfSuperiorHealing copy';
+import PotionOfSuperiorfHealing from './trigger/potionOfSuperiorHealing';
 import Sword from './trigger/sword';
 
 export const passiveEffects: EffectInterface[] = [

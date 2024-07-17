@@ -24,13 +24,6 @@
 	const dispatch = createEventDispatcher();
 	let openedInventory: boolean = false;
 
-	const endTurnStates: string[] = [
-		'TurnWonState',
-		'TurnTiedState',
-		'TurnLostState',
-		'TurnBustedState'
-	];
-
 	const popupClick: PopupSettings = {
 		event: 'click',
 		target: 'popupClick',
@@ -44,7 +37,7 @@
 
 {#if openedInventory === true}
 	<div
-		class="absolute {isEnemy ? 'right-20' : 'left-20'} z-10 bg-surface-500/90"
+		class="absolute max-sm:top-0 max-sm:left-0 max-sm:right-0 {isEnemy ? 'md:right-20' : 'md:left-20'} z-10 bg-surface-500/90"
 		transition:fade={{ delay: 250, duration: 300 }}
 	>
 		<div class="flex flex-col items-center justify-center h-full w-full">
@@ -81,7 +74,7 @@
 			: 'flex-row'} flex-wrap items-center justify-start w-full space-x-5 min-h-16"
 	>
 		{#each passiveEffects as sideEffect}
-			<div class="card p-4 variant-filled-primary" data-popup="popupClick">
+			<div class="card p-4 variant-filled-primary z-10" data-popup="popupClick">
 				<p>{sideEffect.name}</p>
 				<p>{sideEffect.description}</p>
 				<div class="arrow variant-filled-primary" />
@@ -104,9 +97,9 @@
 	/>
 
 	<div
-		class="flex {isEnemy
-			? 'flex-row-reverse'
-			: 'flex-row'}  flex-wrap items-center justify-start w-full space-x-5 my-20"
+		class="flex flex-row {isEnemy
+			? 'md:flex-row-reverse'
+			: ''}  flex-wrap items-center justify-start w-full"
 	>
 		<div class="flex flex-col items-center justify-center space-y-5 h-full w-4/12 md:w-2/12">
 			<button
@@ -126,27 +119,13 @@
 			</button>
 		</div>
 		<div
-			class="snap-x scroll-px-4 snap-mandatory scroll-smooth flex gap-4 overflow-x-auto w-1/2 md:w-9/12"
+			class="flex {isEnemy
+			? 'flex-row-reverse'
+			: 'flex-row'} items-center justify-start overflow-x-auto w-1/2 md:w-9/12 mx-5"
 		>
 			{#each [...playerHand.cards].reverse() as card}
 				<PlayingCard {card} />
 			{/each}
 		</div>
-		{#if endTurnStates.includes(currentStateName)}
-			<div class="flex flex-row flex-wrap items-center justify-center w-full text-4xl text-red-500">
-				{#if isEnemy}
-					<p class="p">
-						{playerHand.value}
-						{fight.basePowerForEnemy !== 0 ? `+ ${fight.basePowerForEnemy}` : ''}
-					</p>
-				{:else}
-					<p class="p">
-						{playerHand.value}
-						{fight.basePowerForPlayer !== 0 ? `+ ${fight.basePowerForPlayer}` : ''}
-					</p>
-				{/if}
-				<Icon icon="game-icons:battle-axe" />
-			</div>
-		{/if}
 	</div>
 </div>
