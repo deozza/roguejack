@@ -67,7 +67,7 @@
 	</div>
 {/if}
 
-<div class="flex flex-col items-center justify-center md:h-full w-full md:w-5/12">
+<div class="flex flex-col items-center justify-center md:h-full w-full md:w-4/12">
 	<div
 		class="flex {isEnemy
 			? 'flex-row-reverse'
@@ -121,7 +121,7 @@
 		<div
 			class="flex {isEnemy
 			? 'flex-row-reverse'
-			: 'flex-row'} items-center justify-start overflow-x-auto w-1/2 md:w-9/12 mx-5"
+			: 'flex-row'} items-center justify-start overflow-x-auto w-1/2 md:w-8/12 mx-5"
 		>
 			{#each [...playerHand.cards].reverse() as card}
 				<PlayingCard {card} />

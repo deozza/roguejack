@@ -277,13 +277,13 @@
 			on:triggerEffect={(e) => triggerEffect(e.detail.object)}
 		/>
 
-		<div class="flex flex-col items-center justify-center md:h-full w-full md:w-2/12 spacing-y-4" id="fighting">
+		<div class="flex flex-col items-center justify-center md:h-full w-full md:w-4/12" id="fighting">
 			<div class="hidden md:flex flex-col items-center justify-center w-full md:mb-20">
 				<h1 class="h1">Battle {$gameStore?.battles.length}</h1>
 				<h2 class="h2">Turn {$gameStore?.getCurrentBattle()?.turns.length}</h2>
 			</div>
 
-			<div class="flex flex-col md:flex-row md:flex-wrap w-full items-center justify-center max-sm:space-y-4 md:space-x-5">
+			<div class="flex flex-col md:flex-row md:flex-wrap w-full items-center justify-center">
 				<BattlePower hand={$gameStore.getCurrentBattle().getCurrentTurn().playerHand} basePower={$gameStore.getCurrentBattle().getCurrentTurn().fight.basePowerForPlayer} currentStateName={$playerTurnMachineState.currentState.name} />
 				<CenterSide on:fight={() => fight()} on:newTurn={() => newTurn()}/>
 				<BattlePower hand={$gameStore.getCurrentBattle().getCurrentTurn().enemyHand} basePower={$gameStore.getCurrentBattle().getCurrentTurn().fight.basePowerForEnemy} currentStateName={$enemyTurnMachineState.currentState.name} />
