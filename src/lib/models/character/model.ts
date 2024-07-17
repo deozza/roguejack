@@ -29,7 +29,9 @@ export class Character {
 		}
 
 		if (characterType.passive) {
-			const sideEffect: EffectInterface | undefined = passiveEffects.find((effect) => effect.technicalName === characterType.passive);
+			const sideEffect: EffectInterface | undefined = passiveEffects.find(
+				(effect) => effect.technicalName === characterType.passive
+			);
 			if (sideEffect) {
 				this.sideEffect = sideEffect;
 			}

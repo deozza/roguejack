@@ -10,7 +10,11 @@
 	import DeckPreview from '../battleScreen/DeckPreview.svelte';
 	import { triggerEffects } from '$lib/models/effect';
 	import type EffectInterface from '$lib/models/effect/effectInterface';
-	import { raritiesWeight, type Rarities, type RaritiesWeight } from '$lib/models/effect/raritiesType';
+	import {
+		raritiesWeight,
+		type Rarities,
+		type RaritiesWeight
+	} from '$lib/models/effect/raritiesType';
 
 	let openedDeckView: boolean = false;
 	let openedDiscardView: boolean = false;
@@ -36,14 +40,18 @@
 	}
 
 	function getObjectToLoot(): EffectInterface {
-		const rarityWeightValue: number = Math.floor(Math.random() * (100) + 1);
+		const rarityWeightValue: number = Math.floor(Math.random() * 100 + 1);
 
-		const rarity: RaritiesWeight | undefined = raritiesWeight.find((rarity) => rarity.weight >= rarityWeightValue);
-		if(rarity === undefined) {
+		const rarity: RaritiesWeight | undefined = raritiesWeight.find(
+			(rarity) => rarity.weight >= rarityWeightValue
+		);
+		if (rarity === undefined) {
 			throw new Error('Rarity not found');
 		}
 
-		const filteredEffects: EffectInterface[] = triggerEffects.filter((triggerEffect: EffectInterface) => triggerEffect.rarity === rarity.rarity);
+		const filteredEffects: EffectInterface[] = triggerEffects.filter(
+			(triggerEffect: EffectInterface) => triggerEffect.rarity === rarity.rarity
+		);
 
 		const randomEffectIndex: number = Math.floor(Math.random() * filteredEffects.length);
 		return filteredEffects[randomEffectIndex];

@@ -1,4 +1,4 @@
-import type { Rarities } from "./raritiesType";
+import type { Rarities } from './raritiesType';
 
 export default interface EffectInterface {
 	technicalName: string;
