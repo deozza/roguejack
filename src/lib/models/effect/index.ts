@@ -1,6 +1,8 @@
 import MasteryOverDeath from '$lib/models/effect/passive/masteryOverDeath';
 import type EffectInterface from './effectInterface';
 import Bravery from './passive/bravery';
+import SharpSword from './passive/sharpSword';
+import Undead from './passive/undead';
 import Vampirism from './passive/vampirism';
 import Dagger from './trigger/dagger';
 import EarthquakeScroll from './trigger/earthquakeScroll';
@@ -14,7 +16,9 @@ import Sword from './trigger/sword';
 export const passiveEffects: EffectInterface[] = [
 	new MasteryOverDeath(),
 	new Vampirism(),
-	new Bravery()
+	new Bravery(),
+	new SharpSword(),
+	new Undead()
 ];
 
 export const triggerEffects: EffectInterface[] = [

@@ -15,6 +15,8 @@
 		type RaritiesWeight
 	} from '$lib/models/effect/raritiesType';
 	import Icon from '@iconify/svelte';
+	import { TurnMachineState } from '$lib/models/stateMachine/turn/turnMachineState';
+	import { gameMachineState } from '$lib/stores/stateMachine/game';
 
 	let openedDeckView: boolean = false;
 	let openedDiscardView: boolean = false;
@@ -72,9 +74,24 @@
 		$battleMachineState.listenToEvent({ name: 'PLAY', data: null });
 		$battleMachineState = $battleMachineState;
 
+		playerTurnMachineState.set(new TurnMachineState());
+		
 		$playerTurnMachineState.listenToEvent({ name: 'NEW_TURN', data: null });
 		$playerTurnMachineState = $playerTurnMachineState;
-		$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
+		
+		try {
+			$playerTurnMachineState.currentState.onStateEnter({ user: 'player' });
+		} catch (error) {
+			$playerTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
+			$playerTurnMachineState = $playerTurnMachineState;
+
+			$battleMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
+			$battleMachineState = $battleMachineState;
+
+			$gameMachineState.listenToEvent({ name: 'END_GAME', data: null });
+			$gameMachineState = $gameMachineState;
+			return;
+		}
 
 		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: null });
 		$playerTurnMachineState = $playerTurnMachineState;

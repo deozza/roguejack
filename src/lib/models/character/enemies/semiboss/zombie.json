@@ -1,0 +1,11 @@
+{
+	"name": "Zombie",
+	"level": 2,
+	"maxHealth": 5,
+	"minAttack": 14,
+	"deck": {
+		"suits": ["spade", "club"],
+		"values": ["A", 2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"]
+	},
+	"passive": "undead"
+}

@@ -15,7 +15,6 @@
     ]
 
     const iconByValue = (): string => {
-        console.log(currentStateName)
         if(currentStateName === 'TurnDeckEmptyState') {
             return 'game-icons:card-discard'
         }
@@ -35,10 +34,12 @@
 
 {#if endTurnStates.includes(currentStateName)}
     <div class="flex flex-row flex-wrap items-center justify-center m-4 text-4xl text-red-500">
-        <p class="p">
-            {hand.value}
-            {basePower !== 0 ? `+ ${basePower}` : ''}
-        </p>
+        {#if currentStateName !== 'TurnDeckEmptyState'}
+            <p class="p">
+                {hand.value}
+                {basePower !== 0 ? `+ ${basePower}` : ''}
+            </p>
+        {/if}
         <Icon icon="{iconByValue()}" />
     </div>
 {/if}

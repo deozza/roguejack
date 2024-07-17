@@ -10,9 +10,7 @@
 	import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 	import { fade } from 'svelte/transition';
 	import DiscardPreview from '../battleScreen/DiscardPreview.svelte';
-	import { TurnMachineState } from '$lib/models/stateMachine/turn/turnMachineState';
 	import { delay, scrollToElement } from '$lib/utils';
-	import { browser } from '$app/environment';
 	import BattlePower from '../battleScreen/BattlePower.svelte';
 
 	let openedEnemyDiscardView: boolean = false;
@@ -38,6 +36,7 @@
 				$playerTurnMachineState = $playerTurnMachineState;
 
 				updateBattleState();
+				return;
 			}
 		}
 
@@ -75,9 +74,8 @@
 				$playerTurnMachineState = $playerTurnMachineState;
 
 				await updateBattleState();
+				return;
 			}
-
-			return;
 		}
 
 		if ($gameStore.getCurrentBattle()?.getCurrentTurn().enemyHand.getIsBusted() === true) {
@@ -167,9 +165,6 @@
 
 	async function updateBattleState() {
 		if ($enemyTurnMachineState.currentState.name === 'TurnDeckEmptyState') {
-			$playerTurnMachineState.listenToEvent({ name: 'WIN', data: null });
-			$playerTurnMachineState = $playerTurnMachineState;
-
 			$battleMachineState.listenToEvent({ name: 'WIN', data: null });
 			$battleMachineState = $battleMachineState;
 
@@ -179,11 +174,12 @@
 		}
 
 		if ($playerTurnMachineState.currentState.name === 'TurnDeckEmptyState') {
-			$playerTurnMachineState.listenToEvent({ name: 'LOSE', data: null });
-			$playerTurnMachineState = $playerTurnMachineState;
-
 			$battleMachineState.listenToEvent({ name: 'LOSE', data: null });
 			$battleMachineState = $battleMachineState;
+
+			await delay(5000);
+			$gameMachineState.listenToEvent({ name: 'END_GAME', data: null });
+			$gameMachineState = $gameMachineState;
 
 			return;
 		}
@@ -209,12 +205,11 @@
 
 	async function redirectToCampOrShop() {
 		gameStore.endTurn();
-		playerTurnMachineState.set(new TurnMachineState());
-		enemyTurnMachineState.set(new TurnMachineState());
 		await delay(5000);
 
 		$battleMachineState.listenToEvent({ name: 'CAMP', data: null });
 		$battleMachineState = $battleMachineState;
+
 		scrollToElement('top');
 		return;
 		if ($gameStore.battles.length % 5 === 0) {
