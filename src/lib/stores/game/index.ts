@@ -41,7 +41,7 @@ function createGameStore() {
 
 	const generateEnemy = (game: Game): Character => {
 		const enemy: Character = new Character();
-		const enemyLevel: number = Math.max(Math.round(game.battles.length / 10), 1);
+		const enemyLevel: number = Math.max(Math.round(game.battles.length / 5), 1);
 
 		let enemyModels: object[] = [];
 

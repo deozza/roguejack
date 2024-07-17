@@ -3,6 +3,8 @@ import type EffectInterface from './effectInterface';
 import Bravery from './passive/bravery';
 import Vampirism from './passive/vampirism';
 import Dagger from './trigger/dagger';
+import EarthquakeScroll from './trigger/earthquakeScroll';
+import FireballScroll from './trigger/fireballScroll';
 import Knife from './trigger/knife';
 import PotionOfGreaterHealing from './trigger/potionOfGreaterHealing';
 import PotionOfHealing from './trigger/potionOfHealing';
@@ -21,5 +23,7 @@ export const triggerEffects: EffectInterface[] = [
 	new Sword(),
 	new PotionOfHealing(),
 	new PotionOfGreaterHealing(),
-	new PotionOfSuperiorfHealing()
+	new PotionOfSuperiorfHealing(),
+	new FireballScroll(),
+	new EarthquakeScroll()
 ];
