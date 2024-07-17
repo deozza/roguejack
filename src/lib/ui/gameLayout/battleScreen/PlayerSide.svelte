@@ -24,11 +24,14 @@
 	const dispatch = createEventDispatcher();
 	let openedInventory: boolean = false;
 
-	const popupClick: PopupSettings = {
-		event: 'click',
-		target: 'popupClick',
-		placement: 'top'
-	};
+
+	function popupClick(target: string): PopupSettings {
+		return {
+			event: 'click',
+			target,
+			placement: 'top'
+		};
+	}
 
 	function openInventory() {
 		openedInventory = !openedInventory;
@@ -74,12 +77,12 @@
 			: 'flex-row'} flex-wrap items-center justify-start w-full space-x-5 min-h-16"
 	>
 		{#each passiveEffects as sideEffect}
-			<div class="card p-4 variant-filled-primary z-10" data-popup="popupClick">
+			<div class="card p-4 variant-filled-primary z-10" data-popup="{sideEffect.technicalName}">
 				<p>{sideEffect.name}</p>
 				<p>{sideEffect.description}</p>
 				<div class="arrow variant-filled-primary" />
 			</div>
-			<button class="btn" use:popup={popupClick}>
+			<button class="btn" use:popup={popupClick(sideEffect.technicalName)}>
 				<Icon icon={sideEffect.icon} width="64" height="64" />
 			</button>
 		{/each}

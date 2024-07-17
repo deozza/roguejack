@@ -146,12 +146,23 @@
 		await updateBattleState();
 	}
 
-	function newTurn() {
+	async function newTurn() {
 		scrollToElement('top');
 		gameStore.endTurn();
 		$playerTurnMachineState.listenToEvent({ name: 'NEW_TURN', data: null });
 		$playerTurnMachineState = $playerTurnMachineState;
-		$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
+
+		try {
+			await $playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
+		} catch (e: any) {
+			if (e.message === 'PLAYER_EMPTY_DECK') {
+				$playerTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
+				$playerTurnMachineState = $playerTurnMachineState;
+
+				updateBattleState();
+				return;
+			}
+		}
 
 		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: null });
 		$playerTurnMachineState = $playerTurnMachineState;
@@ -274,7 +285,7 @@
 
 			<div class="flex flex-col md:flex-row md:flex-wrap w-full items-center justify-center">
 				<BattlePower hand={$gameStore.getCurrentBattle().getCurrentTurn().playerHand} basePower={$gameStore.getCurrentBattle().getCurrentTurn().fight.basePowerForPlayer} currentStateName={$playerTurnMachineState.currentState.name} />
-				<CenterSide on:fight={() => fight()} on:newTurn={() => newTurn()}/>
+				<CenterSide on:fight={() => fight()} on:newTurn={async () => await newTurn()}/>
 				<BattlePower hand={$gameStore.getCurrentBattle().getCurrentTurn().enemyHand} basePower={$gameStore.getCurrentBattle().getCurrentTurn().fight.basePowerForEnemy} currentStateName={$enemyTurnMachineState.currentState.name} />
 			</div>
 		</div>

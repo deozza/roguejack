@@ -80,7 +80,7 @@
 		$playerTurnMachineState = $playerTurnMachineState;
 		
 		try {
-			$playerTurnMachineState.currentState.onStateEnter({ user: 'player' });
+			$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
 		} catch (error) {
 			$playerTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
 			$playerTurnMachineState = $playerTurnMachineState;
