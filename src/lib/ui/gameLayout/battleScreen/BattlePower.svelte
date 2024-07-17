@@ -10,7 +10,6 @@
         'TurnTiedState',
         'TurnLostState',
         'TurnBustedState',
-        'TurnFightingState',
         'TurnDeckEmptyState',
         'TurnIdleState'
     ]

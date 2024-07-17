@@ -11,7 +11,7 @@
 	import { fade } from 'svelte/transition';
 	import DiscardPreview from '../battleScreen/DiscardPreview.svelte';
 	import { TurnMachineState } from '$lib/models/stateMachine/turn/turnMachineState';
-	import { delay } from '$lib/utils';
+	import { delay, scrollToElement } from '$lib/utils';
 	import { browser } from '$app/environment';
 	import BattlePower from '../battleScreen/BattlePower.svelte';
 
@@ -96,13 +96,6 @@
 		$enemyTurnMachineState = $enemyTurnMachineState;
 
 		await calculateAndApplyDamages();
-	}
-
-	function scrollToElement(id: string) {
-		if(browser) {
-			const element = document.getElementById(id);
-			element.scrollIntoView({ behavior: 'smooth' });
-		}
 	}
 
 	async function calculateAndApplyDamages() {
@@ -222,6 +215,7 @@
 
 		$battleMachineState.listenToEvent({ name: 'CAMP', data: null });
 		$battleMachineState = $battleMachineState;
+		scrollToElement('top');
 		return;
 		if ($gameStore.battles.length % 5 === 0) {
 			$battleMachineState.listenToEvent({ name: 'SHOP', data: null });
@@ -261,7 +255,7 @@
 	id="battle-screen"
 	transition:fade={{ delay: 250, duration: 300 }}
 >
-	<div class="flex md:hidden flex-col items-center justify-center w-full"  id="top">
+	<div class="flex md:hidden flex-col items-center justify-center w-full">
 		<h1 class="h1">Battle {$gameStore?.battles.length}</h1>
 		<h2 class="h2">Turn {$gameStore?.getCurrentBattle()?.turns.length}</h2>
 	</div>

@@ -34,7 +34,7 @@
 
 		{#if endTurnStates.includes($playerTurnMachineState.currentState.name)}
 			<button
-				transition:fade={{ delay: 250, duration: 300 }}
+				in:fade={{ delay: 250, duration: 300 }}
 				class="btn btn-xl variant-filled-warning"
 				on:click={() => newTurn()}
 			>
@@ -44,13 +44,13 @@
 	{/if}
 
 	{#if $battleMachineState.currentState.name === 'BattleWonState'}
-		<div transition:fade={{ delay: 250, duration: 300 }} class="variant-ghost-success p-4">
+		<div in:fade={{ delay: 250, duration: 300 }} class="variant-ghost-success p-4">
 			<p class="p text-xl">You won!</p>
 		</div>
 	{/if}
 
 	{#if $battleMachineState.currentState.name === 'BattleLostState'}
-		<div transition:fade={{ delay: 250, duration: 300 }} class="variant-ghost-error p-4">
+		<div in:fade={{ delay: 250, duration: 300 }} class="variant-ghost-error p-4">
 			<p class="p text-xl">You lost!</p>
 		</div>
 	{/if}
