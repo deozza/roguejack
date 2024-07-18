@@ -42,7 +42,7 @@
 				<strong class="text-xl uppercase">Roguejack</strong>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
-				<span>v0.6.0</span>
+				<span>v0.6.2</span>
 				<button class="btn" on:click={() => enterPause()}>
 					<Icon icon={pauseIcon} width="32" height="32" />
 				</button>
