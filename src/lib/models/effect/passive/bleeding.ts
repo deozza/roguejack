@@ -15,6 +15,7 @@ export default class Bleeding implements EffectInterface {
 	enableOnEnemyTurnState: string = 'TurnInitState';
 	icon: string = 'game-icons:blood';
 	rarity: Rarities = 'rare';
+	active: boolean = false;
 
 	public effect(data: object): void {
 		const battleState: StateMachineInterface = get(battleMachineState);

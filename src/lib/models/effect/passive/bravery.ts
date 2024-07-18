@@ -14,6 +14,7 @@ export default class Bravery implements EffectInterface {
 	enableOnEnemyTurnState: string = 'TurnIdleState';
 	icon: string = 'game-icons:sword-brandish';
 	rarity: Rarities = 'rare';
+	active: boolean = false;
 
 	public effect(data: object): void {
 		const game: Game = get(gameStore);

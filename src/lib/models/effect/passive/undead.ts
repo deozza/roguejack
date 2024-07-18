@@ -11,6 +11,7 @@ export default class Undead implements EffectInterface {
 	enableOnEnemyTurnState: string = 'TurnFightingState';
 	icon: string = 'game-icons:half-dead';
 	rarity: Rarities = 'rare';
+	active: boolean = false;
 
 	public effect(data: object): void {
 		if (data['user'] === 'player') {

@@ -16,6 +16,7 @@ export default class Poisoned implements EffectInterface {
 	enableOnEnemyTurnState: string = 'TurnDrawingState';
 	icon: string = 'game-icons:poison-bottle';
 	rarity: Rarities = 'rare';
+	active: boolean = false;
 
 	public effect(data: object): void {
 		const battleState: StateMachineInterface = get(battleMachineState);

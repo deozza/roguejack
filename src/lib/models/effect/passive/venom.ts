@@ -15,6 +15,7 @@ export default class Venom implements EffectInterface {
 	enableOnEnemyTurnState: string = 'TurnFightingState';
 	icon: string = 'game-icons:fangs';
 	rarity: Rarities = 'rare';
+	active: boolean = false;
 
 	public effect(data: object): void {
 		const game: Game = get(gameStore);

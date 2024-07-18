@@ -11,6 +11,7 @@ export default class SharpSword implements EffectInterface {
 	enableOnEnemyTurnState: string = 'TurnFightingState';
 	icon: string = 'game-icons:piercing-sword';
 	rarity: Rarities = 'rare';
+	active: boolean = false;
 
 	public effect(data: object): void {
 		let bonusPower: number = 0;

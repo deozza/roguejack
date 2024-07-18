@@ -11,7 +11,7 @@
 	import type { Character } from '$lib/models/character/model';
 	import { fade } from 'svelte/transition';
 	import { gameStore } from '$lib/stores/game';
-	import PassiveEffect from '$lib/ui/effect/PassiveEffect.svelte';
+	import PassiveSideEffects from '$lib/ui/effect/PassiveSideEffects.svelte';
 
 	export let player: Character;
 	export let playerHand: Hand;
@@ -70,9 +70,7 @@
 			? 'flex-row-reverse'
 			: 'flex-row'} flex-wrap items-center justify-start w-full space-x-5 min-h-16"
 	>
-		{#each passiveEffects as sideEffect}
-			<PassiveEffect {sideEffect} />
-		{/each}
+		<PassiveSideEffects {passiveEffects} />
 	</div>
 	<h3
 		class="h3 uppercase flex flex-col items-center justify-center"

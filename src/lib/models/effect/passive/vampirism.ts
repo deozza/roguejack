@@ -11,6 +11,7 @@ export default class Vampirism implements EffectInterface {
 	enableOnEnemyTurnState: string = 'TurnFightingState';
 	icon: string = 'game-icons:bleeding-wound';
 	rarity: Rarities = 'rare';
+	active: boolean = false;
 
 	public effect(data: object): void {
 		let healNumber: number = 0;

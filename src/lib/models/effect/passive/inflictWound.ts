@@ -15,6 +15,7 @@ export default class InflictWound implements EffectInterface {
 	enableOnEnemyTurnState: string = 'TurnFightingState';
 	icon: string = 'game-icons:scar-wound';
 	rarity: Rarities = 'rare';
+	active: boolean = false;
 
 	public effect(data: object): void {
 		const game: Game = get(gameStore);
