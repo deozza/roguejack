@@ -6,25 +6,7 @@ import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideE
 export class TurnDamageState implements StateInterface {
 	public name: string = 'TurnDamageState';
 
-	public onStateEnter = (data: object): void => {
-		const playerPassiveEffects = get(playerSideEffectsStore);
-		const playerStateToEnable: string =
-			data['user'] === 'player' ? 'enableOnPlayerTurnState' : 'enableOnEnemyTurnState';
-		playerPassiveEffects.forEach((sideEffect) => {
-			if (sideEffect[playerStateToEnable] === this.name) {
-				sideEffect.effect(data);
-			}
-		});
-
-		const enemyPassiveEffects = get(enemySideEffectsStore);
-		const enemyStateToEnable: string =
-			data['user'] === 'player' ? 'enableOnPlayerTurnState' : 'enableOnEnemyTurnState';
-		enemyPassiveEffects.forEach((sideEffect) => {
-			if (sideEffect[enemyStateToEnable] === this.name) {
-				sideEffect.effect(data);
-			}
-		});
-	};
+	public onStateEnter = (data: object): void => {};
 
 	public onStateExecute(data: object): void {
 		gameStore.updateFightData();

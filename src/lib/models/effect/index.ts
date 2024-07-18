@@ -31,7 +31,6 @@ export const passiveEffects: EffectInterface[] = [
 ];
 
 export const triggerEffects: EffectInterface[] = [
-	new PackOfCards(),
 	new Knife(),
 	new Dagger(),
 	new Sword(),

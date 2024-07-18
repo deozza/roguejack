@@ -8,6 +8,8 @@
 	import CampScreen from '$lib/ui/gameLayout/screens/CampScreen.svelte';
 	import GameLostScreen from '$lib/ui/gameLayout/screens/GameLostScreen.svelte';
 	import ShopScreen from '$lib/ui/gameLayout/screens/ShopScreen.svelte';
+	import type { BattleLostState, BattleWonState } from '$lib/models/stateMachine/battle/states';
+	import { scrollToElement } from '$lib/utils';
 
 	const screensToRender: Record<string, SvelteComponent> = {
 		GameIdleState: HomeScreen,
