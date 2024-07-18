@@ -15,7 +15,7 @@
 		BattlePlayingState: BattleScreen,
 		BattleWonState: BattleScreen,
 		BattleLostState: BattleScreen,
-		BattleCampingState: ShopScreen,
+		BattleCampingState: CampScreen,
 		BattleShopingState: ShopScreen,
 		GameLostState: GameLostScreen
 	};
