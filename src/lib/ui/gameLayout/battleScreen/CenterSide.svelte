@@ -32,26 +32,36 @@
 			</button>
 		{/if}
 
-		{#if endTurnStates.includes($playerTurnMachineState.currentState.name)}
-			<button
-				in:fade={{ delay: 250, duration: 300 }}
-				class="btn btn-xl variant-filled-warning"
-				on:click={() => newTurn()}
-			>
-				New turn
-			</button>
-		{/if}
+{#if $battleMachineState.currentState.name === 'BattlePlayingState'}
+	{#if $playerTurnMachineState.currentState.name === 'TurnPlayingState'}
+		<button
+			transition:fade={{ delay: 250, duration: 300 }}
+			class="btn btn-xl variant-filled-error"
+			on:click={() => fight()}
+		>
+			Fight
+		</button>
 	{/if}
 
-	{#if $battleMachineState.currentState.name === 'BattleWonState'}
-		<div in:fade={{ delay: 250, duration: 300 }} class="variant-ghost-success p-4">
-			<p class="p text-xl">You won!</p>
-		</div>
+	{#if endTurnStates.includes($playerTurnMachineState.currentState.name)}
+		<button
+			in:fade={{ delay: 250, duration: 300 }}
+			class="btn btn-xl variant-filled-warning"
+			on:click={() => newTurn()}
+		>
+			New turn
+		</button>
 	{/if}
+{/if}
 
-	{#if $battleMachineState.currentState.name === 'BattleLostState'}
-		<div in:fade={{ delay: 250, duration: 300 }} class="variant-ghost-error p-4">
-			<p class="p text-xl">You lost!</p>
-		</div>
-	{/if}
+{#if $battleMachineState.currentState.name === 'BattleWonState'}
+	<div in:fade={{ delay: 250, duration: 300 }} class="variant-ghost-success p-4">
+		<p class="p text-xl">You won!</p>
+	</div>
+{/if}
 
+{#if $battleMachineState.currentState.name === 'BattleLostState'}
+	<div in:fade={{ delay: 250, duration: 300 }} class="variant-ghost-error p-4">
+		<p class="p text-xl">You lost!</p>
+	</div>
+{/if}

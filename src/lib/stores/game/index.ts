@@ -35,14 +35,14 @@ function createGameStore() {
 
 			const battle = new Battle(enemy, game.battles.length + 1);
 			game.addBattle(battle);
+			game.player.deck.shuffleDeck();
 			return game;
 		});
 	};
 
 	const generateEnemy = (game: Game): Character => {
 		const enemy: Character = new Character();
-		const enemyLevel: number = Math.max(Math.round(game.battles.length / 5), 1);
-
+		const enemyLevel: number = Math.max(Math.ceil(game.battles.length / 10), 1);
 		let enemyModels: object[] = [];
 
 		if ((game.battles.length + 1) % 10 === 0) {

@@ -27,11 +27,11 @@ export class BattleMachineState implements StateMachineInterface {
 			LOSE: BattleLostState
 		},
 		BattleWonState: {
-			CAMP: BattleCampingState,
-			SHOP: BattleShopingState
+			CAMP: BattleCampingState
 		},
 		BattleCampingState: {
-			NEW_BATTLE: BattleInitState
+			NEW_BATTLE: BattleInitState,
+			SHOP: BattleShopingState
 		},
 		BattleShopingState: {
 			NEW_BATTLE: BattleInitState
@@ -45,6 +45,7 @@ export class BattleMachineState implements StateMachineInterface {
 		const currentStateName = this.currentState.name;
 		const nextState = this.stateMachine[currentStateName][event.name];
 		if (nextState) {
+			this.currentState.onStateExit(event.data);
 			this.currentState = new nextState();
 		}
 	}

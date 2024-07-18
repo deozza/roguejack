@@ -16,7 +16,7 @@ export default class FireballScroll implements EffectInterface {
 		if (data['user'] === 'player') {
 			gameStore.update((game) => {
 				game.getCurrentBattle()?.enemy.takeDamage(10);
-				for(let i = 0; i < 5; i++) {
+				for (let i = 0; i < 5; i++) {
 					game.player.deck.drawTopCard();
 				}
 				return game;
@@ -25,7 +25,7 @@ export default class FireballScroll implements EffectInterface {
 		} else {
 			gameStore.update((game) => {
 				game.player.takeDamage(10);
-				for(let i = 0; i < 5; i++) {
+				for (let i = 0; i < 5; i++) {
 					game.getCurrentBattle()?.enemy.deck.drawTopCard();
 				}
 				return game;

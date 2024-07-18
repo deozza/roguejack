@@ -1,6 +1,5 @@
 <script lang="ts">
 	import HomeScreen from '$lib/ui/gameLayout/screens/HomeScreen.svelte';
-	import { GamePlayingState } from '$lib/models/stateMachine/game/states';
 	import CharacterSelectScreen from '$lib/ui/gameLayout/screens/CharacterSelectScreen.svelte';
 	import type { SvelteComponent } from 'svelte';
 	import BattleScreen from '$lib/ui/gameLayout/screens/BattleScreen.svelte';

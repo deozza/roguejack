@@ -1,7 +1,7 @@
 {
 	"name": "Vampire bat",
 	"level": 1,
-	"maxHealth": 5,
+	"maxHealth": 7,
 	"minAttack": 12,
 	"deck": {
 		"suits": ["heart"],

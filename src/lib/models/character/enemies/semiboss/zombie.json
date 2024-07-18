@@ -1,7 +1,7 @@
 {
 	"name": "Zombie",
 	"level": 2,
-	"maxHealth": 5,
+	"maxHealth": 7,
 	"minAttack": 14,
 	"deck": {
 		"suits": ["spade", "club"],
