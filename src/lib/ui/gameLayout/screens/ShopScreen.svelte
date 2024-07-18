@@ -12,10 +12,9 @@
 	import type EffectInterface from '$lib/models/effect/effectInterface';
 	import { triggerEffects } from '$lib/models/effect';
 	import { randomIntFromInterval } from '$lib/utils';
-	import {
-		raritiesWeight,
-		type RaritiesWeight
-	} from '$lib/models/effect/raritiesType';
+	import { raritiesWeight, type RaritiesWeight } from '$lib/models/effect/raritiesType';
+	import { TurnMachineState } from '$lib/models/stateMachine/turn/turnMachineState';
+	import { gameMachineState } from '$lib/stores/stateMachine/game';
 
 	let openedDeckView: boolean = false;
 	let openedDiscardView: boolean = false;
@@ -29,8 +28,12 @@
 		openedDiscardView = !openedDiscardView;
 	}
 
-	function getPriceByRarity(rarity: string): number {
-		switch (rarity) {
+	function getPriceByRarity(object: EffectInterface): number {
+		if (object.technicalName === 'packOfCards') {
+			return 0;
+		}
+
+		switch (object.rarity) {
 			case 'common':
 				return 3;
 			case 'uncommon':
@@ -77,8 +80,13 @@
 			return;
 		}
 
+		if (object.technicalName === 'packOfCards') {
+			object.effect({ user: 'player' });
+			return;
+		}
+
 		gameStore.update((game) => {
-			for(let i = 0; i < getPriceByRarity(object.rarity); i++) {
+			for (let i = 0; i < getPriceByRarity(object.rarity); i++) {
 				game.player.deck.drawTopCard();
 			}
 			return game;
@@ -86,7 +94,9 @@
 
 		gameStore.addToInventory(object, 'player');
 
-		objectsToBuy = objectsToBuy.filter((objectToBuy) => objectToBuy.technicalName !== object.technicalName);
+		objectsToBuy = objectsToBuy.filter(
+			(objectToBuy) => objectToBuy.technicalName !== object.technicalName
+		);
 	}
 
 	function startNewBattle() {
@@ -98,9 +108,24 @@
 		$battleMachineState.listenToEvent({ name: 'PLAY', data: null });
 		$battleMachineState = $battleMachineState;
 
+		playerTurnMachineState.set(new TurnMachineState());
+
 		$playerTurnMachineState.listenToEvent({ name: 'NEW_TURN', data: null });
 		$playerTurnMachineState = $playerTurnMachineState;
-		$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
+
+		try {
+			$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
+		} catch (error) {
+			$playerTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
+			$playerTurnMachineState = $playerTurnMachineState;
+
+			$battleMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
+			$battleMachineState = $battleMachineState;
+
+			$gameMachineState.listenToEvent({ name: 'END_GAME', data: null });
+			$gameMachineState = $gameMachineState;
+			return;
+		}
 
 		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: null });
 		$playerTurnMachineState = $playerTurnMachineState;
@@ -148,34 +173,36 @@
 					</button>
 				</div>
 			</div>
-			<div class="flex flex-col  items-center justify-center w-full md:w-9/12 h-full">
+			<div class="flex flex-col items-center justify-center w-full md:w-9/12 h-full">
 				<h1 class="h1 max-sm:hidden">Shop</h1>
-				<div class="flex flex-col items-center justify-center w-full h-full overflow-y-auto space-y-5">
+				<div
+					class="flex flex-col items-center justify-center w-full h-full overflow-y-auto space-y-5"
+				>
 					<p class="p italic text-xl">Exchange the top cards of your deck to get powerful items</p>
 
 					{#each objectsToBuy as object}
-						<div class="flex flex-col items-center justify-around w-9/12 p-4 rounded-md text-center"
-						class:variant-ringed-tertiary={object.rarity === 'common'}
-						class:variant-ringed-primary={object.rarity === 'uncommon'}
-						class:variant-ringed-secondary={object.rarity === 'rare'}
-						class:variant-ringed-warning={object.rarity === 'epic'}
-						class:variant-ringed-danger={object.rarity === 'legendary'}
-						
+						<div
+							class="flex flex-col items-center justify-around w-9/12 p-4 rounded-md text-center"
+							class:variant-ringed-tertiary={object.rarity === 'common'}
+							class:variant-ringed-primary={object.rarity === 'uncommon'}
+							class:variant-ringed-secondary={object.rarity === 'rare'}
+							class:variant-ringed-warning={object.rarity === 'epic'}
+							class:variant-ringed-danger={object.rarity === 'legendary'}
 						>
 							<p class="p text-xl uppercase">{object.name}</p>
 							<p class="p">{object.description}</p>
-							
+
 							<button
-							class="btn variant-ghost-warning uppercase rounded-md mt-6"
-							on:click={() => buyObject(object)}
+								class="btn variant-ghost-warning uppercase rounded-md mt-6"
+								on:click={() => buyObject(object)}
 							>
-								Buy ({getPriceByRarity(object.rarity)} <Icon icon="game-icons:card-burn" width="32" height="32" />)
-							</button
-						>
+								Buy ({getPriceByRarity(object)}
+								<Icon icon="game-icons:card-burn" width="32" height="32" />)
+							</button>
 						</div>
 					{/each}
 
-					<button 
+					<button
 						class="btn rounded-md variant-filled-tertiary uppercase"
 						on:click={() => startNewBattle()}
 					>

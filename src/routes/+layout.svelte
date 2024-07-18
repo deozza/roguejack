@@ -7,6 +7,7 @@
 	import { storePopup } from '@skeletonlabs/skeleton';
 	import PauseScreen from '$lib/ui/gameLayout/screens/PauseScreen.svelte';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
+	import { gameStore } from '$lib/stores/game';
 	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
 	let pauseIcon: string = 'game-icons:pause-button';
@@ -25,6 +26,8 @@
 	function quit() {
 		$gameMachineState.listenToEvent({ name: 'QUIT_GAME', data: null });
 		$gameMachineState = $gameMachineState;
+
+		gameStore.reset();
 
 		enterPause();
 	}

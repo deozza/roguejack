@@ -19,7 +19,12 @@ export default class SharpSword implements EffectInterface {
 		let bonusPower: number = 0;
 		if (data['user'] === 'player') {
 			gameStore.update((game) => {
-				if (game.getCurrentBattle().getCurrentTurn().playerHand.cards.some((card) => card.suit === 'spade')) {
+				if (
+					game
+						.getCurrentBattle()
+						.getCurrentTurn()
+						.playerHand.cards.some((card) => card.suit === 'spade')
+				) {
 					bonusPower = 1;
 				}
 				game.getCurrentBattle().getCurrentTurn().fight.basePowerForPlayer += bonusPower;
@@ -27,7 +32,12 @@ export default class SharpSword implements EffectInterface {
 			});
 		} else {
 			gameStore.update((game) => {
-				if (game.getCurrentBattle().getCurrentTurn().enemyHand.cards.some((card) => card.suit === 'spade')) {
+				if (
+					game
+						.getCurrentBattle()
+						.getCurrentTurn()
+						.enemyHand.cards.some((card) => card.suit === 'spade')
+				) {
 					bonusPower = 1;
 				}
 				game.getCurrentBattle().getCurrentTurn().fight.basePowerForEnemy += bonusPower;

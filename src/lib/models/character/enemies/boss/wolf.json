@@ -1,8 +1,8 @@
 {
 	"name": "Wolf",
 	"level": 1,
-	"maxHealth": 10,
-	"minAttack": 14,
+	"maxHealth": 15,
+	"minAttack": 11,
 	"deck": {
 		"suits": ["heart", "spade"],
 		"values": ["A", 2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"]

@@ -1,10 +1,13 @@
 <script>
+	import { gameStore } from '$lib/stores/game';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
 	import { fade } from 'svelte/transition';
 
 	function quit() {
 		$gameMachineState.listenToEvent({ name: 'QUIT_GAME', data: null });
 		$gameMachineState = $gameMachineState;
+
+		gameStore.reset();
 	}
 </script>
 

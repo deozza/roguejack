@@ -11,6 +11,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import type { Character } from '$lib/models/character/model';
 	import { fade } from 'svelte/transition';
+	import { gameStore } from '$lib/stores/game';
 
 	export let player: Character;
 	export let playerHand: Hand;
@@ -23,7 +24,6 @@
 
 	const dispatch = createEventDispatcher();
 	let openedInventory: boolean = false;
-
 
 	function popupClick(target: string): PopupSettings {
 		return {
@@ -40,7 +40,9 @@
 
 {#if openedInventory === true}
 	<div
-		class="absolute max-sm:top-0 max-sm:left-0 max-sm:right-0 {isEnemy ? 'md:right-20' : 'md:left-20'} z-10 bg-surface-500/90"
+		class="absolute max-sm:top-0 max-sm:left-0 max-sm:right-0 {isEnemy
+			? 'md:right-20'
+			: 'md:left-20'} z-10 bg-surface-500/90"
 		transition:fade={{ delay: 250, duration: 300 }}
 	>
 		<div class="flex flex-col items-center justify-center h-full w-full">
@@ -77,7 +79,7 @@
 			: 'flex-row'} flex-wrap items-center justify-start w-full space-x-5 min-h-16"
 	>
 		{#each passiveEffects as sideEffect}
-			<div class="card p-4 variant-filled-primary z-10" data-popup="{sideEffect.technicalName}">
+			<div class="card p-4 variant-filled-primary z-10" data-popup={sideEffect.technicalName}>
 				<p>{sideEffect.name}</p>
 				<p>{sideEffect.description}</p>
 				<div class="arrow variant-filled-primary" />
@@ -87,12 +89,29 @@
 			</button>
 		{/each}
 	</div>
-	<h3 class="h3 uppercase flex flex-row items-center justify-between">
-		<span>{player.name}</span>
-		<button class="btn" on:click={() => openInventory()}>
-			<Icon icon="game-icons:backpack" width="64" height="64" />
-		</button>
+	<h3
+		class="h3 uppercase flex flex-col items-center justify-center"
+		class:text-orange-500={isEnemy &&
+			$gameStore.battles.length % 5 === 0 &&
+			$gameStore.battles.length % 10 !== 0}
+		class:text-red-500={isEnemy && $gameStore.battles.length % 10 === 0}
+	>
+		{#if isEnemy}
+			{#if $gameStore.battles.length % 5 === 0 && $gameStore.battles.length % 10 !== 0}
+				<Icon icon="game-icons:crown" width="24" height="24" />
+			{/if}
+			{#if $gameStore.battles.length % 10 === 0}
+				<Icon icon="game-icons:burning-skull" width="24" height="24" />
+			{/if}
+		{/if}
+		<span>
+			{player.name}
+		</span>
 	</h3>
+
+	<button class="btn" on:click={() => openInventory()}>
+		<Icon icon="game-icons:backpack" width="64" height="64" />
+	</button>
 	<Healthbar
 		currentHealth={player.currentHealth}
 		maxHealth={player.maxHealth}
@@ -123,8 +142,8 @@
 		</div>
 		<div
 			class="flex {isEnemy
-			? 'flex-row-reverse'
-			: 'flex-row'} items-center justify-start overflow-x-auto w-1/2 md:w-8/12 mx-5"
+				? 'flex-row-reverse'
+				: 'flex-row'} items-center justify-start overflow-x-auto w-1/2 md:w-8/12 mx-5"
 		>
 			{#each [...playerHand.cards].reverse() as card}
 				<PlayingCard {card} />

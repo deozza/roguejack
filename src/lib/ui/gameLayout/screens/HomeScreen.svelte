@@ -1,8 +1,13 @@
 <script lang="ts">
 	import { GameCharacterSelectionState } from '$lib/models/stateMachine/game/states';
 	import { gameStore } from '$lib/stores/game';
+	import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
 	import { fade } from 'svelte/transition';
+
+	gameStore.reset();
+	playerSideEffectsStore.set([]);
+	enemySideEffectsStore.set([]);
 
 	function startNewGame() {
 		$gameMachineState.listenToEvent({ name: 'NEW_GAME', data: null });

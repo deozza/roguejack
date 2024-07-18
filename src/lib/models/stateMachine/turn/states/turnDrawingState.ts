@@ -1,5 +1,7 @@
 import { gameStore } from '$lib/stores/game';
+import { get } from 'svelte/store';
 import { type StateInterface } from '../../stateInterface';
+import { playerSideEffectsStore } from '$lib/stores/sideEffects';
 
 export class TurnDrawingState implements StateInterface {
 	public name: string = 'TurnDrawingState';
@@ -19,7 +21,14 @@ export class TurnDrawingState implements StateInterface {
 		}
 	}
 
-	public onStateExit = (): void => {
-		console.log(` ${this.name} exited`);
+	public onStateExit = (data: object): void => {
+		const passiveEffects = get(playerSideEffectsStore);
+		const stateToEnable: string =
+			data['user'] === 'player' ? 'enableOnPlayerTurnState' : 'enableOnEnemyTurnState';
+		passiveEffects.forEach((sideEffect) => {
+			if (sideEffect[stateToEnable] === this.name) {
+				sideEffect.effect(data);
+			}
+		});
 	};
 }

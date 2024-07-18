@@ -1,17 +1,26 @@
 import { gameStore } from '$lib/stores/game';
 import { get } from 'svelte/store';
 import { type StateInterface } from '../../stateInterface';
-import { playerSideEffectsStore } from '$lib/stores/sideEffects';
+import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 
 export class TurnDamageState implements StateInterface {
 	public name: string = 'TurnDamageState';
 
 	public onStateEnter = (data: object): void => {
-		const passiveEffects = get(playerSideEffectsStore);
-		const stateToEnable: string =
+		const playerPassiveEffects = get(playerSideEffectsStore);
+		const playerStateToEnable: string =
 			data['user'] === 'player' ? 'enableOnPlayerTurnState' : 'enableOnEnemyTurnState';
-		passiveEffects.forEach((sideEffect) => {
-			if (sideEffect[stateToEnable] === this.name) {
+		playerPassiveEffects.forEach((sideEffect) => {
+			if (sideEffect[playerStateToEnable] === this.name) {
+				sideEffect.effect(data);
+			}
+		});
+
+		const enemyPassiveEffects = get(enemySideEffectsStore);
+		const enemyStateToEnable: string =
+			data['user'] === 'player' ? 'enableOnPlayerTurnState' : 'enableOnEnemyTurnState';
+		enemyPassiveEffects.forEach((sideEffect) => {
+			if (sideEffect[enemyStateToEnable] === this.name) {
 				sideEffect.effect(data);
 			}
 		});
@@ -21,7 +30,23 @@ export class TurnDamageState implements StateInterface {
 		gameStore.updateFightData();
 	}
 
-	public onStateExit = (): void => {
-		console.log(` ${this.name} exited`);
+	public onStateExit = (data: object): void => {
+		const playerPassiveEffects = get(playerSideEffectsStore);
+		const playerStateToEnable: string =
+			data['user'] === 'player' ? 'enableOnPlayerTurnState' : 'enableOnEnemyTurnState';
+		playerPassiveEffects.forEach((sideEffect) => {
+			if (sideEffect[playerStateToEnable] === this.name) {
+				sideEffect.effect(data);
+			}
+		});
+
+		const enemyPassiveEffects = get(enemySideEffectsStore);
+		const enemyStateToEnable: string =
+			data['user'] === 'player' ? 'enableOnPlayerTurnState' : 'enableOnEnemyTurnState';
+		enemyPassiveEffects.forEach((sideEffect) => {
+			if (sideEffect[enemyStateToEnable] === this.name) {
+				sideEffect.effect(data);
+			}
+		});
 	};
 }

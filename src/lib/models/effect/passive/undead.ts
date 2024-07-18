@@ -15,14 +15,24 @@ export default class Undead implements EffectInterface {
 	public effect(data: object): void {
 		if (data['user'] === 'player') {
 			gameStore.update((game) => {
-				if (game.getCurrentBattle().getCurrentTurn().enemyHand.cards.some((card) => card.suit === 'heart' || card.suit === 'diamond')) {
+				if (
+					game
+						.getCurrentBattle()
+						.getCurrentTurn()
+						.enemyHand.cards.some((card) => card.suit === 'heart' || card.suit === 'diamond')
+				) {
 					game.getCurrentBattle().getCurrentTurn().fight.multiplierForEnemy = 0;
 				}
 				return game;
 			});
 		} else {
 			gameStore.update((game) => {
-				if (game.getCurrentBattle().getCurrentTurn().playerHand.cards.some((card) => card.suit === 'heart' || card.suit === 'diamond')) {
+				if (
+					game
+						.getCurrentBattle()
+						.getCurrentTurn()
+						.playerHand.cards.some((card) => card.suit === 'heart' || card.suit === 'diamond')
+				) {
 					bonusPower = 1;
 				}
 				game.getCurrentBattle().getCurrentTurn().fight.multiplierForPlayer = 0;
