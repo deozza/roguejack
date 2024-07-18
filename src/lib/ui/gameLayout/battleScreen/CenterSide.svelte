@@ -21,6 +21,16 @@
 		dispatch('newTurn');
 	}
 </script>
+	{#if $battleMachineState.currentState.name === 'BattlePlayingState'}
+		{#if $playerTurnMachineState.currentState.name === 'TurnPlayingState'}
+			<button
+				transition:fade={{ delay: 250, duration: 300 }}
+				class="btn btn-xl variant-filled-error"
+				on:click={() => fight()}
+			>
+				Fight
+			</button>
+		{/if}
 
 {#if $battleMachineState.currentState.name === 'BattlePlayingState'}
 	{#if $playerTurnMachineState.currentState.name === 'TurnPlayingState'}

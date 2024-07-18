@@ -84,6 +84,30 @@
 		return;
 	}
 
+	function getObjectToLoot(): EffectInterface {
+		const rarityWeightValue: number = Math.floor(Math.random() * 100 + 1);
+
+		const rarity: RaritiesWeight | undefined = raritiesWeight.find(
+			(rarity) => rarity.weight >= rarityWeightValue
+		);
+		if (rarity === undefined) {
+			throw new Error(`Rarity ${rarityWeightValue} not found`);
+		}
+
+		const filteredEffects: EffectInterface[] = triggerEffects.filter(
+			(triggerEffect: EffectInterface) => triggerEffect.rarity === rarity.rarity
+		);
+
+		const randomEffectIndex: number = Math.floor(Math.random() * filteredEffects.length);
+		return filteredEffects[randomEffectIndex];
+	}
+
+	function addToInventory(object: EffectInterface) {
+		gameStore.addToInventory(object, 'player');
+
+		startNewBattle();
+	}
+
 	function startNewBattle() {
 		$battleMachineState.listenToEvent({ name: 'NEW_BATTLE', data: null });
 		$battleMachineState = $battleMachineState;

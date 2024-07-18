@@ -21,7 +21,7 @@ export default class EarthquakeScroll implements EffectInterface {
 				game.getCurrentBattle()?.enemy.takeDamage(10);
 				return game;
 			});
-
+      
 			enemyTurnMachineState.update((state: TurnMachineState) => {
 				state.currentState = new TurnLostState();
 				return state;

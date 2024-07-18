@@ -35,7 +35,6 @@
 		return screensToRender[battleCurrentState.name];
 	}
 </script>
-
 <div id="top">
 	<svelte:component this={screenToRender} />
 </div>

@@ -85,6 +85,7 @@ function createGameStore() {
 
 	const playerDrawCard = () => {
 		update((game) => {
+
 			let card: Card | null = game.player.deck.drawTopCard();
 			if (card === null) {
 				throw new Error('PLAYER_EMPTY_DECK');

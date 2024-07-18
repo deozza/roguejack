@@ -27,7 +27,8 @@ export const passiveEffects: EffectInterface[] = [
 	new Venom(),
 	new Poisoned(),
 	new InflictWound(),
-	new Bleeding()
+	new Bleeding(),
+	new Undead()
 ];
 
 export const triggerEffects: EffectInterface[] = [
