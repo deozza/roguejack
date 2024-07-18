@@ -292,9 +292,6 @@
 					basePower={$gameStore.getCurrentBattle().getCurrentTurn().fight.basePowerForEnemy}
 					currentStateName={$enemyTurnMachineState.currentState.name}
 				/>
-				<BattlePower hand={$gameStore.getCurrentBattle().getCurrentTurn().playerHand} basePower={$gameStore.getCurrentBattle().getCurrentTurn().fight.basePowerForPlayer} currentStateName={$playerTurnMachineState.currentState.name} />
-				<CenterSide on:fight={() => fight()} on:newTurn={async () => await newTurn()}/>
-				<BattlePower hand={$gameStore.getCurrentBattle().getCurrentTurn().enemyHand} basePower={$gameStore.getCurrentBattle().getCurrentTurn().fight.basePowerForEnemy} currentStateName={$enemyTurnMachineState.currentState.name} />
 			</div>
 		</div>
 
