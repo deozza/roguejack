@@ -4,28 +4,28 @@ import type EffectInterface from '../effectInterface';
 import { gameStore } from '$lib/stores/game';
 import type { Rarities } from '../raritiesType';
 import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
-import Poisoned from './poisoned';
+import Bleeding from './bleeding';
 
-export default class Venom implements EffectInterface {
-	technicalName: string = 'venom';
-	name: string = 'Venom';
-	description: string = 'Inflicts poison when attacking';
+export default class InflictWound implements EffectInterface {
+	technicalName: string = 'inflictWound';
+	name: string = 'Inflict wound';
+	description: string = 'Inflicts bleeding when attacking';
 	enableOnBattleState: string = 'BattleInitState';
 	enableOnPlayerTurnState: string = 'TurnWonState';
 	enableOnEnemyTurnState: string = 'TurnWonState';
-	icon: string = 'game-icons:fangs';
+	icon: string = 'game-icons:scar-wound';
 	rarity: Rarities = 'rare';
 
 	public effect(data: object): void {
 		const game: Game = get(gameStore);
 		if (data['user'] === 'player') {
 			enemySideEffectsStore.update((sideEffects) => {
-				sideEffects.push(new Poisoned());
+				sideEffects.push(new Bleeding());
 				return sideEffects;
 			});
 		} else {
 			playerSideEffectsStore.update((sideEffects) => {
-				sideEffects.push(new Poisoned());
+				sideEffects.push(new Bleeding());
 				return sideEffects;
 			});
 		}

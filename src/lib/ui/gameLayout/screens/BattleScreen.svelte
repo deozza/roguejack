@@ -164,6 +164,7 @@
 				return;
 			}
 		}
+		$playerTurnMachineState.currentState.onStateExit({ user: 'player'})
 
 		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: null });
 		$playerTurnMachineState = $playerTurnMachineState;

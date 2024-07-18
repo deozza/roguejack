@@ -15,6 +15,7 @@
 	import { raritiesWeight, type RaritiesWeight } from '$lib/models/effect/raritiesType';
 	import { TurnMachineState } from '$lib/models/stateMachine/turn/turnMachineState';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
+	import PackOfCards from '$lib/models/effect/trigger/packOfCards';
 
 	let openedDeckView: boolean = false;
 	let openedDiscardView: boolean = false;
@@ -54,6 +55,10 @@
 		for (let i = 0; i < 3; i++) {
 			objectsToBuy.push(getObjectToBuy());
 		}
+
+		const packOfCards: EffectInterface = new PackOfCards();
+		objectsToBuy.push(packOfCards);
+
 		return objectsToBuy;
 	}
 
@@ -82,6 +87,9 @@
 
 		if (object.technicalName === 'packOfCards') {
 			object.effect({ user: 'player' });
+			objectsToBuy = objectsToBuy.filter(
+				(objectToBuy) => objectToBuy.technicalName !== object.technicalName
+			);
 			return;
 		}
 

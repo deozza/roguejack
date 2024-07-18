@@ -1,6 +1,8 @@
 import MasteryOverDeath from '$lib/models/effect/passive/masteryOverDeath';
 import type EffectInterface from './effectInterface';
+import Bleeding from './passive/bleeding';
 import Bravery from './passive/bravery';
+import InflictWound from './passive/inflictWound';
 import Poisoned from './passive/poisoned';
 import SharpSword from './passive/sharpSword';
 import Undead from './passive/undead';
@@ -23,7 +25,9 @@ export const passiveEffects: EffectInterface[] = [
 	new SharpSword(),
 	new Undead(),
 	new Venom(),
-	new Poisoned()
+	new Poisoned(),
+	new InflictWound(),
+	new Bleeding()
 ];
 
 export const triggerEffects: EffectInterface[] = [
@@ -35,5 +39,6 @@ export const triggerEffects: EffectInterface[] = [
 	new PotionOfGreaterHealing(),
 	new PotionOfSuperiorfHealing(),
 	new FireballScroll(),
-	new EarthquakeScroll()
+	new EarthquakeScroll(),
+	new PackOfCards()
 ];

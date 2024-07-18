@@ -35,6 +35,7 @@ function createGameStore() {
 
 			const battle = new Battle(enemy, game.battles.length + 1);
 			game.addBattle(battle);
+			game.player.deck.shuffleDeck();
 			return game;
 		});
 	};

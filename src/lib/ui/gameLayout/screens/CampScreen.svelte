@@ -29,12 +29,14 @@
 	}
 
 	function healAtCamp() {
-		gameStore.healPercentages(randomIntFromInterval(0, 5) * 10, 'player');
+		console.log('healAtCamp');
+
+		gameStore.healPercentages((randomIntFromInterval(1, 5) * 10), 'player');
 		goToNextState();
 	}
 
 	function recycleAtCamp() {
-		gameStore.recycleDiscard(randomIntFromInterval(1, 10), 'player');
+		gameStore.recycleDiscard(randomIntFromInterval(2, 10), 'player');
 
 		goToNextState();
 	}
@@ -176,7 +178,7 @@
 						class="flex flex-col items-center justify-around w-9/12 p-4 variant-ringed-tertiary rounded-md text-center"
 					>
 						<p class="p text-xl uppercase">Recycle discard</p>
-						<p class="p">Shuffle between 1 and 10 last cards from discard to deck</p>
+						<p class="p">Shuffle between 2 and 10 last cards from discard to deck</p>
 						<button class="btn variant-ghost-tertiary uppercase" on:click={() => recycleAtCamp()}
 							>select</button
 						>
