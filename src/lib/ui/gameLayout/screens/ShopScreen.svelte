@@ -117,13 +117,13 @@
 
 		playerTurnMachineState.set(new TurnMachineState());
 
-		$playerTurnMachineState.listenToEvent({ name: 'NEW_TURN', data: {user: 'player'} });
+		$playerTurnMachineState.listenToEvent({ name: 'NEW_TURN', data: { user: 'player' } });
 		$playerTurnMachineState = $playerTurnMachineState;
 
 		try {
 			$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
 		} catch (error) {
-			$playerTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: {user: 'player'} });
+			$playerTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: { user: 'player' } });
 			$playerTurnMachineState = $playerTurnMachineState;
 
 			$battleMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
@@ -134,7 +134,7 @@
 			return;
 		}
 
-		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: {user: 'player'} });
+		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: { user: 'player' } });
 		$playerTurnMachineState = $playerTurnMachineState;
 		$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
 

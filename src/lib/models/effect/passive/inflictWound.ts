@@ -20,7 +20,7 @@ export default class InflictWound implements EffectInterface {
 		const game: Game = get(gameStore);
 
 		if (data['user'] === 'player') {
-			if(game.getCurrentBattle()?.getCurrentTurn().fight.playerHasWon === false) {
+			if (game.getCurrentBattle()?.getCurrentTurn().fight.playerHasWon === false) {
 				return;
 			}
 			enemySideEffectsStore.update((sideEffects) => {
@@ -28,7 +28,7 @@ export default class InflictWound implements EffectInterface {
 				return sideEffects;
 			});
 		} else {
-			if(game.getCurrentBattle()?.getCurrentTurn().fight.enemyHasWon === false) {
+			if (game.getCurrentBattle()?.getCurrentTurn().fight.enemyHasWon === false) {
 				return;
 			}
 			playerSideEffectsStore.update((sideEffects) => {

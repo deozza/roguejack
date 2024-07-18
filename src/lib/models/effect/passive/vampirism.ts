@@ -17,7 +17,7 @@ export default class Vampirism implements EffectInterface {
 
 		if (data['user'] === 'player') {
 			gameStore.update((game) => {
-				if(game.getCurrentBattle()?.getCurrentTurn().fight.playerHasWon === false) {
+				if (game.getCurrentBattle()?.getCurrentTurn().fight.playerHasWon === false) {
 					return game;
 				}
 				healNumber = game.getCurrentBattle().getCurrentTurn().fight.baseDamageToEnemy;
@@ -26,7 +26,7 @@ export default class Vampirism implements EffectInterface {
 			});
 		} else {
 			gameStore.update((game) => {
-				if(game.getCurrentBattle()?.getCurrentTurn().fight.enemyHasWon === false) {
+				if (game.getCurrentBattle()?.getCurrentTurn().fight.enemyHasWon === false) {
 					return game;
 				}
 				healNumber = game.getCurrentBattle().getCurrentTurn().fight.baseDamageToPlayer;

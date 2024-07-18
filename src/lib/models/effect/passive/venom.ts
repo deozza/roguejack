@@ -19,8 +19,7 @@ export default class Venom implements EffectInterface {
 	public effect(data: object): void {
 		const game: Game = get(gameStore);
 		if (data['user'] === 'player') {
-
-			if(game.getCurrentBattle()?.getCurrentTurn().fight.playerHasWon === false) {
+			if (game.getCurrentBattle()?.getCurrentTurn().fight.playerHasWon === false) {
 				return;
 			}
 
@@ -29,10 +28,10 @@ export default class Venom implements EffectInterface {
 				return sideEffects;
 			});
 		} else {
-			if(game.getCurrentBattle()?.getCurrentTurn().fight.enemyHasWon === false) {
+			if (game.getCurrentBattle()?.getCurrentTurn().fight.enemyHasWon === false) {
 				return;
 			}
-			
+
 			playerSideEffectsStore.update((sideEffects) => {
 				sideEffects.push(new Poisoned());
 				return sideEffects;

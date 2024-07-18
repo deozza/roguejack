@@ -22,12 +22,12 @@ export class BattleCampingState implements StateInterface {
 			if (sideEffect[stateToEnable] === this.name) {
 				sideEffect.effect(data);
 			}
-		});	
+		});
 
 		enemyPassiveEffects.forEach((sideEffect) => {
 			if (sideEffect[stateToEnable] === this.name) {
 				sideEffect.effect(data);
 			}
-		});	
+		});
 	};
 }

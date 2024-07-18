@@ -25,14 +25,14 @@
 	}
 
 	async function drawCard() {
-		$playerTurnMachineState.listenToEvent({ name: 'DRAW', data: {user: 'player'} });
+		$playerTurnMachineState.listenToEvent({ name: 'DRAW', data: { user: 'player' } });
 		$playerTurnMachineState = $playerTurnMachineState;
 
 		try {
 			await $playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
 		} catch (e: any) {
 			if (e.message === 'PLAYER_EMPTY_DECK') {
-				$playerTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: {user: 'player'} });
+				$playerTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: { user: 'player' } });
 				$playerTurnMachineState = $playerTurnMachineState;
 
 				updateBattleState();
@@ -41,7 +41,7 @@
 		}
 
 		if ($gameStore.getCurrentBattle()?.getCurrentTurn().playerHand.getIsBusted() === true) {
-			$playerTurnMachineState.listenToEvent({ name: 'BUST', data: {user: 'player'} });
+			$playerTurnMachineState.listenToEvent({ name: 'BUST', data: { user: 'player' } });
 			$playerTurnMachineState = $playerTurnMachineState;
 
 			scrollToElement('fighting');
@@ -50,27 +50,27 @@
 			return;
 		}
 
-		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: {user: 'player'} });
+		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: { user: 'player' } });
 		$playerTurnMachineState = $playerTurnMachineState;
 	}
 
 	async function fight() {
 		scrollToElement('fighting');
 
-		$playerTurnMachineState.listenToEvent({ name: 'FIGHT', data: {user: 'player'} });
+		$playerTurnMachineState.listenToEvent({ name: 'FIGHT', data: { user: 'player' } });
 		$playerTurnMachineState = $playerTurnMachineState;
 
-		$enemyTurnMachineState.listenToEvent({ name: 'DRAW', data: {user: 'enemy'} });
+		$enemyTurnMachineState.listenToEvent({ name: 'DRAW', data: { user: 'enemy' } });
 		$enemyTurnMachineState = $enemyTurnMachineState;
 
 		try {
 			await $enemyTurnMachineState.currentState.onStateExecute({ user: 'enemy' });
 		} catch (e: any) {
 			if (e.message === 'ENEMY_EMPTY_DECK') {
-				$enemyTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: {user: 'enemy'} });
+				$enemyTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: { user: 'enemy' } });
 				$enemyTurnMachineState = $enemyTurnMachineState;
 
-				$playerTurnMachineState.listenToEvent({ name: 'WIN', data: {user: 'player'} });
+				$playerTurnMachineState.listenToEvent({ name: 'WIN', data: { user: 'player' } });
 				$playerTurnMachineState = $playerTurnMachineState;
 
 				await updateBattleState();
@@ -79,7 +79,7 @@
 		}
 
 		if ($gameStore.getCurrentBattle()?.getCurrentTurn().enemyHand.getIsBusted() === true) {
-			$enemyTurnMachineState.listenToEvent({ name: 'BUST', data: {user: 'enemy'} });
+			$enemyTurnMachineState.listenToEvent({ name: 'BUST', data: { user: 'enemy' } });
 			$enemyTurnMachineState = $enemyTurnMachineState;
 
 			await calculateAndApplyDamages();
@@ -87,36 +87,36 @@
 			return;
 		}
 
-		$enemyTurnMachineState.listenToEvent({ name: 'PLAY', data: {user: 'enemy'} });
+		$enemyTurnMachineState.listenToEvent({ name: 'PLAY', data: { user: 'enemy' } });
 		$enemyTurnMachineState = $enemyTurnMachineState;
 
-		$enemyTurnMachineState.listenToEvent({ name: 'FIGHT', data: {user: 'enemy'} });
+		$enemyTurnMachineState.listenToEvent({ name: 'FIGHT', data: { user: 'enemy' } });
 		$enemyTurnMachineState = $enemyTurnMachineState;
 
 		await calculateAndApplyDamages();
 	}
 
 	async function calculateAndApplyDamages() {
-		$playerTurnMachineState.listenToEvent({ name: 'DAMAGE', data: {user: 'player'} });
+		$playerTurnMachineState.listenToEvent({ name: 'DAMAGE', data: { user: 'player' } });
 		$playerTurnMachineState = $playerTurnMachineState;
 		$playerTurnMachineState.currentState.onStateExecute({});
 
-		$enemyTurnMachineState.listenToEvent({ name: 'DAMAGE', data: {user: 'enemy'} });
+		$enemyTurnMachineState.listenToEvent({ name: 'DAMAGE', data: { user: 'enemy' } });
 		$enemyTurnMachineState = $enemyTurnMachineState;
 
 		if ($gameStore.getCurrentBattle()?.getCurrentTurn().fight.playerHasWon === true) {
-			$playerTurnMachineState.listenToEvent({ name: 'WIN', data: {user: 'player'} });
+			$playerTurnMachineState.listenToEvent({ name: 'WIN', data: { user: 'player' } });
 			$playerTurnMachineState = $playerTurnMachineState;
 
-			$enemyTurnMachineState.listenToEvent({ name: 'LOSE', data: {user: 'enemy'} });
+			$enemyTurnMachineState.listenToEvent({ name: 'LOSE', data: { user: 'enemy' } });
 			$enemyTurnMachineState = $enemyTurnMachineState;
 		}
 
 		if ($gameStore.getCurrentBattle()?.getCurrentTurn().fight.enemyHasWon === true) {
-			$playerTurnMachineState.listenToEvent({ name: 'LOSE', data: {user: 'player'} });
+			$playerTurnMachineState.listenToEvent({ name: 'LOSE', data: { user: 'player' } });
 			$playerTurnMachineState = $playerTurnMachineState;
 
-			$enemyTurnMachineState.listenToEvent({ name: 'WIN', data: {user: 'enemy'} });
+			$enemyTurnMachineState.listenToEvent({ name: 'WIN', data: { user: 'enemy' } });
 			$enemyTurnMachineState = $enemyTurnMachineState;
 		}
 
@@ -124,10 +124,10 @@
 			$gameStore.getCurrentBattle()?.getCurrentTurn().fight.playerHasWon ===
 			$gameStore.getCurrentBattle()?.getCurrentTurn().fight.enemyHasWon
 		) {
-			$playerTurnMachineState.listenToEvent({ name: 'TIE', data: {user: 'player'} });
+			$playerTurnMachineState.listenToEvent({ name: 'TIE', data: { user: 'player' } });
 			$playerTurnMachineState = $playerTurnMachineState;
 
-			$enemyTurnMachineState.listenToEvent({ name: 'TIE', data: {user: 'enemy'} });
+			$enemyTurnMachineState.listenToEvent({ name: 'TIE', data: { user: 'enemy' } });
 			$enemyTurnMachineState = $enemyTurnMachineState;
 		}
 
@@ -146,14 +146,14 @@
 	async function prepareNewTurn() {
 		scrollToElement('top');
 		gameStore.endTurn();
-		$playerTurnMachineState.listenToEvent({ name: 'NEW_TURN', data: {user: 'player'} });
+		$playerTurnMachineState.listenToEvent({ name: 'NEW_TURN', data: { user: 'player' } });
 		$playerTurnMachineState = $playerTurnMachineState;
 
 		try {
 			await $playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
 		} catch (e: any) {
 			if (e.message === 'PLAYER_EMPTY_DECK') {
-				$playerTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: {user: 'player'} });
+				$playerTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: { user: 'player' } });
 				$playerTurnMachineState = $playerTurnMachineState;
 
 				updateBattleState();
@@ -161,7 +161,7 @@
 			}
 		}
 
-		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: {user: 'player'} });
+		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: { user: 'player' } });
 		$playerTurnMachineState = $playerTurnMachineState;
 		$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
 
