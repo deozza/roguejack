@@ -5,7 +5,7 @@ import type { Rarities } from '../raritiesType';
 export default class Undead implements EffectInterface {
 	technicalName: string = 'undead';
 	name: string = 'Undead';
-	description: string = 'Ignore damages from red cards';
+	description: string = 'Ignore damages if enemy hand does not contain club cards.';
 	enableOnBattleState: string = '';
 	enableOnPlayerTurnState: string = 'TurnFightingState';
 	enableOnEnemyTurnState: string = 'TurnFightingState';
@@ -19,7 +19,7 @@ export default class Undead implements EffectInterface {
 					game
 						.getCurrentBattle()
 						.getCurrentTurn()
-						.enemyHand.cards.some((card) => card.suit === 'heart' || card.suit === 'diamond')
+						.enemyHand.cards.some((card) => card.suit === 'club') === false
 				) {
 					game.getCurrentBattle().getCurrentTurn().fight.multiplierForEnemy = 0;
 				}
@@ -31,11 +31,10 @@ export default class Undead implements EffectInterface {
 					game
 						.getCurrentBattle()
 						.getCurrentTurn()
-						.playerHand.cards.some((card) => card.suit === 'heart' || card.suit === 'diamond')
+						.playerHand.cards.some((card) => card.suit === 'club') === false
 				) {
-					bonusPower = 1;
+					game.getCurrentBattle().getCurrentTurn().fight.multiplierForPlayer = 0;
 				}
-				game.getCurrentBattle().getCurrentTurn().fight.multiplierForPlayer = 0;
 				return game;
 			});
 		}

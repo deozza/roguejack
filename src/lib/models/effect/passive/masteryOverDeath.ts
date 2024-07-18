@@ -17,13 +17,13 @@ export default class MasteryOverDeath implements EffectInterface {
 	public effect(data: object): void {
 		const game: Game = get(gameStore);
 		if (data['user'] === 'player') {
-			const bonusPower: number = Math.floor(game.player.discard.cards.length / 5);
+			const bonusPower: number = Math.floor(game.player.discard.cards.length / 10);
 			gameStore.update((game) => {
 				game.getCurrentBattle().getCurrentTurn().fight.basePowerForPlayer += bonusPower;
 				return game;
 			});
 		} else {
-			const bonusPower: number = Math.floor(game.getCurrentBattle().enemy.discard.cards.length / 5);
+			const bonusPower: number = Math.floor(game.getCurrentBattle().enemy.discard.cards.length / 10);
 			gameStore.update((game) => {
 				game.getCurrentBattle().getCurrentTurn().fight.basePowerForEnemy += bonusPower;
 				return game;

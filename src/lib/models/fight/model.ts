@@ -21,16 +21,31 @@ export class Fight {
 			return this;
 		}
 
+		if (playerHand.getIsBlackjack() && enemyHand.getIsBlackjack()) {
+			return this;
+		}
+
+		if (playerHand.getIsBlackjack()) {
+			this.playerHasWon = true;
+			return this;
+		}
+
+		if (enemyHand.getIsBlackjack()) {
+			this.enemyHasWon = true;
+			return this;
+		}
+
 		if (
 			playerHand.getValue() + this.basePowerForPlayer >
 			enemyHand.getValue() + this.basePowerForEnemy
 		) {
 			this.playerHasWon = true;
 			return this;
+		}else{
+			this.enemyHasWon = true;
+			return this;	
 		}
 
-		this.enemyHasWon = true;
-		return this;
 	}
 
 	public setBaseDamageToPlayer(playerHand: Hand, enemyHand: Hand): Fight {
