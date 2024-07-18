@@ -1,8 +1,10 @@
-import type EffectInterface from '../effectInterface';
 import { gameStore } from '$lib/stores/game';
+import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
+import { delay } from '$lib/utils';
 import type { Rarities } from '../raritiesType';
+import DefaultEffect from './defaultEffect';
 
-export default class Vampirism implements EffectInterface {
+export default class Vampirism extends DefaultEffect {
 	technicalName: string = 'vampirism';
 	name: string = 'Vampirism';
 	description: string = 'Heal the amount of damages inflicted.';
@@ -21,6 +23,7 @@ export default class Vampirism implements EffectInterface {
 				if (game.getCurrentBattle()?.getCurrentTurn().fight.playerHasWon === false) {
 					return game;
 				}
+				this.updateStore(true, [playerSideEffectsStore]);
 				healNumber = game.getCurrentBattle().getCurrentTurn().fight.baseDamageToEnemy;
 				game.player.heal(healNumber);
 				return game;
@@ -30,10 +33,15 @@ export default class Vampirism implements EffectInterface {
 				if (game.getCurrentBattle()?.getCurrentTurn().fight.enemyHasWon === false) {
 					return game;
 				}
+				this.updateStore(true, [enemySideEffectsStore]);
 				healNumber = game.getCurrentBattle().getCurrentTurn().fight.baseDamageToPlayer;
 				game.getCurrentBattle()?.enemy.heal(healNumber);
 				return game;
 			});
 		}
+
+		delay(2000).then(() => {
+			this.updateStore(false, [playerSideEffectsStore, enemySideEffectsStore]);
+		});
 	}
 }

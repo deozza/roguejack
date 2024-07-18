@@ -1,8 +1,10 @@
-import type EffectInterface from '../effectInterface';
 import { gameStore } from '$lib/stores/game';
 import type { Rarities } from '../raritiesType';
+import { delay } from '$lib/utils';
+import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
+import DefaultEffect from './defaultEffect';
 
-export default class Undead implements EffectInterface {
+export default class Undead  extends DefaultEffect {
 	technicalName: string = 'undead';
 	name: string = 'Undead';
 	description: string = 'Ignore damages if enemy hand does not contain club cards.';
@@ -22,6 +24,7 @@ export default class Undead implements EffectInterface {
 						.getCurrentTurn()
 						.enemyHand.cards.some((card) => card.suit === 'club') === false
 				) {
+					this.updateStore(true, [playerSideEffectsStore]);
 					game.getCurrentBattle().getCurrentTurn().fight.multiplierForEnemy = 0;
 				}
 				return game;
@@ -34,10 +37,15 @@ export default class Undead implements EffectInterface {
 						.getCurrentTurn()
 						.playerHand.cards.some((card) => card.suit === 'club') === false
 				) {
+					this.updateStore(true, [enemySideEffectsStore]);
 					game.getCurrentBattle().getCurrentTurn().fight.multiplierForPlayer = 0;
 				}
 				return game;
 			});
 		}
+
+		delay(2000).then(() => {
+			this.updateStore(false, [playerSideEffectsStore, enemySideEffectsStore]);
+		});
 	}
 }

@@ -1,12 +1,13 @@
-import type EffectInterface from '../effectInterface';
 import type { Rarities } from '../raritiesType';
 import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 import Bleeding from './bleeding';
 import type { Game } from '$lib/models/game/model';
 import { get } from 'svelte/store';
 import { gameStore } from '$lib/stores/game';
+import DefaultEffect from './defaultEffect';
+import { delay } from '$lib/utils';
 
-export default class InflictWound implements EffectInterface {
+export default class InflictWound  extends DefaultEffect {
 	technicalName: string = 'inflictWound';
 	name: string = 'Inflict wound';
 	description: string = 'Inflicts bleeding when attacking';
@@ -24,6 +25,8 @@ export default class InflictWound implements EffectInterface {
 			if (game.getCurrentBattle()?.getCurrentTurn().fight.playerHasWon === false) {
 				return;
 			}
+
+			this.updateStore(true, [playerSideEffectsStore]);
 			enemySideEffectsStore.update((sideEffects) => {
 				sideEffects.push(new Bleeding());
 				return sideEffects;
@@ -32,10 +35,15 @@ export default class InflictWound implements EffectInterface {
 			if (game.getCurrentBattle()?.getCurrentTurn().fight.enemyHasWon === false) {
 				return;
 			}
+			this.updateStore(true, [enemySideEffectsStore]);
 			playerSideEffectsStore.update((sideEffects) => {
 				sideEffects.push(new Bleeding());
 				return sideEffects;
 			});
 		}
+
+		delay(2000).then(() => {
+			this.updateStore(false, [playerSideEffectsStore, enemySideEffectsStore]);
+		});
 	}
 }

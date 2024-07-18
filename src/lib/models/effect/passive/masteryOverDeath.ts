@@ -1,12 +1,12 @@
 import type { Game } from '$lib/models/game/model';
 import { get } from 'svelte/store';
-import type EffectInterface from '../effectInterface';
 import { gameStore } from '$lib/stores/game';
 import type { Rarities } from '../raritiesType';
 import { delay } from '$lib/utils';
 import { playerSideEffectsStore, enemySideEffectsStore } from '$lib/stores/sideEffects';
+import DefaultEffect from './defaultEffect';
 
-export default class MasteryOverDeath implements EffectInterface {
+export default class MasteryOverDeath extends DefaultEffect {
 	technicalName: string = 'masteryOverDeath';
 	name: string = 'Mastery Over Death';
 	description: string = 'Deal 1 more base power for every 10 cards in the discard.';
@@ -49,22 +49,5 @@ export default class MasteryOverDeath implements EffectInterface {
 		delay(2000).then(() => {
 			this.updateStore(false, [playerSideEffectsStore, enemySideEffectsStore]);
 		});
-	}
-
-
-	private updateStore(status: boolean, stores: any[]) {
-		stores.forEach((store) => {
-			store.update((effects) => {
-				const index = effects.findIndex((effect) => effect.technicalName === this.technicalName);
-				if(index === -1) {
-					return effects;
-				}
-
-				if(effects[index].active !== undefined) {
-					effects[index].active = status;
-				}
-				return effects;
-			})
-		})
 	}
 }

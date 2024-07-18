@@ -1,11 +1,13 @@
 import type { Game } from '$lib/models/game/model';
 import { get } from 'svelte/store';
-import type EffectInterface from '../effectInterface';
 import { gameStore } from '$lib/stores/game';
 import Sword from '../trigger/sword';
 import type { Rarities } from '../raritiesType';
+import { delay } from '$lib/utils';
+import DefaultEffect from './defaultEffect';
+import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 
-export default class Bravery implements EffectInterface {
+export default class Bravery  extends DefaultEffect {
 	technicalName: string = 'bravery';
 	name: string = 'Bravery';
 	description: string = 'Generate a sword when facing a semiboss or a boss';
@@ -20,10 +22,16 @@ export default class Bravery implements EffectInterface {
 		const game: Game = get(gameStore);
 		if (data['user'] === 'player') {
 			if (game.battles.length % 5 === 0) {
+				this.updateStore(true, [playerSideEffectsStore]);
 				gameStore.addToInventory(new Sword(), 'player');
 			}
 		} else {
+			this.updateStore(true, [enemySideEffectsStore]);
 			gameStore.addToInventory(new Sword(), 'ennemy');
 		}
+
+		delay(2000).then(() => {
+			this.updateStore(false, [playerSideEffectsStore, enemySideEffectsStore]);
+		});
 	}
 }
