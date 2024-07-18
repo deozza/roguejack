@@ -7,7 +7,7 @@ import type { Rarities } from '../raritiesType';
 export default class MasteryOverDeath implements EffectInterface {
 	technicalName: string = 'masteryOverDeath';
 	name: string = 'Mastery Over Death';
-	description: string = 'Deal 1 more base power for every 5 cards in the discard.';
+	description: string = 'Deal 1 more base power for every 10 cards in the discard.';
 	enableOnBattleState: string = '';
 	enableOnPlayerTurnState: string = 'TurnFightingState';
 	enableOnEnemyTurnState: string = 'TurnFightingState';

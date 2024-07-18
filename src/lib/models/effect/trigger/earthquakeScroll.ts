@@ -12,7 +12,7 @@ export default class EarthquakeScroll implements EffectInterface {
 	enableOnBattleState: string = 'BattlePlayingState';
 	enableOnPlayerTurnState: string = 'TurnPlayingState';
 	enableOnEnemyTurnState: string = 'TurnPlayingState';
-	icon: string = 'game-icons:fireball';
+	icon: string = 'game-icons:earth-spit';
 	rarity: Rarities = 'legendary';
 
 	public effect(data: object): void {
