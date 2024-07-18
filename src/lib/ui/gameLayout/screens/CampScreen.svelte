@@ -17,6 +17,7 @@
 	import Icon from '@iconify/svelte';
 	import { TurnMachineState } from '$lib/models/stateMachine/turn/turnMachineState';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
+	import { randomIntFromInterval } from '$lib/utils';
 
 	let openedDeckView: boolean = false;
 	let openedDiscardView: boolean = false;
@@ -31,18 +32,18 @@
 	}
 
 	function healAtCamp() {
-		gameStore.healPercentages(10, 'player');
-		startNewBattle();
+		gameStore.healPercentages(randomIntFromInterval(0, 5) * 10, 'player');
+		goToNextState();
 	}
 
 	function recycleAtCamp() {
-		gameStore.recycleDiscard(4, 'player');
+		gameStore.recycleDiscard(randomIntFromInterval(1, 10), 'player');
 
-		startNewBattle();
+		goToNextState();
 	}
 
 	function getObjectToLoot(): EffectInterface {
-		const rarityWeightValue: number = Math.floor(Math.random() * 100 + 1);
+		const rarityWeightValue: number = randomIntFromInterval(1, 100);
 
 		const rarity: RaritiesWeight | undefined = raritiesWeight.find(
 			(rarity) => rarity.weight >= rarityWeightValue
@@ -55,14 +56,30 @@
 			(triggerEffect: EffectInterface) => triggerEffect.rarity === rarity.rarity
 		);
 
-		const randomEffectIndex: number = Math.floor(Math.random() * filteredEffects.length);
+		const randomEffectIndex: number = randomIntFromInterval(0, filteredEffects.length - 1);
 		return filteredEffects[randomEffectIndex];
 	}
 
 	function addToInventory(object: EffectInterface) {
 		gameStore.addToInventory(object, 'player');
 
+		goToNextState();
+	}
+
+	function goToNextState() {
+		if ($gameStore.battles.length %10 === 0){
+			goToShop();
+			return;
+		}
+
 		startNewBattle();
+		return;
+	}
+
+	function goToShop() {
+		$battleMachineState.listenToEvent({ name: 'SHOP', data: null });
+		$battleMachineState = $battleMachineState;
+		return;
 	}
 
 	function startNewBattle() {
@@ -145,26 +162,29 @@
 
 					<div class="flex flex-col items-center justify-left w-9/12 p-4 variant-ringed-tertiary rounded-md text-center">
 						<p class="p text-xl uppercase">Sleep</p>
-						<p class="p">Heal 10%hp</p>
+						<p class="p">Heal between 10% and 50% of your HP</p>
 						<button class="btn variant-ghost-tertiary uppercase" on:click={() => healAtCamp()}
 							>select</button
 						>
 					</div>
 					<div class="flex flex-col items-center justify-around w-9/12 p-4 variant-ringed-tertiary rounded-md text-center">
 						<p class="p text-xl uppercase">Recycle discard</p>
-						<p class="p">Shuffle last 4 cards from discard to deck</p>
+						<p class="p">Shuffle between 1 and 10 last 4 cards from discard to deck</p>
 						<button class="btn variant-ghost-tertiary uppercase" on:click={() => recycleAtCamp()}
 							>select</button
 						>
 					</div>
-					<div class="flex flex-col items-center justify-around w-9/12 p-4 variant-ringed-success rounded-md text-center">
-						<p class="p text-xl uppercase">{objectToLoot.name}</p>
-						<p class="p">{objectToLoot.description}</p>
-						<button
-						class="btn variant-ghost-success uppercase"
-						on:click={() => addToInventory(objectToLoot)}>loot</button
-					>
-					</div>
+
+					{#if $gameStore.battles.length % 5 === 0}
+						<div class="flex flex-col items-center justify-around w-9/12 p-4 variant-ringed-success rounded-md text-center">
+							<p class="p text-xl uppercase">{objectToLoot.name}</p>
+							<p class="p">{objectToLoot.description}</p>
+							<button
+							class="btn variant-ghost-success uppercase"
+							on:click={() => addToInventory(objectToLoot)}>loot</button
+						>
+						</div>
+					{/if}
 				</div>
 			</div>
 		</div>

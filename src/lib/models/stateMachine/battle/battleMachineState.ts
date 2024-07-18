@@ -27,11 +27,11 @@ export class BattleMachineState implements StateMachineInterface {
 			LOSE: BattleLostState
 		},
 		BattleWonState: {
-			CAMP: BattleCampingState,
-			SHOP: BattleShopingState
+			CAMP: BattleCampingState
 		},
 		BattleCampingState: {
-			NEW_BATTLE: BattleInitState
+			NEW_BATTLE: BattleInitState,
+			SHOP: BattleShopingState
 		},
 		BattleShopingState: {
 			NEW_BATTLE: BattleInitState

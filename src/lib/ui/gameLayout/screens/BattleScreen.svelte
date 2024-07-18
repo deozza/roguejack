@@ -179,7 +179,7 @@
 			$battleMachineState.listenToEvent({ name: 'WIN', data: null });
 			$battleMachineState = $battleMachineState;
 
-			await redirectToCampOrShop();
+			await redirectToCamp();
 
 			return;
 		}
@@ -199,7 +199,7 @@
 			$battleMachineState.listenToEvent({ name: 'WIN', data: null });
 			$battleMachineState = $battleMachineState;
 
-			await redirectToCampOrShop();
+			await redirectToCamp();
 			return;
 		}
 
@@ -214,7 +214,7 @@
 		}
 	}
 
-	async function redirectToCampOrShop() {
+	async function redirectToCamp() {
 		gameStore.endTurn();
 		await delay(5000);
 
@@ -222,14 +222,6 @@
 		$battleMachineState = $battleMachineState;
 
 		scrollToElement('top');
-		return;
-		if ($gameStore.battles.length % 5 === 0) {
-			$battleMachineState.listenToEvent({ name: 'SHOP', data: null });
-			$battleMachineState = $battleMachineState;
-		} else {
-			$battleMachineState.listenToEvent({ name: 'CAMP', data: null });
-			$battleMachineState = $battleMachineState;
-		}
 	}
 
 	function openEnemyDiscardView() {

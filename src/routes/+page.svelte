@@ -1,6 +1,5 @@
 <script lang="ts">
 	import HomeScreen from '$lib/ui/gameLayout/screens/HomeScreen.svelte';
-	import { GamePlayingState } from '$lib/models/stateMachine/game/states';
 	import CharacterSelectScreen from '$lib/ui/gameLayout/screens/CharacterSelectScreen.svelte';
 	import type { SvelteComponent } from 'svelte';
 	import BattleScreen from '$lib/ui/gameLayout/screens/BattleScreen.svelte';
@@ -9,8 +8,6 @@
 	import CampScreen from '$lib/ui/gameLayout/screens/CampScreen.svelte';
 	import GameLostScreen from '$lib/ui/gameLayout/screens/GameLostScreen.svelte';
 	import ShopScreen from '$lib/ui/gameLayout/screens/ShopScreen.svelte';
-	import type { BattleLostState, BattleWonState } from '$lib/models/stateMachine/battle/states';
-	import { scrollToElement } from '$lib/utils';
 
 	const screensToRender: Record<string, SvelteComponent> = {
 		GameIdleState: HomeScreen,
@@ -18,7 +15,7 @@
 		BattlePlayingState: BattleScreen,
 		BattleWonState: BattleScreen,
 		BattleLostState: BattleScreen,
-		BattleCampingState: CampScreen,
+		BattleCampingState: ShopScreen,
 		BattleShopingState: ShopScreen,
 		GameLostState: GameLostScreen
 	};
