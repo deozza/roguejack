@@ -7,11 +7,11 @@
 	import Healthbar from '../../character/Healthbar.svelte';
 	import type { Fight } from '$lib/models/fight/model';
 	import type EffectInterface from '$lib/models/effect/effectInterface';
-	import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
 	import { createEventDispatcher } from 'svelte';
 	import type { Character } from '$lib/models/character/model';
 	import { fade } from 'svelte/transition';
 	import { gameStore } from '$lib/stores/game';
+	import PassiveEffect from '$lib/ui/effect/PassiveEffect.svelte';
 
 	export let player: Character;
 	export let playerHand: Hand;
@@ -24,14 +24,6 @@
 
 	const dispatch = createEventDispatcher();
 	let openedInventory: boolean = false;
-
-	function popupClick(target: string): PopupSettings {
-		return {
-			event: 'click',
-			target,
-			placement: 'top'
-		};
-	}
 
 	function openInventory() {
 		openedInventory = !openedInventory;
@@ -79,14 +71,7 @@
 			: 'flex-row'} flex-wrap items-center justify-start w-full space-x-5 min-h-16"
 	>
 		{#each passiveEffects as sideEffect}
-			<div class="card p-4 variant-filled-primary z-10" data-popup={sideEffect.technicalName}>
-				<p>{sideEffect.name}</p>
-				<p>{sideEffect.description}</p>
-				<div class="arrow variant-filled-primary" />
-			</div>
-			<button class="btn" use:popup={popupClick(sideEffect.technicalName)}>
-				<Icon icon={sideEffect.icon} width="64" height="64" />
-			</button>
+			<PassiveEffect {sideEffect} />
 		{/each}
 	</div>
 	<h3
