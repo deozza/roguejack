@@ -9,7 +9,7 @@ export default class Bravery implements EffectInterface {
 	technicalName: string = 'bravery';
 	name: string = 'Bravery';
 	description: string = 'Generate a sword when facing a semiboss or a boss';
-	enableOnBattleState: string = 'BattleInitState';
+	enableOnBattleState: string = '';
 	enableOnPlayerTurnState: string = 'TurnIdleState';
 	enableOnEnemyTurnState: string = 'TurnIdleState';
 	icon: string = 'game-icons:sword-brandish';
@@ -18,7 +18,7 @@ export default class Bravery implements EffectInterface {
 	public effect(data: object): void {
 		const game: Game = get(gameStore);
 		if (data['user'] === 'player') {
-			if ((game.battles.length + 1) % 5 === 0) {
+			if ((game.battles.length) % 5 === 0) {
 				gameStore.addToInventory(new Sword(), 'player');
 			}
 		} else {

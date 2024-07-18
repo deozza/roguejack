@@ -6,9 +6,9 @@ export default class Undead implements EffectInterface {
 	technicalName: string = 'undead';
 	name: string = 'Undead';
 	description: string = 'Ignore damages from red cards';
-	enableOnBattleState: string = 'BattlePlayingState';
-	enableOnPlayerTurnState: string = 'TurnDamageState';
-	enableOnEnemyTurnState: string = 'TurnDamageState';
+	enableOnBattleState: string = '';
+	enableOnPlayerTurnState: string = 'TurnFightingState';
+	enableOnEnemyTurnState: string = 'TurnFightingState';
 	icon: string = 'game-icons:half-dead';
 	rarity: Rarities = 'rare';
 

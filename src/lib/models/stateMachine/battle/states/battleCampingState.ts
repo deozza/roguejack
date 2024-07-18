@@ -1,3 +1,5 @@
+import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
+import { get } from 'svelte/store';
 import { type StateInterface } from '../../stateInterface';
 
 export class BattleCampingState implements StateInterface {
@@ -11,7 +13,21 @@ export class BattleCampingState implements StateInterface {
 		console.log(` ${this.name} executed`);
 	}
 
-	public onStateExit = (): void => {
-		console.log(` ${this.name} exited`);
+	public onStateExit = (data: object): void => {
+		const stateToEnable: string = 'enableOnBattleState';
+		const playerPassiveEffects = get(playerSideEffectsStore);
+		const enemyPassiveEffects = get(enemySideEffectsStore);
+
+		playerPassiveEffects.forEach((sideEffect) => {
+			if (sideEffect[stateToEnable] === this.name) {
+				sideEffect.effect(data);
+			}
+		});	
+
+		enemyPassiveEffects.forEach((sideEffect) => {
+			if (sideEffect[stateToEnable] === this.name) {
+				sideEffect.effect(data);
+			}
+		});	
 	};
 }

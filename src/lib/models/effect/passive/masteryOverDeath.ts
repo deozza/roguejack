@@ -8,9 +8,9 @@ export default class MasteryOverDeath implements EffectInterface {
 	technicalName: string = 'masteryOverDeath';
 	name: string = 'Mastery Over Death';
 	description: string = 'Deal 1 more base power for every 5 cards in the discard.';
-	enableOnBattleState: string = 'BattlePlayingState';
-	enableOnPlayerTurnState: string = 'TurnDamageState';
-	enableOnEnemyTurnState: string = 'TurnDamageState';
+	enableOnBattleState: string = '';
+	enableOnPlayerTurnState: string = 'TurnFightingState';
+	enableOnEnemyTurnState: string = 'TurnFightingState';
 	icon: string = 'game-icons:graveyard';
 	rarity: Rarities = 'rare';
 

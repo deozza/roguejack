@@ -52,17 +52,16 @@
 
 		$battleMachineState.listenToEvent({ name: 'NEW_BATTLE', data: null });
 		$battleMachineState = $battleMachineState;
-		$battleMachineState.currentState.onStateEnter({ user: 'player' });
 		$battleMachineState.currentState.onStateExecute({});
 
 		$battleMachineState.listenToEvent({ name: 'PLAY', data: null });
 		$battleMachineState = $battleMachineState;
 
-		$playerTurnMachineState.listenToEvent({ name: 'NEW_TURN', data: null });
+		$playerTurnMachineState.listenToEvent({ name: 'NEW_TURN', data: {user: 'player'} });
 		$playerTurnMachineState = $playerTurnMachineState;
 		$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
 
-		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: null });
+		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: {user: 'player'} });
 		$playerTurnMachineState = $playerTurnMachineState;
 		$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
 

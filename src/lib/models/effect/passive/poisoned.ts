@@ -20,21 +20,12 @@ export default class Poisoned implements EffectInterface {
 	public effect(data: object): void {
 		const battleState: StateMachineInterface = get(battleMachineState);
 		if (battleState.currentState.name === 'BattleInitState') {
-			if (data['user'] === 'player') {
-				playerSideEffectsStore.update((sideEffects) => {
-					sideEffects = sideEffects.filter(
-						(effect: EffectInterface) => effect.technicalName !== 'poisoned'
-					);
-					return sideEffects;
-				});
-			} else {
-				enemySideEffectsStore.update((sideEffects) => {
-					sideEffects = sideEffects.filter(
-						(effect: EffectInterface) => effect.technicalName !== 'poisoned'
-					);
-					return sideEffects;
-				});
-			}
+			playerSideEffectsStore.update((sideEffects) => {
+				sideEffects = sideEffects.filter(
+					(effect: EffectInterface) => effect.technicalName !== 'poisoned'
+				);
+				return sideEffects;
+			});
 			return;
 		}
 

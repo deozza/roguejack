@@ -7,16 +7,7 @@ import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideE
 export class BattleInitState implements StateInterface {
 	public name: string = 'BattleInitState';
 
-	public onStateEnter = (data: object): void => {
-		const passiveEffects = get(playerSideEffectsStore);
-		const stateToEnable: string = 'enableOnBattleState';
-
-		passiveEffects.forEach((sideEffect) => {
-			if (sideEffect[stateToEnable] === this.name) {
-				sideEffect.effect(data);
-			}
-		});
-	};
+	public onStateEnter = (data: object): void => {};
 
 	public onStateExecute(data: object): void {
 		gameStore.createBattle();
@@ -31,7 +22,21 @@ export class BattleInitState implements StateInterface {
 		}
 	}
 
-	public onStateExit = (): void => {
-		console.log(` ${this.name} exited`);
+	public onStateExit = (data: object): void => {
+		const stateToEnable: string = 'enableOnBattleState';
+		const playerPassiveEffects = get(playerSideEffectsStore);
+		const enemyPassiveEffects = get(enemySideEffectsStore);
+
+		playerPassiveEffects.forEach((sideEffect) => {
+			if (sideEffect[stateToEnable] === this.name) {
+				sideEffect.effect(data);
+			}
+		});	
+
+		enemyPassiveEffects.forEach((sideEffect) => {
+			if (sideEffect[stateToEnable] === this.name) {
+				sideEffect.effect(data);
+			}
+		});	
 	};
 }

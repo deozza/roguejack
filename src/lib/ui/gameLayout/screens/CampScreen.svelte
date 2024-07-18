@@ -29,14 +29,12 @@
 	}
 
 	function healAtCamp() {
-		console.log('healAtCamp');
-
 		gameStore.healPercentages((randomIntFromInterval(1, 5) * 10), 'player');
 		goToNextState();
 	}
 
 	function recycleAtCamp() {
-		gameStore.recycleDiscard(randomIntFromInterval(2, 10), 'player');
+		gameStore.recycleDiscard(randomIntFromInterval(2, 6), 'player');
 
 		goToNextState();
 	}
@@ -89,7 +87,6 @@
 	function startNewBattle() {
 		$battleMachineState.listenToEvent({ name: 'NEW_BATTLE', data: null });
 		$battleMachineState = $battleMachineState;
-		$battleMachineState.currentState.onStateEnter({ user: 'player' });
 		$battleMachineState.currentState.onStateExecute({});
 
 		$battleMachineState.listenToEvent({ name: 'PLAY', data: null });
@@ -97,13 +94,13 @@
 
 		playerTurnMachineState.set(new TurnMachineState());
 
-		$playerTurnMachineState.listenToEvent({ name: 'NEW_TURN', data: null });
+		$playerTurnMachineState.listenToEvent({ name: 'NEW_TURN', data: {user: 'player'} });
 		$playerTurnMachineState = $playerTurnMachineState;
 
 		try {
 			$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
 		} catch (error) {
-			$playerTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
+			$playerTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: {user: 'player'} });
 			$playerTurnMachineState = $playerTurnMachineState;
 
 			$battleMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
@@ -114,7 +111,7 @@
 			return;
 		}
 
-		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: null });
+		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: {user: 'player'} });
 		$playerTurnMachineState = $playerTurnMachineState;
 		$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
 
@@ -178,7 +175,7 @@
 						class="flex flex-col items-center justify-around w-9/12 p-4 variant-ringed-tertiary rounded-md text-center"
 					>
 						<p class="p text-xl uppercase">Recycle discard</p>
-						<p class="p">Shuffle between 2 and 10 last cards from discard to deck</p>
+						<p class="p">Shuffle between 2 and 6 last cards from discard to deck</p>
 						<button class="btn variant-ghost-tertiary uppercase" on:click={() => recycleAtCamp()}
 							>select</button
 						>
