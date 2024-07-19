@@ -253,7 +253,6 @@
 			user={$gameStore.player}
 			userHand={$gameStore.getCurrentBattle().getCurrentTurn().playerHand}
 			currentStateName={$playerTurnMachineState.currentState.name}
-			fight={$gameStore.getCurrentBattle().getCurrentTurn().fight}
 			passiveEffects={$playerSideEffectsStore}
 			on:draw={() => drawCard()}
 			on:playerDiscardView={() => openPlayerDiscardView()}
@@ -285,7 +284,6 @@
 			user={$gameStore.getCurrentBattle().enemy}
 			userHand={$gameStore.getCurrentBattle().getCurrentTurn().enemyHand}
 			currentStateName={$enemyTurnMachineState.currentState.name}
-			fight={$gameStore.getCurrentBattle().getCurrentTurn().fight}
 			passiveEffects={$enemySideEffectsStore}
 			isEnemy={true}
 			on:enemyDiscardView={() => openEnemyDiscardView()}
