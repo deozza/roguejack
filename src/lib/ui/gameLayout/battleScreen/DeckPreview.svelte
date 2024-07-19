@@ -14,16 +14,21 @@
 </script>
 
 <section
-	class="absolute h-full w-full z-10 bg-surface-500/90"
+	class="absolute w-full z-10 bg-surface-500/90 drop-shadow-2xl"
 	transition:fade={{ delay: 250, duration: 300 }}
 >
 	<div class="flex flex-col items-center justify-center h-full w-full">
-		<h1 class="h1 p-4">
-			Deck preview
+		<div class="flex flex-row items-center justify-end w-full p-4">
 			<button class="btn" on:click={() => dispatch('close')}>
 				<Icon icon="mdi:close" width="24" height="24" />
-			</button>
-		</h1>
+			</button>	
+		</div>
+
+		<div class="flex flex-row items-center justify-center w-full p-4">
+			<h1 class="h1">
+				Discard preview
+			</h1>
+		</div>
 		<div
 			class="inline-flex w-10/12 h-full flex-row flex-wrap items-start justify-center overscroll-none overflow-y-scroll pb-24"
 		>

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
 	import type { Card } from '$lib/models/card/model';
-	import { fly, slide } from 'svelte/transition';
+	import { fly } from 'svelte/transition';
 
 	export let card: Card;
 	export let isEnemy: boolean = false;
@@ -16,7 +16,7 @@
 		<Icon icon={'bi:suit-' + card.suit + '-fill'} />
 	</div>
 	<span class="h1 font-semibold">{card.face} </span>
-	<div class="flex flex-row items-center self-end backward">
+	<div class="flex flex-row items-center self-end">
 		<Icon icon={'bi:suit-' + card.suit + '-fill'} />
 		<span class="font-semibold">{card.face} </span>
 	</div>
