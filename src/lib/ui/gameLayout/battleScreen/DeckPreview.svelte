@@ -6,8 +6,6 @@
 	import { fade } from 'svelte/transition';
 
 	export let cards: Card[];
-	export let isPlayer: boolean = false;
-
 	const dispatch = createEventDispatcher();
 </script>
 

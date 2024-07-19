@@ -5,7 +5,6 @@
 	import Discard from '../../deck/Discard.svelte';
 	import PlayingCard from '../../playingCard/PlayingCard.svelte';
 	import Healthbar from '../../character/Healthbar.svelte';
-	import type { Fight } from '$lib/models/fight/model';
 	import { createEventDispatcher } from 'svelte';
 	import type { Character } from '$lib/models/character/model';
 	import { gameStore } from '$lib/stores/game';
@@ -14,7 +13,6 @@
 
 	export let user: Character;
 	export let userHand: Hand;
-	export let fight: Fight;
 	export let passiveEffects: PassiveEffectInterface[];
 
 	export let currentStateName: string;
