@@ -10,14 +10,16 @@
 </script>
 
 <div
-	class="bg-white flex flex-col items-center justify-between rounded-xl card-hover p-4 min-h-32 min-w-24 m-1 {card.suit}"
+	class="bg-white flex flex-col items-center justify-between rounded-xl card-hover p-2 min-h-32 min-w-24 m-1 {card.suit}"
 >
-	<div class="text-start w-full">
+	<div class="flex flex-row items-center self-start">
+		<span class="font-semibold">{card.face} </span>
 		<Icon icon={'bi:suit-' + card.suit + '-fill'} />
 	</div>
 	<span class="h1 font-semibold">{card.face} </span>
-	<div class="text-end w-full">
-		<Icon icon={'bi:suit-' + card.suit + '-fill'} class="backward" />
+	<div class="flex flex-row items-center self-end backward">
+		<Icon icon={'bi:suit-' + card.suit + '-fill'} />
+		<span class="font-semibold">{card.face} </span>
 	</div>
 </div>
 
@@ -32,7 +34,7 @@
 		color: red;
 	}
 
-	.backward {
+	:global(.backward) {
 		transform: rotate(180deg);
 	}
 </style>
