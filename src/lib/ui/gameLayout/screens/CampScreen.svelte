@@ -199,6 +199,13 @@
 							>
 						</div>
 					{/if}
+
+					<button
+						class="btn rounded-md variant-filled-tertiary uppercase"
+						on:click={() => startNewBattle()}
+					>
+						Exit camp
+					</button>
 				</div>
 			</div>
 		</div>

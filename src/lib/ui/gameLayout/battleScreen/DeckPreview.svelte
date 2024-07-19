@@ -25,7 +25,7 @@
 			</button>
 		</h1>
 		<div
-			class="flex h-full flex-row flex-wrap items-center justify-center overscroll-none overflow-y-scroll pb-24"
+			class="inline-flex w-10/12 h-full flex-row flex-wrap items-start justify-center overscroll-none overflow-y-scroll pb-24"
 		>
 			{#each cards as card}
 				<PlayingCard {card} />
