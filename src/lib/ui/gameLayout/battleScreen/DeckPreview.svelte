@@ -1,8 +1,6 @@
 <script lang="ts">
 	import type { Card } from '$lib/models/card/model';
-	import type { Discard } from '$lib/models/discard/model';
 	import PlayingCard from '$lib/ui/playingCard/PlayingCard.svelte';
-
 	import Icon from '@iconify/svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { fade } from 'svelte/transition';

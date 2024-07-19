@@ -11,6 +11,7 @@ import { get } from 'svelte/store';
 import { writable } from 'svelte/store';
 import { delay } from '$lib/utils';
 import type TriggerSideEffects from '$lib/ui/effect/TriggerSideEffects.svelte';
+import type { DamageTriggerEffectInterface, HealingTriggerEffectInterface } from '$lib/models/effect/interfaces';
 
 function createGameStore() {
 	const { subscribe, set, update } = writable<Game>(new Game());
@@ -214,14 +215,14 @@ function createGameStore() {
 		});
 	};
 
-	const addToInventory = (object: TriggerSideEffects, user: string) => {
+	const addToInventory = (object: HealingTriggerEffectInterface | DamageTriggerEffectInterface, user: string) => {
 		update((game) => {
 			game.player.inventory = [...game.player.inventory, object];
 			return game;
 		});
 	};
 
-	const removeFromInventory = (object: TriggerSideEffects, user: string) => {
+	const removeFromInventory = (object: HealingTriggerEffectInterface | DamageTriggerEffectInterface, user: string) => {
 		update((game) => {
 			const index = game.player.inventory.findIndex((item) => item === object);
 			if (index !== -1) {

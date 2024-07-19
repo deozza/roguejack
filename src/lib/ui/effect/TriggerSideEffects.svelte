@@ -1,16 +1,16 @@
 <script lang="ts">
-	import type { TriggerEffectInterface } from "$lib/models/effect/interfaces";
+	import type { DamageTriggerEffectInterface, HealingTriggerEffectInterface } from "$lib/models/effect/interfaces";
 	import { gameStore } from "$lib/stores/game";
 	import Icon from "@iconify/svelte";
 	import { popup, type PopupSettings } from "@skeletonlabs/skeleton";
 	import { createEventDispatcher } from "svelte";
 
-    export let triggerEffects: TriggerEffectInterface[];
+    export let triggerEffects: Array<HealingTriggerEffectInterface | DamageTriggerEffectInterface>;
 	export let isEnemy: boolean;
 
 	const dispatch = createEventDispatcher();
 
-	function useEffect(effect: TriggerEffectInterface) {
+	function useEffect(effect: HealingTriggerEffectInterface | DamageTriggerEffectInterface) {
 		effect.effect({ user: 'player' });
 		gameStore.removeFromInventory(effect, 'player');
 
@@ -35,7 +35,7 @@
 		{/if}
 		<div class="arrow variant-filled-primary" />
 	</div>
-	<button class="btn {triggerEffect.active !== undefined && triggerEffect.active === true ? 'text-orange-500' : ''}" use:popup={popupClick(triggerEffect.technicalName)}>
+	<button class="btn" use:popup={popupClick(triggerEffect.technicalName)}>
 		<Icon icon={triggerEffect.icon} width="64" height="64" />
 	</button>
 {/each}
