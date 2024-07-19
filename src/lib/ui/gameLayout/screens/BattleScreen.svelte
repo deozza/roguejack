@@ -70,6 +70,8 @@
 			}
 		}
 
+		await delay(2000);
+
 		if ($gameStore.getCurrentBattle()?.getCurrentTurn().enemyHand.getIsBusted() === true) {
 			$enemyTurnMachineState.listenToEvent({ name: 'BUST', data: { user: 'enemy' } });
 			$enemyTurnMachineState = $enemyTurnMachineState;
