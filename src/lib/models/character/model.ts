@@ -12,7 +12,7 @@ export class Character {
 	discard: Discard;
 	minAttack: number | null = null;
 	sideEffect: EffectInterface | null = null;
-	inventory: object[] = [];
+	inventory: EffectInterface[] = [];
 
 	public generateCharacter(characterType: object) {
 		this.name = characterType.name;

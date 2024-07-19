@@ -16,14 +16,6 @@
 	let openedEnemyDiscardView: boolean = false;
 	let openedPlayerDiscardView: boolean = false;
 
-	function triggerEffect(effect: any) {
-		effect.effect({ user: 'player' });
-
-		gameStore.removeFromInventory(effect, 'player');
-
-		updateBattleState();
-	}
-
 	async function drawCard() {
 		$playerTurnMachineState.listenToEvent({ name: 'DRAW', data: { user: 'player' } });
 		$playerTurnMachineState = $playerTurnMachineState;
@@ -219,14 +211,6 @@
 		$battleMachineState = $battleMachineState;
 
 		scrollToElement('top');
-		return;
-		if ($gameStore.battles.length % 5 === 0) {
-			$battleMachineState.listenToEvent({ name: 'SHOP', data: null });
-			$battleMachineState = $battleMachineState;
-		} else {
-			$battleMachineState.listenToEvent({ name: 'CAMP', data: null });
-			$battleMachineState = $battleMachineState;
-		}
 	}
 
 	function openEnemyDiscardView() {
@@ -264,14 +248,14 @@
 	</div>
 	<div class="flex flex-row flex-wrap items-center justify-between w-full">
 		<PlayerSide
-			player={$gameStore.player}
-			playerHand={$gameStore.getCurrentBattle().getCurrentTurn().playerHand}
+			user={$gameStore.player}
+			userHand={$gameStore.getCurrentBattle().getCurrentTurn().playerHand}
 			currentStateName={$playerTurnMachineState.currentState.name}
 			fight={$gameStore.getCurrentBattle().getCurrentTurn().fight}
 			passiveEffects={$playerSideEffectsStore}
 			on:draw={() => drawCard()}
 			on:playerDiscardView={() => openPlayerDiscardView()}
-			on:triggerEffect={(e) => triggerEffect(e.detail.object)}
+			on:updateBattleState={() => updateBattleState()}	
 		/>
 
 		<div class="flex flex-col items-center justify-center md:h-full w-full md:w-4/12" id="fighting">
@@ -296,8 +280,8 @@
 		</div>
 
 		<PlayerSide
-			player={$gameStore.getCurrentBattle().enemy}
-			playerHand={$gameStore.getCurrentBattle().getCurrentTurn().enemyHand}
+			user={$gameStore.getCurrentBattle().enemy}
+			userHand={$gameStore.getCurrentBattle().getCurrentTurn().enemyHand}
 			currentStateName={$enemyTurnMachineState.currentState.name}
 			fight={$gameStore.getCurrentBattle().getCurrentTurn().fight}
 			passiveEffects={$enemySideEffectsStore}

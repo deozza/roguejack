@@ -20,7 +20,7 @@
 		<p>{sideEffect.description}</p>
 		<div class="arrow variant-filled-primary" />
 	</div>
-	<button class="btn {sideEffect.active !== undefined && sideEffect.active === true ? 'text-orange-500' : ''}" use:popup={popupClick(sideEffect.technicalName)}>
+	<button class="btn" use:popup={popupClick(sideEffect.technicalName)}>
 		<Icon icon={sideEffect.icon} width="64" height="64" />
 	</button>
 {/each}
