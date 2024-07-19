@@ -2,10 +2,10 @@ import type { Game } from '$lib/models/game/model';
 import { get } from 'svelte/store';
 import { gameStore } from '$lib/stores/game';
 import Sword from '../trigger/sword';
-import type { Rarities } from '../raritiesType';
 import { delay } from '$lib/utils';
 import DefaultEffect from './defaultEffect';
 import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
+import { EffectType } from '../types';
 
 export default class Bravery  extends DefaultEffect {
 	technicalName: string = 'bravery';
@@ -15,8 +15,8 @@ export default class Bravery  extends DefaultEffect {
 	enableOnPlayerTurnState: string = 'TurnIdleState';
 	enableOnEnemyTurnState: string = 'TurnIdleState';
 	icon: string = 'game-icons:sword-brandish';
-	rarity: Rarities = 'rare';
 	active: boolean = false;
+	effectType: EffectType = EffectType.physical;
 
 	public effect(data: object): void {
 		const game: Game = get(gameStore);

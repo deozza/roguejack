@@ -6,16 +6,16 @@
 	import PlayingCard from '../../playingCard/PlayingCard.svelte';
 	import Healthbar from '../../character/Healthbar.svelte';
 	import type { Fight } from '$lib/models/fight/model';
-	import type EffectInterface from '$lib/models/effect/effectInterface';
 	import { createEventDispatcher } from 'svelte';
 	import type { Character } from '$lib/models/character/model';
 	import { gameStore } from '$lib/stores/game';
 	import CharacterPreview from './CharacterPreview.svelte';
+	import type { PassiveEffectInterface } from '$lib/models/effect/interfaces';
 
 	export let user: Character;
 	export let userHand: Hand;
 	export let fight: Fight;
-	export let passiveEffects: EffectInterface[];
+	export let passiveEffects: PassiveEffectInterface[];
 
 	export let currentStateName: string;
 	export let isEnemy: boolean = false;

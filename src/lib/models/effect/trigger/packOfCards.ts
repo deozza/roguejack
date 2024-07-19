@@ -1,9 +1,10 @@
-import type EffectInterface from '../effectInterface';
 import { gameStore } from '$lib/stores/game';
 import type { Rarities } from '../raritiesType';
 import { Card, faces, suits, type Face, type Suit } from '$lib/models/card/model';
+import type { HealingTriggerEffectInterface } from '../interfaces';
+import { EffectType } from '../types';
 
-export default class PackOfCards implements EffectInterface {
+export default class PackOfCards implements HealingTriggerEffectInterface {
 	technicalName: string = 'packOfCards';
 	name: string = 'Pack of cards';
 	description: string = 'Add 3 random cards to your deck';
@@ -12,6 +13,7 @@ export default class PackOfCards implements EffectInterface {
 	enableOnEnemyTurnState: string = 'TurnPlayingState';
 	icon: string = 'game-icons:card-random';
 	rarity: Rarities = 'common';
+	effectType: EffectType = EffectType.physical;
 
 	public effect(data: object): void {
 		if (data['user'] === 'player') {

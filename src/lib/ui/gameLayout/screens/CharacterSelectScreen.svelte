@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { characters } from '$lib/models/character/players';
-	import type EffectInterface from '$lib/models/effect/effectInterface';
 	import { TurnPlayingState } from '$lib/models/stateMachine/turn/states/turnPlayingState';
 	import { gameStore } from '$lib/stores/game';
 	import { playerSideEffectsStore } from '$lib/stores/sideEffects';
@@ -12,17 +11,18 @@
 	import { passiveEffects } from '$lib/models/effect';
 	import { Card, type Face, type Suit } from '$lib/models/card/model';
 	import DeckPreview from '../battleScreen/DeckPreview.svelte';
+	import PassiveSideEffects from '$lib/ui/effect/PassiveSideEffects.svelte';
 
 	let selectedCharacter: object = {};
 	let cards: Card[] = [];
-	let passive: EffectInterface | undefined = undefined;
+	let passive: PassiveSideEffects | undefined = undefined;
 	let openedDeckPreview: boolean = false;
 
 	preSelectCharacter(characters[0]);
 
 	function preSelectCharacter(character: object) {
 		selectedCharacter = character;
-		passive = passiveEffects.find((effect) => effect.technicalName === character.passive);
+		passive = passiveEffects.find((effect: PassiveSideEffects) => effect.technicalName === character.passive);
 
 		cards = [];
 		character.deck.suits.forEach((suit: Suit) => {

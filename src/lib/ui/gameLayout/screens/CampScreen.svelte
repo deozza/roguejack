@@ -9,16 +9,16 @@
 	import DiscardPreview from '../battleScreen/DiscardPreview.svelte';
 	import DeckPreview from '../battleScreen/DeckPreview.svelte';
 	import { triggerEffects } from '$lib/models/effect';
-	import type EffectInterface from '$lib/models/effect/effectInterface';
 	import { raritiesWeight, type RaritiesWeight } from '$lib/models/effect/raritiesType';
 	import Icon from '@iconify/svelte';
 	import { TurnMachineState } from '$lib/models/stateMachine/turn/turnMachineState';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
 	import { randomIntFromInterval } from '$lib/utils';
+	import type { TriggerEffectInterface } from '$lib/models/effect/interfaces';
 
 	let openedDeckView: boolean = false;
 	let openedDiscardView: boolean = false;
-	const objectToLoot: EffectInterface = getObjectToLoot();
+	const objectToLoot: TriggerEffectInterface = getObjectToLoot();
 
 	function openDeckView() {
 		openedDeckView = !openedDeckView;
@@ -39,7 +39,7 @@
 		goToNextState();
 	}
 
-	function getObjectToLoot(): EffectInterface {
+	function getObjectToLoot(): TriggerEffectInterface {
 		const rarityWeightValue: number = randomIntFromInterval(1, 100);
 
 		const rarity: RaritiesWeight | undefined = raritiesWeight.find(
@@ -49,15 +49,15 @@
 			throw new Error(`Rarity ${rarityWeightValue} not found`);
 		}
 
-		const filteredEffects: EffectInterface[] = triggerEffects.filter(
-			(triggerEffect: EffectInterface) => triggerEffect.rarity === rarity.rarity
+		const filteredEffects: TriggerEffectInterface[] = triggerEffects.filter(
+			(triggerEffect: TriggerEffectInterface) => triggerEffect.rarity === rarity.rarity
 		);
 
 		const randomEffectIndex: number = randomIntFromInterval(0, filteredEffects.length - 1);
 		return filteredEffects[randomEffectIndex];
 	}
 
-	function addToInventory(object: EffectInterface) {
+	function addToInventory(object: TriggerEffectInterface) {
 		if (object.technicalName === 'packOfCards') {
 			object.effect({ user: 'player' });
 			goToNextState();

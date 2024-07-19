@@ -1,10 +1,10 @@
 import type { Game } from '$lib/models/game/model';
 import { get } from 'svelte/store';
 import { gameStore } from '$lib/stores/game';
-import type { Rarities } from '../raritiesType';
 import { delay } from '$lib/utils';
 import { playerSideEffectsStore, enemySideEffectsStore } from '$lib/stores/sideEffects';
 import DefaultEffect from './defaultEffect';
+import { EffectType } from '../types';
 
 export default class MasteryOverDeath extends DefaultEffect {
 	technicalName: string = 'masteryOverDeath';
@@ -14,8 +14,8 @@ export default class MasteryOverDeath extends DefaultEffect {
 	enableOnPlayerTurnState: string = 'TurnFightingState';
 	enableOnEnemyTurnState: string = 'TurnFightingState';
 	icon: string = 'game-icons:graveyard';
-	rarity: Rarities = 'rare';
 	active: boolean = false;
+	effectType: EffectType = EffectType.magical;
 
 	public effect(data: object): void {
 		const game: Game = get(gameStore);

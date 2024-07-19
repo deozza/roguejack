@@ -1,8 +1,9 @@
-import type EffectInterface from '../effectInterface';
 import { gameStore } from '$lib/stores/game';
 import type { Rarities } from '../raritiesType';
+import type { DamageTriggerEffectInterface } from '../interfaces';
+import { DamageType, EffectRange, EffectType } from '../types';
 
-export default class Knife implements EffectInterface {
+export default class Knife implements DamageTriggerEffectInterface {
 	technicalName: string = 'knife';
 	name: string = 'Knife';
 	description: string = 'Deal 1 damage to the enemy.';
@@ -11,6 +12,9 @@ export default class Knife implements EffectInterface {
 	enableOnEnemyTurnState: string = 'TurnPlayingState';
 	icon: string = 'game-icons:bowie-knife';
 	rarity: Rarities = 'common';
+	damageType: DamageType = DamageType.piercing;
+	effectRange: EffectRange = EffectRange.close;
+	effectType: EffectType = EffectType.physical;
 
 	public effect(data: object): void {
 		if (data['user'] === 'player') {

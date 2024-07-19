@@ -1,8 +1,9 @@
-import type EffectInterface from '../effectInterface';
 import { gameStore } from '$lib/stores/game';
 import type { Rarities } from '../raritiesType';
+import type { HealingTriggerEffectInterface } from '../interfaces';
+import { EffectType } from '../types';
 
-export default class PotionOfGreaterHealing implements EffectInterface {
+export default class PotionOfGreaterHealing implements HealingTriggerEffectInterface {
 	technicalName: string = 'potionOfGreaterHealing';
 	name: string = 'Potion of greater healing';
 	description: string = 'Restore 25% of your health.';
@@ -11,6 +12,7 @@ export default class PotionOfGreaterHealing implements EffectInterface {
 	enableOnEnemyTurnState: string = 'TurnPlayingState';
 	icon: string = 'game-icons:potion-ball';
 	rarity: Rarities = 'uncommon';
+	effectType: EffectType = EffectType.physical;
 
 	public effect(data: object): void {
 		if (data['user'] === 'enemy') {

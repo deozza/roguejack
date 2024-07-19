@@ -9,17 +9,17 @@
 	import { fade } from 'svelte/transition';
 	import DiscardPreview from '../battleScreen/DiscardPreview.svelte';
 	import DeckPreview from '../battleScreen/DeckPreview.svelte';
-	import type EffectInterface from '$lib/models/effect/effectInterface';
 	import { triggerEffects } from '$lib/models/effect';
 	import { randomIntFromInterval } from '$lib/utils';
 	import { raritiesWeight, type RaritiesWeight } from '$lib/models/effect/raritiesType';
 	import { TurnMachineState } from '$lib/models/stateMachine/turn/turnMachineState';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
 	import PackOfCards from '$lib/models/effect/trigger/packOfCards';
+	import type { TriggerEffectInterface } from '$lib/models/effect/interfaces';
 
 	let openedDeckView: boolean = false;
 	let openedDiscardView: boolean = false;
-	let objectsToBuy: EffectInterface[] = getObjectsToBuy();
+	let objectsToBuy: TriggerEffectInterface[] = getObjectsToBuy();
 
 	function openDeckView() {
 		openedDeckView = !openedDeckView;
@@ -29,7 +29,7 @@
 		openedDiscardView = !openedDiscardView;
 	}
 
-	function getPriceByRarity(object: EffectInterface): number {
+	function getPriceByRarity(object: TriggerEffectInterface): number {
 		if (object.technicalName === 'packOfCards') {
 			return 0;
 		}
@@ -50,19 +50,19 @@
 		}
 	}
 
-	function getObjectsToBuy(): EffectInterface[] {
-		const objectsToBuy: EffectInterface[] = [];
+	function getObjectsToBuy(): TriggerEffectInterface[] {
+		const objectsToBuy: TriggerEffectInterface[] = [];
 		for (let i = 0; i < 3; i++) {
 			objectsToBuy.push(getObjectToBuy());
 		}
 
-		const packOfCards: EffectInterface = new PackOfCards();
+		const packOfCards: TriggerEffectInterface = new PackOfCards();
 		objectsToBuy.push(packOfCards);
 
 		return objectsToBuy;
 	}
 
-	function getObjectToBuy(): EffectInterface {
+	function getObjectToBuy(): TriggerEffectInterface {
 		const rarityWeightValue: number = randomIntFromInterval(1, 100);
 
 		const rarity: RaritiesWeight | undefined = raritiesWeight.find(
@@ -72,15 +72,15 @@
 			throw new Error(`Rarity ${rarityWeightValue} not found`);
 		}
 
-		const filteredEffects: EffectInterface[] = triggerEffects.filter(
-			(triggerEffect: EffectInterface) => triggerEffect.rarity === rarity.rarity
+		const filteredEffects: TriggerEffectInterface[] = triggerEffects.filter(
+			(triggerEffect: TriggerEffectInterface) => triggerEffect.rarity === rarity.rarity
 		);
 
 		const randomEffectIndex: number = randomIntFromInterval(0, filteredEffects.length - 1);
 		return filteredEffects[randomEffectIndex];
 	}
 
-	function buyObject(object: EffectInterface) {
+	function buyObject(object: TriggerEffectInterface) {
 		if ($gameStore.player.deck.cards.length < getPriceByRarity(object.rarity)) {
 			return;
 		}

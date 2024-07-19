@@ -1,7 +1,7 @@
-import type EffectInterface from "../effectInterface";
-import type { Rarities } from "../raritiesType";
+import type { PassiveEffectInterface } from "../interfaces";
+import type { EffectType } from "../types";
 
-export default class DefaultEffect implements EffectInterface {
+export default class DefaultEffect implements PassiveEffectInterface {
     technicalName: string = '';
 	name: string = '';
 	description: string = '';
@@ -9,8 +9,8 @@ export default class DefaultEffect implements EffectInterface {
 	enableOnPlayerTurnState: string = '';
 	enableOnEnemyTurnState: string = '';
 	icon: string = '';
-	rarity: Rarities = 'common';
 	active: boolean = false;
+	effectType: EffectType;
 
 
     protected updateStore(status: boolean, stores: any[]) {

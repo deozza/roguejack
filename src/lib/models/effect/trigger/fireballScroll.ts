@@ -1,8 +1,9 @@
-import type EffectInterface from '../effectInterface';
 import { gameStore } from '$lib/stores/game';
+import type { DamageTriggerEffectInterface } from '../interfaces';
 import type { Rarities } from '../raritiesType';
+import { DamageType, EffectRange, EffectType } from '../types';
 
-export default class FireballScroll implements EffectInterface {
+export default class FireballScroll implements DamageTriggerEffectInterface {
 	technicalName: string = 'fireballScroll';
 	name: string = 'Fireball scroll';
 	description: string = 'Deals 10 damages. You pass your turn and destroy 5 of your cards';
@@ -11,6 +12,9 @@ export default class FireballScroll implements EffectInterface {
 	enableOnEnemyTurnState: string = 'TurnPlayingState';
 	icon: string = 'game-icons:fireball';
 	rarity: Rarities = 'epic';
+	damageType: DamageType = DamageType.fire;
+	effectRange: EffectRange = EffectRange.far;
+	effectType: EffectType = EffectType.magical;
 
 	public effect(data: object): void {
 		if (data['user'] === 'player') {

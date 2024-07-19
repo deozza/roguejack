@@ -1,8 +1,9 @@
-import type EffectInterface from '../effectInterface';
 import { gameStore } from '$lib/stores/game';
+import type { DamageTriggerEffectInterface } from '../interfaces';
 import type { Rarities } from '../raritiesType';
+import { DamageType, EffectRange, EffectType } from '../types';
 
-export default class Sword implements EffectInterface {
+export default class Sword implements DamageTriggerEffectInterface {
 	technicalName: string = 'sword';
 	name: string = 'Sword';
 	description: string = 'Deal 5 damage to the enemy.';
@@ -11,6 +12,9 @@ export default class Sword implements EffectInterface {
 	enableOnEnemyTurnState: string = 'TurnPlayingState';
 	icon: string = 'game-icons:broadsword';
 	rarity: Rarities = 'rare';
+	damageType: DamageType = DamageType.piercing;
+	effectRange: EffectRange = EffectRange.close;
+	effectType: EffectType = EffectType.physical;
 
 	public effect(data: object): void {
 		if (data['user'] === 'player') {

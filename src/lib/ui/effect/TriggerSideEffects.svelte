@@ -1,16 +1,16 @@
 <script lang="ts">
-	import type EffectInterface from "$lib/models/effect/effectInterface";
+	import type { TriggerEffectInterface } from "$lib/models/effect/interfaces";
 	import { gameStore } from "$lib/stores/game";
 	import Icon from "@iconify/svelte";
 	import { popup, type PopupSettings } from "@skeletonlabs/skeleton";
 	import { createEventDispatcher } from "svelte";
 
-    export let triggerEffects: EffectInterface[];
+    export let triggerEffects: TriggerEffectInterface[];
 	export let isEnemy: boolean;
 
 	const dispatch = createEventDispatcher();
 
-	function useEffect(effect: EffectInterface) {
+	function useEffect(effect: TriggerEffectInterface) {
 		effect.effect({ user: 'player' });
 		gameStore.removeFromInventory(effect, 'player');
 

@@ -1,12 +1,12 @@
 import { get } from 'svelte/store';
-import type EffectInterface from '../effectInterface';
 import { gameStore } from '$lib/stores/game';
-import type { Rarities } from '../raritiesType';
 import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 import { battleMachineState } from '$lib/stores/stateMachine/battle';
 import type { StateMachineInterface } from '$lib/models/stateMachine/stateMachineInterface';
 import DefaultEffect from './defaultEffect';
 import { delay } from '$lib/utils';
+import type { PassiveEffectInterface } from '../interfaces';
+import { EffectType } from '../types';
 
 export default class Bleeding  extends DefaultEffect {
 	technicalName: string = 'bleeding';
@@ -16,15 +16,15 @@ export default class Bleeding  extends DefaultEffect {
 	enableOnPlayerTurnState: string = 'TurnInitState';
 	enableOnEnemyTurnState: string = 'TurnInitState';
 	icon: string = 'game-icons:blood';
-	rarity: Rarities = 'rare';
 	active: boolean = false;
-
+	effectType: EffectType = EffectType.physical;
+	
 	public effect(data: object): void {
 		const battleState: StateMachineInterface = get(battleMachineState);
 		if (battleState.currentState.name === 'BattleInitState') {
 			playerSideEffectsStore.update((sideEffects) => {
 				sideEffects = sideEffects.filter(
-					(effect: EffectInterface) => effect.technicalName !== 'bleeding'
+					(effect: PassiveEffectInterface) => effect.technicalName !== 'bleeding'
 				);
 				return sideEffects;
 			});

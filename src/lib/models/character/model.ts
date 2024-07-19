@@ -1,7 +1,7 @@
 import { Deck } from '$lib/models/deck/model';
 import { Discard } from '$lib/models/discard/model';
 import { passiveEffects } from '../effect';
-import type EffectInterface from '../effect/effectInterface';
+import type { DamageTriggerEffectInterface, HealingTriggerEffectInterface, PassiveEffectInterface } from '../effect/interfaces';
 
 export class Character {
 	name: string;
@@ -11,8 +11,8 @@ export class Character {
 	deck: Deck;
 	discard: Discard;
 	minAttack: number | null = null;
-	sideEffect: EffectInterface | null = null;
-	inventory: EffectInterface[] = [];
+	sideEffects: PassiveEffectInterface[] = [];
+	inventory: Array<DamageTriggerEffectInterface | HealingTriggerEffectInterface> = [];
 
 	public generateCharacter(characterType: object) {
 		this.name = characterType.name;
@@ -29,11 +29,11 @@ export class Character {
 		}
 
 		if (characterType.passive) {
-			const sideEffect: EffectInterface | undefined = passiveEffects.find(
+			const sideEffect: PassiveEffectInterface | undefined = passiveEffects.find(
 				(effect) => effect.technicalName === characterType.passive
 			);
 			if (sideEffect) {
-				this.sideEffect = sideEffect;
+				this.sideEffects = [...this.sideEffects, sideEffect];
 			}
 		}
 	}

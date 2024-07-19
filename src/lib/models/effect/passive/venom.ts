@@ -1,5 +1,3 @@
-import type EffectInterface from '../effectInterface';
-import type { Rarities } from '../raritiesType';
 import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 import Poisoned from './poisoned';
 import { get } from 'svelte/store';
@@ -7,6 +5,7 @@ import { gameStore } from '$lib/stores/game';
 import type { Game } from '$lib/models/game/model';
 import DefaultEffect from './defaultEffect';
 import { delay } from '$lib/utils';
+import { EffectType } from '../types';
 
 export default class Venom extends DefaultEffect {
 	technicalName: string = 'venom';
@@ -16,8 +15,8 @@ export default class Venom extends DefaultEffect {
 	enableOnPlayerTurnState: string = 'TurnFightingState';
 	enableOnEnemyTurnState: string = 'TurnFightingState';
 	icon: string = 'game-icons:fangs';
-	rarity: Rarities = 'rare';
 	active: boolean = false;
+	effectType: EffectType = EffectType.physical;
 
 	public effect(data: object): void {
 		const game: Game = get(gameStore);

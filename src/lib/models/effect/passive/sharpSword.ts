@@ -1,7 +1,7 @@
 import { gameStore } from '$lib/stores/game';
 import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 import { delay } from '$lib/utils';
-import type { Rarities } from '../raritiesType';
+import { EffectType } from '../types';
 import DefaultEffect from './defaultEffect';
 
 export default class SharpSword  extends DefaultEffect {
@@ -12,8 +12,8 @@ export default class SharpSword  extends DefaultEffect {
 	enableOnPlayerTurnState: string = 'TurnFightingState';
 	enableOnEnemyTurnState: string = 'TurnFightingState';
 	icon: string = 'game-icons:piercing-sword';
-	rarity: Rarities = 'rare';
 	active: boolean = false;
+	effectType: EffectType = EffectType.physical;
 
 	public effect(data: object): void {
 		let bonusPower: number = 0;

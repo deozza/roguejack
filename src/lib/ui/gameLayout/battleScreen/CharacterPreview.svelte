@@ -4,13 +4,13 @@
 	import Icon from "@iconify/svelte";
 	import { createEventDispatcher } from "svelte";
 	import { fade } from "svelte/transition";
-	import type EffectInterface from '$lib/models/effect/effectInterface';
 	import TriggerSideEffects from "$lib/ui/effect/TriggerSideEffects.svelte";
+	import type { PassiveEffectInterface } from "$lib/models/effect/interfaces";
 
     const dispatch = createEventDispatcher();
 
     export let user: Character;
-	export let passiveEffects: EffectInterface[];
+	export let passiveEffects: PassiveEffectInterface[];
     export let isEnemy: boolean = false;
 </script>
 <section
