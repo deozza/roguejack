@@ -90,12 +90,12 @@
 			</button>
 		</div>
 		<div
-			class="flex {isEnemy
+			class="inline-flex {isEnemy
 				? 'flex-row-reverse'
-				: 'flex-row'} items-center justify-start overflow-x-auto w-1/2 md:w-8/12 mx-5"
+				: 'flex-row'} items-center justify-start w-1/2 md:w-8/12 mx-5"
 		>
-			{#each [...userHand.cards].reverse() as card}
-				<PlayingCard {card} />
+			{#each userHand.cards as card}
+				<PlayingCard {card} {isEnemy}/>
 			{/each}
 		</div>
 	</div>
