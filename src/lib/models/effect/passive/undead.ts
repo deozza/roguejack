@@ -4,7 +4,7 @@ import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideE
 import DefaultEffect from './defaultEffect';
 import { EffectType } from '../types';
 
-export default class Undead  extends DefaultEffect {
+export default class Undead extends DefaultEffect {
 	technicalName: string = 'undead';
 	name: string = 'Undead';
 	description: string = 'Ignore damages if enemy hand does not contain club cards.';

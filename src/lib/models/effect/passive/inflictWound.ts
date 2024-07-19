@@ -7,7 +7,7 @@ import DefaultEffect from './defaultEffect';
 import { delay } from '$lib/utils';
 import { EffectType } from '../types';
 
-export default class InflictWound  extends DefaultEffect {
+export default class InflictWound extends DefaultEffect {
 	technicalName: string = 'inflictWound';
 	name: string = 'Inflict wound';
 	description: string = 'Inflicts bleeding when attacking';

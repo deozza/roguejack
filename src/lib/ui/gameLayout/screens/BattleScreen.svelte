@@ -257,7 +257,7 @@
 			passiveEffects={$playerSideEffectsStore}
 			on:draw={() => drawCard()}
 			on:playerDiscardView={() => openPlayerDiscardView()}
-			on:updateBattleState={() => updateBattleState()}	
+			on:updateBattleState={() => updateBattleState()}
 		/>
 
 		<div class="flex flex-col items-center justify-center md:h-full w-full md:w-4/12" id="fighting">

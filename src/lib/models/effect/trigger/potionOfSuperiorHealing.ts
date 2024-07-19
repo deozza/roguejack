@@ -14,7 +14,6 @@ export default class PotionOfSuperiorfHealing implements HealingTriggerEffectInt
 	rarity: Rarities = 'rare';
 	effectType: EffectType = EffectType.physical;
 
-
 	public effect(data: object): void {
 		if (data['user'] === 'enemy') {
 			gameStore.update((game) => {

@@ -27,7 +27,13 @@
 </script>
 
 {#if openedCharacterInfo}
-	<CharacterPreview {user} {passiveEffects} {isEnemy}  on:close={() => openCharacterInfoScreen()} on:updateBattleState/>
+	<CharacterPreview
+		{user}
+		{passiveEffects}
+		{isEnemy}
+		on:close={() => openCharacterInfoScreen()}
+		on:updateBattleState
+	/>
 {/if}
 
 <div class="flex flex-col items-center justify-center md:h-full w-full md:w-4/12">
@@ -48,8 +54,11 @@
 		{/if}
 		<div class="flex flex-row items-center justify-center space-x-4">
 			<span>{user.name}</span>
-			
-			<button class="btn btn-sm rounded-full variant-ringed-tertiary text-white" on:click={() => openCharacterInfoScreen()}>?</button>
+
+			<button
+				class="btn btn-sm rounded-full variant-ringed-tertiary text-white"
+				on:click={() => openCharacterInfoScreen()}>?</button
+			>
 		</div>
 	</h3>
 
@@ -60,8 +69,15 @@
 	/>
 
 	<div class="flex flex-row items-center justify-center space-x-3 mt-5">
-		{#each passiveEffects as sideEffect}				
-			<Icon icon={sideEffect.icon} width="24" height="24" class={sideEffect.active !== undefined && sideEffect.active === true ? 'text-orange-500' : ''} />
+		{#each passiveEffects as sideEffect}
+			<Icon
+				icon={sideEffect.icon}
+				width="24"
+				height="24"
+				class={sideEffect.active !== undefined && sideEffect.active === true
+					? 'text-orange-500'
+					: ''}
+			/>
 		{/each}
 	</div>
 
@@ -93,7 +109,7 @@
 				: 'flex-row'} items-center justify-start w-1/2 md:w-8/12 mx-5"
 		>
 			{#each userHand.cards as card}
-				<PlayingCard {card} {isEnemy}/>
+				<PlayingCard {card} {isEnemy} />
 			{/each}
 		</div>
 	</div>

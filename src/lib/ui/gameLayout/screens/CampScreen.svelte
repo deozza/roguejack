@@ -14,11 +14,15 @@
 	import { TurnMachineState } from '$lib/models/stateMachine/turn/turnMachineState';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
 	import { randomIntFromInterval } from '$lib/utils';
-	import type { DamageTriggerEffectInterface, HealingTriggerEffectInterface } from '$lib/models/effect/interfaces';
+	import type {
+		DamageTriggerEffectInterface,
+		HealingTriggerEffectInterface
+	} from '$lib/models/effect/interfaces';
 
 	let openedDeckView: boolean = false;
 	let openedDiscardView: boolean = false;
-	const objectToLoot: DamageTriggerEffectInterface | HealingTriggerEffectInterface = getObjectToLoot();
+	const objectToLoot: DamageTriggerEffectInterface | HealingTriggerEffectInterface =
+		getObjectToLoot();
 
 	function openDeckView() {
 		openedDeckView = !openedDeckView;
@@ -49,9 +53,11 @@
 			throw new Error(`Rarity ${rarityWeightValue} not found`);
 		}
 
-		const filteredEffects: Array<DamageTriggerEffectInterface | HealingTriggerEffectInterface> = triggerEffects.filter(
-			(triggerEffect: DamageTriggerEffectInterface | HealingTriggerEffectInterface) => triggerEffect.rarity === rarity.rarity
-		);
+		const filteredEffects: Array<DamageTriggerEffectInterface | HealingTriggerEffectInterface> =
+			triggerEffects.filter(
+				(triggerEffect: DamageTriggerEffectInterface | HealingTriggerEffectInterface) =>
+					triggerEffect.rarity === rarity.rarity
+			);
 
 		const randomEffectIndex: number = randomIntFromInterval(0, filteredEffects.length - 1);
 		return filteredEffects[randomEffectIndex];

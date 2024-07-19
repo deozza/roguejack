@@ -1,11 +1,14 @@
 <script lang="ts">
-	import type { DamageTriggerEffectInterface, HealingTriggerEffectInterface } from "$lib/models/effect/interfaces";
-	import { gameStore } from "$lib/stores/game";
-	import Icon from "@iconify/svelte";
-	import { popup, type PopupSettings } from "@skeletonlabs/skeleton";
-	import { createEventDispatcher } from "svelte";
+	import type {
+		DamageTriggerEffectInterface,
+		HealingTriggerEffectInterface
+	} from '$lib/models/effect/interfaces';
+	import { gameStore } from '$lib/stores/game';
+	import Icon from '@iconify/svelte';
+	import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
+	import { createEventDispatcher } from 'svelte';
 
-    export let triggerEffects: Array<HealingTriggerEffectInterface | DamageTriggerEffectInterface>;
+	export let triggerEffects: Array<HealingTriggerEffectInterface | DamageTriggerEffectInterface>;
 	export let isEnemy: boolean;
 
 	const dispatch = createEventDispatcher();
@@ -15,9 +18,9 @@
 		gameStore.removeFromInventory(effect, 'player');
 
 		dispatch('updateBattleState');
-	}	
+	}
 
-    function popupClick(target: string): PopupSettings {
+	function popupClick(target: string): PopupSettings {
 		return {
 			event: 'click',
 			target,

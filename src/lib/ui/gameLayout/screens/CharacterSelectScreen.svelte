@@ -22,7 +22,9 @@
 
 	function preSelectCharacter(character: object) {
 		selectedCharacter = character;
-		passive = passiveEffects.find((effect: PassiveEffectInterface) => effect.technicalName === character.passive);
+		passive = passiveEffects.find(
+			(effect: PassiveEffectInterface) => effect.technicalName === character.passive
+		);
 
 		cards = [];
 		character.deck.suits.forEach((suit: Suit) => {

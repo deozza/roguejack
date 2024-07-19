@@ -1,5 +1,9 @@
 import MasteryOverDeath from '$lib/models/effect/passive/masteryOverDeath';
-import type { DamageTriggerEffectInterface, HealingTriggerEffectInterface, PassiveEffectInterface } from './interfaces';
+import type {
+	DamageTriggerEffectInterface,
+	HealingTriggerEffectInterface,
+	PassiveEffectInterface
+} from './interfaces';
 import Bleeding from './passive/bleeding';
 import Bravery from './passive/bravery';
 import InflictWound from './passive/inflictWound';

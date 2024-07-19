@@ -23,9 +23,7 @@ export interface DamageTriggerEffectInterface extends TriggerEffectInterface {
 	effectRange: EffectRange;
 }
 
-export interface HealingTriggerEffectInterface extends TriggerEffectInterface {
-}
-
+export interface HealingTriggerEffectInterface extends TriggerEffectInterface {}
 
 export interface PassiveEffectInterface extends EffectInterface {
 	active: boolean;

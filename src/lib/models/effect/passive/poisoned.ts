@@ -8,7 +8,7 @@ import { delay } from '$lib/utils';
 import type { PassiveEffectInterface } from '../interfaces';
 import { EffectType } from '../types';
 
-export default class Poisoned  extends DefaultEffect {
+export default class Poisoned extends DefaultEffect {
 	technicalName: string = 'poisoned';
 	name: string = 'Poisoned';
 	description: string = 'Inflicts 1 damage when drawing a card. Ends at the end of the battle';

@@ -8,7 +8,7 @@ import { delay } from '$lib/utils';
 import type { PassiveEffectInterface } from '../interfaces';
 import { EffectType } from '../types';
 
-export default class Bleeding  extends DefaultEffect {
+export default class Bleeding extends DefaultEffect {
 	technicalName: string = 'bleeding';
 	name: string = 'Bleeding';
 	description: string = 'Inflicts 1 at the start of the turn. Ends at the end of the battle';
@@ -18,7 +18,7 @@ export default class Bleeding  extends DefaultEffect {
 	icon: string = 'game-icons:blood';
 	active: boolean = false;
 	effectType: EffectType = EffectType.physical;
-	
+
 	public effect(data: object): void {
 		const battleState: StateMachineInterface = get(battleMachineState);
 		if (battleState.currentState.name === 'BattleInitState') {

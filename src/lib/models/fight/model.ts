@@ -41,11 +41,10 @@ export class Fight {
 		) {
 			this.playerHasWon = true;
 			return this;
-		}else{
+		} else {
 			this.enemyHasWon = true;
-			return this;	
+			return this;
 		}
-
 	}
 
 	public setBaseDamageToPlayer(playerHand: Hand, enemyHand: Hand): Fight {

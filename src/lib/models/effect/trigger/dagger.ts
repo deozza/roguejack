@@ -1,6 +1,6 @@
 import { gameStore } from '$lib/stores/game';
 import type { Rarities } from '../raritiesType';
-import type { DamageTriggerEffectInterface,} from '../interfaces';
+import type { DamageTriggerEffectInterface } from '../interfaces';
 import { DamageType, EffectRange, EffectType } from '../types';
 
 export default class Dagger implements DamageTriggerEffectInterface {

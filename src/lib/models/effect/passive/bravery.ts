@@ -7,7 +7,7 @@ import DefaultEffect from './defaultEffect';
 import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 import { EffectType } from '../types';
 
-export default class Bravery  extends DefaultEffect {
+export default class Bravery extends DefaultEffect {
 	technicalName: string = 'bravery';
 	name: string = 'Bravery';
 	description: string = 'Generate a sword when facing a semiboss or a boss';

@@ -32,7 +32,9 @@ export default class MasteryOverDeath extends DefaultEffect {
 				return game;
 			});
 		} else {
-			const bonusPower: number = Math.floor(game.getCurrentBattle().enemy.discard.cards.length / 10);
+			const bonusPower: number = Math.floor(
+				game.getCurrentBattle().enemy.discard.cards.length / 10
+			);
 
 			if (bonusPower === 0) {
 				return;

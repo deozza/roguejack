@@ -4,7 +4,7 @@ import { delay } from '$lib/utils';
 import { EffectType } from '../types';
 import DefaultEffect from './defaultEffect';
 
-export default class SharpSword  extends DefaultEffect {
+export default class SharpSword extends DefaultEffect {
 	technicalName: string = 'sharpSword';
 	name: string = 'Sharp sword';
 	description: string = 'Deals 1 more damage if winning hand has a spade card';

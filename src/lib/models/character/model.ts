@@ -1,7 +1,11 @@
 import { Deck } from '$lib/models/deck/model';
 import { Discard } from '$lib/models/discard/model';
 import { passiveEffects } from '../effect';
-import type { DamageTriggerEffectInterface, HealingTriggerEffectInterface, PassiveEffectInterface } from '../effect/interfaces';
+import type {
+	DamageTriggerEffectInterface,
+	HealingTriggerEffectInterface,
+	PassiveEffectInterface
+} from '../effect/interfaces';
 
 export class Character {
 	name: string;

@@ -17,13 +17,11 @@
 		<div class="flex flex-row items-center justify-end w-full p-4">
 			<button class="btn" on:click={() => dispatch('close')}>
 				<Icon icon="mdi:close" width="24" height="24" />
-			</button>	
+			</button>
 		</div>
 
 		<div class="flex flex-row items-center justify-center w-full p-4">
-			<h1 class="h1">
-				Discard preview
-			</h1>
+			<h1 class="h1">Discard preview</h1>
 		</div>
 		<div
 			class="inline-flex w-10/12 h-full flex-row flex-wrap items-start justify-center overscroll-none overflow-y-scroll pb-24"

@@ -8,7 +8,9 @@
 </script>
 
 <div
-	class="inline-flex bg-white drop-shadow-2xl flex flex-col items-center justify-between rounded-xl card-hover p-2 min-h-32 min-w-24 {isEnemy ? '-ml-12' : '-mr-12'} {card.suit}"
+	class="inline-flex bg-white drop-shadow-2xl flex flex-col items-center justify-between rounded-xl card-hover p-2 min-h-32 min-w-24 {isEnemy
+		? '-ml-12'
+		: '-mr-12'} {card.suit}"
 	in:fly={{ delay: 300, duration: 800 }}
 >
 	<div class="flex flex-row items-center self-start">
