@@ -14,7 +14,7 @@
     export let isEnemy: boolean = false;
 </script>
 <section
-	class="absolute z-10 top-0 right-0 left-0 bg-surface-500/90 drop-shadow-2xl"
+	class="absolute z-10 top-20 right-0 left-0 bg-surface-500/90 drop-shadow-2xl"
 	transition:fade={{ delay: 250, duration: 300 }}
 >
 	<div class="flex flex-col items-center justify-center h-full w-full">
