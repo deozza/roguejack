@@ -1,50 +1,9 @@
-import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
-import Poisoned from './poisoned';
-import { get } from 'svelte/store';
-import { gameStore } from '$lib/stores/game';
-import type { Game } from '$lib/models/game/model';
-import DefaultEffect from './defaultEffect';
-import { delay } from '$lib/utils';
-import { EffectType } from '../types';
+import type { PassiveAbility } from "$lib/models/characters/passiveAbility/interfaces";
 
-export default class Venom extends DefaultEffect {
+export default class Venom implements PassiveAbility {
 	technicalName: string = 'venom';
 	name: string = 'Venom';
 	description: string = 'Inflicts poison when attacking';
-	enableOnBattleState: string = '';
-	enableOnPlayerTurnState: string = 'TurnFightingState';
-	enableOnEnemyTurnState: string = 'TurnFightingState';
 	icon: string = 'game-icons:fangs';
 	active: boolean = false;
-	effectType: EffectType = EffectType.physical;
-
-	public effect(data: object): void {
-		const game: Game = get(gameStore);
-		if (data['user'] === 'player') {
-			if (game.getCurrentBattle()?.getCurrentTurn().fight.playerHasWon === false) {
-				return;
-			}
-
-			this.updateStore(true, [playerSideEffectsStore]);
-			enemySideEffectsStore.update((sideEffects) => {
-				sideEffects.push(new Poisoned());
-				return sideEffects;
-			});
-		} else {
-			if (game.getCurrentBattle()?.getCurrentTurn().fight.enemyHasWon === false) {
-				return;
-			}
-
-			this.updateStore(true, [enemySideEffectsStore]);
-
-			playerSideEffectsStore.update((sideEffects) => {
-				sideEffects.push(new Poisoned());
-				return sideEffects;
-			});
-		}
-
-		delay(2000).then(() => {
-			this.updateStore(false, [playerSideEffectsStore, enemySideEffectsStore]);
-		});
-	}
 }

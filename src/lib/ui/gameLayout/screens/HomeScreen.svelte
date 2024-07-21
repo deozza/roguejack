@@ -31,7 +31,7 @@
 		<p class="p text-lg">Roguejack is a game mixing blackjack and roguelite elements.</p>
 		<p class="p text-lg">
 			Use your deck to build powerful hands, take advantage from the abilities of your characters
-			and the weapons you collect through your journey and try to destroy your ennemies.
+			and the weapons you collect through your journey and try to destroy your enemies.
 		</p>
 		<p class="p text-lg">But beware ! Do not lose all your health or run out of cards !</p>
 	</div>

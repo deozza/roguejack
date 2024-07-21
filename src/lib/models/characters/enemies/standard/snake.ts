@@ -1,7 +1,13 @@
 import type { Face, Suit } from "$lib/models/card/types";
-import DefaultEnemyCharacter from "..";
+import { type Enemy } from "$lib/models/characters/enemies";
+import { EnnemyType } from "$lib/models/characters/types";
+import { DefaultCharacter } from "$lib/models/characters";
 
-export default class Snake extends DefaultEnemyCharacter {
+export default class Snake extends DefaultCharacter implements Enemy {
+
+    minAttack: number;
+    type: EnnemyType;
+    
     constructor() {
         super();
 
@@ -13,7 +19,8 @@ export default class Snake extends DefaultEnemyCharacter {
         this.maxHealth = 3;
         this.currentHealth = 3;
         this.minAttack = 12;
-        this.level = 2;
+        this.level = 1;
+        this.type = EnnemyType.standard;
         this.deck.generateDeck(deckSuits, deckValues);
     }    
 }

@@ -1,7 +1,7 @@
 import { Categories, Ranges, Types } from "$lib/models/effects/enums";
 import type { EffectInterface } from "$lib/models/effects/interfaces";
-import { Rarities } from "../enums";
-import type { WeaponInterface } from "../interfaces";
+import { Rarities } from "$lib/models/items/enums";
+import type { WeaponInterface } from "$lib/models/items/interfaces";
 
 export default class Dagger implements WeaponInterface {
 	technicalName: string = 'dagger';

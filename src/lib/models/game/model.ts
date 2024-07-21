@@ -1,6 +1,6 @@
 import { Battle } from '$lib/models/battle/model';
-import DefaultCharacter from '../characters';
-import type { Player } from '../characters/interfaces';
+import { DefaultCharacter } from '$lib/models/characters';
+import type { Player } from '$lib/models/characters/players';
 
 export class Game {
 	id: string;

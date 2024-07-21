@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { GameMachineState } from './gameMachineState';
-import { EventInterface } from '../eventInterface';
+import type { EventInterface } from '../eventInterface';
 
 describe('game state machine test', () => {
 	it('init state machine', () => {

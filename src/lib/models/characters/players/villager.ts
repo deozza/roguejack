@@ -1,7 +1,8 @@
 import type { Face, Suit } from "$lib/models/card/types";
-import DefaultPlayerCharacter from "$lib/models/characters/players";
+import { type Player } from "$lib/models/characters/players";
+import { DefaultCharacter } from "..";
 
-export default class Villager extends DefaultPlayerCharacter {
+export default class Villager extends DefaultCharacter implements Player {
     constructor() {
         super();
 

@@ -1,7 +1,13 @@
 import type { Face, Suit } from "$lib/models/card/types";
-import DefaultEnemyCharacter from "..";
+import { type Enemy } from "$lib/models/characters/enemies";
+import { EnnemyType } from "$lib/models/characters/types";
+import { DefaultCharacter } from "$lib/models/characters";
 
-export default class Slime extends DefaultEnemyCharacter {
+export default class Slime extends DefaultCharacter implements Enemy {
+
+    minAttack: number;
+    type: EnnemyType;
+    
     constructor() {
         super();
 
@@ -14,6 +20,7 @@ export default class Slime extends DefaultEnemyCharacter {
         this.currentHealth = 10;
         this.minAttack = 8;
         this.level = 2;
+        this.type = EnnemyType.standard;
         this.deck.generateDeck(deckSuits, deckValues);
     }    
 }

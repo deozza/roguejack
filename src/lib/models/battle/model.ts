@@ -1,5 +1,5 @@
 import { Turn } from '$lib/models/turn/model';
-import type { Enemy } from '../characters/interfaces';
+import type { Enemy } from '$lib/models/characters/enemies';
 
 export class Battle {
 	id: string;

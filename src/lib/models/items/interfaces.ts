@@ -1,6 +1,6 @@
-import type { Categories, Ranges, Types } from "../effects/enums";
-import type { EffectInterface } from "../effects/interfaces";
-import type { Rarities } from "./enums";
+import type { Categories, Ranges, Types } from "$lib/models/effects/enums";
+import type { EffectInterface } from "$lib/models/effects/interfaces";
+import type { Rarities } from "$lib/models/items/enums";
 
 interface ItemInterface {
     technicalName: string;

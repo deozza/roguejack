@@ -1,4 +1,4 @@
-import type { Status } from "./interfaces";
+import type { Status } from "$lib/models/characters/status/interfaces";
 
 export default class Bleeding implements Status {
     technicalName: string = 'bleeding';

@@ -1,4 +1,4 @@
-import type { PassiveAbility } from "./interfaces";
+import type { PassiveAbility } from "$lib/models/characters/passiveAbility/interfaces";
 
 export default class MasteryOverDeath implements PassiveAbility {
 	technicalName: string = 'masteryOverDeath';

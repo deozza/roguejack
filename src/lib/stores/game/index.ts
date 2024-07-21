@@ -7,7 +7,7 @@ import { get } from 'svelte/store';
 import { writable } from 'svelte/store';
 import { delay } from '$lib/utils';
 import type { Enemy, Player } from '$lib/models/characters/interfaces';
-import { getRandomEnemyByLevelAndType } from '$lib/models/characters/ennemies';
+import { getRandomEnemyByLevelAndType } from '$lib/models/characters/enemies';
 import { EnnemyType } from '$lib/models/characters/types';
 
 

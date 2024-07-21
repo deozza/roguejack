@@ -1,8 +1,7 @@
 import { Categories, Types } from "$lib/models/effects/enums";
 import type { EffectInterface } from "$lib/models/effects/interfaces";
-import { Rarities } from "../enums";
-import type { ConsumableInterface } from "../interfaces";
-
+import { Rarities } from "$lib/models/items/enums";
+import type { ConsumableInterface } from "$lib/models/items/interfaces";
 
 export default class PotionOfGreaterHealing implements ConsumableInterface {
 	category: Categories = Categories.neutral;

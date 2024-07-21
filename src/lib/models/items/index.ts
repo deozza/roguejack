@@ -1,15 +1,15 @@
 import { randomIntFromInterval } from "$lib/utils";
-import PackOfCards from "./consumable/packOfCards";
-import PotionOfGreaterHealing from "./consumable/potionOfGreaterHealing";
-import PotionOfHealing from "./consumable/potionOfHealing";
-import PotionOfSuperiorfHealing from "./consumable/potionOfSuperiorHealing";
-import { defaultRaritiesWeights, type RaritiesWeight } from "./enums";
-import EarthquakeScroll from "./scrolls/earthquakeScroll";
-import FireballScroll from "./scrolls/fireballScroll";
-import type { ItemTypes } from "./types";
-import Dagger from "./weapons/dagger";
-import Knife from "./weapons/knife";
-import Sword from "./weapons/sword";
+import PackOfCards from "$lib/models/items/consumable/packOfCards";
+import PotionOfGreaterHealing from "$lib/models/items/consumable/potionOfGreaterHealing";
+import PotionOfHealing from "$lib/models/items/consumable/potionOfHealing";
+import PotionOfSuperiorfHealing from "$lib/models/items/consumable/potionOfSuperiorHealing";
+import { defaultRaritiesWeights, type RaritiesWeight } from "$lib/models/items/enums";
+import EarthquakeScroll from "$lib/models/items/scrolls/earthquakeScroll";
+import FireballScroll from "$lib/models/items/scrolls/fireballScroll";
+import type { ItemTypes } from "$lib/models/items/types";
+import Dagger from "$lib/models/items/weapons/dagger";
+import Knife from "$lib/models/items/weapons/knife";
+import Sword from "$lib/models/items/weapons/sword";
 
 
 const items: ItemTypes[] = [

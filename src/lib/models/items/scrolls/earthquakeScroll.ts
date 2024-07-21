@@ -1,7 +1,7 @@
-import { Categories, Ranges, Types } from "$lib/models/effects/enums";
+import { Categories, Types } from "$lib/models/effects/enums";
 import type { EffectInterface } from "$lib/models/effects/interfaces";
-import { Rarities } from "../enums";
-import type { ScrollInterface } from "../interfaces";
+import { Rarities } from "$lib/models/items/enums";
+import type { ScrollInterface } from "$lib/models/items/interfaces";
 
 
 export default class EarthquakeScroll implements ScrollInterface {

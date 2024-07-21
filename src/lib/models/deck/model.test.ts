@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { Card, type Face, type Suit } from '../card/model';
-import { Deck } from './model';
+import { Card, type Face, type Suit } from '$lib/models/card/model';
+import { Deck } from '$lib/models/deck/model';
 
 describe('deck model test', () => {
 	it('generate deck with all cards', () => {

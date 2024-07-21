@@ -1,9 +1,14 @@
 import type { Face, Suit } from "$lib/models/card/types";
-import DefaultEnemyCharacter from "$lib/models/characters/ennemies";
+import { type Enemy } from "$lib/models/characters/enemies";
 import { EnnemyType } from "$lib/models/characters/types";
+import { DefaultCharacter } from "$lib/models/characters";
 
 
-export default class Wolf extends DefaultEnemyCharacter {
+export default class Wolf  extends DefaultCharacter implements Enemy {
+
+    minAttack: number;
+    type: EnnemyType;
+    
     constructor() {
         super();
 

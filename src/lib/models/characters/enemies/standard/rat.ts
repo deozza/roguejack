@@ -1,7 +1,13 @@
 import type { Face, Suit } from "$lib/models/card/types";
-import DefaultEnemyCharacter from "..";
+import { type Enemy } from "$lib/models/characters/enemies";
+import { EnnemyType } from "$lib/models/characters/types";
+import { DefaultCharacter } from "$lib/models/characters";
 
-export default class Rat extends DefaultEnemyCharacter {
+export default class Rat extends DefaultCharacter implements Enemy {
+
+    minAttack: number;
+    type: EnnemyType;
+    
     constructor() {
         super();
 
@@ -12,7 +18,9 @@ export default class Rat extends DefaultEnemyCharacter {
         this.technicalName = 'rat';
         this.maxHealth = 2;
         this.currentHealth = 2;
-        this.minAttack = 10;
+        this.minAttack = 11;
+        this.level = 1;
+        this.type = EnnemyType.standard;
         this.deck.generateDeck(deckSuits, deckValues);
     }    
 }
