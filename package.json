@@ -12,7 +12,8 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
-		"test:unit": "vitest"
+		"test:unit": "vitest",
+		"test:unit:coverage": "vitest run --coverage"
 	},
 	"devDependencies": {
 		"@iconify/svelte": "^4.0.2",

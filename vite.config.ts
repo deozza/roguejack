@@ -4,5 +4,10 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
 	plugins: [sveltekit(), purgeCss()],
-	test: {}
+	test: {
+		coverage: {
+			provider: 'v8',
+			include: ['src/**/*.ts'],
+		}
+	}
 });
