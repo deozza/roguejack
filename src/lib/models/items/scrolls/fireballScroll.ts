@@ -4,7 +4,7 @@ import { Rarities } from "$lib/models/items/enums";
 import type { ScrollInterface } from "$lib/models/items/interfaces";
 
 export default class FireballScroll implements ScrollInterface {
-
+	id: string = crypto.randomUUID();
 	technicalName: string = 'fireballScroll';
 	name: string = 'Fireball scroll';
 	description: string = 'Deals 10 damages. You pass your turn and destroy 5 of your cards';

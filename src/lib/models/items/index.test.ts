@@ -20,4 +20,11 @@ describe('items index test', () => {
 			expect(item.rarity).toBe(data.expected);
 		});
 	});
+
+	it('check id of same item is randomized', () => {
+		const item1: ItemTypes = getRandomItemByWeight([{rarity: Rarities.legendary, weight: 100}]);
+		const item2: ItemTypes = getRandomItemByWeight([{rarity: Rarities.legendary, weight: 100}]);
+		
+		expect(item1.id).not.toBe(item2.id);
+	});
 });

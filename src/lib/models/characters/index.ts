@@ -3,6 +3,7 @@ import { Discard } from "$lib/models/discard/model";
 import type { ItemTypes } from "$lib/models/items/types";
 import type { Status } from "$lib/models/characters/status/interfaces";
 import type { PassiveAbility } from "$lib/models/characters/passiveAbility/interfaces";
+import type { Enemy } from "./enemies";
 
 export interface Character {
     name: string;
@@ -66,5 +67,14 @@ export class DefaultCharacter implements Character {
         this.inventory = [...this.inventory, item];
         return this;
     }
+
+    public removeItemFromInventory(item: ItemTypes): DefaultCharacter {
+        this.inventory = this.inventory.filter((i) => i !== item);
+        return this;
+    }
     
+}
+
+export function checkCharacterIsForEnnemy(character: Character): boolean {
+    return (character as Enemy).type !== undefined;
 }

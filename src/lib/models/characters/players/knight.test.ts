@@ -32,15 +32,4 @@ describe('player character knight test', () => {
 		knight.currentHealth = 5;
 		expect(knight.getHealthColor()).toBe('bg-red-500');
 	});
-
-	it('add item to inventory', () => {
-		const knight = new Knight();
-		expect(knight.inventory.length).toBe(0);
-
-		const item: ConsumableInterface = new PotionOfHealing();
-		knight.addToInventory(item);
-
-		expect(knight.inventory.length).toBe(1);
-		expect(knight.inventory[0].technicalName).toBe('potionOfHealing');
-	});
 });

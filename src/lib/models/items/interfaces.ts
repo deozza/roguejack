@@ -1,8 +1,10 @@
 import type { Categories, Ranges, Types } from "$lib/models/effects/enums";
 import type { EffectInterface } from "$lib/models/effects/interfaces";
 import type { Rarities } from "$lib/models/items/enums";
+import type { Character } from "../characters";
 
 interface ItemInterface {
+    id: string; 
     technicalName: string;
     name: string;
     description: string;
@@ -10,7 +12,7 @@ interface ItemInterface {
     icon: string;
     effects: EffectInterface[];
 
-    applyEffects(): void;
+    applyEffects(targetCharacter: Character, usingCharacter: Character): void;
 }
 
 export interface WeaponInterface extends ItemInterface {

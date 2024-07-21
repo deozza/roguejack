@@ -5,7 +5,8 @@ import type { ScrollInterface } from "$lib/models/items/interfaces";
 
 
 export default class EarthquakeScroll implements ScrollInterface {
-	
+	id: string = crypto.randomUUID();
+
 	technicalName: string = 'earthquakeScroll';
 	name: string = 'Earthquake scroll';
 	description: string = "Deals 10 damages. Your ennemy can't play.";

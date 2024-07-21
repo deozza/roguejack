@@ -4,6 +4,7 @@ import { Rarities } from "$lib/models/items/enums";
 import type { ConsumableInterface } from "$lib/models/items/interfaces";
 
 export default class PackOfCards  implements ConsumableInterface {
+	id: string = crypto.randomUUID();
 	category: Categories = Categories.neutral;
 	type: Types = Types.physical;
 	effects: EffectInterface[] = [];

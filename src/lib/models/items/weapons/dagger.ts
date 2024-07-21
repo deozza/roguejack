@@ -4,6 +4,7 @@ import { Rarities } from "$lib/models/items/enums";
 import type { WeaponInterface } from "$lib/models/items/interfaces";
 
 export default class Dagger implements WeaponInterface {
+	id: string = crypto.randomUUID();
 	technicalName: string = 'dagger';
 	name: string = 'Dagger';
 	description: string = 'Deal 3 damage to the enemy.';
