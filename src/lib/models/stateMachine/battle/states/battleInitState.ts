@@ -14,10 +14,10 @@ export class BattleInitState implements StateInterface {
 		enemySideEffectsStore.set([]);
 		const game: Game = get(gameStore);
 
-		if (game.getCurrentBattle()?.enemy.sideEffects.length > 0) {
+		if (game.getCurrentBattle()?.enemy.passiveAbilities.length > 0) {
 			enemySideEffectsStore.update((enemySideEffectsStore) => [
 				...enemySideEffectsStore,
-				...game.getCurrentBattle()?.enemy.sideEffects
+				...game.getCurrentBattle()?.enemy.passiveAbilities
 			]);
 		}
 	}

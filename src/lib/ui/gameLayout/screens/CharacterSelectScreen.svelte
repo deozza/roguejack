@@ -25,8 +25,8 @@
 		$gameMachineState = $gameMachineState;
 		$gameMachineState.currentState.onStateExecute({});
 
-		if ($gameStore.player.sideEffects.length > 0) {
-			$playerSideEffectsStore = [...$playerSideEffectsStore, ...$gameStore.player.sideEffects];
+		if ($gameStore.player.passiveAbilities.length > 0) {
+			$playerSideEffectsStore = [...$playerSideEffectsStore, ...$gameStore.player.passiveAbilities];
 		}
 
 		$gameMachineState.listenToEvent({ name: 'START_GAME', data: null });
