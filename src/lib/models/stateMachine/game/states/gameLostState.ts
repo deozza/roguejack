@@ -1,17 +1,9 @@
-import { type StateInterface } from '../../stateInterface';
+import { DefaultState } from '../..';
 
-export class GameLostState implements StateInterface {
+export default class GameLostState extends DefaultState {
 	public name: string = 'GameLostState';
 
-	public onStateEnter = (): void => {
-		console.log(` ${this.name} entered`);
-	};
-
 	public onStateExecute(): void {
-		console.log(` ${this.name} executed`);
 	}
-
-	public onStateExit = (): void => {
-		console.log(` ${this.name} exited`);
-	};
 }
+

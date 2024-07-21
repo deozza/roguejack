@@ -1,40 +1,45 @@
-import { type EventInterface } from '../eventInterface';
-import { type StateInterface } from '../stateInterface';
-import { type StateMachineInterface } from '../stateMachineInterface';
-import { TurnBustedState } from './states/turnBustedState';
-import { TurnDamageState } from './states/turnDamageState';
-import { TurnDeckEmptyState } from './states/turnDeckEmptyState';
-import { TurnDrawingState } from './states/turnDrawingState';
-import { TurnFightingState } from './states/turnFightingState';
-import { TurnIdleState } from './states/turnIdleState';
-import { TurnInitState } from './states/turnInitState';
-import { TurnLostState } from './states/turnLostState';
-import { TurnPlayingState } from './states/turnPlayingState';
-import { TurnTiedState } from './states/turnTiedState';
-import { TurnWonState } from './states/turnWonState';
+import type { EventInterface, StateInterface, StateMachineInterface } from '../interfaces';
+import { TurnDamageState, TurnEnemyBustedState, TurnEnemyDeckEmptyState, TurnEnemyDrawingState, TurnEnemyInitState, TurnEnemyPlayingState, TurnEnemyUsingItemState, TurnFightingState, TurnIdleState, TurnLostState, TurnPlayerBustedState, TurnPlayerDeckEmptyState, TurnPlayerDrawingState, TurnPlayerPlayingState, TurnPlayerUsingItemState, TurnTiedState, TurnWonState } from './states';
+import TurnPlayerInitState from './states/turnPlayerInitState';
+
 
 export class TurnMachineState implements StateMachineInterface {
 	public currentState: StateInterface = new TurnIdleState();
 
 	public stateMachine: object = {
 		TurnIdleState: {
-			NEW_TURN: TurnInitState
+			NEW_TURN: TurnPlayerInitState
 		},
-		TurnInitState: {
-			PLAY: TurnPlayingState,
-			DECK_EMPTY: TurnDeckEmptyState
+		TurnPlayerInitState: {
+			PLAY: TurnPlayerPlayingState,
+			DECK_EMPTY: TurnPlayerDeckEmptyState
 		},
-		TurnPlayingState: {
-			DRAW: TurnDrawingState,
-			FIGHT: TurnFightingState
+		TurnPlayerPlayingState: {
+			DRAW: TurnPlayerDrawingState,
+			USE_ITEM: TurnPlayerUsingItemState,
+			FIGHT: TurnEnemyInitState
 		},
-		TurnDrawingState: {
-			PLAY: TurnPlayingState,
-			BUST: TurnBustedState,
-			DECK_EMPTY: TurnDeckEmptyState
+		TurnPlayerDrawingState: {
+			PLAY: TurnPlayerPlayingState,
+			BUST: TurnPlayerBustedState,
+			DECK_EMPTY: TurnPlayerDeckEmptyState,
+			FIGHT: TurnEnemyInitState
 		},
-		TurnBustedState: {
-			DAMAGE: TurnDamageState
+		TurnPlayerUsingItemState: {
+			PLAY: TurnPlayerPlayingState
+		},
+		TurnEnemyInitState: {
+			PLAY: TurnEnemyPlayingState,
+		},
+		TurnEnemyPlayingState: {
+			DRAW: TurnEnemyDrawingState,
+			USE_ITEM: TurnEnemyUsingItemState,
+			FIGHT: TurnFightingState,
+		},
+		TurnEnemyDrawingState: {
+			PLAY: TurnEnemyPlayingState,
+			BUST: TurnEnemyBustedState,
+			DECK_EMPTY: TurnEnemyDeckEmptyState
 		},
 		TurnFightingState: {
 			DAMAGE: TurnDamageState
@@ -44,23 +49,37 @@ export class TurnMachineState implements StateMachineInterface {
 			TIE: TurnTiedState,
 			LOSE: TurnLostState
 		},
+		TurnEnemyDeckEmptyState: {
+			RESET: TurnIdleState
+		},
+		TurnPlayerDeckEmptyState: {
+			RESET: TurnIdleState
+		},
+		TurnEnemyBustedState: {
+			RESET: TurnIdleState
+		},
+		TurnPlayerBustedState: {
+			RESET: TurnIdleState
+		},
 		TurnWonState: {
-			NEW_TURN: TurnInitState
+			RESET: TurnIdleState
 		},
 		TurnTiedState: {
-			NEW_TURN: TurnInitState
+			RESET: TurnIdleState
 		},
 		TurnLostState: {
-			NEW_TURN: TurnInitState
+			RESET: TurnIdleState
 		}
 	};
 
-	public listenToEvent(event: EventInterface): void {
+	public listenToEvent(event: EventInterface): StateInterface {
 		const currentStateName = this.currentState.name;
-		const nextState = this.stateMachine[currentStateName][event.name];
+		const nextState: StateInterface | undefined = this.stateMachine[currentStateName][event.name];
 		if (nextState) {
 			this.currentState.onStateExit(event.data);
-			this.currentState = new nextState();
+			this.currentState = nextState;
 		}
+
+		return this.currentState;
 	}
 }

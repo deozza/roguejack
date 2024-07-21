@@ -1,34 +1,9 @@
-import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
-import { get } from 'svelte/store';
-import { type StateInterface } from '../../stateInterface';
 
-export class TurnIdleState implements StateInterface {
+import { DefaultState } from '../..';
+
+export default class TurnIdleState extends DefaultState {
 	public name: string = 'TurnIdleState';
 
-	public onStateEnter = (): void => {
-		console.log(` ${this.name} entered`);
-	};
-
 	public onStateExecute(): void {
-		console.log(` ${this.name} executed`);
 	}
-
-	public onStateExit = (data: object): void => {
-		let passiveEffects = null;
-		let stateToEnable = null;
-
-		if (data['user'] === 'player') {
-			passiveEffects = get(playerSideEffectsStore);
-			stateToEnable = 'enableOnPlayerTurnState';
-		} else {
-			passiveEffects = get(enemySideEffectsStore);
-			stateToEnable = 'enableOnEnemyTurnState';
-		}
-
-		passiveEffects.forEach((sideEffect) => {
-			if (sideEffect[stateToEnable] === this.name) {
-				sideEffect.effect(data);
-			}
-		});
-	};
 }

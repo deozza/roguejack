@@ -1,19 +1,13 @@
-import { gameStore } from '$lib/stores/game';
-import { type StateInterface } from '../../stateInterface';
+import { DefaultState } from '../..';
 
-export class GameCharacterSelectionState implements StateInterface {
+export default class GameCharacterSelectionState extends DefaultState {
 	public name: string = 'GameCharacterSelectionState';
 
-	public onStateEnter = (): void => {
-		console.log(` ${this.name} entered`);
-	};
-
-	public onStateExecute(data: object): void {
-		const characterChosen: object = data['character'] as object;
-		gameStore.setPlayer(characterChosen);
+	constructor() {
+		super();
 	}
 
-	public onStateExit = (): void => {
-		console.log(` ${this.name} exited`);
-	};
+	public onStateExecute(): void {
+	}
 }
+

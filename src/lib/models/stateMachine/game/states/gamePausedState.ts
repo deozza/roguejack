@@ -1,17 +1,9 @@
-import { type StateInterface } from '../../stateInterface';
+import { DefaultState } from '../..';
 
-export class GamePausedState implements StateInterface {
+export default class GamePausedState extends DefaultState {
 	public name: string = 'GamePausedState';
 
-	public onStateEnter = (): void => {
-		console.log(` ${this.name} entered`);
-	};
-
 	public onStateExecute(): void {
-		console.log(` ${this.name} executed`);
 	}
-
-	public onStateExit = (): void => {
-		console.log(` ${this.name} exited`);
-	};
 }
+

@@ -1,6 +1,4 @@
-import { type EventInterface } from '../eventInterface';
-import { type StateInterface } from '../stateInterface';
-import { type StateMachineInterface } from '../stateMachineInterface';
+import type { EventInterface, StateInterface, StateMachineInterface } from '../interfaces';
 import {
 	GameCharacterSelectionState,
 	GameIdleState,
@@ -43,9 +41,9 @@ export class GameMachineState implements StateMachineInterface {
 
 	public listenToEvent(event: EventInterface): void {
 		const currentStateName = this.currentState.name;
-		const nextState = this.stateMachine[currentStateName][event.name];
+		const nextState: StateInterface | undefined = this.stateMachine[currentStateName][event.name];
 		if (nextState) {
-			this.currentState = new nextState();
+			this.currentState = nextState;
 		}
 	}
 }
