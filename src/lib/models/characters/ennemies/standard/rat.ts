@@ -1,8 +1,7 @@
 import type { Face, Suit } from "$lib/models/card/types";
 import DefaultEnemyCharacter from "..";
-import type { Enemy } from "../../interfaces";
 
-export default class Rat extends DefaultEnemyCharacter implements Enemy {
+export default class Rat extends DefaultEnemyCharacter {
     constructor() {
         super();
 

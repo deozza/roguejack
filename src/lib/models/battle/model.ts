@@ -1,13 +1,13 @@
-import { Character } from '$lib/models/character/model';
 import { Turn } from '$lib/models/turn/model';
+import type { Enemy } from '../characters/interfaces';
 
 export class Battle {
 	id: string;
-	enemy: Character;
+	enemy: Enemy;
 	battle: number;
 	turns: Array<Turn>;
 
-	constructor(enemy: Character, battle: number) {
+	constructor(enemy: Enemy, battle: number) {
 		this.id = crypto.randomUUID();
 		this.enemy = enemy;
 		this.turns = [];

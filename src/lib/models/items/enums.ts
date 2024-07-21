@@ -11,7 +11,7 @@ export interface RaritiesWeight {
     rarity: Rarities;
 }
 
-export let raritiesWeight: RaritiesWeight[] = [
+export let defaultRaritiesWeights: RaritiesWeight[] = [
 	{ rarity: Rarities.common, weight: 40 },
 	{ rarity: Rarities.uncommon, weight: 70 },
 	{ rarity: Rarities.rare, weight: 85 },

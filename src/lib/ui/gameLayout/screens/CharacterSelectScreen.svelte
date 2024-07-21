@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { characters } from '$lib/models/character/players';
 	import { TurnPlayingState } from '$lib/models/stateMachine/turn/states/turnPlayingState';
 	import { gameStore } from '$lib/stores/game';
 	import { playerSideEffectsStore } from '$lib/stores/sideEffects';
@@ -8,31 +7,12 @@
 	import { enemyTurnMachineState, playerTurnMachineState } from '$lib/stores/stateMachine/turn';
 	import Icon from '@iconify/svelte';
 	import { fade } from 'svelte/transition';
-	import { passiveEffects } from '$lib/models/effect';
-	import { Card, type Face, type Suit } from '$lib/models/card/model';
 	import DeckPreview from '../battleScreen/DeckPreview.svelte';
-	import type { PassiveEffectInterface } from '$lib/models/effect/interfaces';
+	import type { Player } from '$lib/models/characters/interfaces';
+	import { PlayerList } from '$lib/models/characters/players';
 
-	let selectedCharacter: object = {};
-	let cards: Card[] = [];
-	let passive: PassiveEffectInterface | undefined = undefined;
+	let selectedCharacter: Player = PlayerList[0];
 	let openedDeckPreview: boolean = false;
-
-	preSelectCharacter(characters[0]);
-
-	function preSelectCharacter(character: object) {
-		selectedCharacter = character;
-		passive = passiveEffects.find(
-			(effect: PassiveEffectInterface) => effect.technicalName === character.passive
-		);
-
-		cards = [];
-		character.deck.suits.forEach((suit: Suit) => {
-			character.deck.values.forEach((value: Face) => {
-				cards = [...cards, new Card(suit, value)];
-			});
-		});
-	}
 
 	function openDeckPreview() {
 		openedDeckPreview = !openedDeckPreview;
@@ -76,7 +56,7 @@
 </script>
 
 {#if openedDeckPreview}
-	<DeckPreview {cards} on:close={() => openDeckPreview()} />
+	<DeckPreview cards={selectedCharacter.deck.cards} on:close={() => openDeckPreview()} />
 {/if}
 
 <section
@@ -98,9 +78,9 @@
 						<hr class="w-full" />
 					</div>
 
-					{#if passive !== undefined && passive !== null}
+					{#each selectedCharacter.passiveAbilities as passive}
 						<p><Icon icon={passive.icon} height="32" width="32" /> {passive.description}</p>
-					{/if}
+					{/each}
 					<button class="btn variant-ringed-tertiary" on:click={() => openDeckPreview()}
 						>See deck</button
 					>
@@ -111,14 +91,14 @@
 			{/if}
 		</div>
 		<div class="flex flex-row flex-wrap items-center justify-center w-full space-x-5">
-			{#each characters as character}
+			{#each PlayerList as player}
 				<button
-					class="btn {selectedCharacter.name === character.name
+					class="btn {selectedCharacter.name === player.name
 						? 'variant-filled-tertiary'
 						: 'variant-ringed-tertiary'} rounded-md"
-					on:click={() => preSelectCharacter(character)}
+					on:click={() => selectedCharacter = player}
 				>
-					<Icon icon={character.icon} width="32" height="32" />
+					<Icon icon={player.icon} width="32" height="32" />
 				</button>
 			{/each}
 		</div>

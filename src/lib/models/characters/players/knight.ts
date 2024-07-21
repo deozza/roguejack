@@ -1,9 +1,8 @@
 import type { Face, Suit } from "$lib/models/card/types";
-import DefaultPlayerCharacter from ".";
-import type { Player } from "../interfaces";
-import Bravery from "../passiveAbility/bravery";
+import DefaultPlayerCharacter from "$lib/models/characters/players";
+import Bravery from "$lib/models/characters/passiveAbility/bravery";
 
-export default class Knight extends DefaultPlayerCharacter implements Player {
+export default class Knight extends DefaultPlayerCharacter {
     constructor() {
         super();
 

@@ -1,8 +1,8 @@
 import type { Face, Suit } from "$lib/models/card/types";
-import DefaultPlayerCharacter from ".";
-import type { Player } from "../interfaces";
+import DefaultPlayerCharacter from "$lib/models/characters/players";
 
-export default class Necromancer extends DefaultPlayerCharacter implements Player {
+
+export default class Necromancer extends DefaultPlayerCharacter {
     constructor() {
         super();
 
