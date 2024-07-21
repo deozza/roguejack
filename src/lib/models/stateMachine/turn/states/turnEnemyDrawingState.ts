@@ -1,7 +1,7 @@
 import { DefaultState } from '../..';
 
-export default class TurnDrawingState extends DefaultState {
-	public name: string = 'TurnDrawingState';
+export default class TurnEnemyDrawingState extends DefaultState {
+	public name: string = 'TurnEnemyDrawingState';
 
 	public onStateEnter(): void {
 		super.onStateEnter()

@@ -8,67 +8,69 @@ export class TurnMachineState implements StateMachineInterface {
 
 	public stateMachine: object = {
 		TurnIdleState: {
-			NEW_TURN: TurnPlayerInitState
+			NEW_TURN: new TurnPlayerInitState
 		},
 		TurnPlayerInitState: {
-			PLAY: TurnPlayerPlayingState,
-			DECK_EMPTY: TurnPlayerDeckEmptyState
+			PLAY: new TurnPlayerPlayingState,
+			DECK_EMPTY: new TurnPlayerDeckEmptyState
 		},
 		TurnPlayerPlayingState: {
-			DRAW: TurnPlayerDrawingState,
-			USE_ITEM: TurnPlayerUsingItemState,
-			FIGHT: TurnEnemyInitState
+			DRAW: new TurnPlayerDrawingState,
+			USE_ITEM: new TurnPlayerUsingItemState,
+			FIGHT: new TurnEnemyInitState
 		},
 		TurnPlayerDrawingState: {
-			PLAY: TurnPlayerPlayingState,
-			BUST: TurnPlayerBustedState,
-			DECK_EMPTY: TurnPlayerDeckEmptyState,
-			FIGHT: TurnEnemyInitState
+			PLAY: new TurnPlayerPlayingState,
+			BUST: new TurnPlayerBustedState,
+			DECK_EMPTY: new TurnPlayerDeckEmptyState,
 		},
 		TurnPlayerUsingItemState: {
-			PLAY: TurnPlayerPlayingState
+			PLAY: new TurnPlayerPlayingState
 		},
 		TurnEnemyInitState: {
-			PLAY: TurnEnemyPlayingState,
+			PLAY: new TurnEnemyPlayingState,
 		},
 		TurnEnemyPlayingState: {
-			DRAW: TurnEnemyDrawingState,
-			USE_ITEM: TurnEnemyUsingItemState,
-			FIGHT: TurnFightingState,
+			DRAW: new TurnEnemyDrawingState,
+			USE_ITEM: new TurnEnemyUsingItemState,
+			FIGHT: new TurnFightingState,
 		},
 		TurnEnemyDrawingState: {
-			PLAY: TurnEnemyPlayingState,
-			BUST: TurnEnemyBustedState,
-			DECK_EMPTY: TurnEnemyDeckEmptyState
+			PLAY: new TurnEnemyPlayingState,
+			BUST: new TurnEnemyBustedState,
+			DECK_EMPTY: new TurnEnemyDeckEmptyState
+		},
+		TurnEnemyUsingItemState: {
+			PLAY: new TurnEnemyPlayingState
 		},
 		TurnFightingState: {
-			DAMAGE: TurnDamageState
+			DAMAGE: new TurnDamageState
 		},
 		TurnDamageState: {
-			WIN: TurnWonState,
-			TIE: TurnTiedState,
-			LOSE: TurnLostState
+			WIN: new TurnWonState,
+			TIE: new TurnTiedState,
+			LOSE: new TurnLostState
 		},
 		TurnEnemyDeckEmptyState: {
-			RESET: TurnIdleState
+			RESET: new TurnIdleState
 		},
 		TurnPlayerDeckEmptyState: {
-			RESET: TurnIdleState
+			RESET: new TurnIdleState
 		},
 		TurnEnemyBustedState: {
-			RESET: TurnIdleState
+			RESET: new TurnIdleState
 		},
 		TurnPlayerBustedState: {
-			RESET: TurnIdleState
+			RESET: new TurnIdleState
 		},
 		TurnWonState: {
-			RESET: TurnIdleState
+			RESET: new TurnIdleState
 		},
 		TurnTiedState: {
-			RESET: TurnIdleState
+			RESET: new TurnIdleState
 		},
 		TurnLostState: {
-			RESET: TurnIdleState
+			RESET: new TurnIdleState
 		}
 	};
 

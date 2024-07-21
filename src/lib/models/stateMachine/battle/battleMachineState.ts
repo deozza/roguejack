@@ -14,28 +14,28 @@ export class BattleMachineState implements StateMachineInterface {
 
 	public stateMachine: object = {
 		BattleIdleState: {
-			NEW_BATTLE: BattleInitState
+			NEW_BATTLE: new BattleInitState()
 		},
 		BattleInitState: {
-			PLAY: BattlePlayingState,
-			DECK_EMPTY: BattleLostState
+			PLAY: new BattlePlayingState(),
+			DECK_EMPTY: new BattleLostState()
 		},
 		BattlePlayingState: {
-			WIN: BattleWonState,
-			LOSE: BattleLostState
+			WIN: new BattleWonState(),
+			LOSE: new BattleLostState()
 		},
 		BattleWonState: {
-			CAMP: BattleCampingState
+			CAMP: new BattleCampingState()
 		},
 		BattleCampingState: {
-			NEW_BATTLE: BattleInitState,
-			SHOP: BattleShopingState
+			NEW_BATTLE: new BattleInitState(),
+			SHOP: new BattleShopingState()
 		},
 		BattleShopingState: {
-			RESET: BattleIdleState
+			RESET: new BattleIdleState()
 		},
 		BattleLostState: {
-			RESET: BattleIdleState
+			RESET: new BattleIdleState()
 		}
 	};
 
