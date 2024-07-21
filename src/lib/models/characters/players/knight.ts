@@ -1,7 +1,7 @@
 import type { Face, Suit } from "$lib/models/card/types";
 import Bravery from "$lib/models/characters/passiveAbility/bravery";
-import type { Player } from ".";
-import { DefaultCharacter } from "..";
+import type { Player } from "$lib/models/characters/players";
+import { DefaultCharacter } from "$lib/models/characters/";
 
 export default class Knight extends DefaultCharacter implements Player {
     constructor() {
@@ -17,5 +17,5 @@ export default class Knight extends DefaultCharacter implements Player {
         this.deck.generateDeck(deckSuits, deckValues);
         this.icon = "game-icons:black-knight-helm";
         this.passiveAbilities.push(new Bravery());
-    }    
+    }
 }

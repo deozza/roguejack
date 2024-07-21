@@ -1,6 +1,6 @@
 import type { Face, Suit } from "$lib/models/card/types";
-import { type Player } from "$lib/models/characters/players";
-import { DefaultCharacter } from "..";
+import type { Player } from "$lib/models/characters/players";
+import { DefaultCharacter } from "$lib/models/characters/";
 
 export default class Villager extends DefaultCharacter implements Player {
     constructor() {
@@ -15,5 +15,5 @@ export default class Villager extends DefaultCharacter implements Player {
         this.currentHealth = 20;
         this.deck.generateDeck(deckSuits, deckValues);
         this.icon = "game-icons:farmer";
-    }    
+    }
 }

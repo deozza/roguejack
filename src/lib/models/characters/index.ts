@@ -17,9 +17,10 @@ export interface Character {
     status: Array<Status>;
     passiveAbilities: Array<PassiveAbility>;
 
-    takeDamage(damage: number): void;
-    heal(heal: number): void;
+    takeDamage(damage: number): Character;
+    heal(heal: number): Character;
     getHealthColor(): string;
+    addToInventory(item: ItemTypes): Character;
 }
 
 export class DefaultCharacter implements Character {
@@ -39,11 +40,11 @@ export class DefaultCharacter implements Character {
         
     }
     
-    public takeDamage(damage: number): void {
-        
+    public takeDamage(damage: number): DefaultCharacter {
+        return this;
     }
-    public heal(heal: number): void {
-        
+    public heal(heal: number): DefaultCharacter {
+        return this;
     }
     public getHealthColor(): string {
         if (this.currentHealth / this.maxHealth > 0.75) {
@@ -59,6 +60,11 @@ export class DefaultCharacter implements Character {
 		}
 
 		return 'bg-red-500';
+    }
+
+    public addToInventory(item: ItemTypes): DefaultCharacter {
+        this.inventory = [...this.inventory, item];
+        return this;
     }
     
 }

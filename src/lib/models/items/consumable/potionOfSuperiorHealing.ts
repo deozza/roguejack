@@ -11,7 +11,7 @@ export default class PotionOfSuperiorfHealing implements ConsumableInterface {
 	name: string = 'Potion of superior healing';
 	description: string = 'Restore 50% of your health.';
 	icon: string = 'game-icons:potion-ball';
-	rarity: Rarities = Rarities.common;
+	rarity: Rarities = Rarities.rare;
 
 	applyEffects(): void {
 		throw new Error("Method not implemented.");

@@ -34,12 +34,12 @@ export function getRandomItemByWeight(raritiesWeight: RaritiesWeight[] = default
         throw new Error(`Rarity ${rarityWeightValue} not found`);
     }
 
-    const filteredEffects: Array<ItemTypes> =
+    const filteredItems: Array<ItemTypes> =
         items.filter(
             (item: ItemTypes) =>
                 item.rarity === rarity.rarity
         );
 
-    const randomEffectIndex: number = randomIntFromInterval(0, filteredEffects.length - 1);
-    return items[randomEffectIndex];
+    const randomItemIndex: number = randomIntFromInterval(0, filteredItems.length - 1);
+    return filteredItems[randomItemIndex];
 }
