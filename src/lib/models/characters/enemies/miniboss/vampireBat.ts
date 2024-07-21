@@ -2,6 +2,7 @@ import type { Face, Suit } from "$lib/models/card/types";
 import { type Enemy } from "$lib/models/characters/enemies";
 import { EnnemyType } from "$lib/models/characters/types";
 import { DefaultCharacter } from "$lib/models/characters";
+import Vampirism from "../../passiveAbility/vampirism";
 
 export default class VampireBat extends DefaultCharacter implements Enemy {
 
@@ -21,5 +22,7 @@ export default class VampireBat extends DefaultCharacter implements Enemy {
         this.minAttack = 12;
         this.type = EnnemyType.miniboss;
         this.deck.generateDeck(deckSuits, deckValues);
+        this.passiveAbilities.push(new Vampirism());
+
     }    
 }

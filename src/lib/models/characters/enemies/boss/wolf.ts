@@ -2,6 +2,7 @@ import type { Face, Suit } from "$lib/models/card/types";
 import { type Enemy } from "$lib/models/characters/enemies";
 import { EnnemyType } from "$lib/models/characters/types";
 import { DefaultCharacter } from "$lib/models/characters";
+import InflictWound from "../../passiveAbility/inflictWound";
 
 
 export default class Wolf  extends DefaultCharacter implements Enemy {
@@ -22,5 +23,7 @@ export default class Wolf  extends DefaultCharacter implements Enemy {
         this.minAttack = 11;
         this.type = EnnemyType.boss;
         this.deck.generateDeck(deckSuits, deckValues);
+        this.passiveAbilities.push(new InflictWound());
+
     }    
 }
