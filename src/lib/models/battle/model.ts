@@ -14,11 +14,15 @@ export class Battle {
 		this.battle = battle;
 	}
 
-	public addTurn(turn: Turn): void {
+	public addTurn(turn: Turn): Battle {
 		this.turns = [...this.turns, turn];
+		return this;
 	}
 
-	public getCurrentTurn(): Turn {
+	public getCurrentTurn(): Turn | null {
+		if (this.turns.length === 0) {
+			return null;
+		}
 		return this.turns[this.turns.length - 1];
 	}
 }
