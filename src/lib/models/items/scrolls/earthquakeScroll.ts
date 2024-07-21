@@ -1,4 +1,4 @@
-import { Categories, Types } from "$lib/models/effects/enums";
+import { Categories, Ranges, Types } from "$lib/models/effects/enums";
 import type { EffectInterface } from "$lib/models/effects/interfaces";
 import { Rarities } from "$lib/models/items/enums";
 import type { ScrollInterface } from "$lib/models/items/interfaces";
