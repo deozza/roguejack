@@ -7,7 +7,15 @@ export default class GameCharacterSelectionState extends DefaultState {
 		super();
 	}
 
+	public onStateEnter(): void {
+		super.onStateEnter()
+	}
+
 	public onStateExecute(): void {
+	}
+
+	public onStateExit(): void {
+		super.onStateExit()
 	}
 }
 

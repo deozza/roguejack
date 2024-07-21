@@ -11,7 +11,6 @@
 	import DiscardPreview from '../battleScreen/DiscardPreview.svelte';
 	import { delay, scrollToElement } from '$lib/utils';
 	import BattlePower from '../battleScreen/BattlePower.svelte';
-	import { TurnPlayingState } from '$lib/models/stateMachine/turn/states/turnPlayingState';
 
 	let openedEnemyDiscardView: boolean = false;
 	let openedPlayerDiscardView: boolean = false;
@@ -158,11 +157,6 @@
 		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: { user: 'player' } });
 		$playerTurnMachineState = $playerTurnMachineState;
 		$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
-
-		enemyTurnMachineState.update((state) => {
-			state.currentState = new TurnPlayingState();
-			return state;
-		});
 	}
 
 	async function updateBattleState() {

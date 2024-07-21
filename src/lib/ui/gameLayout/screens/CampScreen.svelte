@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { TurnPlayingState } from '$lib/models/stateMachine/turn/states/turnPlayingState';
 	import { gameStore } from '$lib/stores/game';
 	import { battleMachineState } from '$lib/stores/stateMachine/battle';
 	import { enemyTurnMachineState, playerTurnMachineState } from '$lib/stores/stateMachine/turn';
@@ -98,11 +97,6 @@
 		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: { user: 'player' } });
 		$playerTurnMachineState = $playerTurnMachineState;
 		$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
-
-		enemyTurnMachineState.update((state) => {
-			state.currentState = new TurnPlayingState();
-			return state;
-		});
 	}
 </script>
 

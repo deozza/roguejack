@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { TurnPlayingState } from '$lib/models/stateMachine/turn/states/turnPlayingState';
 	import { gameStore } from '$lib/stores/game';
 	import { playerSideEffectsStore } from '$lib/stores/sideEffects';
 	import { battleMachineState } from '$lib/stores/stateMachine/battle';
@@ -8,8 +7,7 @@
 	import Icon from '@iconify/svelte';
 	import { fade } from 'svelte/transition';
 	import DeckPreview from '../battleScreen/DeckPreview.svelte';
-	import type { Player } from '$lib/models/characters/interfaces';
-	import { PlayerList } from '$lib/models/characters/players';
+	import { PlayerList, type Player } from '$lib/models/characters/players';
 
 	let selectedCharacter: Player = PlayerList[0];
 	let openedDeckPreview: boolean = false;
@@ -47,11 +45,6 @@
 		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: { user: 'player' } });
 		$playerTurnMachineState = $playerTurnMachineState;
 		$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
-
-		enemyTurnMachineState.update((state) => {
-			state.currentState = new TurnPlayingState();
-			return state;
-		});
 	}
 </script>
 

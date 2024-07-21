@@ -16,15 +16,6 @@ export interface Enemy extends Character {
 }
 
 const enemyList: Enemy[] = [
-    new Owlbear(),
-    new Wolf(),
-    new Boar(),
-    new Kobold(),
-    new VampireBat(),
-    new Zombie(),
-    new Rat(),
-    new Slime(),
-    new Spider()
 ];
 
 export function getRandomEnemyByLevelAndType(level: number, type: EnnemyType): Enemy {

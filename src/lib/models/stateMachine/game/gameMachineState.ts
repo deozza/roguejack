@@ -43,7 +43,10 @@ export class GameMachineState implements StateMachineInterface {
 		const currentStateName = this.currentState.name;
 		const nextState: StateInterface | undefined = this.stateMachine[currentStateName][event.name];
 		if (nextState) {
+			this.currentState.onStateExit();
 			this.currentState = nextState;
+			this.currentState.onStateEnter();
+			this.currentState.onStateExecute(event.data);
 		}
 	}
 }
