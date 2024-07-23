@@ -1,8 +1,6 @@
 import type { Game } from "$lib/models/game/model";
 import { gameStore } from "$lib/stores/game";
 import { enemySideEffectsStore, playerSideEffectsStore } from "$lib/stores/sideEffects";
-import { delay } from "$lib/utils";
-import { get } from "svelte/store";
 import type { ContinuousEffect, Status } from "../interfaces";
 import type { Hand } from "$lib/models/hand/model";
 import type { Card } from "$lib/models/card/model";
@@ -11,7 +9,7 @@ export default class Scared implements Status {
     technicalName: string = 'scared';
 	name: string = 'Scared';
 	description: string = 'Drawn card has a 50% chance to be immediately discard. Ends at the end of the battle';
-	icon: string = 'game-icons:poison-bottle';
+	icon: string = 'game-icons:surprised-skull';
 	active: boolean = false;
 
 	public applyEffects(calledBy: 'player' | 'enemy') {
