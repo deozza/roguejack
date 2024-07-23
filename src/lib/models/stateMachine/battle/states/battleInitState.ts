@@ -6,17 +6,19 @@ import type { GameMachineState } from '../../game/gameMachineState';
 import type { Game } from '$lib/models/game/model';
 import { enemySideEffectsStore } from '$lib/stores/sideEffects';
 import type { Enemy } from '$lib/models/characters/enemies';
+import type { StateInterface } from '../../interfaces';
 
-export default class BattleInitState extends DefaultState {
+export default class BattleInitState extends DefaultState implements StateInterface {
 	public name: string = 'BattleInitState';
 
 	public onStateEnter(): void {
-		super.onStateEnter()
 		const gameState: GameMachineState = get(gameMachineState)
 
 		if(gameState.currentState.name !== 'GamePlayingState') {
 			throw new Error('Cannot enter BattleInitState when game is not in GamePlayingState')
 		}
+
+		super.onStateEnter(this.name)
 	}
 
 	public onStateExecute(): void {
@@ -29,6 +31,6 @@ export default class BattleInitState extends DefaultState {
 	}
 
 	public onStateExit(): void {
-		super.onStateExit()
+		super.onStateExit(this.name)
 	}
 }

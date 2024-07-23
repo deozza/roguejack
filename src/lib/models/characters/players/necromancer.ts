@@ -1,8 +1,7 @@
 import type { Face, Suit } from "$lib/models/card/types";
 import type { Player } from "$lib/models/characters/players";
 import { DefaultCharacter } from "$lib/models/characters";
-import MasteryOverDeath from "$lib/models/effects/continuousEffects/masteryOverDeath";
-
+import MasteryOverDeath from "$lib/models/effects/passiveAbility/masteryOverDeath";
 
 export default class Necromancer extends DefaultCharacter implements Player {
     constructor() {

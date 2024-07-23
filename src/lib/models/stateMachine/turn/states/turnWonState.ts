@@ -1,16 +1,17 @@
 import { DefaultState } from '../..';
+import type { StateInterface } from '../../interfaces';
 
-export default class TurnWonState extends DefaultState {
+export default class TurnWonState extends DefaultState implements StateInterface {
 	public name: string = 'TurnWonState';
 
 	public onStateEnter(): void {
-		super.onStateEnter()
+		super.onStateEnter(this.name)
 	}
 
 	public onStateExecute(): void {
 	}
 
 	public onStateExit(): void {
-		super.onStateExit()
+		super.onStateExit(this.name)
 	}
 }

@@ -1,7 +1,7 @@
 import type { Face, Suit } from "$lib/models/card/types";
 import type { Player } from "$lib/models/characters/players";
 import { DefaultCharacter } from "$lib/models/characters/";
-import Bravery from "$lib/models/effects/continuousEffects/bravery";
+import Bravery from "$lib/models/effects/passiveAbility/bravery";
 
 export default class Knight extends DefaultCharacter implements Player {
     constructor() {

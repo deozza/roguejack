@@ -2,8 +2,7 @@ import type { Face, Suit } from "$lib/models/card/types";
 import { type Enemy } from "$lib/models/characters/enemies";
 import { EnnemyType } from "$lib/models/characters/types";
 import { DefaultCharacter } from "$lib/models/characters";
-import Undead from "$lib/models/effects/continuousEffects/undead";
-
+import Undead from "$lib/models/effects/passiveAbility/undead";
 
 export default class Zombie extends DefaultCharacter implements Enemy {
 

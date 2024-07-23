@@ -2,12 +2,13 @@ import type { Character } from '$lib/models/characters';
 import { gameStore } from '$lib/stores/game';
 import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 import { DefaultState } from '../..';
+import type { StateInterface } from '../../interfaces';
 
-export default class GameInitState extends DefaultState {
+export default class GameInitState extends DefaultState implements StateInterface {
 	public name: string = 'GameInitState';
 
 	public onStateEnter(): void {
-		super.onStateEnter()
+		super.onStateEnter(this.name)
 	}
 
 	public onStateExecute(data: object): void {
@@ -26,7 +27,7 @@ export default class GameInitState extends DefaultState {
 	}
 
 	public onStateExit(): void {
-		super.onStateExit()
+		super.onStateExit(this.name)
 	}
 }
 

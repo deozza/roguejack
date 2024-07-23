@@ -7,12 +7,12 @@ import { battleMachineState } from '$lib/stores/stateMachine/battle';
 import { gameStore } from '$lib/stores/game';
 import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 import type { ContinuousEffect, Status } from '$lib/models/effects/interfaces';
+import type { StateInterface } from '../../interfaces';
 
-export default class TurnPlayerInitState extends DefaultState {
+export default class TurnPlayerInitState extends DefaultState implements StateInterface {
 	public name: string = 'TurnPlayerInitState';
 
 	public onStateEnter(): void {
-		super.onStateEnter()
 		const gameState: GameMachineState = get(gameMachineState)
 
 		if(gameState.currentState.name !== 'GamePlayingState') {
@@ -23,6 +23,8 @@ export default class TurnPlayerInitState extends DefaultState {
 		if(battleState.currentState.name !== 'BattlePlayingState') {
 			throw new Error('Cannot enter TurnPlayerInitState when battle is not in BattlePlayingState')
 		}
+
+		super.onStateEnter(this.name)
 	}
 
 	public onStateExecute(): void {
@@ -30,25 +32,7 @@ export default class TurnPlayerInitState extends DefaultState {
 	}
 
 	public onStateExit(): void {
-		super.onStateExit()
-		const playerSideEffects = get(playerSideEffectsStore);
-        const enemySideEffects = get(enemySideEffectsStore);
-
-		playerSideEffects.forEach((sideEffect : ContinuousEffect | Status) => {
-			sideEffect.applyEffects('player').forEach((effect) => {
-				if(effect.state === 'onStateExit_TurnPlayerInit') {
-					effect.callback();
-				}
-            });
-		});
-
-        enemySideEffects.forEach((sideEffect : ContinuousEffect | Status) => {
-			sideEffect.applyEffects('enemy').forEach((effect) => {
-                if(effect.state === 'onStateExit_TurnPlayerInit') {
-					effect.callback();
-				}
-            });
-		});
+		super.onStateExit(this.name)
 	}
 }
 
