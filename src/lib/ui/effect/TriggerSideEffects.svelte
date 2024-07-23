@@ -5,6 +5,7 @@
 	import Icon from '@iconify/svelte';
 	import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
 	import { createEventDispatcher } from 'svelte';
+	import { playerUsingItemStore } from '$lib/stores/sideEffects';
 
 	export let triggerEffects: Array<ItemTypes>;
 	export let isEnemy: boolean;
@@ -12,8 +13,11 @@
 	const dispatch = createEventDispatcher();
 
 	function useEffect(effect: ItemTypes) {
-		effect.applyEffects('player' );
-		gameStore.removeFromInventory(effect, 'player');
+		playerUsingItemStore.set(effect);
+
+		$turnMachineState = $turnMachineState.listenToEvent({ name: 'USE_ITEM', data: null })
+		
+		$turnMachineState = $turnMachineState.listenToEvent({ name: 'PLAY', data: null })
 
 		dispatch('updateBattleState');
 	}

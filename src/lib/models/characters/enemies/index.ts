@@ -10,6 +10,11 @@ import Rat from "$lib/models/characters/enemies/standard/rat";
 import Slime from "$lib/models/characters/enemies/standard/slime";
 import Spider from "$lib/models/characters/enemies/standard/spider";
 import Snake from "./standard/snake";
+import Werewolf from "./boss/werewolf";
+import GiantEagle from "./miniboss/giantEagle";
+import Myconid from "./standard/myconid";
+import Goblin from "./miniboss/goblin";
+import Ghost from "./standard/ghost";
 
 export interface Enemy extends Character {
     minAttack: number;   
@@ -26,7 +31,12 @@ const enemyList: Enemy[] = [
     new Rat(),
     new Slime(),
     new Spider(),
-    new Snake()
+    new Snake(),
+    new Werewolf(),
+    new GiantEagle(),
+    new Myconid(),
+    new Goblin(),
+    new Ghost()
 ];
 
 export function getRandomEnemyByLevelAndType(level: number, type: EnnemyType): Enemy {

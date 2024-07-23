@@ -4,12 +4,12 @@ import type { ContinuousEffect } from "../interfaces";
 import { gameStore } from "$lib/stores/game";
 import { delay } from "$lib/utils";
 
-export default class MasteryOverDeath implements ContinuousEffect {
+export default class Berserker implements ContinuousEffect {
 	id: string = crypto.randomUUID();
-	technicalName: string = 'masteryOverDeath';
-	name: string = 'Mastery Over Death';
-	description: string = 'Deal 1 more base power for every 10 cards in the discard.';
-	icon: string = 'game-icons:graveyard';
+	technicalName: string = 'berserker';
+	name: string = 'Berserker';
+	description: string = 'Deal 1 more base power when low health.';
+	icon: string = 'game-icons:enrage';
 	active: boolean = false;
 
 	public applyEffects(calledBy: 'player' | 'enemy') {
@@ -22,12 +22,13 @@ export default class MasteryOverDeath implements ContinuousEffect {
 		const game: Game = get(gameStore);
 		if(calledBy === 'enemy'){
 
-			if(game.getCurrentBattle()?.enemy.discard.cards.length >= 10) {
+			const character = game.getCurrentBattle()?.enemy;
+			if(character?.currentHealth / character?.maxHealth <= 0.5 ) {
 				
 				this.active = true;
 				
 				gameStore.update((game: Game) => {
-					game.getCurrentBattle().getCurrentTurn().fight.bonusValueForEnemy += 1;
+					game.getCurrentBattle().getCurrentTurn().fight.bonusValueForEnemy += 2;
 					return game;
 				});
 
@@ -39,12 +40,13 @@ export default class MasteryOverDeath implements ContinuousEffect {
 		}
 
 
-		if(game.player.discard.cards.length >= 10) {
+		const character = game.player;
+		if(character.currentHealth / character.maxHealth <= 0.5) {
 			
 			this.active = true;
 			
 			gameStore.update((game: Game) => {
-				game.getCurrentBattle().getCurrentTurn().fight.bonusValueForPlayer += 1;
+				game.getCurrentBattle().getCurrentTurn().fight.bonusValueForPlayer += 2;
 				return game;
 			});
 
