@@ -28,6 +28,9 @@ export default class Scared implements Status {
 		}
 		this.active = true;
 
+		if(Math.random() >= 0.5){
+			return;
+		}
 
 		gameStore.update((game: Game) => {
 			const hand: Hand = game.getCurrentBattle().getCurrentTurn().playerHand;
@@ -44,6 +47,11 @@ export default class Scared implements Status {
 		if(calledBy === 'player'){
 			return;
 		}
+
+		if(Math.random() >= 0.5){
+			return;
+		}
+
 		gameStore.update((game: Game) => {
 			const hand: Hand = game.getCurrentBattle().getCurrentTurn()?.enemyHand;
 			const drawnCard: Card = hand.cards[hand.cards.length - 1];
