@@ -19,6 +19,9 @@ export default class Poisoned implements Status {
 	}
 
 	public onStateEnter_TurnPlayerDrawingState(calledBy: 'player' | 'enemy') {
+		if(calledBy === 'enemy'){
+			return;
+		}
 		this.active = true;
 
 		gameStore.inflictDamagesToPlayer(1);
@@ -29,6 +32,9 @@ export default class Poisoned implements Status {
 	}
 
 	public onStateEnter_TurnEnemyDrawingState(calledBy: 'player' | 'enemy') {
+		if(calledBy === 'player'){
+			return;
+		}
 		this.active = true;
 
 		gameStore.inflictDamagesToEnemy(1);

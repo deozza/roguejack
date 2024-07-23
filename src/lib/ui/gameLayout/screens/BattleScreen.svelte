@@ -50,7 +50,7 @@
 
 		try {
 			while($gameStore.getCurrentBattle()?.getCurrentTurn().enemyHand.value < $gameStore.getCurrentBattle()?.enemy.minAttack) {
-				delay(1000);
+				await delay(1000);
 				$turnMachineState = $turnMachineState.listenToEvent({ name: 'DRAW', data: null });
 
 				if ($gameStore.getCurrentBattle()?.getCurrentTurn()?.enemyHand.getIsBusted() === true) {
@@ -142,7 +142,6 @@
 
 		if ($gameStore.getCurrentBattle()?.enemy.currentHealth <= 0) {
 			$battleMachineState = $battleMachineState.listenToEvent({ name: 'WIN', data: null });
-			$battleMachineState;
 
 			await redirectToCamp();
 			return;
@@ -151,6 +150,7 @@
 		if ($gameStore.player.currentHealth <= 0) {
 			$battleMachineState = $battleMachineState.listenToEvent({ name: 'LOSE', data: null });
 
+			await delay(5000);
 			$gameMachineState = $gameMachineState.listenToEvent({ name: 'END_GAME', data: null });
 
 			return;
