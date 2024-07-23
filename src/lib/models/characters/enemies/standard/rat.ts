@@ -11,6 +11,11 @@ export default class Rat extends DefaultCharacter implements Enemy {
     constructor() {
         super();
 
+        this.make();
+    }
+
+    make() {
+        
         const deckSuits: Suit[] = ['spade'];
         const deckValues: Face[] = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
@@ -22,5 +27,5 @@ export default class Rat extends DefaultCharacter implements Enemy {
         this.level = 1;
         this.type = EnnemyType.standard;
         this.deck.generateDeck(deckSuits, deckValues);
-    }    
+    }
 }

@@ -28,7 +28,7 @@ export class BattleMachineState implements StateMachineInterface {
 			CAMP: new BattleCampingState()
 		},
 		BattleCampingState: {
-			NEW_BATTLE: new BattleInitState(),
+			RESET: new BattleIdleState(),
 			SHOP: new BattleShopingState()
 		},
 		BattleShopingState: {
@@ -39,7 +39,7 @@ export class BattleMachineState implements StateMachineInterface {
 		}
 	};
 
-	public listenToEvent(event: EventInterface): void {
+	public listenToEvent(event: EventInterface): BattleMachineState {
 		const currentStateName = this.currentState.name;
 		const nextState: StateInterface | undefined = this.stateMachine[currentStateName][event.name];
 		if (nextState) {
@@ -48,5 +48,7 @@ export class BattleMachineState implements StateMachineInterface {
 			this.currentState.onStateEnter();
 			this.currentState.onStateExecute(event.data);
 		}
+
+		return this;
 	}
 }

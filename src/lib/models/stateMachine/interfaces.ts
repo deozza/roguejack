@@ -1,7 +1,7 @@
 export interface StateMachineInterface {
 	currentState: StateInterface;
 	stateMachine: object;
-	listenToEvent(event: EventInterface): void;
+	listenToEvent(event: EventInterface): StateMachineInterface;
 }
 
 

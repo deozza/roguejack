@@ -22,6 +22,9 @@ export interface Character {
     heal(heal: number): Character;
     getHealthColor(): string;
     addToInventory(item: ItemTypes): Character;
+    make(): void;
+    addToInventory(item: ItemTypes): DefaultCharacter;
+    removeItemFromInventory(item: ItemTypes): DefaultCharacter;
 }
 
 export class DefaultCharacter implements Character {
@@ -42,9 +45,11 @@ export class DefaultCharacter implements Character {
     }
     
     public takeDamage(damage: number): DefaultCharacter {
+        this.currentHealth = Math.max(0, this.currentHealth - damage);
         return this;
     }
     public heal(heal: number): DefaultCharacter {
+        this.currentHealth = Math.min(this.maxHealth, this.currentHealth - heal);
         return this;
     }
     public getHealthColor(): string {
@@ -71,6 +76,10 @@ export class DefaultCharacter implements Character {
     public removeItemFromInventory(item: ItemTypes): DefaultCharacter {
         this.inventory = this.inventory.filter((i) => i !== item);
         return this;
+    }
+
+    make(): void {
+        
     }
     
 }

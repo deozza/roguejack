@@ -6,14 +6,13 @@
 	import PlayingCard from '../../playingCard/PlayingCard.svelte';
 	import Healthbar from '../../character/Healthbar.svelte';
 	import { createEventDispatcher } from 'svelte';
-	import type { Character } from '$lib/models/character/model';
 	import { gameStore } from '$lib/stores/game';
 	import CharacterPreview from './CharacterPreview.svelte';
-	import type { PassiveEffectInterface } from '$lib/models/effect/interfaces';
+	import type { Character } from '$lib/models/characters';
 
 	export let user: Character;
 	export let userHand: Hand;
-	export let passiveEffects: PassiveEffectInterface[];
+	export let passiveEffects = [];
 
 	export let currentStateName: string;
 	export let isEnemy: boolean = false;
@@ -89,7 +88,7 @@
 		<div class="flex flex-col items-center justify-center space-y-5 h-full w-4/12 md:w-2/12">
 			<button
 				on:click={() => dispatch('draw')}
-				disabled={currentStateName !== 'TurnPlayingState'}
+				disabled={currentStateName !== 'TurnPlayerPlayingState'}
 				type="button"
 			>
 				<Deck deckSize={user.deck.cards.length} />

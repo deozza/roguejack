@@ -5,7 +5,10 @@ import { DefaultCharacter } from "$lib/models/characters/";
 export default class Villager extends DefaultCharacter implements Player {
     constructor() {
         super();
+        this.make();
+    }
 
+    make() {
         const deckSuits: Suit[] = ['heart', 'diamond', 'club', 'spade'];
         const deckValues: Face[] = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 

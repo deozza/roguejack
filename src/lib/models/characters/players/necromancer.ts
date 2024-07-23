@@ -7,7 +7,10 @@ import MasteryOverDeath from "$lib/models/characters/passiveAbility/masteryOverD
 export default class Necromancer extends DefaultCharacter implements Player {
     constructor() {
         super();
+        this.make();
+    }    
 
+    make() {
         const deckSuits: Suit[] = ['heart', 'diamond', 'club', 'spade'];
         const deckValues: Face[] = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
 
@@ -17,6 +20,6 @@ export default class Necromancer extends DefaultCharacter implements Player {
         this.currentHealth = 15;
         this.deck.generateDeck(deckSuits, deckValues);
         this.icon = "game-icons:death-note";
-        this.passiveAbilities.push(new MasteryOverDeath());
-    }    
+        this.passiveAbilities = [new MasteryOverDeath()];
+    }
 }

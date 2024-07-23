@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { battleMachineState } from '$lib/stores/stateMachine/battle';
-	import { playerTurnMachineState } from '$lib/stores/stateMachine/turn';
+	import { turnMachineState } from '$lib/stores/stateMachine/turn';
 	import { createEventDispatcher } from 'svelte';
 	import { fade } from 'svelte/transition';
 
@@ -10,7 +10,8 @@
 		'TurnWonState',
 		'TurnTiedState',
 		'TurnLostState',
-		'TurnBustedState'
+		'TurnPlayerBustedState',
+		'TurnEnemyBustedState'
 	];
 
 	function fight() {
@@ -23,7 +24,7 @@
 </script>
 
 {#if $battleMachineState.currentState.name === 'BattlePlayingState'}
-	{#if $playerTurnMachineState.currentState.name === 'TurnPlayingState'}
+	{#if $turnMachineState.currentState.name === 'TurnPlayerPlayingState'}
 		<button
 			transition:fade={{ delay: 250, duration: 300 }}
 			class="btn btn-xl variant-filled-error"
@@ -33,7 +34,7 @@
 		</button>
 	{/if}
 
-	{#if endTurnStates.includes($playerTurnMachineState.currentState.name)}
+	{#if endTurnStates.includes($turnMachineState.currentState.name)}
 		<button
 			in:fade={{ delay: 250, duration: 300 }}
 			class="btn btn-xl variant-filled-warning"

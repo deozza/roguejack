@@ -3,7 +3,7 @@
 	import { playerSideEffectsStore } from '$lib/stores/sideEffects';
 	import { battleMachineState } from '$lib/stores/stateMachine/battle';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
-	import { enemyTurnMachineState, playerTurnMachineState } from '$lib/stores/stateMachine/turn';
+	import { turnMachineState } from '$lib/stores/stateMachine/turn';
 	import Icon from '@iconify/svelte';
 	import { fade } from 'svelte/transition';
 	import DeckPreview from '../battleScreen/DeckPreview.svelte';
@@ -17,34 +17,23 @@
 	}
 
 	function selectCharacter() {
-		$gameMachineState.currentState.onStateExecute({ character: selectedCharacter });
-
-		$gameMachineState.listenToEvent({ name: 'CHARACTER_SELECTED', data: null });
-		$gameMachineState = $gameMachineState;
-		$gameMachineState.currentState.onStateExecute({});
+		const player: Player = selectedCharacter;
+		player.make();
+		$gameMachineState = $gameMachineState.listenToEvent({ name: 'CHARACTER_SELECTED', data: {character: player} });
 
 		if ($gameStore.player.passiveAbilities.length > 0) {
 			$playerSideEffectsStore = [...$playerSideEffectsStore, ...$gameStore.player.passiveAbilities];
 		}
 
-		$gameMachineState.listenToEvent({ name: 'START_GAME', data: null });
-		$gameMachineState = $gameMachineState;
+		$gameMachineState = $gameMachineState.listenToEvent({ name: 'START_GAME', data: null });
+		
+		$battleMachineState = $battleMachineState.listenToEvent({ name: 'NEW_BATTLE', data: null });
+		
+		$battleMachineState = $battleMachineState.listenToEvent({ name: 'PLAY', data: null });
+		
+		$turnMachineState = $turnMachineState.listenToEvent({ name: 'NEW_TURN', data: null });
 
-		$battleMachineState.listenToEvent({ name: 'NEW_BATTLE', data: null });
-		$battleMachineState = $battleMachineState;
-		$battleMachineState.currentState.onStateEnter({ user: 'player' });
-		$battleMachineState.currentState.onStateExecute({});
-
-		$battleMachineState.listenToEvent({ name: 'PLAY', data: null });
-		$battleMachineState = $battleMachineState;
-
-		$playerTurnMachineState.listenToEvent({ name: 'NEW_TURN', data: { user: 'player' } });
-		$playerTurnMachineState = $playerTurnMachineState;
-		$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
-
-		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: { user: 'player' } });
-		$playerTurnMachineState = $playerTurnMachineState;
-		$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
+		$turnMachineState = $turnMachineState.listenToEvent({ name: 'PLAY', data: null });
 	}
 </script>
 

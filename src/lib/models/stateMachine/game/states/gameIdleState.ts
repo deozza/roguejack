@@ -1,4 +1,5 @@
 
+import { gameStore } from '$lib/stores/game';
 import { DefaultState } from '../..';
 
 export default class GameIdleState extends DefaultState {
@@ -9,6 +10,7 @@ export default class GameIdleState extends DefaultState {
 	}
 
 	public onStateExecute(): void {
+		gameStore.reset();
 	}
 
 	public onStateExit(): void {

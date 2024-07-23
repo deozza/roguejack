@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { gameStore } from '$lib/stores/game';
 	import { battleMachineState } from '$lib/stores/stateMachine/battle';
-	import { enemyTurnMachineState, playerTurnMachineState } from '$lib/stores/stateMachine/turn';
+	import { turnMachineState } from '$lib/stores/stateMachine/turn';
 	import Deck from '$lib/ui/deck/Deck.svelte';
 	import Discard from '$lib/ui/deck/Discard.svelte';
 	import Icon from '@iconify/svelte';
@@ -101,16 +101,16 @@
 		$battleMachineState.listenToEvent({ name: 'PLAY', data: null });
 		$battleMachineState = $battleMachineState;
 
-		playerTurnMachineState.set(new TurnMachineState());
+		turnMachineState.set(new TurnMachineState());
 
-		$playerTurnMachineState.listenToEvent({ name: 'NEW_TURN', data: { user: 'player' } });
-		$playerTurnMachineState = $playerTurnMachineState;
+		$turnMachineState.listenToEvent({ name: 'NEW_TURN', data: { user: 'player' } });
+		$turnMachineState = $turnMachineState;
 
 		try {
-			$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
+			$turnMachineState.currentState.onStateExecute({ user: 'player' });
 		} catch (error) {
-			$playerTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: { user: 'player' } });
-			$playerTurnMachineState = $playerTurnMachineState;
+			$turnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: { user: 'player' } });
+			$turnMachineState = $turnMachineState;
 
 			$battleMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
 			$battleMachineState = $battleMachineState;
@@ -120,9 +120,9 @@
 			return;
 		}
 
-		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: { user: 'player' } });
-		$playerTurnMachineState = $playerTurnMachineState;
-		$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
+		$turnMachineState.listenToEvent({ name: 'PLAY', data: { user: 'player' } });
+		$turnMachineState = $turnMachineState;
+		$turnMachineState.currentState.onStateExecute({ user: 'player' });
 	}
 </script>
 

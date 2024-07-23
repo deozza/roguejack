@@ -1,3 +1,4 @@
+import { gameStore } from '$lib/stores/game';
 import { DefaultState } from '../..';
 
 export default class TurnEnemyDrawingState extends DefaultState {
@@ -8,6 +9,7 @@ export default class TurnEnemyDrawingState extends DefaultState {
 	}
 
 	public onStateExecute(): void {
+		gameStore.enemyDrawCard();
 	}
 
 	public onStateExit(): void {

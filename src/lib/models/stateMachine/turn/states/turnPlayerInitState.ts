@@ -1,13 +1,30 @@
+import { get } from 'svelte/store';
 import { DefaultState } from '../..';
+import type { GameMachineState } from '../../game/gameMachineState';
+import { gameMachineState } from '$lib/stores/stateMachine/game';
+import type { BattleMachineState } from '../../battle/battleMachineState';
+import { battleMachineState } from '$lib/stores/stateMachine/battle';
+import { gameStore } from '$lib/stores/game';
 
 export default class TurnPlayerInitState extends DefaultState {
 	public name: string = 'TurnPlayerInitState';
 
 	public onStateEnter(): void {
 		super.onStateEnter()
+		const gameState: GameMachineState = get(gameMachineState)
+
+		if(gameState.currentState.name !== 'GamePlayingState') {
+			throw new Error('Cannot enter TurnPlayerInitState when game is not in GamePlayingState')
+		}
+
+		const battleState: BattleMachineState = get(battleMachineState)
+		if(battleState.currentState.name !== 'BattlePlayingState') {
+			throw new Error('Cannot enter TurnPlayerInitState when battle is not in BattlePlayingState')
+		}
 	}
 
 	public onStateExecute(): void {
+		gameStore.createTurn();
 	}
 
 	public onStateExit(): void {

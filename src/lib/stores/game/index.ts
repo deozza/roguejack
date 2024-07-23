@@ -3,13 +3,10 @@ import type { Card } from '$lib/models/card/model';
 import { Game } from '$lib/models/game/model';
 import type { Hand } from '$lib/models/hand/model';
 import { Turn } from '$lib/models/turn/model';
-import { get } from 'svelte/store';
 import { writable } from 'svelte/store';
-import { delay } from '$lib/utils';
-import type { Enemy, Player } from '$lib/models/characters/interfaces';
-import { getRandomEnemyByLevelAndType } from '$lib/models/characters/enemies';
+import { getRandomEnemyByLevelAndType, type Enemy } from '$lib/models/characters/enemies';
 import { EnnemyType } from '$lib/models/characters/types';
-
+import type { Player } from '$lib/models/characters/players';
 
 function createGameStore() {
 	const { subscribe, set, update } = writable<Game>(new Game());
@@ -27,9 +24,12 @@ function createGameStore() {
 
 	const createBattle = () => {
 		update((game) => {
-
 			const nextBattleIndex: number = game.battles.length + 1;
 			let nextBattleEnemyType: EnnemyType = EnnemyType.standard;
+			let nextBattleEnemyLevel: number = Math.max(Math.floor(nextBattleIndex / 10), 1);
+
+			console.log(nextBattleEnemyLevel)
+
 			if(nextBattleIndex % 10 === 0) {
 				nextBattleEnemyType = EnnemyType.boss;
 			}
@@ -38,8 +38,8 @@ function createGameStore() {
 				nextBattleEnemyType = EnnemyType.miniboss;
 			}
 
-			const enemy: Enemy = getRandomEnemyByLevelAndType(game.battles.length + 1, nextBattleEnemyType);
-
+			const enemy: Enemy = getRandomEnemyByLevelAndType(nextBattleEnemyLevel, nextBattleEnemyType);
+			enemy.deck.shuffleDeck();
 			const battle = new Battle(enemy, nextBattleIndex);
 			game.addBattle(battle);
 			game.player.deck.shuffleDeck();
@@ -47,7 +47,7 @@ function createGameStore() {
 		});
 	};
 
-	const createTurn = (user: string) => {
+	const createTurn = () => {
 		update((game) => {
 			if (game.getCurrentBattle() === null) {
 				throw new Error('No battle to create turn');
@@ -59,10 +59,8 @@ function createGameStore() {
 			return game;
 		});
 
-		if (user === 'player') {
-			playerDrawCard();
-			playerDrawCard();
-		}
+		playerDrawCard();
+		playerDrawCard();
 	};
 
 	const playerDrawCard = () => {
@@ -89,18 +87,6 @@ function createGameStore() {
 		});
 	};
 
-	const enemyAutoDraw = async () => {
-		const game = get(gameStore);
-
-		while (
-			game.getCurrentBattle().getCurrentTurn().enemyHand.getValue() <
-			game.getCurrentBattle().enemy.minAttack
-		) {
-			await delay(1000);
-			enemyDrawCard();
-		}
-	};
-
 	const updateFightData = () => {
 		update((game) => {
 			const playerHand: Hand = game.getCurrentBattle()?.getCurrentTurn().playerHand;
@@ -121,7 +107,10 @@ function createGameStore() {
 
 	const inflictDamagesToEnemy = (damages: number) => {
 		update((game) => {
+			console.log(damages)
+			
 			game.getCurrentBattle().enemy.takeDamage(damages);
+
 			return game;
 		});
 	};
@@ -218,6 +207,21 @@ function createGameStore() {
 		});
 	};
 
+	const resolveFight = () => {
+		update((game) => {
+			const playerHand: Hand = game.getCurrentBattle().getCurrentTurn().playerHand;
+			const enemyHand: Hand = game.getCurrentBattle().getCurrentTurn().enemyHand;
+
+			game.getCurrentBattle().getCurrentTurn().fight.setWinner(playerHand, enemyHand);
+			game.getCurrentBattle().getCurrentTurn().fight.setTotalDamageToEnemy(playerHand, enemyHand);
+			game.getCurrentBattle().getCurrentTurn().fight.setMultiplierForPlayer(playerHand);
+			game.getCurrentBattle().getCurrentTurn().fight.setTotalDamageToPlayer(playerHand, enemyHand);
+			game.getCurrentBattle().getCurrentTurn().fight.setMultiplierForEnemy(enemyHand);
+			return game
+		});
+	}
+
+
 	return {
 		subscribe,
 		reset,
@@ -226,7 +230,7 @@ function createGameStore() {
 		createBattle,
 		createTurn,
 		playerDrawCard,
-		enemyAutoDraw,
+		enemyDrawCard,
 		updateFightData,
 		inflictDamagesToPlayer,
 		inflictDamagesToEnemy,
@@ -234,7 +238,8 @@ function createGameStore() {
 		healPercentages,
 		recycleDiscard,
 		addToInventory,
-		removeFromInventory
+		removeFromInventory,
+		resolveFight
 	};
 }
 

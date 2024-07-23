@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { GameCharacterSelectionState } from '$lib/models/stateMachine/game/states';
 	import { gameStore } from '$lib/stores/game';
 	import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
@@ -10,11 +9,7 @@
 	enemySideEffectsStore.set([]);
 
 	function startNewGame() {
-		$gameMachineState.listenToEvent({ name: 'NEW_GAME', data: null });
-		$gameMachineState = $gameMachineState;
-		if ($gameMachineState.currentState.constructor.name === GameCharacterSelectionState.name) {
-			gameStore.reset();
-		}
+		$gameMachineState = $gameMachineState.listenToEvent({ name: 'NEW_GAME', data: null });
 	}
 </script>
 

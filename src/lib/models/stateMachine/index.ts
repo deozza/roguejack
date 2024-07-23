@@ -16,7 +16,7 @@ export class DefaultState implements StateInterface {
 		});
     }
 
-    onStateExecute(): void {
+    onStateExecute(data: object): void {
     }
 
     onStateExit(): void {

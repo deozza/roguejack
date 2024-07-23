@@ -11,7 +11,10 @@ export default class Boar extends DefaultCharacter implements Enemy {
     
     constructor() {
         super();
+        this.make();
+    }    
 
+    make() {
         const deckSuits: Suit[] = ['spade'];
         const deckValues: Face[] = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
 
@@ -22,5 +25,5 @@ export default class Boar extends DefaultCharacter implements Enemy {
         this.minAttack = 12;
         this.type = EnnemyType.miniboss;
         this.deck.generateDeck(deckSuits, deckValues);
-    }    
+    }
 }

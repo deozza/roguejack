@@ -1,4 +1,5 @@
 
+import { gameStore } from '$lib/stores/game';
 import { DefaultState } from '../..';
 
 export default class TurnFightingState extends DefaultState {
@@ -9,6 +10,7 @@ export default class TurnFightingState extends DefaultState {
 	}
 
 	public onStateExecute(): void {
+		gameStore.resolveFight();
 	}
 
 	public onStateExit(): void {

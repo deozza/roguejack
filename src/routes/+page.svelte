@@ -8,7 +8,8 @@
 	import CampScreen from '$lib/ui/gameLayout/screens/CampScreen.svelte';
 	import GameLostScreen from '$lib/ui/gameLayout/screens/GameLostScreen.svelte';
 	import ShopScreen from '$lib/ui/gameLayout/screens/ShopScreen.svelte';
-	import type { StateInterface } from '$lib/models/stateMachine/stateInterface';
+	import { turnMachineState } from '$lib/stores/stateMachine/turn';
+	import type { StateInterface } from '$lib/models/stateMachine/interfaces';
 
 	const screensToRender: Record<string, SvelteComponent> = {
 		GameIdleState: HomeScreen,
@@ -33,6 +34,11 @@
 
 		return screensToRender[battleCurrentState.name];
 	}
+
+	$: console.log('game state : ', $gameMachineState);
+	$: console.log('battle state : ', $battleMachineState);
+	$: console.log('turn state : ', $turnMachineState);
+
 </script>
 
 <div id="top">

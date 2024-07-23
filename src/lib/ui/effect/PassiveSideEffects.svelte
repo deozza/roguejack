@@ -1,9 +1,8 @@
 <script lang="ts">
-	import type { PassiveEffectInterface } from '$lib/models/effect/interfaces';
 	import Icon from '@iconify/svelte';
 	import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
 
-	export let passiveEffects: PassiveEffectInterface[];
+	export let passiveEffects = [];
 
 	function popupClick(target: string): PopupSettings {
 		return {

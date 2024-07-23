@@ -13,6 +13,11 @@ export default class Zombie extends DefaultCharacter implements Enemy {
     constructor() {
         super();
 
+        this.make();
+    }    
+
+    make() {
+
         const deckSuits: Suit[] = ['spade', 'club'];
         const deckValues: Face[] = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
 
@@ -24,6 +29,6 @@ export default class Zombie extends DefaultCharacter implements Enemy {
         this.level = 2;
         this.type = EnnemyType.miniboss;
         this.deck.generateDeck(deckSuits, deckValues);
-        this.passiveAbilities.push(new Undead());
-    }    
+        this.passiveAbilities = [new Undead()];
+    }
 }

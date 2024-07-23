@@ -39,7 +39,7 @@ export class GameMachineState implements StateMachineInterface {
 		}
 	};
 
-	public listenToEvent(event: EventInterface): void {
+	public listenToEvent(event: EventInterface): GameMachineState {
 		const currentStateName = this.currentState.name;
 		const nextState: StateInterface | undefined = this.stateMachine[currentStateName][event.name];
 		if (nextState) {
@@ -48,5 +48,6 @@ export class GameMachineState implements StateMachineInterface {
 			this.currentState.onStateEnter();
 			this.currentState.onStateExecute(event.data);
 		}
+		return this;
 	}
 }

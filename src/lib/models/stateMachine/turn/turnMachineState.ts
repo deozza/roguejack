@@ -46,6 +46,12 @@ export class TurnMachineState implements StateMachineInterface {
 		TurnFightingState: {
 			DAMAGE: new TurnDamageState
 		},
+		TurnEnemyBustedState: {
+			DAMAGE: new TurnDamageState
+		},
+		TurnPlayerBustedState: {
+			DAMAGE: new TurnDamageState
+		},
 		TurnDamageState: {
 			WIN: new TurnWonState,
 			TIE: new TurnTiedState,
@@ -55,12 +61,6 @@ export class TurnMachineState implements StateMachineInterface {
 			RESET: new TurnIdleState
 		},
 		TurnPlayerDeckEmptyState: {
-			RESET: new TurnIdleState
-		},
-		TurnEnemyBustedState: {
-			RESET: new TurnIdleState
-		},
-		TurnPlayerBustedState: {
 			RESET: new TurnIdleState
 		},
 		TurnWonState: {
@@ -74,7 +74,7 @@ export class TurnMachineState implements StateMachineInterface {
 		}
 	};
 
-	public listenToEvent(event: EventInterface): StateInterface {
+	public listenToEvent(event: EventInterface): TurnMachineState {
 		const currentStateName = this.currentState.name;
 		const nextState: StateInterface | undefined = this.stateMachine[currentStateName][event.name];
 		if (nextState) {
@@ -84,6 +84,6 @@ export class TurnMachineState implements StateMachineInterface {
 			this.currentState.onStateExecute(event.data);
 		}
 
-		return this.currentState;
+		return this;
 	}
 }

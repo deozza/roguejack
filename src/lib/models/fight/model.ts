@@ -1,10 +1,12 @@
 import type { Hand } from '$lib/models/hand/model';
 
 export class Fight {
-	basePowerForPlayer: number = 0;
-	basePowerForEnemy: number = 0;
-	baseDamageToPlayer: number = 0;
-	baseDamageToEnemy: number = 0;
+	bonusValueForPlayer: number = 0;
+	bonusValueForEnemy: number = 0;
+	bonusDamageToPlayer: number = 0;
+	bonusDamageToEnemy: number = 0;
+	totalDamageToPlayer: number = 0;
+	totalDamageToEnemy: number = 0;
 	multiplierForPlayer: number = 1;
 	multiplierForEnemy: number = 1;
 	playerHasWon: boolean = false;
@@ -36,8 +38,8 @@ export class Fight {
 		}
 
 		if (
-			playerHand.getValue() + this.basePowerForPlayer >
-			enemyHand.getValue() + this.basePowerForEnemy
+			playerHand.getValue() + this.bonusValueForPlayer >
+			enemyHand.getValue() + this.bonusValueForEnemy
 		) {
 			this.playerHasWon = true;
 			return this;
@@ -47,42 +49,44 @@ export class Fight {
 		}
 	}
 
-	public setBaseDamageToPlayer(playerHand: Hand, enemyHand: Hand): Fight {
+	public setTotalDamageToPlayer(playerHand: Hand, enemyHand: Hand): Fight {
 		if (this.enemyHasWon === false) {
-			this.baseDamageToPlayer = 0;
+			this.totalDamageToPlayer = 0;
 			return this;
 		}
 
 		if (playerHand.getIsBusted()) {
-			this.baseDamageToPlayer += playerHand.getValue() - 21;
+			this.totalDamageToPlayer += playerHand.getValue() - 21;
 			return this;
 		}
 
-		this.baseDamageToPlayer +=
+		this.totalDamageToPlayer +=
 			enemyHand.getValue() +
-			this.basePowerForEnemy -
+			this.bonusValueForEnemy +
+			this.bonusDamageToPlayer -
 			playerHand.getValue() -
-			this.basePowerForPlayer;
+			this.bonusValueForPlayer;
 		return this;
 	}
 
-	public setBaseDamageToEnemy(playerHand: Hand, enemyHand: Hand): Fight {
+	public setTotalDamageToEnemy(playerHand: Hand, enemyHand: Hand): Fight {
 		if (this.playerHasWon === false) {
-			this.baseDamageToEnemy = 0;
+			this.totalDamageToEnemy = 0;
 
 			return this;
 		}
 
 		if (enemyHand.getIsBusted()) {
-			this.baseDamageToEnemy += enemyHand.getValue() - 21;
+			this.totalDamageToEnemy += enemyHand.getValue() - 21;
 			return this;
 		}
 
-		this.baseDamageToEnemy +=
+		this.totalDamageToEnemy +=
 			playerHand.getValue() +
-			this.basePowerForPlayer -
+			this.bonusValueForPlayer +
+			this.bonusDamageToEnemy -
 			enemyHand.getValue() -
-			this.basePowerForEnemy;
+			this.bonusValueForEnemy;
 		return this;
 	}
 

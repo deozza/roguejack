@@ -1,16 +1,15 @@
 <script lang="ts">
-	import type { Character } from '$lib/models/character/model';
 	import PassiveSideEffects from '$lib/ui/effect/PassiveSideEffects.svelte';
 	import Icon from '@iconify/svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import TriggerSideEffects from '$lib/ui/effect/TriggerSideEffects.svelte';
-	import type { PassiveEffectInterface } from '$lib/models/effect/interfaces';
+	import type { Character } from '$lib/models/characters';
 
 	const dispatch = createEventDispatcher();
 
 	export let user: Character;
-	export let passiveEffects: PassiveEffectInterface[];
+	export let passiveEffects = [];
 	export let isEnemy: boolean = false;
 </script>
 

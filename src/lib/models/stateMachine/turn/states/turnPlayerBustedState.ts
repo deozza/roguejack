@@ -1,4 +1,5 @@
 import { DefaultState } from '../..';
+import { gameStore } from '$lib/stores/game';
 
 export default class TurnPlayerBustedState extends DefaultState {
 	public name: string = 'TurnPlayerBustedState';
@@ -8,6 +9,7 @@ export default class TurnPlayerBustedState extends DefaultState {
 	}
 
 	public onStateExecute(): void {
+		gameStore.resolveFight();
 	}
 
 	public onStateExit(): void {

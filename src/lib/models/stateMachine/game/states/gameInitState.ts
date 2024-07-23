@@ -1,3 +1,5 @@
+import { gameStore } from '$lib/stores/game';
+import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 import { DefaultState } from '../..';
 
 export default class GameInitState extends DefaultState {
@@ -7,7 +9,14 @@ export default class GameInitState extends DefaultState {
 		super.onStateEnter()
 	}
 
-	public onStateExecute(): void {
+	public onStateExecute(data: object): void {
+		if(data.character === undefined || data.character === null) {
+			throw new Error('Character not selected');
+		}
+
+		playerSideEffectsStore.set([]);
+		enemySideEffectsStore.set([]);
+		gameStore.setPlayer(data.character)
 	}
 
 	public onStateExit(): void {
