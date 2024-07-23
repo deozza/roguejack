@@ -28,8 +28,6 @@ function createGameStore() {
 			let nextBattleEnemyType: EnnemyType = EnnemyType.standard;
 			let nextBattleEnemyLevel: number = Math.max(Math.floor(nextBattleIndex / 10), 1);
 
-			console.log(nextBattleEnemyLevel)
-
 			if(nextBattleIndex % 10 === 0) {
 				nextBattleEnemyType = EnnemyType.boss;
 			}
@@ -107,10 +105,7 @@ function createGameStore() {
 
 	const inflictDamagesToEnemy = (damages: number) => {
 		update((game) => {
-			console.log(damages)
-			
 			game.getCurrentBattle().enemy.takeDamage(damages);
-
 			return game;
 		});
 	};
