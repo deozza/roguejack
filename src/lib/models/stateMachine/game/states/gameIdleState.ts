@@ -1,17 +1,22 @@
-import { type StateInterface } from '../../stateInterface';
 
-export class GameIdleState implements StateInterface {
+import { gameStore } from '$lib/stores/game';
+import { DefaultState } from '../..';
+import type { StateInterface } from '../../interfaces';
+
+export default class GameIdleState extends DefaultState implements StateInterface {
 	public name: string = 'GameIdleState';
 
-	public onStateEnter = (): void => {
-		console.log(` ${this.name} entered`);
-	};
-
-	public onStateExecute(): void {
-		console.log(` ${this.name} executed`);
+	public onStateEnter(): void {
+		super.onStateEnter(this.name)
 	}
 
-	public onStateExit = (): void => {
-		console.log(` ${this.name} exited`);
-	};
+	public onStateExecute(): void {
+		gameStore.reset();
+	}
+
+	public onStateExit(): void {
+		super.onStateExit(this.name)
+	}
+	
 }
+

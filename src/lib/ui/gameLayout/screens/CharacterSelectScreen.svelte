@@ -1,80 +1,40 @@
 <script lang="ts">
-	import { characters } from '$lib/models/character/players';
-	import type EffectInterface from '$lib/models/effect/effectInterface';
-	import { TurnPlayingState } from '$lib/models/stateMachine/turn/states/turnPlayingState';
 	import { gameStore } from '$lib/stores/game';
 	import { playerSideEffectsStore } from '$lib/stores/sideEffects';
 	import { battleMachineState } from '$lib/stores/stateMachine/battle';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
-	import { enemyTurnMachineState, playerTurnMachineState } from '$lib/stores/stateMachine/turn';
+	import { turnMachineState } from '$lib/stores/stateMachine/turn';
 	import Icon from '@iconify/svelte';
 	import { fade } from 'svelte/transition';
-	import { passiveEffects } from '$lib/models/effect';
-	import { Card, type Face, type Suit } from '$lib/models/card/model';
 	import DeckPreview from '../battleScreen/DeckPreview.svelte';
+	import { PlayerList, type Player } from '$lib/models/characters/players';
 
-	let selectedCharacter: object = {};
-	let cards: Card[] = [];
-	let passive: EffectInterface | undefined = undefined;
+	let selectedCharacter: Player = PlayerList[0];
 	let openedDeckPreview: boolean = false;
-
-	preSelectCharacter(characters[0]);
-
-	function preSelectCharacter(character: object) {
-		selectedCharacter = character;
-		passive = passiveEffects.find((effect) => effect.technicalName === character.passive);
-
-		cards = [];
-		character.deck.suits.forEach((suit: Suit) => {
-			character.deck.values.forEach((value: Face) => {
-				cards = [...cards, new Card(suit, value)];
-			});
-		});
-	}
 
 	function openDeckPreview() {
 		openedDeckPreview = !openedDeckPreview;
 	}
 
 	function selectCharacter() {
-		$gameMachineState.currentState.onStateExecute({ character: selectedCharacter });
+		const player: Player = selectedCharacter;
+		player.make();
+		$gameMachineState = $gameMachineState.listenToEvent({ name: 'CHARACTER_SELECTED', data: {character: player} });
+		
+		$gameMachineState = $gameMachineState.listenToEvent({ name: 'START_GAME', data: null });
+		
+		$battleMachineState = $battleMachineState.listenToEvent({ name: 'NEW_BATTLE', data: null });
+		
+		$battleMachineState = $battleMachineState.listenToEvent({ name: 'PLAY', data: null });
+		
+		$turnMachineState = $turnMachineState.listenToEvent({ name: 'NEW_TURN', data: null });
 
-		$gameMachineState.listenToEvent({ name: 'CHARACTER_SELECTED', data: null });
-		$gameMachineState = $gameMachineState;
-		$gameMachineState.currentState.onStateExecute({});
-
-		if ($gameStore.player.sideEffect !== null) {
-			$playerSideEffectsStore = [...$playerSideEffectsStore, $gameStore.player.sideEffect];
-		}
-
-		$gameMachineState.listenToEvent({ name: 'START_GAME', data: null });
-		$gameMachineState = $gameMachineState;
-
-		$battleMachineState.listenToEvent({ name: 'NEW_BATTLE', data: null });
-		$battleMachineState = $battleMachineState;
-		$battleMachineState.currentState.onStateEnter({ user: 'player' });
-		$battleMachineState.currentState.onStateExecute({});
-
-		$battleMachineState.listenToEvent({ name: 'PLAY', data: null });
-		$battleMachineState = $battleMachineState;
-
-		$playerTurnMachineState.listenToEvent({ name: 'NEW_TURN', data: { user: 'player' } });
-		$playerTurnMachineState = $playerTurnMachineState;
-		$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
-
-		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: { user: 'player' } });
-		$playerTurnMachineState = $playerTurnMachineState;
-		$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
-
-		enemyTurnMachineState.update((state) => {
-			state.currentState = new TurnPlayingState();
-			return state;
-		});
+		$turnMachineState = $turnMachineState.listenToEvent({ name: 'PLAY', data: null });
 	}
 </script>
 
 {#if openedDeckPreview}
-	<DeckPreview {cards} on:close={() => openDeckPreview()} />
+	<DeckPreview cards={selectedCharacter.deck.cards} on:close={() => openDeckPreview()} />
 {/if}
 
 <section
@@ -96,9 +56,9 @@
 						<hr class="w-full" />
 					</div>
 
-					{#if passive !== undefined && passive !== null}
+					{#each selectedCharacter.passiveAbilities as passive}
 						<p><Icon icon={passive.icon} height="32" width="32" /> {passive.description}</p>
-					{/if}
+					{/each}
 					<button class="btn variant-ringed-tertiary" on:click={() => openDeckPreview()}
 						>See deck</button
 					>
@@ -109,14 +69,14 @@
 			{/if}
 		</div>
 		<div class="flex flex-row flex-wrap items-center justify-center w-full space-x-5">
-			{#each characters as character}
+			{#each PlayerList as player}
 				<button
-					class="btn {selectedCharacter.name === character.name
+					class="btn {selectedCharacter.name === player.name
 						? 'variant-filled-tertiary'
 						: 'variant-ringed-tertiary'} rounded-md"
-					on:click={() => preSelectCharacter(character)}
+					on:click={() => selectedCharacter = player}
 				>
-					<Icon icon={character.icon} width="32" height="32" />
+					<Icon icon={player.icon} width="32" height="32" />
 				</button>
 			{/each}
 		</div>

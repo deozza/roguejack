@@ -2,7 +2,8 @@
 	import type { Hand } from '$lib/models/hand/model';
 	import Icon from '@iconify/svelte';
 	export let hand: Hand;
-	export let basePower: number;
+	export let bonusValue: number;
+	export let bonusDamage: number;
 	export let currentStateName: string;
 
 	const endTurnStates: string[] = [
@@ -35,8 +36,8 @@
 	<div class="flex flex-row flex-wrap items-center justify-center m-4 text-4xl text-red-500">
 		{#if currentStateName !== 'TurnDeckEmptyState'}
 			<p class="p">
-				{hand.value}
-				{basePower !== 0 ? `+ ${basePower}` : ''}
+				{hand.value + bonusValue}
+				{bonusDamage !== 0 ? `+ ${bonusDamage}` : ''}
 			</p>
 		{/if}
 		<Icon icon={iconByValue()} />

@@ -1,6 +1,6 @@
-export { GameIdleState } from './gameIdleState';
-export { GameCharacterSelectionState } from './gameCharacterSelectionState';
-export { GameInitState } from './gameInitState';
-export { GamePlayingState } from './gamePlayingState';
-export { GamePausedState } from './gamePausedState';
-export { GameLostState } from './gameLostState';
+export { default as GameIdleState } from './gameIdleState';
+export { default as GameCharacterSelectionState } from './gameCharacterSelectionState';
+export { default as GameInitState } from './gameInitState';
+export { default as GamePlayingState } from './gamePlayingState';
+export { default as GamePausedState } from './gamePausedState';
+export { default as GameLostState } from './gameLostState';

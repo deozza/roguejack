@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { GameCharacterSelectionState } from '$lib/models/stateMachine/game/states';
 	import { gameStore } from '$lib/stores/game';
 	import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
@@ -10,11 +9,7 @@
 	enemySideEffectsStore.set([]);
 
 	function startNewGame() {
-		$gameMachineState.listenToEvent({ name: 'NEW_GAME', data: null });
-		$gameMachineState = $gameMachineState;
-		if ($gameMachineState.currentState.constructor.name === GameCharacterSelectionState.name) {
-			gameStore.reset();
-		}
+		$gameMachineState = $gameMachineState.listenToEvent({ name: 'NEW_GAME', data: null });
 	}
 </script>
 
@@ -31,7 +26,7 @@
 		<p class="p text-lg">Roguejack is a game mixing blackjack and roguelite elements.</p>
 		<p class="p text-lg">
 			Use your deck to build powerful hands, take advantage from the abilities of your characters
-			and the weapons you collect through your journey and try to destroy your ennemies.
+			and the weapons you collect through your journey and try to destroy your enemies.
 		</p>
 		<p class="p text-lg">But beware ! Do not lose all your health or run out of cards !</p>
 	</div>

@@ -1,11 +1,11 @@
 <script lang="ts">
-	import type EffectInterface from "$lib/models/effect/effectInterface";
-	import Icon from "@iconify/svelte";
-	import { popup, type PopupSettings } from "@skeletonlabs/skeleton";
+	import type { ContinuousEffect, Status } from '$lib/models/effects/interfaces';
+	import Icon from '@iconify/svelte';
+	import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
 
-    export let passiveEffects: EffectInterface[];
+	export let passiveEffects: Array<Status | ContinuousEffect> = [];
 
-    function popupClick(target: string): PopupSettings {
+	function popupClick(target: string): PopupSettings {
 		return {
 			event: 'click',
 			target,
@@ -21,6 +21,6 @@
 		<div class="arrow variant-filled-primary" />
 	</div>
 	<button class="btn" use:popup={popupClick(sideEffect.technicalName)}>
-		<Icon icon={sideEffect.icon} width="64" height="64" />
+		<Icon icon={sideEffect.icon} width="64" height="64"/>
 	</button>
 {/each}

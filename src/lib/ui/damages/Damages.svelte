@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Hand } from '$lib/stores/hand/model';
+	import type { Hand } from '$lib/models/hand/model';
 	import Icon from '@iconify/svelte';
 
 	export let currentTurn: Hand;

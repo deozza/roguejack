@@ -1,6 +1,4 @@
-import { type EventInterface } from '../eventInterface';
-import { type StateInterface } from '../stateInterface';
-import { type StateMachineInterface } from '../stateMachineInterface';
+import type { EventInterface, StateInterface, StateMachineInterface } from '../interfaces';
 import {
 	BattleCampingState,
 	BattleIdleState,
@@ -16,37 +14,41 @@ export class BattleMachineState implements StateMachineInterface {
 
 	public stateMachine: object = {
 		BattleIdleState: {
-			NEW_BATTLE: BattleInitState
+			NEW_BATTLE: new BattleInitState()
 		},
 		BattleInitState: {
-			PLAY: BattlePlayingState,
-			DECK_EMPTY: BattleLostState
+			PLAY: new BattlePlayingState(),
+			DECK_EMPTY: new BattleLostState()
 		},
 		BattlePlayingState: {
-			WIN: BattleWonState,
-			LOSE: BattleLostState
+			WIN: new BattleWonState(),
+			LOSE: new BattleLostState()
 		},
 		BattleWonState: {
-			CAMP: BattleCampingState
+			CAMP: new BattleCampingState()
 		},
 		BattleCampingState: {
-			NEW_BATTLE: BattleInitState,
-			SHOP: BattleShopingState
+			RESET: new BattleIdleState(),
+			SHOP: new BattleShopingState()
 		},
 		BattleShopingState: {
-			NEW_BATTLE: BattleInitState
+			RESET: new BattleIdleState()
 		},
 		BattleLostState: {
-			RESET: BattleIdleState
+			RESET: new BattleIdleState()
 		}
 	};
 
-	public listenToEvent(event: EventInterface): void {
+	public listenToEvent(event: EventInterface): BattleMachineState {
 		const currentStateName = this.currentState.name;
-		const nextState = this.stateMachine[currentStateName][event.name];
+		const nextState: StateInterface | undefined = this.stateMachine[currentStateName][event.name];
 		if (nextState) {
-			this.currentState.onStateExit(event.data);
-			this.currentState = new nextState();
+			this.currentState.onStateExit();
+			this.currentState = nextState;
+			this.currentState.onStateEnter();
+			this.currentState.onStateExecute(event.data);
 		}
+
+		return this;
 	}
 }

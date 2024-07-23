@@ -1,15 +1,17 @@
-import { describe, expect, it } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { Game } from './model';
 import { Battle } from '../battle/model';
-import { Character } from '../character/model';
+import Slime from '../characters/enemies/standard/slime';
+import type { Enemy } from '../characters/enemies';
 
 describe('game model test', () => {
-	it('add battle to game', () => {
+	it('add battle', () => {
+
 		const game: Game = new Game();
 		expect(game.battles.length).toBe(0);
 
-		const enemy: Character = new Character();
-		const battle: Battle = new Battle(enemy, game.battles.length);
+		const enemy: Enemy = new Slime();
+		const battle: Battle = new Battle(enemy, 1);
 		game.addBattle(battle);
 
 		expect(game.battles.length).toBe(1);
@@ -17,10 +19,10 @@ describe('game model test', () => {
 
 	it('get current battle', () => {
 		const game: Game = new Game();
-		expect(game.getCurrentBattle()).toBe(null);
+		expect(game.getCurrentBattle()).toBeNull();
 
-		const enemy: Character = new Character();
-		const battle: Battle = new Battle(enemy, game.battles.length);
+		const enemy: Enemy = new Slime();
+		const battle: Battle = new Battle(enemy, 1);
 		game.addBattle(battle);
 
 		expect(game.getCurrentBattle()).toEqual(battle);

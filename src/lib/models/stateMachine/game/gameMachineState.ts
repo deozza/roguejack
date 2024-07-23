@@ -1,6 +1,4 @@
-import { type EventInterface } from '../eventInterface';
-import { type StateInterface } from '../stateInterface';
-import { type StateMachineInterface } from '../stateMachineInterface';
+import type { EventInterface, StateInterface, StateMachineInterface } from '../interfaces';
 import {
 	GameCharacterSelectionState,
 	GameIdleState,
@@ -15,37 +13,41 @@ export class GameMachineState implements StateMachineInterface {
 
 	public stateMachine: object = {
 		GameIdleState: {
-			NEW_GAME: GameCharacterSelectionState,
-			PAUSE_GAME: GamePausedState
+			NEW_GAME: new GameCharacterSelectionState(),
+			PAUSE_GAME: new GamePausedState()
 		},
 		GameCharacterSelectionState: {
-			CHARACTER_SELECTED: GameInitState,
-			PAUSE_GAME: GamePausedState,
-			QUIT_GAME: GameIdleState
+			CHARACTER_SELECTED: new GameInitState(),
+			PAUSE_GAME: new GamePausedState(),
+			QUIT_GAME: new GameIdleState()
 		},
 		GameInitState: {
-			START_GAME: GamePlayingState,
-			PAUSE_GAME: GamePausedState,
-			QUIT_GAME: GameIdleState
+			START_GAME: new GamePlayingState(),
+			PAUSE_GAME: new GamePausedState(),
+			QUIT_GAME: new GameIdleState()
 		},
 		GamePlayingState: {
-			PAUSE_GAME: GamePausedState,
-			END_GAME: GameLostState,
-			QUIT_GAME: GameIdleState
+			PAUSE_GAME: new GamePausedState(),
+			END_GAME: new GameLostState(),
+			QUIT_GAME: new GameIdleState()
 		},
 		GamePausedState: {
-			RESUME_GAME: GamePlayingState
+			RESUME_GAME: new GamePlayingState()
 		},
 		GameLostState: {
-			QUIT_GAME: GameIdleState
+			QUIT_GAME: new GameIdleState()
 		}
 	};
 
-	public listenToEvent(event: EventInterface): void {
+	public listenToEvent(event: EventInterface): GameMachineState {
 		const currentStateName = this.currentState.name;
-		const nextState = this.stateMachine[currentStateName][event.name];
+		const nextState: StateInterface | undefined = this.stateMachine[currentStateName][event.name];
 		if (nextState) {
-			this.currentState = new nextState();
+			this.currentState.onStateExit();
+			this.currentState = nextState;
+			this.currentState.onStateEnter();
+			this.currentState.onStateExecute(event.data);
 		}
+		return this;
 	}
 }

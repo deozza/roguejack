@@ -1,16 +1,13 @@
 import { Battle } from '$lib/models/battle/model';
 import type { Card } from '$lib/models/card/model';
-import { characters as semiboss } from '$lib/models/character/enemies/semiboss';
-import { characters as basic } from '$lib/models/character/enemies/basic';
-import { characters as boss } from '$lib/models/character/enemies/boss';
-import { Character } from '$lib/models/character/model';
 import { Game } from '$lib/models/game/model';
 import type { Hand } from '$lib/models/hand/model';
 import { Turn } from '$lib/models/turn/model';
-import { get } from 'svelte/store';
 import { writable } from 'svelte/store';
-import type EffectInterface from '$lib/models/effect/effectInterface';
-import { delay } from '$lib/utils';
+import { getRandomEnemyByLevelAndType, type Enemy } from '$lib/models/characters/enemies';
+import { EnnemyType } from '$lib/models/characters/types';
+import type { Player } from '$lib/models/characters/players';
+import type { ItemTypes } from '$lib/models/items/types';
 
 function createGameStore() {
 	const { subscribe, set, update } = writable<Game>(new Game());
@@ -19,53 +16,37 @@ function createGameStore() {
 		set(new Game());
 	};
 
-	const setPlayer = (characterChosen: object) => {
-		const player = new Character();
-		player.generateCharacter(characterChosen);
-
+	const setPlayer = (chosenPlayer: Player) => {
 		update((game) => {
-			game.player = player;
+			game.player = chosenPlayer;
 			return game;
 		});
 	};
 
 	const createBattle = () => {
 		update((game) => {
-			const enemy: Character = generateEnemy(game);
+			const nextBattleIndex: number = game.battles.length + 1;
+			let nextBattleEnemyType: EnnemyType = EnnemyType.standard;
+			let nextBattleEnemyLevel: number = Math.max(Math.floor(nextBattleIndex / 10), 1);
 
-			const battle = new Battle(enemy, game.battles.length + 1);
+			if(nextBattleIndex % 10 === 0) {
+				nextBattleEnemyType = EnnemyType.boss;
+			}
+
+			if(nextBattleIndex % 5 === 0 && nextBattleIndex % 10 !== 0) {
+				nextBattleEnemyType = EnnemyType.miniboss;
+			}
+
+			const enemy: Enemy = getRandomEnemyByLevelAndType(nextBattleEnemyLevel, nextBattleEnemyType);
+			enemy.deck.shuffleDeck();
+			const battle = new Battle(enemy, nextBattleIndex);
 			game.addBattle(battle);
 			game.player.deck.shuffleDeck();
 			return game;
 		});
 	};
 
-	const generateEnemy = (game: Game): Character => {
-		const enemy: Character = new Character();
-		const enemyLevel: number = Math.max(Math.ceil(game.battles.length / 10), 1);
-		let enemyModels: object[] = [];
-
-		if ((game.battles.length + 1) % 10 === 0) {
-			enemyModels = boss.filter(
-				(character) => character.level <= enemyLevel && character.level >= enemyLevel - 1
-			);
-		} else if ((game.battles.length + 1) % 5 === 0) {
-			enemyModels = semiboss.filter(
-				(character) => character.level <= enemyLevel && character.level >= enemyLevel - 1
-			);
-		} else {
-			enemyModels = basic.filter(
-				(character) => character.level <= enemyLevel && character.level >= enemyLevel - 1
-			);
-		}
-
-		const enemyModel = enemyModels[Math.floor(Math.random() * enemyModels.length)];
-		enemy.generateCharacter(enemyModel);
-
-		return enemy;
-	};
-
-	const createTurn = (user: string) => {
+	const createTurn = () => {
 		update((game) => {
 			if (game.getCurrentBattle() === null) {
 				throw new Error('No battle to create turn');
@@ -77,15 +58,12 @@ function createGameStore() {
 			return game;
 		});
 
-		if (user === 'player') {
-			playerDrawCard();
-			playerDrawCard();
-		}
+		playerDrawCard();
+		playerDrawCard();
 	};
 
 	const playerDrawCard = () => {
 		update((game) => {
-
 			let card: Card | null = game.player.deck.drawTopCard();
 			if (card === null) {
 				throw new Error('PLAYER_EMPTY_DECK');
@@ -106,18 +84,6 @@ function createGameStore() {
 
 			return game;
 		});
-	};
-
-	const enemyAutoDraw = async () => {
-		const game = get(gameStore);
-
-		while (
-			game.getCurrentBattle().getCurrentTurn().enemyHand.getValue() <
-			game.getCurrentBattle().enemy.minAttack
-		) {
-			await delay(1000);
-			enemyDrawCard();
-		}
 	};
 
 	const updateFightData = () => {
@@ -214,22 +180,91 @@ function createGameStore() {
 		});
 	};
 
-	const addToInventory = (object: EffectInterface, user: string) => {
+	const addToInventory = (
+		object: ItemTypes,
+		user: string
+	) => {
 		update((game) => {
-			game.player.inventory = [...game.player.inventory, object];
+			if(user === 'enemy') {
+				const index = game.getCurrentBattle().enemy.inventory.findIndex((item) => item === object);
+				if(index === -1) {
+					object.currentAmount = object.defaultAmount;
+					game.getCurrentBattle().enemy.inventory = [...game.getCurrentBattle().enemy.inventory, object];
+					return game;
+				}
+
+				game.getCurrentBattle().enemy.inventory[index].currentAmount += object.defaultAmount;
+				return game;
+			}
+
+			const index = game.player.inventory.findIndex((item) => item === object);
+				if(index === -1) {
+					object.currentAmount = object.defaultAmount;
+					game.player.inventory = [...game.player.inventory, object];
+					return game;
+				}
+			
+				game.player.inventory[index].currentAmount += object.defaultAmount;
 			return game;
 		});
 	};
 
-	const removeFromInventory = (object: EffectInterface, user: string) => {
+	const removeFromInventory = (
+		object: ItemTypes,
+		user: string
+	) => {
 		update((game) => {
 			const index = game.player.inventory.findIndex((item) => item === object);
-			if (index !== -1) {
+			if(index === -1) {
+				return game;
+			}
+
+			game.player.inventory[index].currentAmount -= 1;
+			if(game.player.inventory[index].currentAmount <= 0) {
 				game.player.inventory.splice(index, 1);
 			}
+
 			return game;
 		});
 	};
+
+	const addCardToDeck = (card: Card, user: string) => {
+		update((game) => {
+			if (user === 'player') {
+				game.player.deck.putCardOnTop(card);
+				return game;
+			}
+			game.getCurrentBattle().enemy.deck.putCardOnTop(card);
+			return game;
+		}
+		);
+	}
+
+	const shuffleDeck = (user: string) => {
+		update((game) => {
+			if (user === 'player') {
+				game.player.deck.shuffleDeck();
+				return game;
+			}
+			game.getCurrentBattle().enemy.deck.shuffleDeck();
+			return game;
+		});
+	}
+
+	const resolveFight = () => {
+		update((game) => {
+			const playerHand: Hand = game.getCurrentBattle().getCurrentTurn().playerHand;
+			const enemyHand: Hand = game.getCurrentBattle().getCurrentTurn().enemyHand;
+
+			game.getCurrentBattle().getCurrentTurn().fight.setWinner(playerHand, enemyHand);
+			game.getCurrentBattle().getCurrentTurn().fight.setTotalDamageToEnemy(playerHand, enemyHand);
+			game.getCurrentBattle().getCurrentTurn().fight.setMultiplierForPlayer(playerHand);
+			game.getCurrentBattle().getCurrentTurn().fight.setTotalDamageToPlayer(playerHand, enemyHand);
+			game.getCurrentBattle().getCurrentTurn().fight.setMultiplierForEnemy(enemyHand);
+			return game
+		});
+	}
+
 
 	return {
 		subscribe,
@@ -239,7 +274,7 @@ function createGameStore() {
 		createBattle,
 		createTurn,
 		playerDrawCard,
-		enemyAutoDraw,
+		enemyDrawCard,
 		updateFightData,
 		inflictDamagesToPlayer,
 		inflictDamagesToEnemy,
@@ -247,7 +282,10 @@ function createGameStore() {
 		healPercentages,
 		recycleDiscard,
 		addToInventory,
-		removeFromInventory
+		removeFromInventory,
+		resolveFight,
+		addCardToDeck,
+		shuffleDeck
 	};
 }
 

@@ -8,8 +8,9 @@
 	import CampScreen from '$lib/ui/gameLayout/screens/CampScreen.svelte';
 	import GameLostScreen from '$lib/ui/gameLayout/screens/GameLostScreen.svelte';
 	import ShopScreen from '$lib/ui/gameLayout/screens/ShopScreen.svelte';
-	import type { BattleLostState, BattleWonState } from '$lib/models/stateMachine/battle/states';
-	import { scrollToElement } from '$lib/utils';
+	import { turnMachineState } from '$lib/stores/stateMachine/turn';
+	import type { StateInterface } from '$lib/models/stateMachine/interfaces';
+	import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 
 	const screensToRender: Record<string, SvelteComponent> = {
 		GameIdleState: HomeScreen,
@@ -27,14 +28,23 @@
 		$battleMachineState.currentState
 	);
 
-	function getScreenToRender(gameCurrentState, battleCurrentState): SvelteComponent {
+	function getScreenToRender(gameCurrentState: StateInterface, battleCurrentState: StateInterface): SvelteComponent {
 		if (gameCurrentState && gameCurrentState.name !== 'GamePlayingState') {
 			return screensToRender[gameCurrentState.name];
 		}
 
 		return screensToRender[battleCurrentState.name];
 	}
+
+	$: console.log('game state : ', $gameMachineState);
+	$: console.log('battle state : ', $battleMachineState);
+	$: console.log('turn state : ', $turnMachineState);
+
+	$: console.log('player side effects : ', $playerSideEffectsStore);
+	$: console.log('enemy side effects : ', $enemySideEffectsStore);
+
 </script>
+
 <div id="top">
 	<svelte:component this={screenToRender} />
 </div>

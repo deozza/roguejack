@@ -1,34 +1,20 @@
+import type { ContinuousEffect, Status } from '$lib/models/effects/interfaces';
 import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 import { get } from 'svelte/store';
-import { type StateInterface } from '../../stateInterface';
+import { DefaultState } from '../..';
+import type { StateInterface } from '../../interfaces';
 
-export class TurnLostState implements StateInterface {
+export default class TurnLostState extends DefaultState implements StateInterface{
 	public name: string = 'TurnLostState';
 
-	public onStateEnter = (): void => {
-		console.log(` ${this.name} entered`);
-	};
-
-	public onStateExecute(): void {
-		console.log(` ${this.name} executed`);
+	public onStateEnter(): void {
+		super.onStateEnter(this.name)
 	}
 
-	public onStateExit = (data: object): void => {
-		let passiveEffects = null;
-		let stateToEnable = null;
+	public onStateExecute(): void {
+	}
 
-		if (data['user'] === 'player') {
-			passiveEffects = get(playerSideEffectsStore);
-			stateToEnable = 'enableOnPlayerTurnState';
-		} else {
-			passiveEffects = get(enemySideEffectsStore);
-			stateToEnable = 'enableOnEnemyTurnState';
-		}
-
-		passiveEffects.forEach((sideEffect) => {
-			if (sideEffect[stateToEnable] === this.name) {
-				sideEffect.effect(data);
-			}
-		});
-	};
+	public onStateExit(): void {
+		super.onStateExit(this.name)
+	}
 }

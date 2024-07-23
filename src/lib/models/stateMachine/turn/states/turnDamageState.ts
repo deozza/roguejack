@@ -1,33 +1,26 @@
+import type { Game } from '$lib/models/game/model';
 import { gameStore } from '$lib/stores/game';
 import { get } from 'svelte/store';
-import { type StateInterface } from '../../stateInterface';
-import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
+import { DefaultState } from '../..';
+import type { Fight } from '$lib/models/fight/model';
+import type { StateInterface } from '../../interfaces';
 
-export class TurnDamageState implements StateInterface {
+export default class TurnDamageState extends DefaultState implements StateInterface {
 	public name: string = 'TurnDamageState';
 
-	public onStateEnter = (data: object): void => {};
-
-	public onStateExecute(data: object): void {
-		gameStore.updateFightData();
+	public onStateEnter(): void {
+		super.onStateEnter(this.name)
 	}
 
-	public onStateExit = (data: object): void => {
-		let passiveEffects = null;
-		let stateToEnable = null;
+	public onStateExecute(): void {
+		const game: Game = get(gameStore);
+		const fight: Fight = game.getCurrentBattle().getCurrentTurn().fight;
 
-		if (data['user'] === 'player') {
-			passiveEffects = get(playerSideEffectsStore);
-			stateToEnable = 'enableOnPlayerTurnState';
-		} else {
-			passiveEffects = get(enemySideEffectsStore);
-			stateToEnable = 'enableOnEnemyTurnState';
-		}
+		gameStore.inflictDamagesToEnemy(fight.totalDamageToEnemy * fight.multiplierForPlayer);
+		gameStore.inflictDamagesToPlayer(fight.totalDamageToPlayer * fight.multiplierForEnemy);
+	}
 
-		passiveEffects.forEach((sideEffect) => {
-			if (sideEffect[stateToEnable] === this.name) {
-				sideEffect.effect(data);
-			}
-		});
-	};
+	public onStateExit(): void {
+		super.onStateExit(this.name)
+	}
 }

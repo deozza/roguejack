@@ -1,31 +1,17 @@
-import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
-import { get } from 'svelte/store';
-import { type StateInterface } from '../../stateInterface';
+import { DefaultState } from '../..';
+import type { StateInterface } from '../../interfaces';
 
-export class BattlePlayingState implements StateInterface {
+export default class BattlePlayingState extends DefaultState implements StateInterface {
 	public name: string = 'BattlePlayingState';
 
-	public onStateEnter = (): void => {
-		console.log(` ${this.name} entered`);
-	};
+	public onStateEnter(): void {
+		super.onStateEnter(this.name)
+	}
 
-	public onStateExecute(): void {}
+	public onStateExecute(): void {
+	}
 
-	public onStateExit = (data: object): void => {
-		const stateToEnable: string = 'enableOnBattleState';
-		const playerPassiveEffects = get(playerSideEffectsStore);
-		const enemyPassiveEffects = get(enemySideEffectsStore);
-
-		playerPassiveEffects.forEach((sideEffect) => {
-			if (sideEffect[stateToEnable] === this.name) {
-				sideEffect.effect(data);
-			}
-		});
-
-		enemyPassiveEffects.forEach((sideEffect) => {
-			if (sideEffect[stateToEnable] === this.name) {
-				sideEffect.effect(data);
-			}
-		});
-	};
+	public onStateExit(): void {
+		super.onStateExit(this.name)
+	}
 }

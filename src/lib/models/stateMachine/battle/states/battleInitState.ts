@@ -1,42 +1,36 @@
-import { type StateInterface } from '../../stateInterface';
-import { gameStore } from '$lib/stores/game';
-import type { Game } from '$lib/models/game/model';
 import { get } from 'svelte/store';
-import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
+import { DefaultState } from '../..';
+import { gameStore } from '$lib/stores/game';
+import { gameMachineState } from '$lib/stores/stateMachine/game';
+import type { GameMachineState } from '../../game/gameMachineState';
+import type { Game } from '$lib/models/game/model';
+import { enemySideEffectsStore } from '$lib/stores/sideEffects';
+import type { Enemy } from '$lib/models/characters/enemies';
+import type { StateInterface } from '../../interfaces';
 
-export class BattleInitState implements StateInterface {
+export default class BattleInitState extends DefaultState implements StateInterface {
 	public name: string = 'BattleInitState';
 
-	public onStateEnter = (data: object): void => {};
+	public onStateEnter(): void {
+		const gameState: GameMachineState = get(gameMachineState)
 
-	public onStateExecute(data: object): void {
+		if(gameState.currentState.name !== 'GamePlayingState') {
+			throw new Error('Cannot enter BattleInitState when game is not in GamePlayingState')
+		}
+
+		super.onStateEnter(this.name)
+	}
+
+	public onStateExecute(): void {
 		gameStore.createBattle();
-		enemySideEffectsStore.set([]);
-		const game: Game = get(gameStore);
-
-		if (game.getCurrentBattle()?.enemy.sideEffect !== null) {
-			enemySideEffectsStore.update((enemySideEffectsStore) => [
-				...enemySideEffectsStore,
-				game.getCurrentBattle()?.enemy.sideEffect
-			]);
+		const game: Game = get(gameStore)
+		const enemy: Enemy = game.getCurrentBattle()?.enemy as Enemy;
+		if (enemy.passiveAbilities.length > 0) {
+			enemySideEffectsStore.set(enemy.passiveAbilities);
 		}
 	}
 
-	public onStateExit = (data: object): void => {
-		const stateToEnable: string = 'enableOnBattleState';
-		const playerPassiveEffects = get(playerSideEffectsStore);
-		const enemyPassiveEffects = get(enemySideEffectsStore);
-
-		playerPassiveEffects.forEach((sideEffect) => {
-			if (sideEffect[stateToEnable] === this.name) {
-				sideEffect.effect(data);
-			}
-		});
-
-		enemyPassiveEffects.forEach((sideEffect) => {
-			if (sideEffect[stateToEnable] === this.name) {
-				sideEffect.effect(data);
-			}
-		});
-	};
+	public onStateExit(): void {
+		super.onStateExit(this.name)
+	}
 }

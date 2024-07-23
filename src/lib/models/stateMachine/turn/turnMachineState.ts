@@ -1,66 +1,89 @@
-import { type EventInterface } from '../eventInterface';
-import { type StateInterface } from '../stateInterface';
-import { type StateMachineInterface } from '../stateMachineInterface';
-import { TurnBustedState } from './states/turnBustedState';
-import { TurnDamageState } from './states/turnDamageState';
-import { TurnDeckEmptyState } from './states/turnDeckEmptyState';
-import { TurnDrawingState } from './states/turnDrawingState';
-import { TurnFightingState } from './states/turnFightingState';
-import { TurnIdleState } from './states/turnIdleState';
-import { TurnInitState } from './states/turnInitState';
-import { TurnLostState } from './states/turnLostState';
-import { TurnPlayingState } from './states/turnPlayingState';
-import { TurnTiedState } from './states/turnTiedState';
-import { TurnWonState } from './states/turnWonState';
+import type { EventInterface, StateInterface, StateMachineInterface } from '../interfaces';
+import { TurnDamageState, TurnEnemyBustedState, TurnEnemyDeckEmptyState, TurnEnemyDrawingState, TurnEnemyInitState, TurnEnemyPlayingState, TurnEnemyUsingItemState, TurnFightingState, TurnIdleState, TurnLostState, TurnPlayerBustedState, TurnPlayerDeckEmptyState, TurnPlayerDrawingState, TurnPlayerPlayingState, TurnPlayerUsingItemState, TurnTiedState, TurnWonState } from './states';
+import TurnPlayerInitState from './states/turnPlayerInitState';
+
 
 export class TurnMachineState implements StateMachineInterface {
 	public currentState: StateInterface = new TurnIdleState();
 
 	public stateMachine: object = {
 		TurnIdleState: {
-			NEW_TURN: TurnInitState
+			NEW_TURN: new TurnPlayerInitState
 		},
-		TurnInitState: {
-			PLAY: TurnPlayingState,
-			DECK_EMPTY: TurnDeckEmptyState
+		TurnPlayerInitState: {
+			PLAY: new TurnPlayerPlayingState,
+			DECK_EMPTY: new TurnPlayerDeckEmptyState
 		},
-		TurnPlayingState: {
-			DRAW: TurnDrawingState,
-			FIGHT: TurnFightingState
+		TurnPlayerPlayingState: {
+			DRAW: new TurnPlayerDrawingState,
+			USE_ITEM: new TurnPlayerUsingItemState,
+			FIGHT: new TurnEnemyInitState
 		},
-		TurnDrawingState: {
-			PLAY: TurnPlayingState,
-			BUST: TurnBustedState,
-			DECK_EMPTY: TurnDeckEmptyState
+		TurnPlayerDrawingState: {
+			PLAY: new TurnPlayerPlayingState,
+			BUST: new TurnPlayerBustedState,
+			DECK_EMPTY: new TurnPlayerDeckEmptyState,
 		},
-		TurnBustedState: {
-			DAMAGE: TurnDamageState
+		TurnPlayerUsingItemState: {
+			PLAY: new TurnPlayerPlayingState
+		},
+		TurnEnemyInitState: {
+			PLAY: new TurnEnemyPlayingState,
+		},
+		TurnEnemyPlayingState: {
+			DRAW: new TurnEnemyDrawingState,
+			USE_ITEM: new TurnEnemyUsingItemState,
+			FIGHT: new TurnFightingState,
+		},
+		TurnEnemyDrawingState: {
+			PLAY: new TurnEnemyPlayingState,
+			BUST: new TurnEnemyBustedState,
+			DECK_EMPTY: new TurnEnemyDeckEmptyState
+		},
+		TurnEnemyUsingItemState: {
+			PLAY: new TurnEnemyPlayingState
 		},
 		TurnFightingState: {
-			DAMAGE: TurnDamageState
+			DAMAGE: new TurnDamageState
+		},
+		TurnEnemyBustedState: {
+			DAMAGE: new TurnDamageState
+		},
+		TurnPlayerBustedState: {
+			DAMAGE: new TurnDamageState
 		},
 		TurnDamageState: {
-			WIN: TurnWonState,
-			TIE: TurnTiedState,
-			LOSE: TurnLostState
+			WIN: new TurnWonState,
+			TIE: new TurnTiedState,
+			LOSE: new TurnLostState
+		},
+		TurnEnemyDeckEmptyState: {
+			RESET: new TurnIdleState
+		},
+		TurnPlayerDeckEmptyState: {
+			RESET: new TurnIdleState
 		},
 		TurnWonState: {
-			NEW_TURN: TurnInitState
+			RESET: new TurnIdleState
 		},
 		TurnTiedState: {
-			NEW_TURN: TurnInitState
+			RESET: new TurnIdleState
 		},
 		TurnLostState: {
-			NEW_TURN: TurnInitState
+			RESET: new TurnIdleState
 		}
 	};
 
-	public listenToEvent(event: EventInterface): void {
+	public listenToEvent(event: EventInterface): TurnMachineState {
 		const currentStateName = this.currentState.name;
-		const nextState = this.stateMachine[currentStateName][event.name];
+		const nextState: StateInterface | undefined = this.stateMachine[currentStateName][event.name];
 		if (nextState) {
-			this.currentState.onStateExit(event.data);
-			this.currentState = new nextState();
+			this.currentState.onStateExit();
+			this.currentState = nextState;
+			this.currentState.onStateEnter();
+			this.currentState.onStateExecute(event.data);
 		}
+
+		return this;
 	}
 }

@@ -1,25 +1,25 @@
 <script lang="ts">
-	import { TurnPlayingState } from '$lib/models/stateMachine/turn/states/turnPlayingState';
 	import { gameStore } from '$lib/stores/game';
 	import { battleMachineState } from '$lib/stores/stateMachine/battle';
-	import { enemyTurnMachineState, playerTurnMachineState } from '$lib/stores/stateMachine/turn';
+	import { turnMachineState } from '$lib/stores/stateMachine/turn';
 	import Deck from '$lib/ui/deck/Deck.svelte';
 	import Discard from '$lib/ui/deck/Discard.svelte';
 	import Icon from '@iconify/svelte';
 	import { fade } from 'svelte/transition';
 	import DiscardPreview from '../battleScreen/DiscardPreview.svelte';
 	import DeckPreview from '../battleScreen/DeckPreview.svelte';
-	import type EffectInterface from '$lib/models/effect/effectInterface';
-	import { triggerEffects } from '$lib/models/effect';
-	import { randomIntFromInterval } from '$lib/utils';
-	import { raritiesWeight, type RaritiesWeight } from '$lib/models/effect/raritiesType';
 	import { TurnMachineState } from '$lib/models/stateMachine/turn/turnMachineState';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
-	import PackOfCards from '$lib/models/effect/trigger/packOfCards';
+	import type { ItemTypes } from '$lib/models/items/types';
+	import { getRandomItemByWeight } from '$lib/models/items';
+	import type { ConsumableInterface } from '$lib/models/items/interfaces';
+	import PackOfCards from '$lib/models/items/consumable/packOfCards';
+	import { Rarities } from '$lib/models/items/enums';
 
 	let openedDeckView: boolean = false;
 	let openedDiscardView: boolean = false;
-	let objectsToBuy: EffectInterface[] = getObjectsToBuy();
+	let objectsToBuy: Array<ItemTypes> =
+		getObjectsToBuy();
 
 	function openDeckView() {
 		openedDeckView = !openedDeckView;
@@ -29,59 +29,44 @@
 		openedDiscardView = !openedDiscardView;
 	}
 
-	function getPriceByRarity(object: EffectInterface): number {
+	function getPriceByRarity(
+		object: ItemTypes
+	): number {
 		if (object.technicalName === 'packOfCards') {
 			return 0;
 		}
 
 		switch (object.rarity) {
-			case 'common':
+			case Rarities.common:
 				return 3;
-			case 'uncommon':
+			case Rarities.uncommon:
 				return 5;
-			case 'rare':
+			case Rarities.rare:
 				return 10;
-			case 'epic':
+			case Rarities.epic:
 				return 15;
-			case 'legendary':
+			case Rarities.legendary:
 				return 30;
 			default:
 				return 0;
 		}
 	}
 
-	function getObjectsToBuy(): EffectInterface[] {
-		const objectsToBuy: EffectInterface[] = [];
+	function getObjectsToBuy(): Array<ItemTypes> {
+		const objectsToBuy: Array<ItemTypes> = [];
 		for (let i = 0; i < 3; i++) {
-			objectsToBuy.push(getObjectToBuy());
+			objectsToBuy.push(getRandomItemByWeight());
 		}
 
-		const packOfCards: EffectInterface = new PackOfCards();
+		const packOfCards: ConsumableInterface = new PackOfCards();
 		objectsToBuy.push(packOfCards);
 
 		return objectsToBuy;
 	}
 
-	function getObjectToBuy(): EffectInterface {
-		const rarityWeightValue: number = randomIntFromInterval(1, 100);
 
-		const rarity: RaritiesWeight | undefined = raritiesWeight.find(
-			(rarity) => rarity.weight >= rarityWeightValue
-		);
-		if (rarity === undefined) {
-			throw new Error(`Rarity ${rarityWeightValue} not found`);
-		}
-
-		const filteredEffects: EffectInterface[] = triggerEffects.filter(
-			(triggerEffect: EffectInterface) => triggerEffect.rarity === rarity.rarity
-		);
-
-		const randomEffectIndex: number = randomIntFromInterval(0, filteredEffects.length - 1);
-		return filteredEffects[randomEffectIndex];
-	}
-
-	function buyObject(object: EffectInterface) {
-		if ($gameStore.player.deck.cards.length < getPriceByRarity(object.rarity)) {
+	function buyObject(object: ItemTypes) {
+		if ($gameStore.player.deck.cards.length < getPriceByRarity(object)) {
 			return;
 		}
 
@@ -94,7 +79,7 @@
 		}
 
 		gameStore.update((game) => {
-			for (let i = 0; i < getPriceByRarity(object.rarity); i++) {
+			for (let i = 0; i < getPriceByRarity(object); i++) {
 				game.player.deck.drawTopCard();
 			}
 			return game;
@@ -116,16 +101,16 @@
 		$battleMachineState.listenToEvent({ name: 'PLAY', data: null });
 		$battleMachineState = $battleMachineState;
 
-		playerTurnMachineState.set(new TurnMachineState());
+		turnMachineState.set(new TurnMachineState());
 
-		$playerTurnMachineState.listenToEvent({ name: 'NEW_TURN', data: { user: 'player' } });
-		$playerTurnMachineState = $playerTurnMachineState;
+		$turnMachineState.listenToEvent({ name: 'NEW_TURN', data: { user: 'player' } });
+		$turnMachineState = $turnMachineState;
 
 		try {
-			$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
+			$turnMachineState.currentState.onStateExecute({ user: 'player' });
 		} catch (error) {
-			$playerTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: { user: 'player' } });
-			$playerTurnMachineState = $playerTurnMachineState;
+			$turnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: { user: 'player' } });
+			$turnMachineState = $turnMachineState;
 
 			$battleMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
 			$battleMachineState = $battleMachineState;
@@ -135,14 +120,9 @@
 			return;
 		}
 
-		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: { user: 'player' } });
-		$playerTurnMachineState = $playerTurnMachineState;
-		$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
-
-		enemyTurnMachineState.update((state) => {
-			state.currentState = new TurnPlayingState();
-			return state;
-		});
+		$turnMachineState.listenToEvent({ name: 'PLAY', data: { user: 'player' } });
+		$turnMachineState = $turnMachineState;
+		$turnMachineState.currentState.onStateExecute({ user: 'player' });
 	}
 </script>
 
@@ -191,11 +171,11 @@
 					{#each objectsToBuy as object}
 						<div
 							class="flex flex-col items-center justify-around w-9/12 p-4 rounded-md text-center"
-							class:variant-ringed-tertiary={object.rarity === 'common'}
-							class:variant-ringed-primary={object.rarity === 'uncommon'}
-							class:variant-ringed-secondary={object.rarity === 'rare'}
-							class:variant-ringed-warning={object.rarity === 'epic'}
-							class:variant-ringed-danger={object.rarity === 'legendary'}
+							class:variant-ringed-tertiary={object.rarity === Rarities.common}
+							class:variant-ringed-primary={object.rarity === Rarities.uncommon}
+							class:variant-ringed-secondary={object.rarity === Rarities.rare}
+							class:variant-ringed-warning={object.rarity === Rarities.epic}
+							class:variant-ringed-danger={object.rarity === Rarities.legendary}
 						>
 							<p class="p text-xl uppercase">{object.name}</p>
 							<p class="p">{object.description}</p>

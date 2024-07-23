@@ -1,24 +1,23 @@
 <script lang="ts">
-	import { TurnPlayingState } from '$lib/models/stateMachine/turn/states/turnPlayingState';
 	import { gameStore } from '$lib/stores/game';
 	import { battleMachineState } from '$lib/stores/stateMachine/battle';
-	import { enemyTurnMachineState, playerTurnMachineState } from '$lib/stores/stateMachine/turn';
+	import { turnMachineState } from '$lib/stores/stateMachine/turn';
 	import Deck from '$lib/ui/deck/Deck.svelte';
 	import Discard from '$lib/ui/deck/Discard.svelte';
 	import { fade } from 'svelte/transition';
 	import DiscardPreview from '../battleScreen/DiscardPreview.svelte';
 	import DeckPreview from '../battleScreen/DeckPreview.svelte';
-	import { triggerEffects } from '$lib/models/effect';
-	import type EffectInterface from '$lib/models/effect/effectInterface';
-	import { raritiesWeight, type RaritiesWeight } from '$lib/models/effect/raritiesType';
 	import Icon from '@iconify/svelte';
 	import { TurnMachineState } from '$lib/models/stateMachine/turn/turnMachineState';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
 	import { randomIntFromInterval } from '$lib/utils';
+	import type { ItemTypes } from '$lib/models/items/types';
+	import { getRandomItemByWeight } from '$lib/models/items';
+	import { Rarities } from '$lib/models/items/enums';
 
 	let openedDeckView: boolean = false;
 	let openedDiscardView: boolean = false;
-	const objectToLoot: EffectInterface = getObjectToLoot();
+	const objectToLoot: ItemTypes = getRandomItemByWeight();
 
 	function openDeckView() {
 		openedDeckView = !openedDeckView;
@@ -39,31 +38,14 @@
 		goToNextState();
 	}
 
-	function getObjectToLoot(): EffectInterface {
-		const rarityWeightValue: number = randomIntFromInterval(1, 100);
 
-		const rarity: RaritiesWeight | undefined = raritiesWeight.find(
-			(rarity) => rarity.weight >= rarityWeightValue
-		);
-		if (rarity === undefined) {
-			throw new Error(`Rarity ${rarityWeightValue} not found`);
-		}
-
-		const filteredEffects: EffectInterface[] = triggerEffects.filter(
-			(triggerEffect: EffectInterface) => triggerEffect.rarity === rarity.rarity
-		);
-
-		const randomEffectIndex: number = randomIntFromInterval(0, filteredEffects.length - 1);
-		return filteredEffects[randomEffectIndex];
-	}
-
-	function addToInventory(object: EffectInterface) {
-		if (object.technicalName === 'packOfCards') {
-			object.effect({ user: 'player' });
+	function addToInventory(item: ItemTypes) {
+		if (item.technicalName === 'packOfCards') {
+			item.effect({ user: 'player' });
 			goToNextState();
 			return;
 		}
-		gameStore.addToInventory(object, 'player');
+		gameStore.addToInventory(item, 'player');
 
 		goToNextState();
 	}
@@ -79,47 +61,29 @@
 	}
 
 	function goToShop() {
-		$battleMachineState.listenToEvent({ name: 'SHOP', data: null });
-		$battleMachineState = $battleMachineState;
+		$battleMachineState = $battleMachineState.listenToEvent({ name: 'SHOP', data: null });
 		return;
 	}
 
 	function startNewBattle() {
-		$battleMachineState.listenToEvent({ name: 'NEW_BATTLE', data: null });
-		$battleMachineState = $battleMachineState;
-		$battleMachineState.currentState.onStateEnter({ user: 'player' });
-		$battleMachineState.currentState.onStateExecute({});
 
-		$battleMachineState.listenToEvent({ name: 'PLAY', data: null });
-		$battleMachineState = $battleMachineState;
+		$battleMachineState = $battleMachineState.listenToEvent({ name: 'RESET', data: null });
+		$battleMachineState = $battleMachineState.listenToEvent({ name: 'NEW_BATTLE', data: null });
 
-		playerTurnMachineState.set(new TurnMachineState());
-
-		$playerTurnMachineState.listenToEvent({ name: 'NEW_TURN', data: { user: 'player' } });
-		$playerTurnMachineState = $playerTurnMachineState;
+		$battleMachineState = $battleMachineState.listenToEvent({ name: 'PLAY', data: null });
 
 		try {
-			$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
+			$turnMachineState = $turnMachineState.listenToEvent({ name: 'NEW_TURN', data: null });
 		} catch (error) {
-			$playerTurnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: { user: 'player' } });
-			$playerTurnMachineState = $playerTurnMachineState;
+			$turnMachineState = $turnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
 
-			$battleMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
-			$battleMachineState = $battleMachineState;
+			$battleMachineState = $battleMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
 
-			$gameMachineState.listenToEvent({ name: 'END_GAME', data: null });
-			$gameMachineState = $gameMachineState;
+			$gameMachineState = $gameMachineState.listenToEvent({ name: 'END_GAME', data: null });
 			return;
 		}
 
-		$playerTurnMachineState.listenToEvent({ name: 'PLAY', data: { user: 'player' } });
-		$playerTurnMachineState = $playerTurnMachineState;
-		$playerTurnMachineState.currentState.onStateExecute({ user: 'player' });
-
-		enemyTurnMachineState.update((state) => {
-			state.currentState = new TurnPlayingState();
-			return state;
-		});
+		$turnMachineState = $turnMachineState.listenToEvent({ name: 'PLAY', data: null });
 	}
 </script>
 
@@ -185,11 +149,11 @@
 					{#if $gameStore.battles.length % 5 === 0}
 						<div
 							class="flex flex-col items-center justify-around w-9/12 p-4 variant-ringed-success rounded-md text-center"
-							class:variant-ringed-tertiary={objectToLoot.rarity === 'common'}
-							class:variant-ringed-primary={objectToLoot.rarity === 'uncommon'}
-							class:variant-ringed-secondary={objectToLoot.rarity === 'rare'}
-							class:variant-ringed-warning={objectToLoot.rarity === 'epic'}
-							class:variant-ringed-danger={objectToLoot.rarity === 'legendary'}
+							class:variant-ringed-tertiary={objectToLoot.rarity === Rarities.common}
+							class:variant-ringed-primary={objectToLoot.rarity === Rarities.uncommon}
+							class:variant-ringed-secondary={objectToLoot.rarity === Rarities.rare}
+							class:variant-ringed-warning={objectToLoot.rarity === Rarities.epic}
+							class:variant-ringed-danger={objectToLoot.rarity === Rarities.legendary}
 						>
 							<p class="p text-xl uppercase">{objectToLoot.name}</p>
 							<p class="p">{objectToLoot.description}</p>
@@ -199,6 +163,13 @@
 							>
 						</div>
 					{/if}
+
+					<button
+						class="btn rounded-md variant-filled-tertiary uppercase"
+						on:click={() => startNewBattle()}
+					>
+						Exit camp
+					</button>
 				</div>
 			</div>
 		</div>

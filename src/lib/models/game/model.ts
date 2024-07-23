@@ -1,14 +1,15 @@
 import { Battle } from '$lib/models/battle/model';
-import { Character } from '$lib/models/character/model';
+import { DefaultCharacter } from '$lib/models/characters';
+import type { Player } from '$lib/models/characters/players';
 
 export class Game {
 	id: string;
-	player: Character;
+	player: Player;
 	battles: Array<Battle>;
 
 	constructor() {
 		this.id = crypto.randomUUID();
-		this.player = new Character();
+		this.player = new DefaultCharacter();
 		this.battles = [];
 	}
 

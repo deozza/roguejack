@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { Card } from '../card/model';
-import { Hand } from './model';
+import { Card } from '$lib/models/card/model';
+import { Hand } from '$lib/models/hand/model';
 
 describe('hand model test', () => {
 	it('add card to hand', () => {

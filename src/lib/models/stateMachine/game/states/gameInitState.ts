@@ -1,23 +1,33 @@
-import { battleMachineState } from '$lib/stores/stateMachine/battle';
-import { enemyTurnMachineState, playerTurnMachineState } from '$lib/stores/stateMachine/turn';
-import { BattleMachineState } from '../../battle/battleMachineState';
-import { type StateInterface } from '../../stateInterface';
-import { TurnMachineState } from '../../turn/turnMachineState';
+import type { Character } from '$lib/models/characters';
+import { gameStore } from '$lib/stores/game';
+import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
+import { DefaultState } from '../..';
+import type { StateInterface } from '../../interfaces';
 
-export class GameInitState implements StateInterface {
+export default class GameInitState extends DefaultState implements StateInterface {
 	public name: string = 'GameInitState';
 
-	public onStateEnter = (): void => {
-		console.log(` ${this.name} entered`);
-	};
-
-	public onStateExecute(data: object): void {
-		battleMachineState.set(new BattleMachineState());
-		playerTurnMachineState.set(new TurnMachineState());
-		enemyTurnMachineState.set(new TurnMachineState());
+	public onStateEnter(): void {
+		super.onStateEnter(this.name)
 	}
 
-	public onStateExit = (): void => {
-		console.log(` ${this.name} exited`);
-	};
+	public onStateExecute(data: object): void {
+		if(data.character === undefined || data.character === null) {
+			throw new Error('Character not selected');
+		}
+
+		const player: Character = data.character as Character;
+
+		playerSideEffectsStore.set([]);
+		enemySideEffectsStore.set([]);
+		gameStore.setPlayer(player)
+		if (player.passiveAbilities.length > 0) {
+			playerSideEffectsStore.set(player.passiveAbilities);
+		}
+	}
+
+	public onStateExit(): void {
+		super.onStateExit(this.name)
+	}
 }
+

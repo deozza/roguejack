@@ -1,49 +1,17 @@
-import { get } from 'svelte/store';
-import { type StateInterface } from '../../stateInterface';
-import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
+import { DefaultState } from '../..';
+import type { StateInterface } from '../../interfaces';
 
-export class TurnWonState implements StateInterface {
+export default class TurnWonState extends DefaultState implements StateInterface {
 	public name: string = 'TurnWonState';
 
-	public onStateEnter = (data: object): void => {
-		let passiveEffects = null;
-		let stateToEnable = null;
-
-		if (data['user'] === 'player') {
-			passiveEffects = get(playerSideEffectsStore);
-			stateToEnable = 'enableOnPlayerTurnState';
-		} else {
-			passiveEffects = get(enemySideEffectsStore);
-			stateToEnable = 'enableOnEnemyTurnState';
-		}
-
-		passiveEffects.forEach((sideEffect) => {
-			if (sideEffect[stateToEnable] === this.name) {
-				sideEffect.effect(data);
-			}
-		});
-	};
-
-	public onStateExecute(): void {
-		console.log(` ${this.name} executed`);
+	public onStateEnter(): void {
+		super.onStateEnter(this.name)
 	}
 
-	public onStateExit = (data: object): void => {
-		let passiveEffects = null;
-		let stateToEnable = null;
+	public onStateExecute(): void {
+	}
 
-		if (data['user'] === 'player') {
-			passiveEffects = get(playerSideEffectsStore);
-			stateToEnable = 'enableOnPlayerTurnState';
-		} else {
-			passiveEffects = get(enemySideEffectsStore);
-			stateToEnable = 'enableOnEnemyTurnState';
-		}
-
-		passiveEffects.forEach((sideEffect) => {
-			if (sideEffect[stateToEnable] === this.name) {
-				sideEffect.effect(data);
-			}
-		});
-	};
+	public onStateExit(): void {
+		super.onStateExit(this.name)
+	}
 }
