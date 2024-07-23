@@ -1,9 +1,9 @@
 import { Deck } from "$lib/models/deck/model";
 import { Discard } from "$lib/models/discard/model";
 import type { ItemTypes } from "$lib/models/items/types";
-import type { Status } from "$lib/models/characters/status/interfaces";
-import type { PassiveAbility } from "$lib/models/characters/passiveAbility/interfaces";
-import type { Enemy } from "./enemies";
+import type { Status } from "$lib/models/effects/interfaces";
+import type { Enemy } from "$lib/models/characters/enemies";
+import type { ContinuousEffect } from "$lib/models/effects/interfaces";
 
 export interface Character {
     name: string;
@@ -16,7 +16,7 @@ export interface Character {
     inventory: Array<ItemTypes>;
     icon: string;
     status: Array<Status>;
-    passiveAbilities: Array<PassiveAbility>;
+    passiveAbilities: Array<ContinuousEffect>;
 
     takeDamage(damage: number): Character;
     heal(heal: number): Character;
@@ -38,7 +38,7 @@ export class DefaultCharacter implements Character {
     inventory: ItemTypes[] = [];
     icon: string = '';
     status: Array<Status> = [];
-    passiveAbilities: Array<PassiveAbility> = [];
+    passiveAbilities: Array<ContinuousEffect> = [];
 
     constructor() {
         

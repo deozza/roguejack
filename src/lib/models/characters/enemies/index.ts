@@ -9,6 +9,7 @@ import Zombie from "$lib/models/characters/enemies/miniboss/zombie";
 import Rat from "$lib/models/characters/enemies/standard/rat";
 import Slime from "$lib/models/characters/enemies/standard/slime";
 import Spider from "$lib/models/characters/enemies/standard/spider";
+import Snake from "./standard/snake";
 
 export interface Enemy extends Character {
     minAttack: number;   
@@ -24,8 +25,8 @@ const enemyList: Enemy[] = [
     new Zombie(),
     new Rat(),
     new Slime(),
-    new Spider()
-
+    new Spider(),
+    new Snake()
 ];
 
 export function getRandomEnemyByLevelAndType(level: number, type: EnnemyType): Enemy {

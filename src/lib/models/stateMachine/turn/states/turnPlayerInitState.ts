@@ -5,6 +5,8 @@ import { gameMachineState } from '$lib/stores/stateMachine/game';
 import type { BattleMachineState } from '../../battle/battleMachineState';
 import { battleMachineState } from '$lib/stores/stateMachine/battle';
 import { gameStore } from '$lib/stores/game';
+import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
+import type { ContinuousEffect, Status } from '$lib/models/effects/interfaces';
 
 export default class TurnPlayerInitState extends DefaultState {
 	public name: string = 'TurnPlayerInitState';
@@ -29,6 +31,24 @@ export default class TurnPlayerInitState extends DefaultState {
 
 	public onStateExit(): void {
 		super.onStateExit()
+		const playerSideEffects = get(playerSideEffectsStore);
+        const enemySideEffects = get(enemySideEffectsStore);
+
+		playerSideEffects.forEach((sideEffect : ContinuousEffect | Status) => {
+			sideEffect.applyEffects('player').forEach((effect) => {
+				if(effect.state === 'onStateExit_TurnPlayerInit') {
+					effect.callback();
+				}
+            });
+		});
+
+        enemySideEffects.forEach((sideEffect : ContinuousEffect | Status) => {
+			sideEffect.applyEffects('enemy').forEach((effect) => {
+                if(effect.state === 'onStateExit_TurnPlayerInit') {
+					effect.callback();
+				}
+            });
+		});
 	}
 }
 

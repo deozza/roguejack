@@ -5,11 +5,12 @@
 	import { fade } from 'svelte/transition';
 	import TriggerSideEffects from '$lib/ui/effect/TriggerSideEffects.svelte';
 	import type { Character } from '$lib/models/characters';
+	import type { ContinuousEffect, Status } from '$lib/models/effects/interfaces';
 
 	const dispatch = createEventDispatcher();
 
 	export let user: Character;
-	export let passiveEffects = [];
+	export let passiveEffects: Array<Status | ContinuousEffect> = [];
 	export let isEnemy: boolean = false;
 </script>
 

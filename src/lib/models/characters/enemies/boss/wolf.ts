@@ -2,7 +2,7 @@ import type { Face, Suit } from "$lib/models/card/types";
 import { type Enemy } from "$lib/models/characters/enemies";
 import { EnnemyType } from "$lib/models/characters/types";
 import { DefaultCharacter } from "$lib/models/characters";
-import InflictWound from "../../passiveAbility/inflictWound";
+import InflictWound from "$lib/models/effects/continuousEffects/inflictWound";
 
 
 export default class Wolf  extends DefaultCharacter implements Enemy {

@@ -1,8 +1,9 @@
 <script lang="ts">
+	import type { ContinuousEffect, Status } from '$lib/models/effects/interfaces';
 	import Icon from '@iconify/svelte';
 	import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
 
-	export let passiveEffects = [];
+	export let passiveEffects: Array<Status | ContinuousEffect> = [];
 
 	function popupClick(target: string): PopupSettings {
 		return {

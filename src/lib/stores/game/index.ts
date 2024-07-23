@@ -7,6 +7,7 @@ import { writable } from 'svelte/store';
 import { getRandomEnemyByLevelAndType, type Enemy } from '$lib/models/characters/enemies';
 import { EnnemyType } from '$lib/models/characters/types';
 import type { Player } from '$lib/models/characters/players';
+import type { ItemTypes } from '$lib/models/items/types';
 
 function createGameStore() {
 	const { subscribe, set, update } = writable<Game>(new Game());
@@ -180,10 +181,15 @@ function createGameStore() {
 	};
 
 	const addToInventory = (
-		object: HealingTriggerEffectInterface | DamageTriggerEffectInterface,
+		object: ItemTypes,
 		user: string
 	) => {
 		update((game) => {
+			if(user === 'enemy') {
+				game.getCurrentBattle().enemy.inventory = [...game.getCurrentBattle().enemy.inventory, object];
+				return game;
+			}
+			
 			game.player.inventory = [...game.player.inventory, object];
 			return game;
 		});

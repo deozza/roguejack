@@ -20,11 +20,7 @@
 		const player: Player = selectedCharacter;
 		player.make();
 		$gameMachineState = $gameMachineState.listenToEvent({ name: 'CHARACTER_SELECTED', data: {character: player} });
-
-		if ($gameStore.player.passiveAbilities.length > 0) {
-			$playerSideEffectsStore = [...$playerSideEffectsStore, ...$gameStore.player.passiveAbilities];
-		}
-
+		
 		$gameMachineState = $gameMachineState.listenToEvent({ name: 'START_GAME', data: null });
 		
 		$battleMachineState = $battleMachineState.listenToEvent({ name: 'NEW_BATTLE', data: null });

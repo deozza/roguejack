@@ -9,10 +9,11 @@
 	import { gameStore } from '$lib/stores/game';
 	import CharacterPreview from './CharacterPreview.svelte';
 	import type { Character } from '$lib/models/characters';
+	import type { ContinuousEffect, Status } from '$lib/models/effects/interfaces';
 
 	export let user: Character;
 	export let userHand: Hand;
-	export let passiveEffects = [];
+	export let passiveEffects: Array<Status | ContinuousEffect> = [];
 
 	export let currentStateName: string;
 	export let isEnemy: boolean = false;

@@ -2,6 +2,7 @@ import type { Face, Suit } from "$lib/models/card/types";
 import { type Enemy } from "$lib/models/characters/enemies";
 import { EnnemyType } from "$lib/models/characters/types";
 import { DefaultCharacter } from "$lib/models/characters";
+import Bravery from "$lib/models/effects/continuousEffects/bravery";
 
 export default class Spider extends DefaultCharacter implements Enemy {
 
@@ -23,8 +24,9 @@ export default class Spider extends DefaultCharacter implements Enemy {
         this.maxHealth = 3;
         this.currentHealth = 3;
         this.minAttack = 11;
-        this.level = 1;
+        this.level = 2;
         this.type = EnnemyType.standard;
         this.deck.generateDeck(deckSuits, deckValues);
+
     }
 }

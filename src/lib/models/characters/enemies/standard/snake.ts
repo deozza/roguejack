@@ -2,7 +2,7 @@ import type { Face, Suit } from "$lib/models/card/types";
 import { type Enemy } from "$lib/models/characters/enemies";
 import { EnnemyType } from "$lib/models/characters/types";
 import { DefaultCharacter } from "$lib/models/characters";
-import Venom from "../../passiveAbility/venom";
+import Venom from "$lib/models/effects/continuousEffects/venom";
 
 export default class Snake extends DefaultCharacter implements Enemy {
 

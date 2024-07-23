@@ -2,7 +2,7 @@ import type { Face, Suit } from "$lib/models/card/types";
 import { type Enemy } from "$lib/models/characters/enemies";
 import { EnnemyType } from "$lib/models/characters/types";
 import { DefaultCharacter } from "$lib/models/characters";
-import SharpSword from "../../passiveAbility/sharpSword";
+import SharpSword from "$lib/models/effects/continuousEffects/sharpSword";
 
 
 export default class Kobold extends DefaultCharacter implements Enemy {

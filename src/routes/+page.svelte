@@ -10,6 +10,7 @@
 	import ShopScreen from '$lib/ui/gameLayout/screens/ShopScreen.svelte';
 	import { turnMachineState } from '$lib/stores/stateMachine/turn';
 	import type { StateInterface } from '$lib/models/stateMachine/interfaces';
+	import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 
 	const screensToRender: Record<string, SvelteComponent> = {
 		GameIdleState: HomeScreen,
@@ -38,6 +39,9 @@
 	$: console.log('game state : ', $gameMachineState);
 	$: console.log('battle state : ', $battleMachineState);
 	$: console.log('turn state : ', $turnMachineState);
+
+	$: console.log('player side effects : ', $playerSideEffectsStore);
+	$: console.log('enemy side effects : ', $enemySideEffectsStore);
 
 </script>
 

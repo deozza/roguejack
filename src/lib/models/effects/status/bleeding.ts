@@ -1,4 +1,4 @@
-import type { Status } from "$lib/models/characters/status/interfaces";
+import type { Status } from "../interfaces";
 
 export default class Bleeding implements Status {
     technicalName: string = 'bleeding';
@@ -6,5 +6,9 @@ export default class Bleeding implements Status {
 	description: string = 'Inflicts 1 at the start of the turn. Ends at the end of the battle';
 	icon: string = 'game-icons:blood';
 	active: boolean = false;
+
+	public applyEffects(calledBy: 'player' | 'enemy') {
+		console.log('bleeding effect entered');
+	}
 
 }

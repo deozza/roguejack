@@ -1,3 +1,4 @@
+import type { Character } from '$lib/models/characters';
 import { gameStore } from '$lib/stores/game';
 import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 import { DefaultState } from '../..';
@@ -14,9 +15,14 @@ export default class GameInitState extends DefaultState {
 			throw new Error('Character not selected');
 		}
 
+		const player: Character = data.character as Character;
+
 		playerSideEffectsStore.set([]);
 		enemySideEffectsStore.set([]);
-		gameStore.setPlayer(data.character)
+		gameStore.setPlayer(player)
+		if (player.passiveAbilities.length > 0) {
+			playerSideEffectsStore.set(player.passiveAbilities);
+		}
 	}
 
 	public onStateExit(): void {

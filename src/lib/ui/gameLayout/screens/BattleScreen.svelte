@@ -38,6 +38,7 @@
 		}
 
 		$turnMachineState = $turnMachineState.listenToEvent({ name: 'PLAY', data: null });
+		updateBattleState();
 	}
 
 	async function fight() {
@@ -48,7 +49,7 @@
 		$turnMachineState = $turnMachineState.listenToEvent({ name: 'PLAY', data: null });
 
 		try {
-			while($gameStore.getCurrentBattle()?.getCurrentTurn().enemyHand.value < 300) {
+			while($gameStore.getCurrentBattle()?.getCurrentTurn().enemyHand.value < $gameStore.getCurrentBattle()?.enemy.minAttack) {
 				delay(1000);
 				$turnMachineState = $turnMachineState.listenToEvent({ name: 'DRAW', data: null });
 
