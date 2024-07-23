@@ -17,6 +17,8 @@ export default class FireballScroll implements ScrollInterface {
 	range: Ranges = Ranges.far;
 	rarity: Rarities = Rarities.epic;
 	effects: EffectInterface[] = [];
+	defaultAmount =  1;
+	currentAmount: number = 1;
 	
 	applyEffects(calledBy: 'player' | 'enemy'): void {
 		if(calledBy === 'player') {

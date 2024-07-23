@@ -4,13 +4,13 @@ import { Rarities } from "$lib/models/items/enums";
 import type { WeaponInterface } from "$lib/models/items/interfaces";
 import { gameStore } from "$lib/stores/game";
 
-export default class Sword implements WeaponInterface {
+export default class Hatchet implements WeaponInterface {
 	id: string = crypto.randomUUID();
-	technicalName: string = 'sword';
-	name: string = 'Sword';
-	description: string = 'Deal 5 damage to the enemy.';
-	icon: string = 'game-icons:broadsword';
-	rarity: Rarities = Rarities.rare;
+	technicalName: string = 'hatchet';
+	name: string = 'Hatchet';
+	description: string = 'Deal 1 damage to the enemy.';
+	icon: string = 'game-icons:hatchet';
+	rarity: Rarities = Rarities.common;
 	effects: EffectInterface[] = [];
 	category: Categories = Categories.slashing;
 	type: Types = Types.physical;
@@ -18,15 +18,16 @@ export default class Sword implements WeaponInterface {
 	defaultAmount =  1;
 	currentAmount: number = 1;
 	
-	applyEffects(calledBy: 'player' | 'enemy'): void {
+	applyEffects(calledBy: 'player' | 'enemy') {
 		if (calledBy === 'player') {
-			gameStore.inflictDamagesToEnemy(5);
+			gameStore.inflictDamagesToEnemy(1);
 			return;
 		}
 
 		if (calledBy === 'enemy') {
-			gameStore.inflictDamagesToPlayer(5);
+			gameStore.inflictDamagesToPlayer(1);
 			return;
 		}
 	}
+
 }

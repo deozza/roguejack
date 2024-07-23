@@ -10,11 +10,13 @@ export default class Dagger implements WeaponInterface {
 	name: string = 'Dagger';
 	description: string = 'Deal 3 damage to the enemy.';
 	icon: string = 'game-icons:plain-dagger';
-	rarity: Rarities = Rarities.common;
+	rarity: Rarities = Rarities.uncommon;
 	effects: EffectInterface[] = [];
 	category: Categories = Categories.piercing;
 	type: Types = Types.physical;
 	range: Ranges = Ranges.close;
+	defaultAmount =  1;
+	currentAmount: number = 1;
 	
 	applyEffects(calledBy: 'player' | 'enemy'): void {
 		if (calledBy === 'player') {
@@ -25,6 +27,7 @@ export default class Dagger implements WeaponInterface {
 		if (calledBy === 'enemy') {
 			gameStore.inflictDamagesToPlayer(3);
 			return;
-		}	}
+		}	
+	}
 
 }

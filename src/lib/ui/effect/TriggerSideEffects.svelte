@@ -36,7 +36,8 @@
 		{/if}
 		<div class="arrow variant-filled-primary" />
 	</div>
-	<button class="btn" use:popup={popupClick(triggerEffect.technicalName)}>
+	<button class="btn flex flex-row items-end" use:popup={popupClick(triggerEffect.technicalName)}>
 		<Icon icon={triggerEffect.icon} width="64" height="64" />
+		<span class="">x{triggerEffect.currentAmount}</span>
 	</button>
 {/each}

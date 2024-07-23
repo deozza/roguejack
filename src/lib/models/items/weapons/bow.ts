@@ -4,29 +4,30 @@ import { Rarities } from "$lib/models/items/enums";
 import type { WeaponInterface } from "$lib/models/items/interfaces";
 import { gameStore } from "$lib/stores/game";
 
-export default class Sword implements WeaponInterface {
+export default class Bow implements WeaponInterface {
 	id: string = crypto.randomUUID();
-	technicalName: string = 'sword';
-	name: string = 'Sword';
-	description: string = 'Deal 5 damage to the enemy.';
-	icon: string = 'game-icons:broadsword';
+	technicalName: string = 'bow';
+	name: string = 'Bow';
+	description: string = 'Deal 1 damage to the enemy.';
+	icon: string = 'game-icons:bow-arrow';
 	rarity: Rarities = Rarities.rare;
 	effects: EffectInterface[] = [];
-	category: Categories = Categories.slashing;
+	category: Categories = Categories.piercing;
 	type: Types = Types.physical;
-	range: Ranges = Ranges.close;
-	defaultAmount =  1;
-	currentAmount: number = 1;
+	range: Ranges = Ranges.far;
+	defaultAmount =  5;
+	currentAmount: number = 5;
 	
 	applyEffects(calledBy: 'player' | 'enemy'): void {
 		if (calledBy === 'player') {
-			gameStore.inflictDamagesToEnemy(5);
+			gameStore.inflictDamagesToEnemy(1);
 			return;
 		}
 
 		if (calledBy === 'enemy') {
-			gameStore.inflictDamagesToPlayer(5);
+			gameStore.inflictDamagesToPlayer(1);
 			return;
-		}
+		}	
 	}
+
 }

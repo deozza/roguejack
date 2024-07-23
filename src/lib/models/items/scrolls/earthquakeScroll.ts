@@ -21,6 +21,8 @@ export default class EarthquakeScroll implements ScrollInterface {
 	range: Ranges = Ranges.far;
 	rarity: Rarities = Rarities.legendary;
 	effects: EffectInterface[] = [];
+	defaultAmount =  1;
+	currentAmount: number = 1;
 
 	applyEffects(calledBy: 'player' | 'enemy'): void {
 		const game: Game = get(gameStore);

@@ -15,6 +15,8 @@ export default class PackOfCards  implements ConsumableInterface {
 	description: string = 'Add 3 random cards to your deck.';
 	icon: string = 'game-icons:card-random';
 	rarity: Rarities = Rarities.common;
+	defaultAmount =  1;
+	currentAmount: number = 1;
 
 	applyEffects(calledBy: 'player' | 'enemy'): void {
 		for(let i = 0; i < 3; i++) {

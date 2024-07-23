@@ -186,11 +186,25 @@ function createGameStore() {
 	) => {
 		update((game) => {
 			if(user === 'enemy') {
-				game.getCurrentBattle().enemy.inventory = [...game.getCurrentBattle().enemy.inventory, object];
+				const index = game.getCurrentBattle().enemy.inventory.findIndex((item) => item === object);
+				if(index === -1) {
+					object.currentAmount = object.defaultAmount;
+					game.getCurrentBattle().enemy.inventory = [...game.getCurrentBattle().enemy.inventory, object];
+					return game;
+				}
+
+				game.getCurrentBattle().enemy.inventory[index].currentAmount += object.defaultAmount;
 				return game;
 			}
+
+			const index = game.player.inventory.findIndex((item) => item === object);
+				if(index === -1) {
+					object.currentAmount = object.defaultAmount;
+					game.player.inventory = [...game.player.inventory, object];
+					return game;
+				}
 			
-			game.player.inventory = [...game.player.inventory, object];
+				game.player.inventory[index].currentAmount += object.defaultAmount;
 			return game;
 		});
 	};
@@ -201,9 +215,15 @@ function createGameStore() {
 	) => {
 		update((game) => {
 			const index = game.player.inventory.findIndex((item) => item === object);
-			if (index !== -1) {
+			if(index === -1) {
+				return game;
+			}
+
+			game.player.inventory[index].currentAmount -= 1;
+			if(game.player.inventory[index].currentAmount <= 0) {
 				game.player.inventory.splice(index, 1);
 			}
+
 			return game;
 		});
 	};

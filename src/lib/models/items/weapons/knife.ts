@@ -11,11 +11,13 @@ export default class Knife implements WeaponInterface {
 	name: string = 'Knife';
 	description: string = 'Deal 1 damage to the enemy.';
 	icon: string = 'game-icons:bowie-knife';
-	rarity: Rarities = Rarities.uncommon;
+	rarity: Rarities = Rarities.common;
 	effects: EffectInterface[] = [];
 	category: Categories = Categories.piercing;
 	type: Types = Types.physical;
 	range: Ranges = Ranges.close;
+	defaultAmount =  1;
+	currentAmount: number = 1;
 	
 	applyEffects(calledBy: 'player' | 'enemy') {
 		if (calledBy === 'player') {

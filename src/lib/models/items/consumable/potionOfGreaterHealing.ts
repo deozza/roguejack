@@ -14,6 +14,8 @@ export default class PotionOfGreaterHealing implements ConsumableInterface {
 	description: string = 'Restore 25% of your health.';
 	icon: string = 'game-icons:potion-ball';
 	rarity: Rarities = Rarities.uncommon;
+	defaultAmount =  1;
+	currentAmount: number = 1;
 
 	applyEffects(calledBy: 'player' | 'enemy'): void {
 		gameStore.healPercentages(25, calledBy);

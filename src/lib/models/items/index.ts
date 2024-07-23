@@ -10,6 +10,13 @@ import type { ItemTypes } from "$lib/models/items/types";
 import Dagger from "$lib/models/items/weapons/dagger";
 import Knife from "$lib/models/items/weapons/knife";
 import Sword from "$lib/models/items/weapons/sword";
+import Halberd from "./weapons/halberd";
+import Hatchet from "./weapons/hatchet";
+import Spear from "./weapons/spear";
+import Stick from "./weapons/stick";
+import TwoHandedAxe from "./weapons/twoHandedAxe";
+import Bow from "./weapons/bow";
+import Crossbow from "./weapons/crossbow";
 
 
 const items: ItemTypes[] = [
@@ -21,7 +28,15 @@ const items: ItemTypes[] = [
     new FireballScroll(),
     new Dagger(),
     new Knife(),
-    new Sword()
+    new Sword(),
+    new Halberd(),
+    new Hatchet(),
+    new Spear(),
+    new Stick(),
+    new TwoHandedAxe(),
+    new Bow(),
+    new Crossbow(),
+    new Crossbow()
 ];
 
 export function getRandomItemByWeight(raritiesWeight: RaritiesWeight[] = defaultRaritiesWeights): ItemTypes {
