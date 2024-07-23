@@ -39,7 +39,7 @@ export class DefaultState{
 
         enemySideEffects.forEach((sideEffect : ContinuousEffect | Status) => {
 			sideEffect.applyEffects('enemy').forEach((effect) => {
-                if(effect.state === 'onStateExit'+currentStateName) {
+                if(effect.state === 'onStateExit_'+currentStateName) {
 					effect.callback();
 				}
             });

@@ -1,20 +1,18 @@
 <script lang="ts">
-	import type {
-		DamageTriggerEffectInterface,
-		HealingTriggerEffectInterface
-	} from '$lib/models/effect/interfaces';
+	import type { ItemTypes } from '$lib/models/items/types';
 	import { gameStore } from '$lib/stores/game';
+	import { turnMachineState } from '$lib/stores/stateMachine/turn';
 	import Icon from '@iconify/svelte';
 	import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
 	import { createEventDispatcher } from 'svelte';
 
-	export let triggerEffects: Array<HealingTriggerEffectInterface | DamageTriggerEffectInterface>;
+	export let triggerEffects: Array<ItemTypes>;
 	export let isEnemy: boolean;
 
 	const dispatch = createEventDispatcher();
 
-	function useEffect(effect: HealingTriggerEffectInterface | DamageTriggerEffectInterface) {
-		effect.effect({ user: 'player' });
+	function useEffect(effect: ItemTypes) {
+		effect.applyEffects('player' );
 		gameStore.removeFromInventory(effect, 'player');
 
 		dispatch('updateBattleState');
@@ -34,7 +32,7 @@
 		<p>{triggerEffect.name}</p>
 		<p>{triggerEffect.description}</p>
 		{#if isEnemy === false}
-			<button class="btn" on:click={() => useEffect(triggerEffect)}>Use</button>
+			<button class="btn" on:click={() => useEffect(triggerEffect)} disabled={$turnMachineState.currentState.name!=='TurnPlayerPlayingState'}>Use</button>
 		{/if}
 		<div class="arrow variant-filled-primary" />
 	</div>

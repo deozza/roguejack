@@ -16,8 +16,6 @@ export default class TurnDamageState extends DefaultState implements StateInterf
 		const game: Game = get(gameStore);
 		const fight: Fight = game.getCurrentBattle().getCurrentTurn().fight;
 
-		console.log(fight);
-
 		gameStore.inflictDamagesToEnemy(fight.totalDamageToEnemy * fight.multiplierForPlayer);
 		gameStore.inflictDamagesToPlayer(fight.totalDamageToPlayer * fight.multiplierForEnemy);
 	}

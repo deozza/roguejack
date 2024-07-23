@@ -32,7 +32,7 @@
 		{passiveEffects}
 		{isEnemy}
 		on:close={() => openCharacterInfoScreen()}
-		on:updateBattleState
+		on:updateBattleState={() => {openCharacterInfoScreen();dispatch('updateBattleState')}}
 	/>
 {/if}
 
