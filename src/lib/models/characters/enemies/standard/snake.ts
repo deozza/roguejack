@@ -23,7 +23,7 @@ export default class Snake extends DefaultCharacter implements Enemy {
         this.maxHealth = 3;
         this.currentHealth = 3;
         this.minAttack = 12;
-        this.level = 1;
+        this.level = 2;
         this.type = EnnemyType.standard;
         this.deck.generateDeck(deckSuits, deckValues);
         this.passiveAbilities = [new Venom()];

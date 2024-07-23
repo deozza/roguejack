@@ -1,7 +1,9 @@
+import { Card, generateRandomCard } from "$lib/models/card/model";
 import { Categories, Types } from "$lib/models/effects/enums";
 import type { EffectInterface } from "$lib/models/effects/interfaces";
 import { Rarities } from "$lib/models/items/enums";
 import type { ConsumableInterface } from "$lib/models/items/interfaces";
+import { gameStore } from "$lib/stores/game";
 
 export default class PackOfCards  implements ConsumableInterface {
 	id: string = crypto.randomUUID();
@@ -14,8 +16,13 @@ export default class PackOfCards  implements ConsumableInterface {
 	icon: string = 'game-icons:card-random';
 	rarity: Rarities = Rarities.common;
 
-	applyEffects(): void {
-		throw new Error("Method not implemented.");
+	applyEffects(calledBy: 'player' | 'enemy'): void {
+		for(let i = 0; i < 3; i++) {
+			const card = generateRandomCard();
+			gameStore.addCardToDeck(card, calledBy);
+		}
+
+		gameStore.shuffleDeck(calledBy);
 	}
 
 }

@@ -24,6 +24,7 @@ export default class VampireBat extends DefaultCharacter implements Enemy {
         this.maxHealth = 7;
         this.currentHealth = 7;
         this.minAttack = 12;
+        this.level = 1;
         this.type = EnnemyType.miniboss;
         this.deck.generateDeck(deckSuits, deckValues);
         this.passiveAbilities = [new Vampirism()];

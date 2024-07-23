@@ -3,6 +3,7 @@ import { Categories, Ranges, Types } from "$lib/models/effects/enums";
 import type { EffectInterface } from "$lib/models/effects/interfaces";
 import { Rarities } from "$lib/models/items/enums";
 import type { WeaponInterface } from "$lib/models/items/interfaces";
+import { gameStore } from "$lib/stores/game";
 
 export default class Knife implements WeaponInterface {
 	id: string = crypto.randomUUID();
@@ -16,12 +17,16 @@ export default class Knife implements WeaponInterface {
 	type: Types = Types.physical;
 	range: Ranges = Ranges.close;
 	
-	applyEffects(targetCharacter: Character, usingCharacter: Character) {
-		if(this.conditionsAreMet() === false) {
+	applyEffects(calledBy: 'player' | 'enemy') {
+		if (calledBy === 'player') {
+			gameStore.inflictDamagesToEnemy(1);
+			return;
+		}
+
+		if (calledBy === 'enemy') {
+			gameStore.inflictDamagesToPlayer(1);
+			return;
 		}
 	}
 
-	conditionsAreMet(): boolean {
-		return true;
-	}
 }

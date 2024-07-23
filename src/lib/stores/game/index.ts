@@ -196,7 +196,7 @@ function createGameStore() {
 	};
 
 	const removeFromInventory = (
-		object: HealingTriggerEffectInterface | DamageTriggerEffectInterface,
+		object: ItemTypes,
 		user: string
 	) => {
 		update((game) => {
@@ -207,6 +207,29 @@ function createGameStore() {
 			return game;
 		});
 	};
+
+	const addCardToDeck = (card: Card, user: string) => {
+		update((game) => {
+			if (user === 'player') {
+				game.player.deck.putCardOnTop(card);
+				return game;
+			}
+			game.getCurrentBattle().enemy.deck.putCardOnTop(card);
+			return game;
+		}
+		);
+	}
+
+	const shuffleDeck = (user: string) => {
+		update((game) => {
+			if (user === 'player') {
+				game.player.deck.shuffleDeck();
+				return game;
+			}
+			game.getCurrentBattle().enemy.deck.shuffleDeck();
+			return game;
+		});
+	}
 
 	const resolveFight = () => {
 		update((game) => {
@@ -240,7 +263,9 @@ function createGameStore() {
 		recycleDiscard,
 		addToInventory,
 		removeFromInventory,
-		resolveFight
+		resolveFight,
+		addCardToDeck,
+		shuffleDeck
 	};
 }
 

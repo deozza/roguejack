@@ -12,7 +12,7 @@ interface ItemInterface {
     icon: string;
     effects: EffectInterface[];
 
-    applyEffects(targetCharacter: Character, usingCharacter: Character): void;
+    applyEffects(calledBy: 'player' | 'enemy'): void;
 }
 
 export interface WeaponInterface extends ItemInterface {

@@ -2,6 +2,7 @@ import { Categories, Types } from "$lib/models/effects/enums";
 import type { EffectInterface } from "$lib/models/effects/interfaces";
 import { Rarities } from "$lib/models/items/enums";
 import type { ConsumableInterface } from "$lib/models/items/interfaces";
+import { gameStore } from "$lib/stores/game";
 
 export default class PotionOfSuperiorfHealing implements ConsumableInterface {
 	id: string = crypto.randomUUID();
@@ -14,8 +15,8 @@ export default class PotionOfSuperiorfHealing implements ConsumableInterface {
 	icon: string = 'game-icons:potion-ball';
 	rarity: Rarities = Rarities.rare;
 
-	applyEffects(): void {
-		throw new Error("Method not implemented.");
+	applyEffects(calledBy: 'player' | 'enemy'): void {
+		gameStore.healPercentages(50, calledBy);
 	}
 
 }

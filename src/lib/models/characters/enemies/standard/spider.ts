@@ -23,7 +23,7 @@ export default class Spider extends DefaultCharacter implements Enemy {
         this.maxHealth = 3;
         this.currentHealth = 3;
         this.minAttack = 11;
-        this.level = 2;
+        this.level = 1;
         this.type = EnnemyType.standard;
         this.deck.generateDeck(deckSuits, deckValues);
 

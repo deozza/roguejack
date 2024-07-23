@@ -2,6 +2,7 @@ import { Categories, Ranges, Types } from "$lib/models/effects/enums";
 import type { EffectInterface } from "$lib/models/effects/interfaces";
 import { Rarities } from "$lib/models/items/enums";
 import type { WeaponInterface } from "$lib/models/items/interfaces";
+import { gameStore } from "$lib/stores/game";
 
 export default class Sword implements WeaponInterface {
 	id: string = crypto.randomUUID();
@@ -15,7 +16,15 @@ export default class Sword implements WeaponInterface {
 	type: Types = Types.physical;
 	range: Ranges = Ranges.close;
 	
-	applyEffects(): void {
-		throw new Error("Method not implemented.");
+	applyEffects(calledBy: 'player' | 'enemy'): void {
+		if (calledBy === 'player') {
+			gameStore.inflictDamagesToEnemy(5);
+			return;
+		}
+
+		if (calledBy === 'enemy') {
+			gameStore.inflictDamagesToPlayer(5);
+			return;
+		}
 	}
 }

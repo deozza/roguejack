@@ -24,6 +24,7 @@ export default class Wolf  extends DefaultCharacter implements Enemy {
         this.maxHealth = 15;
         this.currentHealth = 15;
         this.minAttack = 11;
+        this.level = 1;
         this.type = EnnemyType.boss;
         this.deck.generateDeck(deckSuits, deckValues);
         this.passiveAbilities = [new InflictWound()];

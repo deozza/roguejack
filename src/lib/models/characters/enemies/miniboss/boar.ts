@@ -23,6 +23,7 @@ export default class Boar extends DefaultCharacter implements Enemy {
         this.maxHealth = 10;
         this.currentHealth = 10;
         this.minAttack = 12;
+        this.level = 1;
         this.type = EnnemyType.miniboss;
         this.deck.generateDeck(deckSuits, deckValues);
     }

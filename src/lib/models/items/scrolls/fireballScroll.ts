@@ -1,7 +1,10 @@
 import { Categories, Ranges, Types } from "$lib/models/effects/enums";
 import type { EffectInterface } from "$lib/models/effects/interfaces";
+import type { Game } from "$lib/models/game/model";
 import { Rarities } from "$lib/models/items/enums";
 import type { ScrollInterface } from "$lib/models/items/interfaces";
+import { gameStore } from "$lib/stores/game";
+import { get } from "svelte/store";
 
 export default class FireballScroll implements ScrollInterface {
 	id: string = crypto.randomUUID();
@@ -15,7 +18,25 @@ export default class FireballScroll implements ScrollInterface {
 	rarity: Rarities = Rarities.epic;
 	effects: EffectInterface[] = [];
 	
-	applyEffects(): void {
-		throw new Error("Method not implemented.");
+	applyEffects(calledBy: 'player' | 'enemy'): void {
+		if(calledBy === 'player') {
+			gameStore.inflictDamagesToEnemy(10);
+			gameStore.update((game: Game) => {
+				for(let i = 0; i < 5; i++) {
+					game.player.deck.drawTopCard;
+				}
+				return game;
+			});
+		}
+
+		if(calledBy === 'enemy') {
+			gameStore.inflictDamagesToPlayer(10);
+			gameStore.update((game: Game) => {
+				for(let i = 0; i < 5; i++) {
+					game.getCurrentBattle().enemy.deck.drawTopCard;
+				}
+				return game;
+			});
+		}
 	}
 }

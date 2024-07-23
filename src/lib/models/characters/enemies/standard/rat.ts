@@ -24,7 +24,7 @@ export default class Rat extends DefaultCharacter implements Enemy {
         this.maxHealth = 2;
         this.currentHealth = 2;
         this.minAttack = 11;
-        this.level = 2;
+        this.level = 1;
         this.type = EnnemyType.standard;
         this.deck.generateDeck(deckSuits, deckValues);
     }
