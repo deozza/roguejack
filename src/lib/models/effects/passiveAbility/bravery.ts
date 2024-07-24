@@ -27,7 +27,7 @@ export default class Bravery implements ContinuousEffect {
 			return;
 		}
 
-		if(game.getCurrentBattle()?.enemy.type === EnnemyType.miniboss || game.getCurrentBattle()?.enemy.type === EnnemyType.miniboss) {
+		if(game.getCurrentBattle()?.enemy.type === EnnemyType.boss || game.getCurrentBattle()?.enemy.type === EnnemyType.miniboss) {
 			gameStore.addToInventory(new Sword(), calledBy);
 		}
 	}
