@@ -71,7 +71,7 @@
 		}
 
 		if (object.technicalName === 'packOfCards') {
-			object.effect({ user: 'player' });
+			object.applyEffects('player');
 			objectsToBuy = objectsToBuy.filter(
 				(objectToBuy) => objectToBuy.technicalName !== object.technicalName
 			);
