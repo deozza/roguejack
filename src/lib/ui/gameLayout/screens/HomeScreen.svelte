@@ -19,11 +19,11 @@
 	transition:fade={{ delay: 250, duration: 300 }}
 >
 	<div class="flex flex-col items-center justify-center">
-		<h1 class="h1">Welcome to Roguejack</h1>
+		<h1 class="h1">Dungeons and Jacks</h1>
 	</div>
 
 	<div class="flex flex-col items-center justify-center text-center w-9/12 space-y-4">
-		<p class="p text-lg">Roguejack is a game mixing blackjack and roguelite elements.</p>
+		<p class="p text-lg">Dungeons and Jacks is a game mixing blackjack and roguelite elements.</p>
 		<p class="p text-lg">
 			Use your deck to build powerful hands, take advantage from the abilities of your characters
 			and the weapons you collect through your journey and try to destroy your enemies.
@@ -33,7 +33,7 @@
 
 	<div class="flex flex-col items-center justify-center">
 		<button class="btn btn-xl variant-filled-success" on:click={() => startNewGame()}>
-			New game
+			Enter the dungeon
 		</button>
 	</div>
 
