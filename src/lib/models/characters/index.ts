@@ -49,7 +49,7 @@ export class DefaultCharacter implements Character {
         return this;
     }
     public heal(heal: number): DefaultCharacter {
-        this.currentHealth = Math.min(this.maxHealth, this.currentHealth - heal);
+        this.currentHealth = Math.min(this.maxHealth, this.currentHealth + heal);
         return this;
     }
     public getHealthColor(): string {
