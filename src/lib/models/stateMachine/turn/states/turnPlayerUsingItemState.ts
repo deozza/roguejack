@@ -19,7 +19,7 @@ export default class TurnPlayerUsingItemState extends DefaultState implements St
 			return;
 		}
 
-		item.applyEffects('player' );
+		item.applyEffects('player');
 		gameStore.removeFromInventory(item, 'player');
 	}
 
