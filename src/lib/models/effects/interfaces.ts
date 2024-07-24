@@ -1,12 +1,11 @@
-import type { Targets } from "$lib/models/effects/enums";
+import type { Targets } from '$lib/models/effects/enums';
 
 export interface EffectInterface {
-
-    applyEffect(target: Targets): void;
+	applyEffect(target: Targets): void;
 }
 
 export interface Status {
-    technicalName: string;
+	technicalName: string;
 	name: string;
 	description: string;
 	icon: string;
@@ -17,7 +16,7 @@ export interface Status {
 
 export interface ContinuousEffect {
 	id: string;
-    technicalName: string;
+	technicalName: string;
 	name: string;
 	description: string;
 	icon: string;

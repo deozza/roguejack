@@ -7,7 +7,6 @@ import Slime from '../characters/enemies/standard/slime';
 
 describe('battle model test', () => {
 	it('add turn', () => {
-
 		const enemy: Enemy = new Slime();
 		const battle: Battle = new Battle(enemy, 1);
 
@@ -30,5 +29,4 @@ describe('battle model test', () => {
 
 		expect(battle.getCurrentTurn()).toEqual(turn);
 	});
-
 });

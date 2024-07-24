@@ -1,8 +1,8 @@
-import type { Game } from "$lib/models/game/model";
-import { get } from "svelte/store";
-import type { ContinuousEffect } from "../interfaces";
-import { gameStore } from "$lib/stores/game";
-import { delay } from "$lib/utils";
+import type { Game } from '$lib/models/game/model';
+import { get } from 'svelte/store';
+import type { ContinuousEffect } from '../interfaces';
+import { gameStore } from '$lib/stores/game';
+import { delay } from '$lib/utils';
 
 export default class Dodge implements ContinuousEffect {
 	id: string = crypto.randomUUID();
@@ -14,18 +14,20 @@ export default class Dodge implements ContinuousEffect {
 
 	public applyEffects(calledBy: 'player' | 'enemy') {
 		return [
-			{state: 'onStateExit_TurnFightingState', callback: () => this.onStateExit_TurnFightingState(calledBy)},
-		]
+			{
+				state: 'onStateExit_TurnFightingState',
+				callback: () => this.onStateExit_TurnFightingState(calledBy)
+			}
+		];
 	}
 
 	public onStateExit_TurnFightingState(calledBy: 'player' | 'enemy') {
 		const game: Game = get(gameStore);
-		if(calledBy === 'enemy'){
-			if(game.getCurrentBattle()?.getCurrentTurn()?.fight.playerHasWon) {
-				if(game.getCurrentBattle()?.getCurrentTurn()?.playerHand.cards.length >= 4) {
-					
+		if (calledBy === 'enemy') {
+			if (game.getCurrentBattle()?.getCurrentTurn()?.fight.playerHasWon) {
+				if (game.getCurrentBattle()?.getCurrentTurn()?.playerHand.cards.length >= 4) {
 					this.active = true;
-					
+
 					gameStore.update((game: Game) => {
 						game.getCurrentBattle().getCurrentTurn().fight.totalDamageToEnemy = 0;
 						return game;
@@ -36,15 +38,13 @@ export default class Dodge implements ContinuousEffect {
 					});
 				}
 			}
-			return;	
+			return;
 		}
 
-
-		if(game.getCurrentBattle()?.getCurrentTurn()?.fight.enemyHasWon) {
-			if(game.getCurrentBattle()?.getCurrentTurn()?.enemyHand.cards.length >= 4) {
-				
+		if (game.getCurrentBattle()?.getCurrentTurn()?.fight.enemyHasWon) {
+			if (game.getCurrentBattle()?.getCurrentTurn()?.enemyHand.cards.length >= 4) {
 				this.active = true;
-				
+
 				gameStore.update((game: Game) => {
 					game.getCurrentBattle().getCurrentTurn().fight.totalDamageToPlayer = 0;
 					return game;
@@ -55,6 +55,5 @@ export default class Dodge implements ContinuousEffect {
 				});
 			}
 		}
-
 	}
 }

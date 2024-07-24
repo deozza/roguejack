@@ -55,10 +55,9 @@ const value: Record<Face, number> = {
 	K: 10
 };
 
-
 export const generateRandomCard = (): Card => {
 	const randomSuit = Object.keys(suits)[Math.floor(Math.random() * Object.keys(suits).length)];
 	const randomFace = Object.keys(faces)[Math.floor(Math.random() * Object.keys(faces).length)];
 
 	return new Card(randomSuit as Suit, randomFace as Face);
-}
+};

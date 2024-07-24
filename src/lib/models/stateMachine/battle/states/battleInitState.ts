@@ -12,18 +12,18 @@ export default class BattleInitState extends DefaultState implements StateInterf
 	public name: string = 'BattleInitState';
 
 	public onStateEnter(): void {
-		const gameState: GameMachineState = get(gameMachineState)
+		const gameState: GameMachineState = get(gameMachineState);
 
-		if(gameState.currentState.name !== 'GamePlayingState') {
-			throw new Error('Cannot enter BattleInitState when game is not in GamePlayingState')
+		if (gameState.currentState.name !== 'GamePlayingState') {
+			throw new Error('Cannot enter BattleInitState when game is not in GamePlayingState');
 		}
 
-		super.onStateEnter(this.name)
+		super.onStateEnter(this.name);
 	}
 
 	public onStateExecute(): void {
 		gameStore.createBattle();
-		const game: Game = get(gameStore)
+		const game: Game = get(gameStore);
 		const enemy: Enemy = game.getCurrentBattle()?.enemy as Enemy;
 		if (enemy.passiveAbilities.length > 0) {
 			enemySideEffectsStore.set(enemy.passiveAbilities);
@@ -31,6 +31,6 @@ export default class BattleInitState extends DefaultState implements StateInterf
 	}
 
 	public onStateExit(): void {
-		super.onStateExit(this.name)
+		super.onStateExit(this.name);
 	}
 }

@@ -1,32 +1,42 @@
-import type { Game } from "$lib/models/game/model";
-import { gameStore } from "$lib/stores/game";
-import { enemySideEffectsStore, playerSideEffectsStore } from "$lib/stores/sideEffects";
-import type { ContinuousEffect, Status } from "../interfaces";
-import type { Hand } from "$lib/models/hand/model";
-import type { Card } from "$lib/models/card/model";
+import type { Game } from '$lib/models/game/model';
+import { gameStore } from '$lib/stores/game';
+import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
+import type { ContinuousEffect, Status } from '../interfaces';
+import type { Hand } from '$lib/models/hand/model';
+import type { Card } from '$lib/models/card/model';
 
 export default class Scared implements Status {
-    technicalName: string = 'scared';
+	technicalName: string = 'scared';
 	name: string = 'Scared';
-	description: string = 'Drawn card has a 50% chance to be immediately discard. Ends at the end of the battle';
+	description: string =
+		'Drawn card has a 50% chance to be immediately discard. Ends at the end of the battle';
 	icon: string = 'game-icons:surprised-skull';
 	active: boolean = false;
 
 	public applyEffects(calledBy: 'player' | 'enemy') {
 		return [
-			{state: 'onStateExit_TurnPlayerDrawingState', callback: () => this.onStateExit_TurnPlayerDrawingState(calledBy)},
-			{state: 'onStateExit_TurnEnemyDrawingState', callback: () => this.onStateExit_TurnEnemyDrawingState(calledBy)},
-			{state: 'onStateExit_BattleWonState', callback: () => this.onStateExit_BattleWonState(calledBy)},
-		]
+			{
+				state: 'onStateExit_TurnPlayerDrawingState',
+				callback: () => this.onStateExit_TurnPlayerDrawingState(calledBy)
+			},
+			{
+				state: 'onStateExit_TurnEnemyDrawingState',
+				callback: () => this.onStateExit_TurnEnemyDrawingState(calledBy)
+			},
+			{
+				state: 'onStateExit_BattleWonState',
+				callback: () => this.onStateExit_BattleWonState(calledBy)
+			}
+		];
 	}
 
 	public onStateExit_TurnPlayerDrawingState(calledBy: 'player' | 'enemy') {
-		if(calledBy === 'enemy'){
+		if (calledBy === 'enemy') {
 			return;
 		}
 		this.active = true;
 
-		if(Math.random() >= 0.5){
+		if (Math.random() >= 0.5) {
 			return;
 		}
 
@@ -38,15 +48,15 @@ export default class Scared implements Status {
 			game.player.discard.discardCard(drawnCard);
 
 			return game;
-		});		
+		});
 	}
 
 	public onStateExit_TurnEnemyDrawingState(calledBy: 'player' | 'enemy') {
-		if(calledBy === 'player'){
+		if (calledBy === 'player') {
 			return;
 		}
 
-		if(Math.random() >= 0.5){
+		if (Math.random() >= 0.5) {
 			return;
 		}
 
@@ -62,7 +72,7 @@ export default class Scared implements Status {
 	}
 
 	public onStateExit_BattleWonState(calledBy: 'player' | 'enemy') {
-		if(calledBy === 'player'){
+		if (calledBy === 'player') {
 			playerSideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
 				return sideEffects.filter((effect) => effect.technicalName !== this.technicalName);
 			});
@@ -74,5 +84,4 @@ export default class Scared implements Status {
 			return sideEffects.filter((effect) => effect.technicalName !== this.technicalName);
 		});
 	}
-
 }

@@ -1,13 +1,13 @@
-import { get } from "svelte/store";
-import type { ContinuousEffect } from "../interfaces";
-import type { Game } from "$lib/models/game/model";
-import { gameStore } from "$lib/stores/game";
-import Sword from "$lib/models/items/weapons/sword";
-import { EnnemyType } from "$lib/models/characters/types";
+import { get } from 'svelte/store';
+import type { ContinuousEffect } from '../interfaces';
+import type { Game } from '$lib/models/game/model';
+import { gameStore } from '$lib/stores/game';
+import Sword from '$lib/models/items/weapons/sword';
+import { EnnemyType } from '$lib/models/characters/types';
 
 export default class Bravery implements ContinuousEffect {
 	id: string = crypto.randomUUID();
-    technicalName: string = 'bravery';
+	technicalName: string = 'bravery';
 	name: string = 'Bravery';
 	description: string = 'Generate a sword when facing a semiboss or a boss';
 	icon: string = 'game-icons:sword-brandish';
@@ -15,21 +15,26 @@ export default class Bravery implements ContinuousEffect {
 
 	public applyEffects(calledBy: 'player' | 'enemy') {
 		return [
-			{state: 'onStateExit_BattleInitState', callback: () => this.onStateExit_TurnPlayerInit(calledBy)},
-		]
+			{
+				state: 'onStateExit_BattleInitState',
+				callback: () => this.onStateExit_TurnPlayerInit(calledBy)
+			}
+		];
 	}
 
 	public onStateExit_TurnPlayerInit(calledBy: 'player' | 'enemy') {
-		const game: Game = get(gameStore)
+		const game: Game = get(gameStore);
 
-		if(calledBy === 'enemy'){
+		if (calledBy === 'enemy') {
 			gameStore.addToInventory(new Sword(), calledBy);
 			return;
 		}
 
-		if(game.getCurrentBattle()?.enemy.type === EnnemyType.boss || game.getCurrentBattle()?.enemy.type === EnnemyType.miniboss) {
+		if (
+			game.getCurrentBattle()?.enemy.type === EnnemyType.boss ||
+			game.getCurrentBattle()?.enemy.type === EnnemyType.miniboss
+		) {
 			gameStore.addToInventory(new Sword(), calledBy);
 		}
 	}
-
 }

@@ -1,4 +1,3 @@
-
 import { gameStore } from '$lib/stores/game';
 import { DefaultState } from '../..';
 import type { StateInterface } from '../../interfaces';
@@ -7,7 +6,7 @@ export default class TurnFightingState extends DefaultState implements StateInte
 	public name: string = 'TurnFightingState';
 
 	public onStateEnter(): void {
-		super.onStateEnter(this.name)
+		super.onStateEnter(this.name);
 	}
 
 	public onStateExecute(): void {
@@ -15,6 +14,6 @@ export default class TurnFightingState extends DefaultState implements StateInte
 	}
 
 	public onStateExit(): void {
-		super.onStateExit(this.name)
+		super.onStateExit(this.name);
 	}
 }

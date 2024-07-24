@@ -28,7 +28,10 @@
 		$battleMachineState.currentState
 	);
 
-	function getScreenToRender(gameCurrentState: StateInterface, battleCurrentState: StateInterface): SvelteComponent {
+	function getScreenToRender(
+		gameCurrentState: StateInterface,
+		battleCurrentState: StateInterface
+	): SvelteComponent {
 		if (gameCurrentState && gameCurrentState.name !== 'GamePlayingState') {
 			return screensToRender[gameCurrentState.name];
 		}
@@ -42,7 +45,6 @@
 
 	$: console.log('player side effects : ', $playerSideEffectsStore);
 	$: console.log('enemy side effects : ', $enemySideEffectsStore);
-
 </script>
 
 <div id="top">

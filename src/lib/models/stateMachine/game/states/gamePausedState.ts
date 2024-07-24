@@ -5,14 +5,12 @@ export default class GamePausedState extends DefaultState implements StateInterf
 	public name: string = 'GamePausedState';
 
 	public onStateEnter(): void {
-		super.onStateEnter(this.name)
+		super.onStateEnter(this.name);
 	}
 
-	public onStateExecute(): void {
-	}
+	public onStateExecute(): void {}
 
 	public onStateExit(): void {
-		super.onStateExit(this.name)
+		super.onStateExit(this.name);
 	}
 }
-

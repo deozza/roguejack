@@ -16,7 +16,6 @@
 	let openedPlayerDiscardView: boolean = false;
 
 	function drawCard() {
-
 		try {
 			$turnMachineState = $turnMachineState.listenToEvent({ name: 'DRAW', data: null });
 		} catch (e: any) {
@@ -30,7 +29,7 @@
 
 		if ($gameStore.getCurrentBattle()?.getCurrentTurn().playerHand.getIsBusted() === true) {
 			$turnMachineState = $turnMachineState.listenToEvent({ name: 'BUST', data: null });
-			
+
 			scrollToElement('fighting');
 			calculateAndApplyDamages();
 
@@ -49,7 +48,10 @@
 		$turnMachineState = $turnMachineState.listenToEvent({ name: 'PLAY', data: null });
 
 		try {
-			while($gameStore.getCurrentBattle()?.getCurrentTurn().enemyHand.value < $gameStore.getCurrentBattle()?.enemy.minAttack) {
+			while (
+				$gameStore.getCurrentBattle()?.getCurrentTurn().enemyHand.value <
+				$gameStore.getCurrentBattle()?.enemy.minAttack
+			) {
 				await delay(1000);
 				$turnMachineState = $turnMachineState.listenToEvent({ name: 'DRAW', data: null });
 
@@ -85,16 +87,16 @@
 		$turnMachineState = $turnMachineState.listenToEvent({ name: 'DAMAGE', data: null });
 
 		const fight: Fight = $gameStore.getCurrentBattle().getCurrentTurn().fight;
-		
-		if(fight.enemyHasWon === false && fight.playerHasWon === false) {
+
+		if (fight.enemyHasWon === false && fight.playerHasWon === false) {
 			$turnMachineState = $turnMachineState.listenToEvent({ name: 'TIE', data: null });
 		}
-		
-		if(fight.playerHasWon === true) {
-			$turnMachineState = $turnMachineState.listenToEvent({ name: 'WIN', data: null });
-		} 
 
-		if(fight.enemyHasWon === true) {
+		if (fight.playerHasWon === true) {
+			$turnMachineState = $turnMachineState.listenToEvent({ name: 'WIN', data: null });
+		}
+
+		if (fight.enemyHasWon === true) {
 			$turnMachineState = $turnMachineState.listenToEvent({ name: 'LOSE', data: null });
 		}
 
@@ -107,16 +109,13 @@
 
 		$turnMachineState = $turnMachineState.listenToEvent({ name: 'RESET', data: null });
 
-
 		try {
 			$turnMachineState = $turnMachineState.listenToEvent({ name: 'NEW_TURN', data: null });
-
 		} catch (e: any) {
 			if (e.message === 'PLAYER_EMPTY_DECK') {
 				$turnMachineState = $turnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
 				updateBattleState();
 				return;
-
 			}
 		}
 
@@ -160,16 +159,13 @@
 	}
 
 	async function redirectToCamp() {
-
-
 		await delay(5000);
 		$battleMachineState = $battleMachineState.listenToEvent({ name: 'CAMP', data: null });
-		
+
 		await delay(1000);
 		$turnMachineState = $turnMachineState.listenToEvent({ name: 'RESET', data: null });
 		scrollToElement('top');
 		gameStore.endTurn();
-
 	}
 
 	function openEnemyDiscardView() {

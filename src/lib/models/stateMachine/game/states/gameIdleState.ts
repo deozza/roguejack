@@ -1,4 +1,3 @@
-
 import { gameStore } from '$lib/stores/game';
 import { DefaultState } from '../..';
 import type { StateInterface } from '../../interfaces';
@@ -7,7 +6,7 @@ export default class GameIdleState extends DefaultState implements StateInterfac
 	public name: string = 'GameIdleState';
 
 	public onStateEnter(): void {
-		super.onStateEnter(this.name)
+		super.onStateEnter(this.name);
 	}
 
 	public onStateExecute(): void {
@@ -15,8 +14,6 @@ export default class GameIdleState extends DefaultState implements StateInterfac
 	}
 
 	public onStateExit(): void {
-		super.onStateExit(this.name)
+		super.onStateExit(this.name);
 	}
-	
 }
-

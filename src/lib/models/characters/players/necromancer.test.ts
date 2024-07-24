@@ -4,7 +4,6 @@ import PotionOfHealing from '$lib/models/items/consumable/potionOfHealing';
 import type { ConsumableInterface } from '$lib/models/items/interfaces';
 
 describe('player character necromancer test', () => {
-
 	it('check deck has 52 cards ', () => {
 		const necromancer = new Necromancer();
 		expect(necromancer.deck.cards.length).toBe(52);

@@ -6,7 +6,6 @@ import type { Enemy } from '../characters/enemies';
 
 describe('game model test', () => {
 	it('add battle', () => {
-
 		const game: Game = new Game();
 		expect(game.battles.length).toBe(0);
 

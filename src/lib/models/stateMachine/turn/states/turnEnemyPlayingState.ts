@@ -1,4 +1,3 @@
-
 import { DefaultState } from '../..';
 import type { StateInterface } from '../../interfaces';
 
@@ -6,13 +5,12 @@ export default class TurnEnemyPlayingState extends DefaultState implements State
 	public name: string = 'TurnEnemyPlayingState';
 
 	public onStateEnter(): void {
-		super.onStateEnter(this.name)
+		super.onStateEnter(this.name);
 	}
 
-	public onStateExecute(): void {
-	}
+	public onStateExecute(): void {}
 
 	public onStateExit(): void {
-		super.onStateExit(this.name)
+		super.onStateExit(this.name);
 	}
 }

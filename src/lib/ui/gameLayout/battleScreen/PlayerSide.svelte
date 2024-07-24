@@ -33,7 +33,10 @@
 		{passiveEffects}
 		{isEnemy}
 		on:close={() => openCharacterInfoScreen()}
-		on:updateBattleState={() => {openCharacterInfoScreen();dispatch('updateBattleState')}}
+		on:updateBattleState={() => {
+			openCharacterInfoScreen();
+			dispatch('updateBattleState');
+		}}
 	/>
 {/if}
 
@@ -46,7 +49,7 @@
 		class:text-red-500={isEnemy && $gameStore.battles.length % 10 === 0}
 	>
 		{#if isEnemy && user.type !== undefined && user.type !== null}
-			{#if user.type === EnnemyType.miniboss }
+			{#if user.type === EnnemyType.miniboss}
 				<Icon icon="game-icons:crown" width="24" height="24" />
 			{/if}
 			{#if user.type === EnnemyType.boss}

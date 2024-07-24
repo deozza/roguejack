@@ -1,10 +1,10 @@
-import { Categories, Ranges, Types } from "$lib/models/effects/enums";
-import type { EffectInterface } from "$lib/models/effects/interfaces";
-import type { Game } from "$lib/models/game/model";
-import { Rarities } from "$lib/models/items/enums";
-import type { ScrollInterface } from "$lib/models/items/interfaces";
-import { gameStore } from "$lib/stores/game";
-import { get } from "svelte/store";
+import { Categories, Ranges, Types } from '$lib/models/effects/enums';
+import type { EffectInterface } from '$lib/models/effects/interfaces';
+import type { Game } from '$lib/models/game/model';
+import { Rarities } from '$lib/models/items/enums';
+import type { ScrollInterface } from '$lib/models/items/interfaces';
+import { gameStore } from '$lib/stores/game';
+import { get } from 'svelte/store';
 
 export default class FireballScroll implements ScrollInterface {
 	id: string = crypto.randomUUID();
@@ -17,24 +17,24 @@ export default class FireballScroll implements ScrollInterface {
 	range: Ranges = Ranges.far;
 	rarity: Rarities = Rarities.epic;
 	effects: EffectInterface[] = [];
-	defaultAmount =  1;
+	defaultAmount = 1;
 	currentAmount: number = 1;
-	
+
 	applyEffects(calledBy: 'player' | 'enemy'): void {
-		if(calledBy === 'player') {
+		if (calledBy === 'player') {
 			gameStore.inflictDamagesToEnemy(10);
 			gameStore.update((game: Game) => {
-				for(let i = 0; i < 5; i++) {
+				for (let i = 0; i < 5; i++) {
 					game.player.deck.drawTopCard;
 				}
 				return game;
 			});
 		}
 
-		if(calledBy === 'enemy') {
+		if (calledBy === 'enemy') {
 			gameStore.inflictDamagesToPlayer(10);
 			gameStore.update((game: Game) => {
-				for(let i = 0; i < 5; i++) {
+				for (let i = 0; i < 5; i++) {
 					game.getCurrentBattle().enemy.deck.drawTopCard;
 				}
 				return game;

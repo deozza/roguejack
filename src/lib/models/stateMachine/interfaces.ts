@@ -4,7 +4,6 @@ export interface StateMachineInterface {
 	listenToEvent(event: EventInterface): StateMachineInterface;
 }
 
-
 export interface StateInterface {
 	name: string;
 	onStateEnter(): void;

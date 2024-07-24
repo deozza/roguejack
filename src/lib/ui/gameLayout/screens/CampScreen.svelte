@@ -38,7 +38,6 @@
 		goToNextState();
 	}
 
-
 	function addToInventory(item: ItemTypes) {
 		if (item.technicalName === 'packOfCards') {
 			item.effect({ user: 'player' });
@@ -66,7 +65,6 @@
 	}
 
 	function startNewBattle() {
-
 		$battleMachineState = $battleMachineState.listenToEvent({ name: 'RESET', data: null });
 		$battleMachineState = $battleMachineState.listenToEvent({ name: 'NEW_BATTLE', data: null });
 

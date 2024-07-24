@@ -1,14 +1,14 @@
 export enum Rarities {
-    common,
-    uncommon,
-    rare,
-    epic,
-    legendary
+	common,
+	uncommon,
+	rare,
+	epic,
+	legendary
 }
 
 export interface RaritiesWeight {
-    weight: number;
-    rarity: Rarities;
+	weight: number;
+	rarity: Rarities;
 }
 
 export let defaultRaritiesWeights: RaritiesWeight[] = [

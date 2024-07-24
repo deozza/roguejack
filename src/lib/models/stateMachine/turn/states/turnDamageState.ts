@@ -9,7 +9,7 @@ export default class TurnDamageState extends DefaultState implements StateInterf
 	public name: string = 'TurnDamageState';
 
 	public onStateEnter(): void {
-		super.onStateEnter(this.name)
+		super.onStateEnter(this.name);
 	}
 
 	public onStateExecute(): void {
@@ -21,6 +21,6 @@ export default class TurnDamageState extends DefaultState implements StateInterf
 	}
 
 	public onStateExit(): void {
-		super.onStateExit(this.name)
+		super.onStateExit(this.name);
 	}
 }

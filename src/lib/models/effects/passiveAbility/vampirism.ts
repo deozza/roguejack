@@ -1,8 +1,8 @@
-import type { Game } from "$lib/models/game/model";
-import { get } from "svelte/store";
-import type { ContinuousEffect } from "../interfaces";
-import { gameStore } from "$lib/stores/game";
-import { delay } from "$lib/utils";
+import type { Game } from '$lib/models/game/model';
+import { get } from 'svelte/store';
+import type { ContinuousEffect } from '../interfaces';
+import { gameStore } from '$lib/stores/game';
+import { delay } from '$lib/utils';
 
 export default class Vampirism implements ContinuousEffect {
 	id: string = crypto.randomUUID();
@@ -14,31 +14,33 @@ export default class Vampirism implements ContinuousEffect {
 
 	public applyEffects(calledBy: 'player' | 'enemy') {
 		return [
-			{state: 'onStateExit_TurnFightingState', callback: () => this.onStateExit_TurnFightingState(calledBy)},
-		]
+			{
+				state: 'onStateExit_TurnFightingState',
+				callback: () => this.onStateExit_TurnFightingState(calledBy)
+			}
+		];
 	}
 
 	public onStateExit_TurnFightingState(calledBy: 'player' | 'enemy') {
 		this.active = true;
 		const game: Game = get(gameStore);
-		if(calledBy === 'enemy'){
-			if(game.getCurrentBattle()?.getCurrentTurn()?.fight.enemyHasWon) {
-				
+		if (calledBy === 'enemy') {
+			if (game.getCurrentBattle()?.getCurrentTurn()?.fight.enemyHasWon) {
 				gameStore.update((game: Game) => {
-					game.getCurrentBattle()?.enemy.heal(game.getCurrentBattle().getCurrentTurn().fight.totalDamageToPlayer);
+					game
+						.getCurrentBattle()
+						?.enemy.heal(game.getCurrentBattle().getCurrentTurn().fight.totalDamageToPlayer);
 					return game;
 				});
-	
+
 				delay(1000).then(() => {
 					this.active = false;
 				});
 			}
-			return;	
+			return;
 		}
 
-
-		if(game.getCurrentBattle()?.getCurrentTurn()?.fight.playerHasWon) {
-				
+		if (game.getCurrentBattle()?.getCurrentTurn()?.fight.playerHasWon) {
 			gameStore.update((game: Game) => {
 				game.player.heal(game.getCurrentBattle().getCurrentTurn().fight.totalDamageToEnemy);
 				return game;
@@ -49,6 +51,5 @@ export default class Vampirism implements ContinuousEffect {
 			});
 		}
 		return;
-
 	}
 }

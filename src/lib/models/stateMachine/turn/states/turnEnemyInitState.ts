@@ -1,4 +1,3 @@
-
 import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 import { get } from 'svelte/store';
 import { DefaultState } from '../..';
@@ -9,13 +8,12 @@ export default class TurnEnemyInitState extends DefaultState implements StateInt
 	public name: string = 'TurnEnemyInitState';
 
 	public onStateEnter(): void {
-		super.onStateEnter(this.name)
+		super.onStateEnter(this.name);
 	}
 
-	public onStateExecute(): void {
-	}
+	public onStateExecute(): void {}
 
 	public onStateExit(): void {
-		super.onStateExit(this.name)
+		super.onStateExit(this.name);
 	}
 }

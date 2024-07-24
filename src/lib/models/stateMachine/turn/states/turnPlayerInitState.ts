@@ -13,18 +13,18 @@ export default class TurnPlayerInitState extends DefaultState implements StateIn
 	public name: string = 'TurnPlayerInitState';
 
 	public onStateEnter(): void {
-		const gameState: GameMachineState = get(gameMachineState)
+		const gameState: GameMachineState = get(gameMachineState);
 
-		if(gameState.currentState.name !== 'GamePlayingState') {
-			throw new Error('Cannot enter TurnPlayerInitState when game is not in GamePlayingState')
+		if (gameState.currentState.name !== 'GamePlayingState') {
+			throw new Error('Cannot enter TurnPlayerInitState when game is not in GamePlayingState');
 		}
 
-		const battleState: BattleMachineState = get(battleMachineState)
-		if(battleState.currentState.name !== 'BattlePlayingState') {
-			throw new Error('Cannot enter TurnPlayerInitState when battle is not in BattlePlayingState')
+		const battleState: BattleMachineState = get(battleMachineState);
+		if (battleState.currentState.name !== 'BattlePlayingState') {
+			throw new Error('Cannot enter TurnPlayerInitState when battle is not in BattlePlayingState');
 		}
 
-		super.onStateEnter(this.name)
+		super.onStateEnter(this.name);
 	}
 
 	public onStateExecute(): void {
@@ -32,7 +32,6 @@ export default class TurnPlayerInitState extends DefaultState implements StateIn
 	}
 
 	public onStateExit(): void {
-		super.onStateExit(this.name)
+		super.onStateExit(this.name);
 	}
 }
-

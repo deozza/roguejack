@@ -6,7 +6,6 @@ import type { ConsumableInterface } from '../items/interfaces';
 import PotionOfHealing from '../items/consumable/potionOfHealing';
 
 describe('global character test', () => {
-
 	it('check rat is an enemy ', () => {
 		const rat = new Rat();
 		expect(checkCharacterIsForEnnemy(rat)).toBeTruthy();
@@ -16,7 +15,6 @@ describe('global character test', () => {
 		const knight = new Knight();
 		expect(checkCharacterIsForEnnemy(knight)).toBeFalsy();
 	});
-
 
 	it('add item to inventory', () => {
 		const character = new DefaultCharacter();
@@ -43,8 +41,7 @@ describe('global character test', () => {
 		expect(character.inventory).toStrictEqual([item1, item2]);
 
 		character.removeItemFromInventory(item1);
-		expect(character.inventory.length).toBe(1)
+		expect(character.inventory.length).toBe(1);
 		expect(character.inventory).toStrictEqual([item2]);
 	});
-
 });

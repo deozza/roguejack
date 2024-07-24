@@ -1,11 +1,11 @@
 export enum Targets {
-    user,
-    opponent,
-    all,
+	user,
+	opponent,
+	all
 }
 
 export enum Categories {
-    piercing,
+	piercing,
 	slashing,
 	blunt,
 	fire,
@@ -23,13 +23,13 @@ export enum Categories {
 }
 
 export enum Types {
-    physical,
-    magical
+	physical,
+	magical
 }
 
 export enum Ranges {
-    none = -1,
-    close = 0,
-    medium = 1,
-    far = 2
+	none = -1,
+	close = 0,
+	medium = 1,
+	far = 2
 }

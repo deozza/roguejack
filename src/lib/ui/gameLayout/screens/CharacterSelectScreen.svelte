@@ -19,14 +19,17 @@
 	function selectCharacter() {
 		const player: Player = selectedCharacter;
 		player.make();
-		$gameMachineState = $gameMachineState.listenToEvent({ name: 'CHARACTER_SELECTED', data: {character: player} });
-		
+		$gameMachineState = $gameMachineState.listenToEvent({
+			name: 'CHARACTER_SELECTED',
+			data: { character: player }
+		});
+
 		$gameMachineState = $gameMachineState.listenToEvent({ name: 'START_GAME', data: null });
-		
+
 		$battleMachineState = $battleMachineState.listenToEvent({ name: 'NEW_BATTLE', data: null });
-		
+
 		$battleMachineState = $battleMachineState.listenToEvent({ name: 'PLAY', data: null });
-		
+
 		$turnMachineState = $turnMachineState.listenToEvent({ name: 'NEW_TURN', data: null });
 
 		$turnMachineState = $turnMachineState.listenToEvent({ name: 'PLAY', data: null });
@@ -74,7 +77,7 @@
 					class="btn {selectedCharacter.name === player.name
 						? 'variant-filled-tertiary'
 						: 'variant-ringed-tertiary'} rounded-md"
-					on:click={() => selectedCharacter = player}
+					on:click={() => (selectedCharacter = player)}
 				>
 					<Icon icon={player.icon} width="32" height="32" />
 				</button>

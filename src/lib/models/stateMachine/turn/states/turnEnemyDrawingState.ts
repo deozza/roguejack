@@ -6,7 +6,7 @@ export default class TurnEnemyDrawingState extends DefaultState implements State
 	public name: string = 'TurnEnemyDrawingState';
 
 	public onStateEnter(): void {
-		super.onStateEnter(this.name)
+		super.onStateEnter(this.name);
 	}
 
 	public onStateExecute(): void {
@@ -14,7 +14,6 @@ export default class TurnEnemyDrawingState extends DefaultState implements State
 	}
 
 	public onStateExit(): void {
-		super.onStateExit(this.name)
+		super.onStateExit(this.name);
 	}
 }
-

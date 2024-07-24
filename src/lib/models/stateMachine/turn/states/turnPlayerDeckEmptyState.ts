@@ -5,13 +5,12 @@ export default class TurnPlayerDeckEmptyState extends DefaultState implements St
 	public name: string = 'TurnPlayerDeckEmptyState';
 
 	public onStateEnter(): void {
-		super.onStateEnter(this.name)
+		super.onStateEnter(this.name);
 	}
 
-	public onStateExecute(): void {
-	}
+	public onStateExecute(): void {}
 
 	public onStateExit(): void {
-		super.onStateExit(this.name)
+		super.onStateExit(this.name);
 	}
 }

@@ -9,7 +9,7 @@ export default class TurnPlayerDrawingState extends DefaultState implements Stat
 	public name: string = 'TurnPlayerDrawingState';
 
 	public onStateEnter(): void {
-		super.onStateEnter(this.name)
+		super.onStateEnter(this.name);
 	}
 
 	public onStateExecute(): void {
@@ -17,6 +17,6 @@ export default class TurnPlayerDrawingState extends DefaultState implements Stat
 	}
 
 	public onStateExit(): void {
-		super.onStateExit(this.name)
+		super.onStateExit(this.name);
 	}
 }

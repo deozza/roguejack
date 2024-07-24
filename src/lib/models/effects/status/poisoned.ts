@@ -1,10 +1,10 @@
-import { gameStore } from "$lib/stores/game";
-import { enemySideEffectsStore, playerSideEffectsStore } from "$lib/stores/sideEffects";
-import { delay } from "$lib/utils";
-import type { ContinuousEffect, Status } from "../interfaces";
+import { gameStore } from '$lib/stores/game';
+import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
+import { delay } from '$lib/utils';
+import type { ContinuousEffect, Status } from '../interfaces';
 
 export default class Poisoned implements Status {
-    technicalName: string = 'poisoned';
+	technicalName: string = 'poisoned';
 	name: string = 'Poisoned';
 	description: string = 'Inflicts 1 at each card drawn. Ends at the end of the battle';
 	icon: string = 'game-icons:poison-bottle';
@@ -12,14 +12,23 @@ export default class Poisoned implements Status {
 
 	public applyEffects(calledBy: 'player' | 'enemy') {
 		return [
-			{state: 'onStateEnter_TurnPlayerDrawingState', callback: () => this.onStateEnter_TurnPlayerDrawingState(calledBy)},
-			{state: 'onStateEnter_TurnEnemyDrawingState', callback: () => this.onStateEnter_TurnEnemyDrawingState(calledBy)},
-			{state: 'onStateExit_BattleWonState', callback: () => this.onStateExit_BattleWonState(calledBy)},
-		]
+			{
+				state: 'onStateEnter_TurnPlayerDrawingState',
+				callback: () => this.onStateEnter_TurnPlayerDrawingState(calledBy)
+			},
+			{
+				state: 'onStateEnter_TurnEnemyDrawingState',
+				callback: () => this.onStateEnter_TurnEnemyDrawingState(calledBy)
+			},
+			{
+				state: 'onStateExit_BattleWonState',
+				callback: () => this.onStateExit_BattleWonState(calledBy)
+			}
+		];
 	}
 
 	public onStateEnter_TurnPlayerDrawingState(calledBy: 'player' | 'enemy') {
-		if(calledBy === 'enemy'){
+		if (calledBy === 'enemy') {
 			return;
 		}
 		this.active = true;
@@ -32,7 +41,7 @@ export default class Poisoned implements Status {
 	}
 
 	public onStateEnter_TurnEnemyDrawingState(calledBy: 'player' | 'enemy') {
-		if(calledBy === 'player'){
+		if (calledBy === 'player') {
 			return;
 		}
 		this.active = true;
@@ -45,7 +54,7 @@ export default class Poisoned implements Status {
 	}
 
 	public onStateExit_BattleWonState(calledBy: 'player' | 'enemy') {
-		if(calledBy === 'player'){
+		if (calledBy === 'player') {
 			playerSideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
 				return sideEffects.filter((effect) => effect.technicalName !== this.technicalName);
 			});
@@ -57,5 +66,4 @@ export default class Poisoned implements Status {
 			return sideEffects.filter((effect) => effect.technicalName !== this.technicalName);
 		});
 	}
-
 }

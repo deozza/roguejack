@@ -9,13 +9,13 @@ export default class TurnPlayerUsingItemState extends DefaultState implements St
 	public name: string = 'TurnPlayerUsingItemState';
 
 	public onStateEnter(): void {
-		super.onStateEnter(this.name)
+		super.onStateEnter(this.name);
 	}
 
 	public onStateExecute(): void {
 		const item: ItemTypes | null = get(playerUsingItemStore);
 
-		if(item == null) {
+		if (item == null) {
 			return;
 		}
 
@@ -24,7 +24,7 @@ export default class TurnPlayerUsingItemState extends DefaultState implements St
 	}
 
 	public onStateExit(): void {
-		super.onStateExit(this.name)
+		super.onStateExit(this.name);
 		playerUsingItemStore.set(null);
 	}
 }

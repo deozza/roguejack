@@ -39,6 +39,5 @@ describe('discard model test', () => {
 		const drawnCard: Card | null = discard.drawTopCard();
 		expect(drawnCard).toEqual(card);
 		expect(discard.cards.length).toBe(0);
-		
 	});
 });

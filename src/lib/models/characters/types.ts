@@ -1,5 +1,5 @@
 export enum EnnemyType {
-    standard,
-    miniboss,
-    boss
+	standard,
+	miniboss,
+	boss
 }

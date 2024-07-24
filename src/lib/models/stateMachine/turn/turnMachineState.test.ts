@@ -112,7 +112,7 @@ describe('turn state machine test', () => {
 		};
 		turnMachineState.listenToEvent(event);
 		expect(turnMachineState.currentState.name).toBe('TurnEnemyPlayingState');
-		
+
 		event = {
 			name: 'USE_ITEM',
 			data: {}
@@ -126,14 +126,14 @@ describe('turn state machine test', () => {
 		};
 		turnMachineState.listenToEvent(event);
 		expect(turnMachineState.currentState.name).toBe('TurnEnemyPlayingState');
-		
+
 		event = {
 			name: 'FIGHT',
 			data: {}
 		};
 		turnMachineState.listenToEvent(event);
 		expect(turnMachineState.currentState.name).toBe('TurnFightingState');
-		
+
 		event = {
 			name: 'DAMAGE',
 			data: {}
@@ -147,6 +147,5 @@ describe('turn state machine test', () => {
 		};
 		turnMachineState.listenToEvent(event);
 		expect(turnMachineState.currentState.name).toBe('TurnWonState');
-		
 	});
 });

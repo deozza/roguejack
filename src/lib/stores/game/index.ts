@@ -29,11 +29,11 @@ function createGameStore() {
 			let nextBattleEnemyType: EnnemyType = EnnemyType.standard;
 			let nextBattleEnemyLevel: number = Math.max(Math.floor(nextBattleIndex / 10), 1);
 
-			if(nextBattleIndex % 10 === 0) {
+			if (nextBattleIndex % 10 === 0) {
 				nextBattleEnemyType = EnnemyType.boss;
 			}
 
-			if(nextBattleIndex % 5 === 0 && nextBattleIndex % 10 !== 0) {
+			if (nextBattleIndex % 5 === 0 && nextBattleIndex % 10 !== 0) {
 				nextBattleEnemyType = EnnemyType.miniboss;
 			}
 
@@ -180,16 +180,16 @@ function createGameStore() {
 		});
 	};
 
-	const addToInventory = (
-		object: ItemTypes,
-		user: string
-	) => {
+	const addToInventory = (object: ItemTypes, user: string) => {
 		update((game) => {
-			if(user === 'enemy') {
+			if (user === 'enemy') {
 				const index = game.getCurrentBattle().enemy.inventory.findIndex((item) => item === object);
-				if(index === -1) {
+				if (index === -1) {
 					object.currentAmount = object.defaultAmount;
-					game.getCurrentBattle().enemy.inventory = [...game.getCurrentBattle().enemy.inventory, object];
+					game.getCurrentBattle().enemy.inventory = [
+						...game.getCurrentBattle().enemy.inventory,
+						object
+					];
 					return game;
 				}
 
@@ -198,29 +198,26 @@ function createGameStore() {
 			}
 
 			const index = game.player.inventory.findIndex((item) => item === object);
-				if(index === -1) {
-					object.currentAmount = object.defaultAmount;
-					game.player.inventory = [...game.player.inventory, object];
-					return game;
-				}
-			
-				game.player.inventory[index].currentAmount += object.defaultAmount;
+			if (index === -1) {
+				object.currentAmount = object.defaultAmount;
+				game.player.inventory = [...game.player.inventory, object];
+				return game;
+			}
+
+			game.player.inventory[index].currentAmount += object.defaultAmount;
 			return game;
 		});
 	};
 
-	const removeFromInventory = (
-		object: ItemTypes,
-		user: string
-	) => {
+	const removeFromInventory = (object: ItemTypes, user: string) => {
 		update((game) => {
 			const index = game.player.inventory.findIndex((item) => item === object);
-			if(index === -1) {
+			if (index === -1) {
 				return game;
 			}
 
 			game.player.inventory[index].currentAmount -= 1;
-			if(game.player.inventory[index].currentAmount <= 0) {
+			if (game.player.inventory[index].currentAmount <= 0) {
 				game.player.inventory.splice(index, 1);
 			}
 
@@ -236,9 +233,8 @@ function createGameStore() {
 			}
 			game.getCurrentBattle().enemy.deck.putCardOnTop(card);
 			return game;
-		}
-		);
-	}
+		});
+	};
 
 	const shuffleDeck = (user: string) => {
 		update((game) => {
@@ -249,7 +245,7 @@ function createGameStore() {
 			game.getCurrentBattle().enemy.deck.shuffleDeck();
 			return game;
 		});
-	}
+	};
 
 	const resolveFight = () => {
 		update((game) => {
@@ -261,10 +257,9 @@ function createGameStore() {
 			game.getCurrentBattle().getCurrentTurn().fight.setMultiplierForPlayer(playerHand);
 			game.getCurrentBattle().getCurrentTurn().fight.setTotalDamageToPlayer(playerHand, enemyHand);
 			game.getCurrentBattle().getCurrentTurn().fight.setMultiplierForEnemy(enemyHand);
-			return game
+			return game;
 		});
-	}
-
+	};
 
 	return {
 		subscribe,

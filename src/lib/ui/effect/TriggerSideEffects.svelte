@@ -15,9 +15,9 @@
 	function useEffect(effect: ItemTypes) {
 		playerUsingItemStore.set(effect);
 
-		$turnMachineState = $turnMachineState.listenToEvent({ name: 'USE_ITEM', data: null })
-		
-		$turnMachineState = $turnMachineState.listenToEvent({ name: 'PLAY', data: null })
+		$turnMachineState = $turnMachineState.listenToEvent({ name: 'USE_ITEM', data: null });
+
+		$turnMachineState = $turnMachineState.listenToEvent({ name: 'PLAY', data: null });
 
 		dispatch('updateBattleState');
 	}
@@ -32,11 +32,18 @@
 </script>
 
 {#each triggerEffects as triggerEffect}
-	<div class="card p-4 variant-filled-primary z-10 max-w-48" data-popup={triggerEffect.technicalName}>
+	<div
+		class="card p-4 variant-filled-primary z-10 max-w-48"
+		data-popup={triggerEffect.technicalName}
+	>
 		<p class="bold text-lg">{triggerEffect.name}</p>
 		<p class="p">{triggerEffect.description}</p>
 		{#if isEnemy === false}
-			<button class="btn" on:click={() => useEffect(triggerEffect)} disabled={$turnMachineState.currentState.name!=='TurnPlayerPlayingState'}>Use</button>
+			<button
+				class="btn"
+				on:click={() => useEffect(triggerEffect)}
+				disabled={$turnMachineState.currentState.name !== 'TurnPlayerPlayingState'}>Use</button
+			>
 		{/if}
 		<div class="arrow variant-filled-primary" />
 	</div>

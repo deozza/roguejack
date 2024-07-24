@@ -18,8 +18,7 @@
 
 	let openedDeckView: boolean = false;
 	let openedDiscardView: boolean = false;
-	let objectsToBuy: Array<ItemTypes> =
-		getObjectsToBuy();
+	let objectsToBuy: Array<ItemTypes> = getObjectsToBuy();
 
 	function openDeckView() {
 		openedDeckView = !openedDeckView;
@@ -29,9 +28,7 @@
 		openedDiscardView = !openedDiscardView;
 	}
 
-	function getPriceByRarity(
-		object: ItemTypes
-	): number {
+	function getPriceByRarity(object: ItemTypes): number {
 		if (object.technicalName === 'packOfCards') {
 			return 0;
 		}
@@ -63,7 +60,6 @@
 
 		return objectsToBuy;
 	}
-
 
 	function buyObject(object: ItemTypes) {
 		if ($gameStore.player.deck.cards.length < getPriceByRarity(object)) {

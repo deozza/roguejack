@@ -1,8 +1,8 @@
-import { Categories, Ranges, Types } from "$lib/models/effects/enums";
-import type { EffectInterface } from "$lib/models/effects/interfaces";
-import { Rarities } from "$lib/models/items/enums";
-import type { WeaponInterface } from "$lib/models/items/interfaces";
-import { gameStore } from "$lib/stores/game";
+import { Categories, Ranges, Types } from '$lib/models/effects/enums';
+import type { EffectInterface } from '$lib/models/effects/interfaces';
+import { Rarities } from '$lib/models/items/enums';
+import type { WeaponInterface } from '$lib/models/items/interfaces';
+import { gameStore } from '$lib/stores/game';
 
 export default class Dagger implements WeaponInterface {
 	id: string = crypto.randomUUID();
@@ -15,9 +15,9 @@ export default class Dagger implements WeaponInterface {
 	category: Categories = Categories.piercing;
 	type: Types = Types.physical;
 	range: Ranges = Ranges.close;
-	defaultAmount =  1;
+	defaultAmount = 1;
 	currentAmount: number = 1;
-	
+
 	applyEffects(calledBy: 'player' | 'enemy'): void {
 		if (calledBy === 'player') {
 			gameStore.inflictDamagesToEnemy(3);
@@ -27,7 +27,6 @@ export default class Dagger implements WeaponInterface {
 		if (calledBy === 'enemy') {
 			gameStore.inflictDamagesToPlayer(3);
 			return;
-		}	
+		}
 	}
-
 }

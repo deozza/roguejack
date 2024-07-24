@@ -8,11 +8,11 @@ export default class GameInitState extends DefaultState implements StateInterfac
 	public name: string = 'GameInitState';
 
 	public onStateEnter(): void {
-		super.onStateEnter(this.name)
+		super.onStateEnter(this.name);
 	}
 
 	public onStateExecute(data: object): void {
-		if(data.character === undefined || data.character === null) {
+		if (data.character === undefined || data.character === null) {
 			throw new Error('Character not selected');
 		}
 
@@ -20,14 +20,13 @@ export default class GameInitState extends DefaultState implements StateInterfac
 
 		playerSideEffectsStore.set([]);
 		enemySideEffectsStore.set([]);
-		gameStore.setPlayer(player)
+		gameStore.setPlayer(player);
 		if (player.passiveAbilities.length > 0) {
 			playerSideEffectsStore.set(player.passiveAbilities);
 		}
 	}
 
 	public onStateExit(): void {
-		super.onStateExit(this.name)
+		super.onStateExit(this.name);
 	}
 }
-
