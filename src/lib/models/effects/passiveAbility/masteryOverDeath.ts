@@ -8,7 +8,7 @@ export default class MasteryOverDeath implements ContinuousEffect {
 	id: string = crypto.randomUUID();
 	technicalName: string = 'masteryOverDeath';
 	name: string = 'Mastery Over Death';
-	description: string = 'Deal 1 more base power for every 10 cards in the discard.';
+	description: string = 'Deal 1 more base power when there is at least 10 cards in the discard.';
 	icon: string = 'game-icons:graveyard';
 	active: boolean = false;
 
