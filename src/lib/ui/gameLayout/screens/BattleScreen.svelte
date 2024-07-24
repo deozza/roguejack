@@ -113,13 +113,14 @@
 		} catch (e: any) {
 			if (e.message === 'PLAYER_EMPTY_DECK') {
 				$turnMachineState = $turnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
-
 				updateBattleState();
 				return;
+
 			}
 		}
 
 		$turnMachineState = $turnMachineState.listenToEvent({ name: 'PLAY', data: null });
+		updateBattleState();
 	}
 
 	async function updateBattleState() {
