@@ -10,6 +10,7 @@
 	import CharacterPreview from './CharacterPreview.svelte';
 	import type { Character } from '$lib/models/characters';
 	import type { ContinuousEffect, Status } from '$lib/models/effects/interfaces';
+	import { EnnemyType } from '$lib/models/characters/types';
 
 	export let user: Character;
 	export let userHand: Hand;
@@ -44,11 +45,11 @@
 			$gameStore.battles.length % 10 !== 0}
 		class:text-red-500={isEnemy && $gameStore.battles.length % 10 === 0}
 	>
-		{#if isEnemy}
-			{#if $gameStore.battles.length % 5 === 0 && $gameStore.battles.length % 10 !== 0}
+		{#if isEnemy && user.type !== undefined && user.type !== null}
+			{#if user.type === EnnemyType.miniboss }
 				<Icon icon="game-icons:crown" width="24" height="24" />
 			{/if}
-			{#if $gameStore.battles.length % 10 === 0}
+			{#if user.type === EnnemyType.boss}
 				<Icon icon="game-icons:burning-skull" width="24" height="24" />
 			{/if}
 		{/if}
