@@ -1,9 +1,19 @@
 import { purgeCss } from 'vite-plugin-tailwind-purgecss';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
+import { sentrySvelteKit } from '@sentry/sveltekit';
 
 export default defineConfig({
-	plugins: [sveltekit(), purgeCss()],
+	plugins: [
+		sentrySvelteKit({
+			sourceMapsUploadOptions: {
+				org: 'letsjam',
+				project: 'roguejack',
+			}
+		}),
+		sveltekit(),
+		purgeCss()
+	],
 	test: {
 		coverage: {
 			provider: 'v8',
