@@ -26,4 +26,8 @@ export default class PackOfCards implements ConsumableInterface {
 
 		gameStore.shuffleDeck(calledBy);
 	}
+
+	make(): ConsumableInterface {
+		return new PackOfCards();
+	}
 }

@@ -29,4 +29,8 @@ export default class Crossbow implements WeaponInterface {
 			return;
 		}
 	}
+	
+	make(): WeaponInterface {
+		return new Crossbow();
+	}
 }

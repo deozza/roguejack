@@ -8,7 +8,6 @@
 	import DiscardPreview from '../battleScreen/DiscardPreview.svelte';
 	import DeckPreview from '../battleScreen/DeckPreview.svelte';
 	import Icon from '@iconify/svelte';
-	import { TurnMachineState } from '$lib/models/stateMachine/turn/turnMachineState';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
 	import { randomIntFromInterval } from '$lib/utils';
 	import type { ItemTypes } from '$lib/models/items/types';
@@ -40,7 +39,7 @@
 
 	function addToInventory(item: ItemTypes) {
 		if (item.technicalName === 'packOfCards') {
-			item.effect({ user: 'player' });
+			item.applyEffects('player' );
 			goToNextState();
 			return;
 		}
@@ -144,7 +143,7 @@
 						>
 					</div>
 
-					{#if $gameStore.battles.length % 5 === 0}
+
 						<div
 							class="flex flex-col items-center justify-around w-9/12 p-4 variant-ringed-success rounded-md text-center"
 							class:variant-ringed-tertiary={objectToLoot.rarity === Rarities.common}
@@ -160,7 +159,6 @@
 								on:click={() => addToInventory(objectToLoot)}>loot</button
 							>
 						</div>
-					{/if}
 
 					<button
 						class="btn rounded-md variant-filled-tertiary uppercase"

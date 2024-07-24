@@ -29,4 +29,8 @@ export default class Dagger implements WeaponInterface {
 			return;
 		}
 	}
+
+	make(): WeaponInterface {
+		return new Dagger();
+	}
 }

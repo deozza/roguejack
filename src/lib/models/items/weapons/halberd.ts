@@ -29,4 +29,8 @@ export default class Halberd implements WeaponInterface {
 			return;
 		}
 	}
+
+	make(): WeaponInterface {
+		return new Halberd();
+	}
 }

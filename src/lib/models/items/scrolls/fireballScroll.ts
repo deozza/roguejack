@@ -41,4 +41,8 @@ export default class FireballScroll implements ScrollInterface {
 			});
 		}
 	}
+
+	make(): ScrollInterface {
+		return new FireballScroll();
+	}
 }

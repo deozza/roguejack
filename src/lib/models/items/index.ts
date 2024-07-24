@@ -55,8 +55,7 @@ export function getRandomItemByWeight(
 	);
 
 	const randomItemIndex: number = randomIntFromInterval(0, filteredItems.length - 1);
-	const item: ItemTypes = { ...filteredItems[randomItemIndex] };
-	item.id = crypto.randomUUID();
+	const item: ItemTypes = filteredItems[randomItemIndex].make();
 
 	return item;
 }

@@ -29,4 +29,8 @@ export default class Bow implements WeaponInterface {
 			return;
 		}
 	}
+
+	make(): WeaponInterface {
+		return new Bow();
+	}
 }

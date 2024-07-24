@@ -1,6 +1,7 @@
 import type { Categories, Ranges, Types } from '$lib/models/effects/enums';
 import type { EffectInterface } from '$lib/models/effects/interfaces';
 import type { Rarities } from '$lib/models/items/enums';
+import type { ItemTypes } from './types';
 
 interface ItemInterface {
 	id: string;
@@ -14,6 +15,7 @@ interface ItemInterface {
 	currentAmount: number;
 
 	applyEffects(calledBy: 'player' | 'enemy'): void;
+	make(): ItemTypes;
 }
 
 export interface WeaponInterface extends ItemInterface {

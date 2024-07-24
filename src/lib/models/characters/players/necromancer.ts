@@ -20,5 +20,6 @@ export default class Necromancer extends DefaultCharacter implements Player {
 		this.deck.generateDeck(deckSuits, deckValues);
 		this.icon = 'game-icons:death-note';
 		this.passiveAbilities = [new MasteryOverDeath()];
+		this.inventory = [];
 	}
 }

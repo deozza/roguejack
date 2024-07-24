@@ -29,4 +29,8 @@ export default class Hatchet implements WeaponInterface {
 			return;
 		}
 	}
+
+	make(): WeaponInterface {
+		return new Hatchet();
+	}
 }

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { ItemTypes } from '$lib/models/items/types';
-	import { gameStore } from '$lib/stores/game';
 	import { turnMachineState } from '$lib/stores/stateMachine/turn';
 	import Icon from '@iconify/svelte';
 	import { popup, type PopupSettings } from '@skeletonlabs/skeleton';

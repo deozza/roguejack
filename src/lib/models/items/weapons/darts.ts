@@ -29,4 +29,8 @@ export default class Darts implements WeaponInterface {
 			return;
 		}
 	}
+
+	make(): WeaponInterface {
+		return new Darts();
+	}
 }

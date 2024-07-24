@@ -46,4 +46,8 @@ export default class EarthquakeScroll implements ScrollInterface {
 			});
 		}
 	}
+
+	make(): ScrollInterface {
+		return new EarthquakeScroll();
+	}
 }

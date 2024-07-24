@@ -29,4 +29,8 @@ export default class Spear implements WeaponInterface {
 			return;
 		}
 	}
+
+	make(): WeaponInterface {
+		return new Spear();
+	}
 }

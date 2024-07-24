@@ -29,4 +29,8 @@ export default class Sword implements WeaponInterface {
 			return;
 		}
 	}
+
+	make(): WeaponInterface {
+		return new Sword();
+	}
 }

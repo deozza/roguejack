@@ -20,4 +20,8 @@ export default class PotionOfHealing implements ConsumableInterface {
 	applyEffects(calledBy: 'player' | 'enemy'): void {
 		gameStore.healPercentages(10, calledBy);
 	}
+
+	make(): ConsumableInterface {
+		return new PotionOfHealing();
+	}
 }

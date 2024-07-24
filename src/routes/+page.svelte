@@ -38,13 +38,6 @@
 
 		return screensToRender[battleCurrentState.name];
 	}
-
-	$: console.log('game state : ', $gameMachineState);
-	$: console.log('battle state : ', $battleMachineState);
-	$: console.log('turn state : ', $turnMachineState);
-
-	$: console.log('player side effects : ', $playerSideEffectsStore);
-	$: console.log('enemy side effects : ', $enemySideEffectsStore);
 </script>
 
 <div id="top">

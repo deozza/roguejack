@@ -30,4 +30,8 @@ export default class Knife implements WeaponInterface {
 			return;
 		}
 	}
+
+	make(): WeaponInterface {
+		return new Knife();
+	}
 }

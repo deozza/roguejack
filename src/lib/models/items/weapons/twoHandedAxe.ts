@@ -29,4 +29,8 @@ export default class TwoHandedAxe implements WeaponInterface {
 			return;
 		}
 	}
+
+	make(): WeaponInterface {
+		return new TwoHandedAxe();
+	}
 }

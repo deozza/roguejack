@@ -39,7 +39,7 @@
 		<!-- App Bar -->
 		<AppBar padding="p-1 md:p-4">
 			<svelte:fragment slot="lead">
-				<strong class="text-xl uppercase">Roguejack</strong>
+				<strong class="text-xl uppercase">Dungeons and Jacks</strong>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				<span>v0.7.2</span>
