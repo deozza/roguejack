@@ -15,7 +15,7 @@ export default class Bravery implements ContinuousEffect {
 
 	public applyEffects(calledBy: 'player' | 'enemy') {
 		return [
-			{state: 'onStateExit_TurnPlayerInitState', callback: () => this.onStateExit_TurnPlayerInit(calledBy)},
+			{state: 'onStateExit_BattleInitState', callback: () => this.onStateExit_TurnPlayerInit(calledBy)},
 		]
 	}
 
