@@ -4,6 +4,7 @@ import { EnnemyType } from "$lib/models/characters/types";
 import { DefaultCharacter } from "$lib/models/characters";
 import SharpSword from "$lib/models/effects/passiveAbility/sharpSword";
 import Dodge from "$lib/models/effects/passiveAbility/dodge";
+import { Discard } from "$lib/models/discard/model";
 
 export default class Goblin extends DefaultCharacter implements Enemy {
 
@@ -29,5 +30,6 @@ export default class Goblin extends DefaultCharacter implements Enemy {
         this.type = EnnemyType.miniboss;
         this.deck.generateDeck(deckSuits, deckValues);
         this.passiveAbilities = [new Dodge()];
+        this.discard = new Discard();
     }
 }

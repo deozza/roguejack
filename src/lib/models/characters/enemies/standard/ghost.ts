@@ -3,6 +3,7 @@ import { type Enemy } from "$lib/models/characters/enemies";
 import { EnnemyType } from "$lib/models/characters/types";
 import { DefaultCharacter } from "$lib/models/characters";
 import Intimidation from "$lib/models/effects/passiveAbility/intimidation";
+import { Discard } from "$lib/models/discard/model";
 
 export default class Ghost extends DefaultCharacter implements Enemy {
 
@@ -27,5 +28,6 @@ export default class Ghost extends DefaultCharacter implements Enemy {
         this.type = EnnemyType.standard;
         this.deck.generateDeck(deckSuits, deckValues);
         this.passiveAbilities = [new Intimidation()]
+        this.discard = new Discard();
     }
 }

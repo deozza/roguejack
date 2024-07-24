@@ -2,6 +2,7 @@ import type { Face, Suit } from "$lib/models/card/types";
 import { type Enemy } from "$lib/models/characters/enemies";
 import { EnnemyType } from "$lib/models/characters/types";
 import { DefaultCharacter } from "$lib/models/characters";
+import { Discard } from "$lib/models/discard/model";
 
 export default class Owlbear extends DefaultCharacter implements Enemy {
 
@@ -26,5 +27,6 @@ export default class Owlbear extends DefaultCharacter implements Enemy {
         this.level = 2;
         this.type = EnnemyType.boss;
         this.deck.generateDeck(deckSuits, deckValues);
+        this.discard = new Discard();
     }
 }

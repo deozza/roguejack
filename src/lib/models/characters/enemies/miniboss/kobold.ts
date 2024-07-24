@@ -3,6 +3,7 @@ import { type Enemy } from "$lib/models/characters/enemies";
 import { EnnemyType } from "$lib/models/characters/types";
 import { DefaultCharacter } from "$lib/models/characters";
 import SharpSword from "$lib/models/effects/passiveAbility/sharpSword";
+import { Discard } from "$lib/models/discard/model";
 
 export default class Kobold extends DefaultCharacter implements Enemy {
 
@@ -28,5 +29,6 @@ export default class Kobold extends DefaultCharacter implements Enemy {
         this.type = EnnemyType.miniboss;
         this.deck.generateDeck(deckSuits, deckValues);
         this.passiveAbilities = [new SharpSword()];
+        this.discard = new Discard();
     }
 }

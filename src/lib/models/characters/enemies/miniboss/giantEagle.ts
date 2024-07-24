@@ -3,6 +3,7 @@ import { type Enemy } from "$lib/models/characters/enemies";
 import { EnnemyType } from "$lib/models/characters/types";
 import { DefaultCharacter } from "$lib/models/characters";
 import Fly from "$lib/models/effects/passiveAbility/fly";
+import { Discard } from "$lib/models/discard/model";
 
 
 export default class GiantEagle extends DefaultCharacter implements Enemy {
@@ -28,5 +29,6 @@ export default class GiantEagle extends DefaultCharacter implements Enemy {
         this.type = EnnemyType.miniboss;
         this.deck.generateDeck(deckSuits, deckValues);
         this.passiveAbilities = [new Fly()]
+        this.discard = new Discard();
     }
 }

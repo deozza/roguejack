@@ -3,6 +3,7 @@ import { type Enemy } from "$lib/models/characters/enemies";
 import { EnnemyType } from "$lib/models/characters/types";
 import { DefaultCharacter } from "$lib/models/characters";
 import Undead from "$lib/models/effects/passiveAbility/undead";
+import { Discard } from "$lib/models/discard/model";
 
 export default class Zombie extends DefaultCharacter implements Enemy {
 
@@ -29,5 +30,6 @@ export default class Zombie extends DefaultCharacter implements Enemy {
         this.type = EnnemyType.miniboss;
         this.deck.generateDeck(deckSuits, deckValues);
         this.passiveAbilities = [new Undead()];
+        this.discard = new Discard();
     }
 }

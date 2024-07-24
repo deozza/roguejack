@@ -3,6 +3,7 @@ import { type Enemy } from "$lib/models/characters/enemies";
 import { EnnemyType } from "$lib/models/characters/types";
 import { DefaultCharacter } from "$lib/models/characters";
 import Spore from "$lib/models/effects/passiveAbility/spore";
+import { Discard } from "$lib/models/discard/model";
 
 export default class Myconid extends DefaultCharacter implements Enemy {
 
@@ -27,5 +28,6 @@ export default class Myconid extends DefaultCharacter implements Enemy {
         this.type = EnnemyType.standard;
         this.deck.generateDeck(deckSuits, deckValues);
         this.passiveAbilities = [new Spore()]
+        this.discard = new Discard();
     }
 }
