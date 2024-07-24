@@ -85,16 +85,17 @@
 		$turnMachineState = $turnMachineState.listenToEvent({ name: 'DAMAGE', data: null });
 
 		const fight: Fight = $gameStore.getCurrentBattle().getCurrentTurn().fight;
-		if(fight.playerHasWon) {
+		
+		if(fight.enemyHasWon === false && fight.playerHasWon === false) {
+			$turnMachineState = $turnMachineState.listenToEvent({ name: 'TIE', data: null });
+		}
+		
+		if(fight.playerHasWon === true) {
 			$turnMachineState = $turnMachineState.listenToEvent({ name: 'WIN', data: null });
 		} 
 
-		if(fight.enemyHasWon) {
+		if(fight.enemyHasWon === true) {
 			$turnMachineState = $turnMachineState.listenToEvent({ name: 'LOSE', data: null });
-		}
-
-		if(fight.enemyHasWon === false && fight.playerHasWon === false) {
-			$turnMachineState = $turnMachineState.listenToEvent({ name: 'TIE', data: null });
 		}
 
 		await updateBattleState();

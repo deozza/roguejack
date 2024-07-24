@@ -34,7 +34,7 @@
 		<div class="flex flex-col items-center justify-center h-full my-10 w-full">
 			<h3 class="h3 p-4">Passive effects</h3>
 			<hr class="w-9/12 !border-slate-500 mb-10" />
-			<div class="flex flex-row flex-wrap items-center justify-around w-full space-x-5 min-h-16">
+			<div class="flex flex-row flex-wrap items-center justify-center w-full space-x-5 min-h-16">
 				<PassiveSideEffects {passiveEffects} />
 			</div>
 		</div>
@@ -42,9 +42,7 @@
 		<div class="flex flex-col items-center justify-center h-full w-full">
 			<h3 class="h3 p-4">Inventory</h3>
 			<hr class="w-9/12 !border-slate-500 mb-10" />
-			<div
-				class="flex h-full flex-col flex-wrap items-center justify-center overscroll-none overflow-y-scroll pb-24"
-			>
+			<div class="flex flex-row flex-wrap items-center justify-center w-full space-x-5 min-h-16">
 				<TriggerSideEffects triggerEffects={user.inventory} {isEnemy} on:updateBattleState />
 			</div>
 		</div>

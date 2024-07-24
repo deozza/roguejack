@@ -98,7 +98,7 @@
 
 			<button
 				on:click={() => dispatch(isEnemy ? 'enemyDiscardView' : 'playerDiscardView')}
-				disabled={currentStateName !== 'TurnPlayingState'}
+				disabled={currentStateName !== 'TurnPlayerPlayingState'}
 				type="button"
 			>
 				<Discard discardSize={user.discard.cards.length} />
