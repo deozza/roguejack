@@ -15,9 +15,9 @@
 </script>
 
 {#each passiveEffects as sideEffect}
-	<div class="card p-4 variant-filled-primary z-10" data-popup={sideEffect.technicalName}>
-		<p>{sideEffect.name}</p>
-		<p>{sideEffect.description}</p>
+	<div class="card p-4 variant-filled-primary z-10 max-w-48" data-popup={sideEffect.technicalName}>
+		<p class="bold text-lg">{sideEffect.name}</p>
+		<p class="p">{sideEffect.description}</p>
 		<div class="arrow variant-filled-primary" />
 	</div>
 	<button class="btn" use:popup={popupClick(sideEffect.technicalName)}>
