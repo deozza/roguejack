@@ -183,7 +183,7 @@ function createGameStore() {
 	const addToInventory = (object: ItemTypes, user: string) => {
 		update((game) => {
 			if (user === 'enemy') {
-				const index = game.getCurrentBattle().enemy.inventory.findIndex((item) => item === object);
+				const index: number = game.getCurrentBattle().enemy.inventory.findIndex((item: ItemTypes) => item.technicalName === object.technicalName);
 				if (index === -1) {
 					object.currentAmount = object.defaultAmount;
 					game.getCurrentBattle().enemy.inventory = [
@@ -197,7 +197,7 @@ function createGameStore() {
 				return game;
 			}
 
-			const index = game.player.inventory.findIndex((item) => item === object);
+			const index: number = game.player.inventory.findIndex((item: ItemTypes) => item.technicalName === object.technicalName);
 			if (index === -1) {
 				object.currentAmount = object.defaultAmount;
 				game.player.inventory = [...game.player.inventory, object];

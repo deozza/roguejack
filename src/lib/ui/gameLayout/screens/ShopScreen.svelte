@@ -8,7 +8,6 @@
 	import { fade } from 'svelte/transition';
 	import DiscardPreview from '../battleScreen/DiscardPreview.svelte';
 	import DeckPreview from '../battleScreen/DeckPreview.svelte';
-	import { TurnMachineState } from '$lib/models/stateMachine/turn/turnMachineState';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
 	import type { ItemTypes } from '$lib/models/items/types';
 	import { getRandomItemByWeight } from '$lib/models/items';
@@ -69,7 +68,7 @@
 		if (object.technicalName === 'packOfCards') {
 			object.applyEffects('player');
 			objectsToBuy = objectsToBuy.filter(
-				(objectToBuy) => objectToBuy.technicalName !== object.technicalName
+				(objectToBuy) => objectToBuy.id !== object.id
 			);
 			return;
 		}
@@ -89,36 +88,23 @@
 	}
 
 	function startNewBattle() {
-		$battleMachineState.listenToEvent({ name: 'NEW_BATTLE', data: null });
-		$battleMachineState = $battleMachineState;
-		$battleMachineState.currentState.onStateEnter({ user: 'player' });
-		$battleMachineState.currentState.onStateExecute({});
+		$battleMachineState = $battleMachineState.listenToEvent({ name: 'RESET', data: null });
+		$battleMachineState = $battleMachineState.listenToEvent({ name: 'NEW_BATTLE', data: null });
 
-		$battleMachineState.listenToEvent({ name: 'PLAY', data: null });
-		$battleMachineState = $battleMachineState;
-
-		turnMachineState.set(new TurnMachineState());
-
-		$turnMachineState.listenToEvent({ name: 'NEW_TURN', data: { user: 'player' } });
-		$turnMachineState = $turnMachineState;
+		$battleMachineState = $battleMachineState.listenToEvent({ name: 'PLAY', data: null });
 
 		try {
-			$turnMachineState.currentState.onStateExecute({ user: 'player' });
+			$turnMachineState = $turnMachineState.listenToEvent({ name: 'NEW_TURN', data: null });
 		} catch (error) {
-			$turnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: { user: 'player' } });
-			$turnMachineState = $turnMachineState;
+			$turnMachineState = $turnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
 
-			$battleMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
-			$battleMachineState = $battleMachineState;
+			$battleMachineState = $battleMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
 
-			$gameMachineState.listenToEvent({ name: 'END_GAME', data: null });
-			$gameMachineState = $gameMachineState;
+			$gameMachineState = $gameMachineState.listenToEvent({ name: 'END_GAME', data: null });
 			return;
 		}
 
-		$turnMachineState.listenToEvent({ name: 'PLAY', data: { user: 'player' } });
-		$turnMachineState = $turnMachineState;
-		$turnMachineState.currentState.onStateExecute({ user: 'player' });
+		$turnMachineState = $turnMachineState.listenToEvent({ name: 'PLAY', data: null });
 	}
 </script>
 
