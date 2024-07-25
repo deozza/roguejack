@@ -13,6 +13,7 @@
 	import type { ItemTypes } from '$lib/models/items/types';
 	import { getRandomItemByWeight } from '$lib/models/items';
 	import { Rarities } from '$lib/models/items/enums';
+	import { EnnemyType } from '$lib/models/characters/types';
 
 	let openedDeckView: boolean = false;
 	let openedDiscardView: boolean = false;
@@ -143,6 +144,7 @@
 						>
 					</div>
 
+					{#if $gameStore.getCurrentBattle().enemy.type === EnnemyType.boss || $gameStore.getCurrentBattle().enemy.type === EnnemyType.miniboss }
 
 						<div
 							class="flex flex-col items-center justify-around w-9/12 p-4 variant-ringed-success rounded-md text-center"
@@ -159,6 +161,7 @@
 								on:click={() => addToInventory(objectToLoot)}>loot</button
 							>
 						</div>
+					{/if}
 
 					<button
 						class="btn rounded-md variant-filled-tertiary uppercase"
