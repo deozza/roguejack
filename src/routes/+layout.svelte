@@ -42,7 +42,7 @@
 				<strong class="text-xl uppercase">Dungeons and Jacks</strong>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
-				<span>v0.7.3</span>
+				<span>v0.7.4</span>
 				<button class="btn" on:click={() => enterPause()}>
 					<Icon icon={pauseIcon} width="32" height="32" />
 				</button>
