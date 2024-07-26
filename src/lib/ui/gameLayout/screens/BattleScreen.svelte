@@ -195,7 +195,6 @@
 <section
 	class="container h-full mx-auto flex flex-col justify-center items-center"
 	id="battle-screen"
-	transition:fade={{ delay: 250, duration: 300 }}
 >
 	<div class="flex md:hidden flex-col items-center justify-center w-full">
 		<h1 class="h1">Battle {$gameStore?.battles.length}</h1>

@@ -8,9 +8,8 @@
 	import CampScreen from '$lib/ui/gameLayout/screens/CampScreen.svelte';
 	import GameLostScreen from '$lib/ui/gameLayout/screens/GameLostScreen.svelte';
 	import ShopScreen from '$lib/ui/gameLayout/screens/ShopScreen.svelte';
-	import { turnMachineState } from '$lib/stores/stateMachine/turn';
 	import type { StateInterface } from '$lib/models/stateMachine/interfaces';
-	import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
+	import { fade } from 'svelte/transition';
 
 	const screensToRender: Record<string, SvelteComponent> = {
 		GameIdleState: HomeScreen,
@@ -40,6 +39,6 @@
 	}
 </script>
 
-<div id="top">
+<div id="top"  class="mt-10">
 	<svelte:component this={screenToRender} />
 </div>

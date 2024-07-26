@@ -100,7 +100,6 @@
 <section
 	class="container h-full mx-auto flex flex-col justify-left items-start space-y-10"
 	id="camp-screen"
-	transition:fade={{ delay: 250, duration: 300 }}
 >
 	<div class="flex flex-col items-center justify-center h-full w-full">
 		<h1 class="h1 md:hidden">Camp</h1>
@@ -125,6 +124,7 @@
 				<div
 					class="flex flex-col items-center justify-center w-full h-full overflow-y-auto space-y-5"
 				>
+				<p class="p italic text-xl">Get some rest after your last fight.</p>
 					<div
 						class="flex flex-col items-center justify-left w-9/12 p-4 variant-ringed-tertiary rounded-md text-center"
 					>

@@ -1,11 +1,8 @@
 <script lang="ts">
-	import { gameStore } from '$lib/stores/game';
-	import { playerSideEffectsStore } from '$lib/stores/sideEffects';
 	import { battleMachineState } from '$lib/stores/stateMachine/battle';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
 	import { turnMachineState } from '$lib/stores/stateMachine/turn';
 	import Icon from '@iconify/svelte';
-	import { fade } from 'svelte/transition';
 	import DeckPreview from '../battleScreen/DeckPreview.svelte';
 	import { PlayerList, type Player } from '$lib/models/characters/players';
 
@@ -43,7 +40,6 @@
 <section
 	class="container h-full mx-auto flex flex-col justify-center items-center"
 	id="character-select-screen"
-	transition:fade={{ delay: 250, duration: 300 }}
 >
 	<div class="flex flex-col items-center justify-center h-full space-y-10 w-full">
 		<h1 class="h1">Select your character</h1>
@@ -60,7 +56,11 @@
 					</div>
 
 					{#each selectedCharacter.passiveAbilities as passive}
-						<p><Icon icon={passive.icon} height="32" width="32" /> {passive.description}</p>
+					<div class="flex flex-col items-start justify-start space-y-4">
+						<p class="p flex flex-row items-center"><Icon icon={passive.icon} height="32" width="32" /> {passive.name}</p>
+						<p class="p">{passive.description}</p>
+					</div>
+
 					{/each}
 					<button class="btn variant-ringed-tertiary" on:click={() => openDeckPreview()}
 						>See deck</button

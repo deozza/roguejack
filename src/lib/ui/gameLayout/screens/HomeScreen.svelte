@@ -16,7 +16,6 @@
 <section
 	class="container h-full mx-auto flex flex-col justify-center items-center space-y-10"
 	id="home-screen"
-	transition:fade={{ delay: 250, duration: 300 }}
 >
 	<div class="flex flex-col items-center justify-center">
 		<h1 class="h1">Welcome to Roguejack</h1>
@@ -33,7 +32,7 @@
 
 	<div class="flex flex-col items-center justify-center">
 		<button class="btn btn-xl variant-filled-success" on:click={() => startNewGame()}>
-			New game
+			Enter the dungeon
 		</button>
 	</div>
 

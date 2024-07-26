@@ -123,7 +123,6 @@
 <section
 	class="container h-full mx-auto flex flex-col justify-left items-start space-y-10"
 	id="shop-screen"
-	transition:fade={{ delay: 250, duration: 300 }}
 >
 	<div class="flex flex-col items-center justify-center h-full w-full">
 		<h1 class="h1 md:hidden">Shop</h1>
@@ -148,7 +147,7 @@
 				<div
 					class="flex flex-col items-center justify-center w-full h-full overflow-y-auto space-y-5"
 				>
-					<p class="p italic text-xl">Exchange the top cards of your deck to get powerful items</p>
+					<p class="p italic text-xl">Exchange the top cards of your deck to get powerful items.</p>
 
 					{#each objectsToBuy as object}
 						<div
