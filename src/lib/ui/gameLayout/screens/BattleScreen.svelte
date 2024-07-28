@@ -219,7 +219,7 @@
 			</div>
 
 			<div class="flex flex-col md:flex-row md:flex-wrap w-full items-center justify-center">
-				<CenterSide on:fight={() => fight()} />
+				<CenterSide on:fight={() => fight()} on:newTurn={async () => await prepareNewTurn()}/>
 			</div>
 		</div>
 

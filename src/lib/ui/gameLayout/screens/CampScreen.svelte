@@ -104,21 +104,6 @@
 	<div class="flex flex-col items-center justify-center h-full w-full">
 		<h1 class="h1 md:hidden">Camp</h1>
 		<div class="flex flex-row flex-wrap items-center justify-around w-full">
-			<div class="flex flex-col items-center justify-center w-full md:w-2/12">
-				<h2 class="h2">Status</h2>
-				<div class="flex flex-row md:flex-col items-center justify-center">
-					<p class="flex flex-row items-center justify-center text-error-500">
-						<Icon icon="game-icons:hearts" width="16" height="16" />
-						{$gameStore.player.currentHealth}/{$gameStore.player.maxHealth}
-					</p>
-					<button on:click={() => openDeckView()} type="button">
-						<Deck deckSize={$gameStore.player.deck.cards.length} />
-					</button>
-					<button on:click={() => openDiscardView()} type="button">
-						<Discard discardSize={$gameStore.player.discard.cards.length} />
-					</button>
-				</div>
-			</div>
 			<div class="flex flex-col items-center justify-center w-full md:w-9/12 h-full">
 				<h1 class="h1 max-sm:hidden">Camp</h1>
 				<div

@@ -15,6 +15,8 @@
 	import PassiveAbility from '$lib/ui/effect/PassiveAbility.svelte';
 	import Status from '$lib/ui/effect/Status.svelte';
 	import Item from '$lib/ui/effect/Item.svelte';
+	import Deck from '$lib/ui/deck/Deck.svelte';
+	import Discard from '$lib/ui/deck/Discard.svelte';
 	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
 	let pauseIcon: string = 'game-icons:pause-button';
@@ -48,11 +50,14 @@
 		<AppBar padding="p-1 md:p-4">
 			<svelte:fragment slot="lead">
 				{#if $gameMachineState.currentState.name === 'GamePlayingState'}
-					<div class="flex flex-row items-center justify-between mt-5 space-x-5 w-full divide-x divide-surface-500">
+					<div class="flex flex-row items-center justify-between space-x-5 w-full divide-x divide-surface-500">
 						<p class="flex flex-row items-center justify-center text-error-500">
 							<Icon icon="game-icons:hearts" width="16" height="16" />
 							{$gameStore.player.currentHealth}/{$gameStore.player.maxHealth}
 						</p>
+						<Deck deckSize={$gameStore.player.deck.cards.length} mini={true} />
+						<Discard discardSize={$gameStore.player.discard.cards.length} mini={true}/>
+
 						<div class="flex flex-row items-center justify-start space-x-3">
 							{#each $gameStore.player.passiveAbilities as passiveAbility}
 								<PassiveAbility {passiveAbility} />
