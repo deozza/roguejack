@@ -2,7 +2,7 @@ import { get } from 'svelte/store';
 import type { ContinuousEffect } from '../interfaces';
 import type { ItemTypes } from '$lib/models/items/types';
 import { enemyUsingItemStore, playerUsingItemStore } from '$lib/stores/sideEffects';
-import {  Ranges } from '../enums';
+import { Ranges } from '../enums';
 
 export default class Fly implements ContinuousEffect {
 	id: string = crypto.randomUUID();

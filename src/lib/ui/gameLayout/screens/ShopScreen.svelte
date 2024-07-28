@@ -67,9 +67,7 @@
 
 		if (object.technicalName === 'packOfCards') {
 			object.applyEffects('player');
-			objectsToBuy = objectsToBuy.filter(
-				(objectToBuy) => objectToBuy.id !== object.id
-			);
+			objectsToBuy = objectsToBuy.filter((objectToBuy) => objectToBuy.id !== object.id);
 			return;
 		}
 

@@ -10,7 +10,6 @@ export default class GameIdleState extends DefaultState implements StateInterfac
 	public onStateEnter(): void {
 		super.onStateEnter(this.name);
 		sceneStore.set(HomeScreen);
-
 	}
 
 	public onStateExecute(): void {

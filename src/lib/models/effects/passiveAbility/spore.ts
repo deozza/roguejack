@@ -50,7 +50,7 @@ export default class Spore implements ContinuousEffect {
 				gameStore.update((game: Game) => {
 					game.player.status.push(new Poisoned());
 					return game;
-				})
+				});
 			}
 			return;
 		}
@@ -66,7 +66,7 @@ export default class Spore implements ContinuousEffect {
 			gameStore.update((game: Game) => {
 				game.getCurrentBattle()?.enemy.status.push(new Poisoned());
 				return game;
-			})
+			});
 		}
 
 		return;
@@ -94,7 +94,7 @@ export default class Spore implements ContinuousEffect {
 			gameStore.update((game: Game) => {
 				game.player.status.push(new Poisoned());
 				return game;
-			})
+			});
 
 			return;
 		}
@@ -122,7 +122,7 @@ export default class Spore implements ContinuousEffect {
 			gameStore.update((game: Game) => {
 				game.getCurrentBattle()?.enemy.status.push(new Poisoned());
 				return game;
-			})
+			});
 
 			return;
 		}

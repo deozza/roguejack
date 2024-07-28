@@ -15,11 +15,10 @@
 
 		gameStore.reset();
 	}
-
 </script>
 
 {#key $sceneStore}
 	<div id="top" class="w-full h-full" in:fade>
 		<svelte:component this={$sceneStore} on:quit={() => quit()} />
-	</div>	
+	</div>
 {/key}

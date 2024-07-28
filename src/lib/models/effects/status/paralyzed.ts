@@ -37,9 +37,11 @@ export default class Paralyzed implements Status {
 			});
 
 			gameStore.update((game: Game) => {
-				game.player.status = game.player.status.filter((effect: Status) => effect.technicalName !== this.technicalName);
+				game.player.status = game.player.status.filter(
+					(effect: Status) => effect.technicalName !== this.technicalName
+				);
 				return game;
-			})
+			});
 
 			return;
 		}
@@ -49,8 +51,10 @@ export default class Paralyzed implements Status {
 		});
 
 		gameStore.update((game: Game) => {
-			game.getCurrentBattle().enemy.status = game.getCurrentBattle().enemy.status.filter((effect: Status) => effect.technicalName !== this.technicalName);
+			game.getCurrentBattle().enemy.status = game
+				.getCurrentBattle()
+				.enemy.status.filter((effect: Status) => effect.technicalName !== this.technicalName);
 			return game;
-		})
+		});
 	}
 }

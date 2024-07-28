@@ -13,7 +13,7 @@ export class GameMachineState implements StateMachineInterface {
 
 	public stateMachine: object = {
 		GameIdleState: {
-			NEW_GAME: new GameCharacterSelectionState(),
+			NEW_GAME: new GameCharacterSelectionState()
 		},
 		GameCharacterSelectionState: {
 			CHARACTER_SELECTED: new GameInitState(),

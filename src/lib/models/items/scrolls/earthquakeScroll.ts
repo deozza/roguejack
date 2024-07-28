@@ -37,7 +37,7 @@ export default class EarthquakeScroll implements ScrollInterface {
 			gameStore.update((game: Game) => {
 				game.getCurrentBattle()?.enemy.status.push(new Paralyzed());
 				return game;
-			})
+			});
 		}
 
 		if (calledBy === 'enemy') {
@@ -53,7 +53,7 @@ export default class EarthquakeScroll implements ScrollInterface {
 			gameStore.update((game: Game) => {
 				game.player.status.push(new Paralyzed());
 				return game;
-			})
+			});
 		}
 	}
 
