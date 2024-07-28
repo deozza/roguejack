@@ -1,3 +1,5 @@
+import { sceneStore } from '$lib/stores/scene';
+import GameLostScreen from '$lib/ui/gameLayout/screens/GameLostScreen.svelte';
 import { DefaultState } from '../..';
 import type { StateInterface } from '../../interfaces';
 
@@ -6,6 +8,8 @@ export default class GameLostState extends DefaultState implements StateInterfac
 
 	public onStateEnter(): void {
 		super.onStateEnter(this.name);
+		sceneStore.set(GameLostScreen);
+
 	}
 
 	public onStateExecute(): void {}

@@ -1,3 +1,5 @@
+import { sceneStore } from '$lib/stores/scene';
+import ShopScreen from '$lib/ui/gameLayout/screens/ShopScreen.svelte';
 import { DefaultState } from '../..';
 import type { StateInterface } from '../../interfaces';
 
@@ -6,6 +8,7 @@ export default class BattleShopingState extends DefaultState implements StateInt
 
 	public onStateEnter(): void {
 		super.onStateEnter(this.name);
+		sceneStore.set(ShopScreen);
 	}
 
 	public onStateExecute(): void {}
