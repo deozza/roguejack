@@ -28,5 +28,7 @@ export default class GiantEagle extends DefaultCharacter implements Enemy {
 		this.deck.generateDeck(deckSuits, deckValues);
 		this.passiveAbilities = [new Fly()];
 		this.discard = new Discard();
+		this.inventory = [];
+		this.status = [];
 	}
 }

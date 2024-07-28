@@ -17,6 +17,7 @@
 	import Item from '$lib/ui/effect/Item.svelte';
 	import Deck from '$lib/ui/deck/Deck.svelte';
 	import Discard from '$lib/ui/deck/Discard.svelte';
+	import { updateBattleState } from '$lib/utils';
 	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
 	let pauseIcon: string = 'game-icons:pause-button';
@@ -74,7 +75,7 @@
 
 						<div class="flex flex-row items-center justify-start space-x-3">
 							{#each $gameStore.player.inventory as item}
-								<Item {item} isEnemy={false} />
+								<Item {item} isEnemy={false} on:updateBattleState={async () => await updateBattleState()}/>
 							{/each}
 						</div>
 			
@@ -84,7 +85,7 @@
 				{/if}
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
-				<span>v0.7.4</span>
+				<span>v0.8.0</span>
 				<button class="btn" on:click={() => enterPause()}>
 					<Icon icon={pauseIcon} width="32" height="32" />
 				</button>

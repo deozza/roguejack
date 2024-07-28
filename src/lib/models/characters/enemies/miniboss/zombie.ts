@@ -29,5 +29,7 @@ export default class Zombie extends DefaultCharacter implements Enemy {
 		this.deck.generateDeck(deckSuits, deckValues);
 		this.passiveAbilities = [new Undead()];
 		this.discard = new Discard();
+		this.inventory = [];
+		this.status = [];
 	}
 }

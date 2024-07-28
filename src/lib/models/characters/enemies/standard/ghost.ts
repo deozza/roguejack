@@ -28,5 +28,7 @@ export default class Ghost extends DefaultCharacter implements Enemy {
 		this.deck.generateDeck(deckSuits, deckValues);
 		this.passiveAbilities = [new Intimidation()];
 		this.discard = new Discard();
+		this.inventory = [];
+		this.status = [];
 	}
 }

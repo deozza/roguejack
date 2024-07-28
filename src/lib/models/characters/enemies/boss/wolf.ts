@@ -29,5 +29,7 @@ export default class Wolf extends DefaultCharacter implements Enemy {
 		this.deck.generateDeck(deckSuits, deckValues);
 		this.passiveAbilities = [new InflictWound()];
 		this.discard = new Discard();
+		this.inventory = [];
+		this.status = [];
 	}
 }

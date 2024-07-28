@@ -28,5 +28,7 @@ export default class Snake extends DefaultCharacter implements Enemy {
 		this.deck.generateDeck(deckSuits, deckValues);
 		this.passiveAbilities = [new Venom()];
 		this.discard = new Discard();
+		this.inventory = [];
+		this.status = [];
 	}
 }

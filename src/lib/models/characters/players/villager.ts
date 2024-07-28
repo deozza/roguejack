@@ -19,5 +19,6 @@ export default class Villager extends DefaultCharacter implements Player {
 		this.deck.generateDeck(deckSuits, deckValues);
 		this.icon = 'game-icons:farmer';
 		this.inventory = [];
+		this.status = [];
 	}
 }

@@ -29,5 +29,7 @@ export default class VampireBat extends DefaultCharacter implements Enemy {
 		this.deck.generateDeck(deckSuits, deckValues);
 		this.passiveAbilities = [new Vampirism()];
 		this.discard = new Discard();
+		this.inventory = [];
+		this.status = [];
 	}
 }

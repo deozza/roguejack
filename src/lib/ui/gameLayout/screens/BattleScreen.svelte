@@ -2,19 +2,16 @@
 	import { gameStore } from '$lib/stores/game';
 	import PlayerSide from '../battleScreen/PlayerSide.svelte';
 	import { turnMachineState } from '$lib/stores/stateMachine/turn';
-	import { battleMachineState } from '$lib/stores/stateMachine/battle';
-	import { gameMachineState } from '$lib/stores/stateMachine/game';
 	import CenterSide from '../battleScreen/CenterSide.svelte';
 	import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 	import DiscardPreview from '../battleScreen/DiscardPreview.svelte';
-	import { delay, scrollToElement } from '$lib/utils';
+	import { delay, scrollToElement, updateBattleState } from '$lib/utils';
 	import type { Fight } from '$lib/models/fight/model';
-	import TurnResult from '../battleScreen/TurnResult.svelte';
 
 	let openedEnemyDiscardView: boolean = false;
 	let openedPlayerDiscardView: boolean = false;
 
-	function drawCard() {
+	async function drawCard() {
 		try {
 			$turnMachineState = $turnMachineState.listenToEvent({ name: 'DRAW', data: null });
 		} catch (e: any) {
@@ -36,7 +33,7 @@
 		}
 
 		$turnMachineState = $turnMachineState.listenToEvent({ name: 'PLAY', data: null });
-		updateBattleState();
+		await updateBattleState();
 	}
 
 	async function fight() {
@@ -113,58 +110,13 @@
 		} catch (e: any) {
 			if (e.message === 'PLAYER_EMPTY_DECK') {
 				$turnMachineState = $turnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
-				updateBattleState();
+				await updateBattleState();
 				return;
 			}
 		}
 
 		$turnMachineState = $turnMachineState.listenToEvent({ name: 'PLAY', data: null });
-		updateBattleState();
-	}
-
-	async function updateBattleState() {
-		if ($turnMachineState.currentState.name === 'TurnEnemyDeckEmptyState') {
-			$battleMachineState = $battleMachineState.listenToEvent({ name: 'WIN', data: null });
-
-			await redirectToCamp();
-
-			return;
-		}
-
-		if ($turnMachineState.currentState.name === 'TurnPlayerDeckEmptyState') {
-			$battleMachineState = $battleMachineState.listenToEvent({ name: 'LOSE', data: null });
-
-			await delay(5000);
-			$gameMachineState = $gameMachineState.listenToEvent({ name: 'END_GAME', data: null });
-
-			return;
-		}
-
-		if ($gameStore.getCurrentBattle()?.enemy.currentHealth <= 0) {
-			$battleMachineState = $battleMachineState.listenToEvent({ name: 'WIN', data: null });
-
-			await redirectToCamp();
-			return;
-		}
-
-		if ($gameStore.player.currentHealth <= 0) {
-			$battleMachineState = $battleMachineState.listenToEvent({ name: 'LOSE', data: null });
-
-			await delay(5000);
-			$gameMachineState = $gameMachineState.listenToEvent({ name: 'END_GAME', data: null });
-
-			return;
-		}
-	}
-
-	async function redirectToCamp() {
-		await delay(5000);
-		$battleMachineState = $battleMachineState.listenToEvent({ name: 'CAMP', data: null });
-
-		await delay(1000);
-		$turnMachineState = $turnMachineState.listenToEvent({ name: 'RESET', data: null });
-		scrollToElement('top');
-		gameStore.endTurn();
+		await updateBattleState();
 	}
 
 	function openEnemyDiscardView() {
@@ -207,7 +159,7 @@
 			currentStateName={$turnMachineState.currentState.name}
 			passiveEffects={$playerSideEffectsStore}
 			fight={$gameStore.getCurrentBattle().getCurrentTurn().fight}
-			on:draw={() => drawCard()}
+			on:draw={async () => await drawCard()}
 			on:playerDiscardView={() => openPlayerDiscardView()}
 			on:updateBattleState={() => updateBattleState()}
 		/>

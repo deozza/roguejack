@@ -29,5 +29,7 @@ export default class Kobold extends DefaultCharacter implements Enemy {
 		this.deck.generateDeck(deckSuits, deckValues);
 		this.passiveAbilities = [new SharpSword()];
 		this.discard = new Discard();
+		this.inventory = [];
+		this.status = [];
 	}
 }

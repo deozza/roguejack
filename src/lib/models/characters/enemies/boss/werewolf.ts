@@ -29,5 +29,7 @@ export default class Werewolf extends DefaultCharacter implements Enemy {
 		this.deck.generateDeck(deckSuits, deckValues);
 		this.passiveAbilities = [new Berserker()];
 		this.discard = new Discard();
+		this.inventory = [];
+		this.status = [];
 	}
 }

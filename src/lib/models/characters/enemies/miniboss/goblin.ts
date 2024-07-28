@@ -57,5 +57,7 @@ export default class Goblin extends DefaultCharacter implements Enemy {
 		this.deck.generateDeck(deckSuits, deckValues);
 		this.passiveAbilities = [new Dodge()];
 		this.discard = new Discard();
+		this.inventory = [];
+		this.status = [];
 	}
 }

@@ -27,5 +27,7 @@ export default class Rat extends DefaultCharacter implements Enemy {
 		this.type = EnnemyType.standard;
 		this.deck.generateDeck(deckSuits, deckValues);
 		this.discard = new Discard();
+		this.inventory = [];
+		this.status = [];
 	}
 }

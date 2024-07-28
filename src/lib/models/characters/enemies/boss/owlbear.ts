@@ -27,5 +27,7 @@ export default class Owlbear extends DefaultCharacter implements Enemy {
 		this.type = EnnemyType.boss;
 		this.deck.generateDeck(deckSuits, deckValues);
 		this.discard = new Discard();
+		this.inventory = [];
+		this.status = [];
 	}
 }

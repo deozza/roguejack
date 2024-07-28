@@ -34,7 +34,8 @@ export class TurnMachineState implements StateMachineInterface {
 		TurnPlayerPlayingState: {
 			DRAW: new TurnPlayerDrawingState(),
 			USE_ITEM: new TurnPlayerUsingItemState(),
-			FIGHT: new TurnEnemyInitState()
+			FIGHT: new TurnEnemyInitState(),
+			RESET: new TurnIdleState()
 		},
 		TurnPlayerDrawingState: {
 			PLAY: new TurnPlayerPlayingState(),
