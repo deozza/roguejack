@@ -1,4 +1,5 @@
 import type { Character } from '$lib/models/characters';
+import Bleeding from '$lib/models/effects/status/bleeding';
 import { gameStore } from '$lib/stores/game';
 import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 import { DefaultState } from '../..';
@@ -24,6 +25,7 @@ export default class GameInitState extends DefaultState implements StateInterfac
 		if (player.passiveAbilities.length > 0) {
 			playerSideEffectsStore.set(player.passiveAbilities);
 		}
+
 	}
 
 	public onStateExit(): void {

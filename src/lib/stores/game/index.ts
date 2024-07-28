@@ -307,7 +307,8 @@ function createGameStore() {
 
 	const removeStatusFromPlayer = (statusToRemove: Status) => {
 		update((game: Game) => {
-			const index = game.player.status.findIndex((status: Status) => status === statusToRemove);
+			const index = game.player.status.findIndex((status: Status) => status.technicalName === statusToRemove.technicalName);
+
 			if (index === -1) {
 				return game;
 			}
@@ -325,7 +326,7 @@ function createGameStore() {
 		update((game: Game) => {
 			const index = game
 				.getCurrentBattle()
-				?.enemy.status.findIndex((status: Status) => status === statusToRemove);
+				?.enemy.status.findIndex((status: Status) => status.technicalName === statusToRemove.technicalName);
 			if (index === -1) {
 				return game;
 			}

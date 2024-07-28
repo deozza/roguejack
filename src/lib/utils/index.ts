@@ -83,6 +83,5 @@ export async function redirectToCamp() {
 		return state.listenToEvent({ name: 'RESET', data: null });
 	});
 
-	scrollToElement('top');
 	gameStore.endTurn();
 }

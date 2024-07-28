@@ -18,7 +18,7 @@
 	class="card p-4 variant-filled-primary z-10 max-w-48"
 	data-popup={passiveAbility.technicalName}
 >
-	<p class="bold text-lg">{passiveAbility.name}</p>
+	<p class="bold text-lg text-center">{passiveAbility.name}</p>
 	<p class="p">{passiveAbility.description}</p>
 	<div class="arrow variant-filled-primary" />
 </div>
