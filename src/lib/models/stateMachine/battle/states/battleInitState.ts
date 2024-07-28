@@ -23,7 +23,7 @@ export default class BattleInitState extends DefaultState implements StateInterf
 
 	public onStateExecute(): void {
 		enemySideEffectsStore.set([]);
-		
+
 		gameStore.createBattle();
 		const game: Game = get(gameStore);
 		const enemy: Enemy = game.getCurrentBattle()?.enemy as Enemy;

@@ -13,9 +13,7 @@
 	}
 </script>
 
-<section
-	class="absolute h-full w-full z-50 bg-surface-500/90"
->
+<section class="absolute h-full w-full z-50 bg-surface-500/90">
 	<div class="flex flex-col items-center justify-center h-full w-full">
 		<h1 class="h1">You lost</h1>
 		<button class="btn" on:click={() => quit()}>Quit game</button>

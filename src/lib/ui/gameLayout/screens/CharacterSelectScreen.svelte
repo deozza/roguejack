@@ -56,11 +56,13 @@
 					</div>
 
 					{#each selectedCharacter.passiveAbilities as passive}
-					<div class="flex flex-col items-start justify-start space-y-4">
-						<p class="p flex flex-row items-center"><Icon icon={passive.icon} height="32" width="32" /> {passive.name}</p>
-						<p class="p">{passive.description}</p>
-					</div>
-
+						<div class="flex flex-col items-start justify-start space-y-4">
+							<p class="p flex flex-row items-center">
+								<Icon icon={passive.icon} height="32" width="32" />
+								{passive.name}
+							</p>
+							<p class="p">{passive.description}</p>
+						</div>
 					{/each}
 					<button class="btn variant-ringed-tertiary" on:click={() => openDeckPreview()}
 						>See deck</button

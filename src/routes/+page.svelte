@@ -39,6 +39,6 @@
 	}
 </script>
 
-<div id="top"  class="mt-10">
+<div id="top" class="mt-10">
 	<svelte:component this={screenToRender} />
 </div>

@@ -40,7 +40,7 @@
 
 	function addToInventory(item: ItemTypes) {
 		if (item.technicalName === 'packOfCards') {
-			item.applyEffects('player' );
+			item.applyEffects('player');
 			goToNextState();
 			return;
 		}
@@ -124,7 +124,7 @@
 				<div
 					class="flex flex-col items-center justify-center w-full h-full overflow-y-auto space-y-5"
 				>
-				<p class="p italic text-xl">Get some rest after your last fight.</p>
+					<p class="p italic text-xl">Get some rest after your last fight.</p>
 					<div
 						class="flex flex-col items-center justify-left w-9/12 p-4 variant-ringed-tertiary rounded-md text-center"
 					>
@@ -144,8 +144,7 @@
 						>
 					</div>
 
-					{#if $gameStore.getCurrentBattle().enemy.type === EnnemyType.boss || $gameStore.getCurrentBattle().enemy.type === EnnemyType.miniboss }
-
+					{#if $gameStore.getCurrentBattle().enemy.type === EnnemyType.boss || $gameStore.getCurrentBattle().enemy.type === EnnemyType.miniboss}
 						<div
 							class="flex flex-col items-center justify-around w-9/12 p-4 variant-ringed-success rounded-md text-center"
 							class:variant-ringed-tertiary={objectToLoot.rarity === Rarities.common}
