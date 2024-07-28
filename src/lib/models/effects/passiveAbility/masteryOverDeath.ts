@@ -2,7 +2,6 @@ import type { Game } from '$lib/models/game/model';
 import { get } from 'svelte/store';
 import type { ContinuousEffect } from '../interfaces';
 import { gameStore } from '$lib/stores/game';
-import { delay } from '$lib/utils';
 
 export default class MasteryOverDeath implements ContinuousEffect {
 	id: string = crypto.randomUUID();
@@ -25,30 +24,18 @@ export default class MasteryOverDeath implements ContinuousEffect {
 		const game: Game = get(gameStore);
 		if (calledBy === 'enemy') {
 			if (game.getCurrentBattle()?.enemy.discard.cards.length >= 10) {
-				this.active = true;
-
 				gameStore.update((game: Game) => {
 					game.getCurrentBattle().getCurrentTurn().fight.bonusValueForEnemy += 1;
 					return game;
-				});
-
-				delay(1000).then(() => {
-					this.active = false;
 				});
 			}
 			return;
 		}
 
 		if (game.player.discard.cards.length >= 10) {
-			this.active = true;
-
 			gameStore.update((game: Game) => {
 				game.getCurrentBattle().getCurrentTurn().fight.bonusValueForPlayer += 1;
 				return game;
-			});
-
-			delay(1000).then(() => {
-				this.active = false;
 			});
 		}
 	}

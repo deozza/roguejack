@@ -9,7 +9,6 @@ import {
 	playerUsingItemStore
 } from '$lib/stores/sideEffects';
 import Poisoned from '../status/poisoned';
-import { delay } from '$lib/utils';
 import type { ItemTypes } from '$lib/models/items/types';
 
 export default class Spore implements ContinuousEffect {
@@ -38,7 +37,6 @@ export default class Spore implements ContinuousEffect {
 	}
 
 	public onStateEnter_TurnLostState(calledBy: 'player' | 'enemy') {
-		this.active = true;
 		const game: Game = get(gameStore);
 		if (calledBy === 'enemy') {
 			if (
@@ -49,9 +47,10 @@ export default class Spore implements ContinuousEffect {
 					return [...sideEffects, new Poisoned()];
 				});
 
-				delay(1000).then(() => {
-					this.active = false;
-				});
+				gameStore.update((game: Game) => {
+					game.player.status.push(new Poisoned());
+					return game;
+				})
 			}
 			return;
 		}
@@ -60,14 +59,14 @@ export default class Spore implements ContinuousEffect {
 			game.getCurrentBattle()?.getCurrentTurn()?.playerHand.value <
 			game.getCurrentBattle()?.getCurrentTurn()?.enemyHand.value
 		) {
-			this.active = true;
-
 			enemySideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
 				return [...sideEffects, new Poisoned()];
 			});
-			delay(1000).then(() => {
-				this.active = false;
-			});
+
+			gameStore.update((game: Game) => {
+				game.getCurrentBattle()?.enemy.status.push(new Poisoned());
+				return game;
+			})
 		}
 
 		return;
@@ -92,6 +91,11 @@ export default class Spore implements ContinuousEffect {
 				return [...sideEffects, new Poisoned()];
 			});
 
+			gameStore.update((game: Game) => {
+				game.player.status.push(new Poisoned());
+				return game;
+			})
+
 			return;
 		}
 	}
@@ -114,6 +118,11 @@ export default class Spore implements ContinuousEffect {
 			enemySideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
 				return [...sideEffects, new Poisoned()];
 			});
+
+			gameStore.update((game: Game) => {
+				game.getCurrentBattle()?.enemy.status.push(new Poisoned());
+				return game;
+			})
 
 			return;
 		}

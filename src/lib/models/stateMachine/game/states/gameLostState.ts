@@ -1,3 +1,4 @@
+import { sceneStore } from '$lib/stores/scene';
 import { DefaultState } from '../..';
 import type { StateInterface } from '../../interfaces';
 
@@ -6,6 +7,7 @@ export default class GameLostState extends DefaultState implements StateInterfac
 
 	public onStateEnter(): void {
 		super.onStateEnter(this.name);
+		sceneStore.set(GameLostState);
 	}
 
 	public onStateExecute(): void {}

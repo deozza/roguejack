@@ -1,6 +1,6 @@
+import type { Game } from '$lib/models/game/model';
 import { gameStore } from '$lib/stores/game';
 import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
-import { delay } from '$lib/utils';
 import type { ContinuousEffect, Status } from '../interfaces';
 
 export default class Poisoned implements Status {
@@ -31,26 +31,15 @@ export default class Poisoned implements Status {
 		if (calledBy === 'enemy') {
 			return;
 		}
-		this.active = true;
 
 		gameStore.inflictDamagesToPlayer(1);
-
-		delay(1000).then(() => {
-			this.active = false;
-		});
 	}
 
 	public onStateEnter_TurnEnemyDrawingState(calledBy: 'player' | 'enemy') {
 		if (calledBy === 'player') {
 			return;
 		}
-		this.active = true;
-
 		gameStore.inflictDamagesToEnemy(1);
-
-		delay(1000).then(() => {
-			this.active = false;
-		});
 	}
 
 	public onStateExit_BattleWonState(calledBy: 'player' | 'enemy') {
@@ -59,11 +48,21 @@ export default class Poisoned implements Status {
 				return sideEffects.filter((effect) => effect.technicalName !== this.technicalName);
 			});
 
+			gameStore.update((game: Game) => {
+				game.player.status = game.player.status.filter((effect: Status) => effect.technicalName !== this.technicalName);
+				return game;
+			})
+
 			return;
 		}
 
 		enemySideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
 			return sideEffects.filter((effect) => effect.technicalName !== this.technicalName);
 		});
+
+		gameStore.update((game: Game) => {
+			game.getCurrentBattle().enemy.status = game.getCurrentBattle().enemy.status.filter((effect: Status) => effect.technicalName !== this.technicalName);
+			return game;
+		})
 	}
 }

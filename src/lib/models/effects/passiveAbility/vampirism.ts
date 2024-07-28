@@ -2,7 +2,6 @@ import type { Game } from '$lib/models/game/model';
 import { get } from 'svelte/store';
 import type { ContinuousEffect } from '../interfaces';
 import { gameStore } from '$lib/stores/game';
-import { delay } from '$lib/utils';
 
 export default class Vampirism implements ContinuousEffect {
 	id: string = crypto.randomUUID();
@@ -22,7 +21,6 @@ export default class Vampirism implements ContinuousEffect {
 	}
 
 	public onStateExit_TurnFightingState(calledBy: 'player' | 'enemy') {
-		this.active = true;
 		const game: Game = get(gameStore);
 		if (calledBy === 'enemy') {
 			if (game.getCurrentBattle()?.getCurrentTurn()?.fight.enemyHasWon) {
@@ -32,10 +30,6 @@ export default class Vampirism implements ContinuousEffect {
 						?.enemy.heal(game.getCurrentBattle().getCurrentTurn().fight.totalDamageToPlayer);
 					return game;
 				});
-
-				delay(1000).then(() => {
-					this.active = false;
-				});
 			}
 			return;
 		}
@@ -44,10 +38,6 @@ export default class Vampirism implements ContinuousEffect {
 			gameStore.update((game: Game) => {
 				game.player.heal(game.getCurrentBattle().getCurrentTurn().fight.totalDamageToEnemy);
 				return game;
-			});
-
-			delay(1000).then(() => {
-				this.active = false;
 			});
 		}
 		return;

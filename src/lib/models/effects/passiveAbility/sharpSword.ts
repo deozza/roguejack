@@ -2,7 +2,6 @@ import type { Game } from '$lib/models/game/model';
 import { get } from 'svelte/store';
 import type { ContinuousEffect } from '../interfaces';
 import { gameStore } from '$lib/stores/game';
-import { delay } from '$lib/utils';
 
 export default class SharpSword implements ContinuousEffect {
 	id: string = crypto.randomUUID();
@@ -30,15 +29,9 @@ export default class SharpSword implements ContinuousEffect {
 					?.getCurrentTurn()
 					?.enemyHand.cards.filter((card) => card.suit === 'spade').length === 0
 			) {
-				this.active = true;
-
 				gameStore.update((game: Game) => {
 					game.getCurrentBattle().getCurrentTurn().fight.bonusValueForEnemy += 1;
 					return game;
-				});
-
-				delay(1000).then(() => {
-					this.active = false;
 				});
 			}
 			return;
@@ -50,15 +43,9 @@ export default class SharpSword implements ContinuousEffect {
 				?.getCurrentTurn()
 				?.playerHand.cards.filter((card) => card.suit === 'spade').length === 0
 		) {
-			this.active = true;
-
 			gameStore.update((game: Game) => {
 				game.getCurrentBattle().getCurrentTurn().fight.bonusValueForPlayer += 1;
 				return game;
-			});
-
-			delay(1000).then(() => {
-				this.active = false;
 			});
 		}
 	}

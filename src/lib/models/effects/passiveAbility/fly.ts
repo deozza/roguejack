@@ -1,11 +1,8 @@
-import type { Game } from '$lib/models/game/model';
 import { get } from 'svelte/store';
 import type { ContinuousEffect } from '../interfaces';
-import { gameStore } from '$lib/stores/game';
-import { delay } from '$lib/utils';
 import type { ItemTypes } from '$lib/models/items/types';
 import { enemyUsingItemStore, playerUsingItemStore } from '$lib/stores/sideEffects';
-import { Categories, Ranges } from '../enums';
+import {  Ranges } from '../enums';
 
 export default class Fly implements ContinuousEffect {
 	id: string = crypto.randomUUID();

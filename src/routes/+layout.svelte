@@ -5,7 +5,6 @@
 	import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
 
 	import { storePopup } from '@skeletonlabs/skeleton';
-	import PauseScreen from '$lib/ui/gameLayout/screens/PauseScreen.svelte';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
 	import { gameStore } from '$lib/stores/game';
 	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
@@ -17,8 +16,10 @@
 		pauseStatus = !pauseStatus;
 		if (pauseStatus === true) {
 			pauseIcon = 'game-icons:play-button';
+			$gameMachineState = $gameMachineState.listenToEvent({ name: 'PAUSE_GAME', data: null });
 			return;
 		}
+		$gameMachineState = $gameMachineState.listenToEvent({ name: 'RESUME_GAME', data: null });
 
 		pauseIcon = 'game-icons:pause-button';
 	}
@@ -49,9 +50,5 @@
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
-
-	{#if pauseStatus === true}
-		<PauseScreen on:resume={() => enterPause()} on:quit={() => quit()} />
-	{/if}
 	<slot />
 </AppShell>

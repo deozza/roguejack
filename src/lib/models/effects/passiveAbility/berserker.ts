@@ -32,25 +32,15 @@ export default class Berserker implements ContinuousEffect {
 					game.getCurrentBattle().getCurrentTurn().fight.bonusValueForEnemy += 2;
 					return game;
 				});
-
-				delay(1000).then(() => {
-					this.active = false;
-				});
 			}
 			return;
 		}
 
 		const character = game.player;
 		if (character.currentHealth / character.maxHealth <= 0.5) {
-			this.active = true;
-
 			gameStore.update((game: Game) => {
 				game.getCurrentBattle().getCurrentTurn().fight.bonusValueForPlayer += 2;
 				return game;
-			});
-
-			delay(1000).then(() => {
-				this.active = false;
 			});
 		}
 	}

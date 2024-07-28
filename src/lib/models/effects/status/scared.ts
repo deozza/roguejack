@@ -77,11 +77,21 @@ export default class Scared implements Status {
 				return sideEffects.filter((effect) => effect.technicalName !== this.technicalName);
 			});
 
+			gameStore.update((game: Game) => {
+				game.player.status = game.player.status.filter((effect: Status) => effect.technicalName !== this.technicalName);
+				return game;
+			})
+
 			return;
 		}
 
 		enemySideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
 			return sideEffects.filter((effect) => effect.technicalName !== this.technicalName);
 		});
+
+		gameStore.update((game: Game) => {
+			game.getCurrentBattle().enemy.status = game.getCurrentBattle().enemy.status.filter((effect: Status) => effect.technicalName !== this.technicalName);
+			return game;
+		})
 	}
 }

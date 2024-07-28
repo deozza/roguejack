@@ -1,3 +1,5 @@
+import { sceneStore } from '$lib/stores/scene';
+import CampScreen from '$lib/ui/gameLayout/screens/CampScreen.svelte';
 import { DefaultState } from '../..';
 import type { StateInterface } from '../../interfaces';
 
@@ -6,6 +8,7 @@ export default class BattleCampingState extends DefaultState implements StateInt
 
 	public onStateEnter(): void {
 		super.onStateEnter(this.name);
+		sceneStore.set(CampScreen);
 	}
 
 	public onStateExecute(): void {}

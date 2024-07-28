@@ -33,6 +33,11 @@ export default class EarthquakeScroll implements ScrollInterface {
 			enemySideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
 				return [...sideEffects, new Paralyzed()];
 			});
+
+			gameStore.update((game: Game) => {
+				game.getCurrentBattle()?.enemy.status.push(new Paralyzed());
+				return game;
+			})
 		}
 
 		if (calledBy === 'enemy') {
@@ -44,6 +49,11 @@ export default class EarthquakeScroll implements ScrollInterface {
 			playerSideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
 				return [...sideEffects, new Paralyzed()];
 			});
+
+			gameStore.update((game: Game) => {
+				game.player.status.push(new Paralyzed());
+				return game;
+			})
 		}
 	}
 

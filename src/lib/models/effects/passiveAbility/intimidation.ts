@@ -1,6 +1,8 @@
 import type { ContinuousEffect, Status } from '../interfaces';
 import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 import Scared from '../status/scared';
+import { gameStore } from '$lib/stores/game';
+import type { Game } from '$lib/models/game/model';
 
 export default class Intimidation implements ContinuousEffect {
 	id: string = crypto.randomUUID();
@@ -24,11 +26,21 @@ export default class Intimidation implements ContinuousEffect {
 			playerSideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
 				return [...sideEffects, new Scared()];
 			});
+
+			gameStore.update((game: Game) => {
+				game.player.status.push(new Scared());
+				return game;
+			})
 			return;
 		}
 
 		enemySideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
 			return [...sideEffects, new Scared()];
 		});
+
+		gameStore.update((game: Game) => {
+			game.getCurrentBattle()?.enemy.status.push(new Scared());
+			return game;
+		})
 	}
 }
