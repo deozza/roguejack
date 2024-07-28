@@ -2,6 +2,8 @@ import type { Face, Suit } from '$lib/models/card/types';
 import type { Player } from '$lib/models/characters/players';
 import { DefaultCharacter } from '$lib/models/characters/';
 import Bravery from '$lib/models/effects/passiveAbility/bravery';
+import Poisoned from '$lib/models/effects/status/poisoned';
+import Dagger from '$lib/models/items/weapons/dagger';
 
 export default class Knight extends DefaultCharacter implements Player {
 	constructor() {
@@ -22,5 +24,6 @@ export default class Knight extends DefaultCharacter implements Player {
 		this.icon = 'game-icons:black-knight-helm';
 		this.passiveAbilities = [new Bravery()];
 		this.inventory = [];
+		this.status = [];
 	}
 }

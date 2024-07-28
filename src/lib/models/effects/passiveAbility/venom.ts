@@ -33,10 +33,7 @@ export default class Venom implements ContinuousEffect {
 					return [...sideEffects, new Poisoned()];
 				});
 
-				gameStore.update((game: Game) => {
-					game.player.status = [...game.player.status, new Poisoned()];
-					return game;
-				})
+				gameStore.addStatusToPlayer(new Poisoned());
 			}
 			return;
 		}
@@ -50,10 +47,7 @@ export default class Venom implements ContinuousEffect {
 				return [...sideEffects, new Poisoned()];
 			});
 
-			gameStore.update((game: Game) => {
-				game.getCurrentBattle().enemy.status = [...game.getCurrentBattle().enemy.status, new Poisoned()];
-				return game;
-			})
+			gameStore.addStatusToEnemy(new Poisoned());
 		}
 
 		return;

@@ -27,10 +27,7 @@ export default class Intimidation implements ContinuousEffect {
 				return [...sideEffects, new Scared()];
 			});
 
-			gameStore.update((game: Game) => {
-				game.player.status = [...game.player.status, new Scared()];
-				return game;
-			})
+			gameStore.addStatusToPlayer(new Scared());
 
 			return;
 		}
@@ -40,9 +37,6 @@ export default class Intimidation implements ContinuousEffect {
 		});
 
 
-		gameStore.update((game: Game) => {
-			game.getCurrentBattle().enemy.status = [...game.getCurrentBattle().enemy.status, new Scared()];
-			return game;
-		})
+		gameStore.addStatusToEnemy(new Scared());
 	}
 }

@@ -12,7 +12,9 @@ export default class Scared implements Status {
 		'Drawn card has a 50% chance to be immediately discard. Ends at the end of the battle';
 	icon: string = 'game-icons:surprised-skull';
 	active: boolean = false;
-
+	defaultAmount: number = 1;
+	currentAmount: number = 1;
+	
 	public applyEffects(calledBy: 'player' | 'enemy') {
 		return [
 			{

@@ -10,7 +10,9 @@ export interface Status {
 	description: string;
 	icon: string;
 	active: boolean;
-
+	defaultAmount: number;
+	currentAmount: number;
+	
 	applyEffects(calledBy: 'player' | 'enemy'): void;
 }
 

@@ -8,7 +8,7 @@
 	export let healthColor: string;
 </script>
 
-<div class="flex flex-col items-center justify-center w-6/12">
+<div class="flex flex-col items-center justify-center w-full">
 	<span class="text-2xl">{currentHealth}/{maxHealth}</span>
 	{#key currentHealth}
 		<div class="w-full"

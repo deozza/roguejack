@@ -267,17 +267,69 @@ function createGameStore() {
 			return game;
 		});
 	};
+
+	const addStatusToPlayer = (statusToAdd: Status) => {
+		update((game) => {
+
+			const index: number = game.player.status.findIndex(
+				(status: Status) => status.technicalName === statusToAdd.technicalName
+			);
+			if (index === -1) {
+				statusToAdd.currentAmount = statusToAdd.defaultAmount;
+				game.player.status = [...game.player.status, statusToAdd];
+				return game;
+			}
+
+			game.player.status[index].currentAmount += statusToAdd.defaultAmount;
+			return game;
+		});
+	};
+
+	const addStatusToEnemy = (statusToAdd: Status) => {
+		update((game) => {
+
+			const index: number = game.getCurrentBattle().enemy.status.findIndex(
+				(status: Status) => status.technicalName === statusToAdd.technicalName
+			);
+			if (index === -1) {
+				statusToAdd.currentAmount = statusToAdd.defaultAmount;
+				game.getCurrentBattle().enemy.status = [...game.getCurrentBattle().enemy.status, statusToAdd];
+				return game;
+			}
+
+			game.getCurrentBattle().enemy.status[index].currentAmount += statusToAdd.defaultAmount;
+			return game;
+		});
+	};
 	
-	const removeStatusFromPlayer = (status: Status) => {
+	const removeStatusFromPlayer = (statusToRemove: Status) => {
 		update((game: Game) => {
-			game.player.status = game.player.status.filter((effect: Status) => effect.technicalName !== status.technicalName);
+			const index = game.player.status.findIndex((status: Status) => status === statusToRemove);
+			if (index === -1) {
+				return game;
+			}
+
+			game.player.status[index].currentAmount -= 1;
+			if (game.player.status[index].currentAmount <= 0) {
+				game.player.status.splice(index, 1);
+			}
+
 			return game;
 		});
 	}
 
-	const removeStatusFromEnemy = (status: Status) => {
+	const removeStatusFromEnemy = (statusToRemove: Status) => {
 		update((game: Game) => {
-			game.getCurrentBattle().enemy.status = game.getCurrentBattle().enemy.status.filter((effect: Status) => effect.technicalName !== status.technicalName);
+			const index = game.getCurrentBattle()?.enemy.status.findIndex((status: Status) => status === statusToRemove);
+			if (index === -1) {
+				return game;
+			}
+
+			game.plagetCurrentBattle().enemyyer.status[index].currentAmount -= 1;
+			if (game.getCurrentBattle().enemy.status[index].currentAmount <= 0) {
+				game.getCurrentBattle().enemy.status.splice(index, 1);
+			}
+			
 			return game;
 		});
 	}
@@ -302,6 +354,8 @@ function createGameStore() {
 		resolveFight,
 		addCardToDeck,
 		shuffleDeck,
+		addStatusToPlayer,
+		addStatusToEnemy,
 		removeStatusFromPlayer,
 		removeStatusFromEnemy
 	};

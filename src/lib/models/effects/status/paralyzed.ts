@@ -1,8 +1,6 @@
-import type { Game } from '$lib/models/game/model';
 import { gameStore } from '$lib/stores/game';
 import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 import { turnMachineState } from '$lib/stores/stateMachine/turn';
-import { delay } from '$lib/utils';
 import type { ContinuousEffect, Status } from '../interfaces';
 
 export default class Paralyzed implements Status {
@@ -11,6 +9,8 @@ export default class Paralyzed implements Status {
 	description: string = 'Skip this turn';
 	icon: string = 'game-icons:cancel';
 	active: boolean = false;
+	defaultAmount: number = 1;
+	currentAmount: number = 1;
 
 	public applyEffects(calledBy: 'player' | 'enemy') {
 		return [

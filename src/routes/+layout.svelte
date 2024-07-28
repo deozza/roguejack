@@ -12,6 +12,9 @@
 	import { TurnMachineState } from '$lib/models/stateMachine/turn/turnMachineState';
 	import { battleMachineState } from '$lib/stores/stateMachine/battle';
 	import { BattleMachineState } from '$lib/models/stateMachine/battle/battleMachineState';
+	import PassiveAbility from '$lib/ui/effect/PassiveAbility.svelte';
+	import Status from '$lib/ui/effect/Status.svelte';
+	import Item from '$lib/ui/effect/Item.svelte';
 	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
 	let pauseIcon: string = 'game-icons:pause-button';
@@ -44,7 +47,36 @@
 		<!-- App Bar -->
 		<AppBar padding="p-1 md:p-4">
 			<svelte:fragment slot="lead">
-				<strong class="text-xl uppercase">Dungeons and Jacks</strong>
+				{#if $gameMachineState.currentState.name === 'GamePlayingState'}
+					<div class="flex flex-row items-center justify-between mt-5 space-x-5 w-full divide-x divide-surface-500">
+						<p class="flex flex-row items-center justify-center text-error-500">
+							<Icon icon="game-icons:hearts" width="16" height="16" />
+							{$gameStore.player.currentHealth}/{$gameStore.player.maxHealth}
+						</p>
+						<div class="flex flex-row items-center justify-start space-x-3">
+							{#each $gameStore.player.passiveAbilities as passiveAbility}
+								<PassiveAbility {passiveAbility} />
+							{/each}
+						</div>
+			
+						{#if $gameStore.player.status.length > 0}
+							<div class="flex flex-row items-center justify-start space-x-3">
+								{#each $gameStore.player.status as status}
+									<Status {status} />
+								{/each}
+							</div>
+						{/if}
+
+						<div class="flex flex-row items-center justify-start space-x-3">
+							{#each $gameStore.player.inventory as item}
+								<Item {item} isEnemy={false} />
+							{/each}
+						</div>
+			
+					</div>
+				{:else}
+					<strong class="text-xl uppercase">Dungeons and Jacks</strong>
+				{/if}
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				<span>v0.7.4</span>

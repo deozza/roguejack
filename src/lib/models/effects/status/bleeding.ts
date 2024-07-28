@@ -9,6 +9,8 @@ export default class Bleeding implements Status {
 	description: string = 'Inflicts 1 at the start of the turn. Ends at the end of the battle';
 	icon: string = 'game-icons:blood';
 	active: boolean = false;
+	defaultAmount: number = 1;
+	currentAmount: number = 1;
 
 	public applyEffects(calledBy: 'player' | 'enemy') {
 		return [

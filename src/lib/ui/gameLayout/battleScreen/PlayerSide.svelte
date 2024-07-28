@@ -7,85 +7,68 @@
 	import Healthbar from '../../character/Healthbar.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { gameStore } from '$lib/stores/game';
-	import CharacterPreview from './CharacterPreview.svelte';
 	import { checkCharacterIsForEnnemy, type Character } from '$lib/models/characters';
-	import type { ContinuousEffect, Status } from '$lib/models/effects/interfaces';
+	import type { ContinuousEffect, Status as StatusInterface } from '$lib/models/effects/interfaces';
 	import { EnnemyType } from '$lib/models/characters/types';
 	import BattlePower from './BattlePower.svelte';
 	import type { Fight } from '$lib/models/fight/model';
+	import PassiveAbility from '$lib/ui/effect/PassiveAbility.svelte';
+	import Status from '$lib/ui/effect/Status.svelte';
 
 	export let user: Character;
 	export let userHand: Hand;
-	export let passiveEffects: Array<Status | ContinuousEffect> = [];
+	export let passiveEffects: Array<StatusInterface | ContinuousEffect> = [];
 	export let currentStateName: string;
 	export let fight: Fight;
 
 	const isEnemy: boolean = checkCharacterIsForEnnemy(user);
 
 	const dispatch = createEventDispatcher();
-	let openedCharacterInfo: boolean = false;
 
-	function openCharacterInfoScreen() {
-		openedCharacterInfo = !openedCharacterInfo;
-	}
 </script>
 
-{#if openedCharacterInfo}
-	<CharacterPreview
-		{user}
-		{passiveEffects}
-		{isEnemy}
-		on:close={() => openCharacterInfoScreen()}
-		on:updateBattleState={() => {
-			openCharacterInfoScreen();
-			dispatch('updateBattleState');
-		}}
-	/>
-{/if}
-
 <div class="flex flex-col items-center justify-center md:h-full w-full md:w-4/12">
-	<h3
-		class="h3 uppercase flex flex-col items-center justify-center"
-		class:text-orange-500={isEnemy &&
-			$gameStore.battles.length % 5 === 0 &&
-			$gameStore.battles.length % 10 !== 0}
-		class:text-red-500={isEnemy && $gameStore.battles.length % 10 === 0}
-	>
-		{#if isEnemy && user.type !== undefined && user.type !== null}
-			{#if user.type === EnnemyType.miniboss}
-				<Icon icon="game-icons:crown" width="24" height="24" />
+	<div class="flex flex-col items-center justify-center w-1/2">
+		<h3
+			class="h3 uppercase flex flex-col items-center justify-center"
+			class:text-orange-500={isEnemy &&
+				$gameStore.battles.length % 5 === 0 &&
+				$gameStore.battles.length % 10 !== 0}
+			class:text-red-500={isEnemy && $gameStore.battles.length % 10 === 0}
+		>
+			{#if isEnemy && user.type !== undefined && user.type !== null}
+				{#if user.type === EnnemyType.miniboss}
+					<Icon icon="game-icons:crown" width="24" height="24" />
+				{/if}
+				{#if user.type === EnnemyType.boss}
+					<Icon icon="game-icons:burning-skull" width="24" height="24" />
+				{/if}
 			{/if}
-			{#if user.type === EnnemyType.boss}
-				<Icon icon="game-icons:burning-skull" width="24" height="24" />
-			{/if}
-		{/if}
-		<div class="flex flex-row items-center justify-center space-x-4">
 			<span>{user.name}</span>
+		</h3>
 
-			<button
-				class="btn btn-sm rounded-full variant-ringed-tertiary text-white"
-				on:click={() => openCharacterInfoScreen()}>?</button
-			>
+		<Healthbar
+			currentHealth={user.currentHealth}
+			maxHealth={user.maxHealth}
+			healthColor={user.getHealthColor()}
+		/>
+
+		<div class="flex flex-row items-center justify-between mt-5 w-full divide-x divide-surface-500">
+			<div class="flex flex-row items-center justify-start space-x-3 w-1/2">
+				{#each user.passiveAbilities as passiveAbility}
+					<PassiveAbility {passiveAbility} />
+				{/each}
+			</div>
+
+			{#if user.status.length > 0}
+				<div class="flex flex-row items-center justify-start space-x-3 w-1/2 ">
+					{#each user.status as status}
+						<Status {status} />
+					{/each}
+				</div>
+			{/if}
+
 		</div>
-	</h3>
-
-	<Healthbar
-		currentHealth={user.currentHealth}
-		maxHealth={user.maxHealth}
-		healthColor={user.getHealthColor()}
-	/>
-
-	<div class="flex flex-row items-center justify-center space-x-3 mt-5">
-		{#each passiveEffects as sideEffect}
-			<Icon
-				icon={sideEffect.icon}
-				width="24"
-				height="24"
-				class={sideEffect.active !== undefined && sideEffect.active === true
-					? 'text-orange-500'
-					: ''}
-			/>
-		{/each}
 	</div>
 
 	<div

@@ -33,10 +33,7 @@ export default class InflictWound implements ContinuousEffect {
 					return [...sideEffects, new Bleeding()];
 				});
 				
-				gameStore.update((game: Game) => {
-					game.player.status = [...game.player.status, new Bleeding()];
-					return game;
-				})
+				gameStore.addStatusToPlayer(new Bleeding());
 			}
 			return;
 		}
@@ -49,10 +46,7 @@ export default class InflictWound implements ContinuousEffect {
 				return [...sideEffects, new Bleeding()];
 			});
 
-			gameStore.update((game: Game) => {
-				game.getCurrentBattle().enemy.status = [...game.getCurrentBattle().enemy.status, new Bleeding()];
-				return game;
-			})
+			gameStore.addStatusToEnemy(new Bleeding());
 		}
 
 		return;
