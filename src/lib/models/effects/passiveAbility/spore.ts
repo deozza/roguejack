@@ -47,7 +47,6 @@ export default class Spore implements ContinuousEffect {
 					return [...sideEffects, new Poisoned()];
 				});
 
-
 				gameStore.addStatusToPlayer(new Poisoned());
 			}
 			return;
@@ -60,7 +59,7 @@ export default class Spore implements ContinuousEffect {
 			enemySideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
 				return [...sideEffects, new Poisoned()];
 			});
-			
+
 			gameStore.addStatusToEnemy(new Poisoned());
 		}
 

@@ -12,7 +12,7 @@ export interface Status {
 	active: boolean;
 	defaultAmount: number;
 	currentAmount: number;
-	
+
 	applyEffects(calledBy: 'player' | 'enemy'): void;
 }
 

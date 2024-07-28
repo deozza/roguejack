@@ -32,7 +32,7 @@ export default class InflictWound implements ContinuousEffect {
 				playerSideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
 					return [...sideEffects, new Bleeding()];
 				});
-				
+
 				gameStore.addStatusToPlayer(new Bleeding());
 			}
 			return;

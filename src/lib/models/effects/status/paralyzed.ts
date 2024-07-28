@@ -47,6 +47,5 @@ export default class Paralyzed implements Status {
 		});
 
 		gameStore.removeStatusFromEnemy(this);
-
 	}
 }

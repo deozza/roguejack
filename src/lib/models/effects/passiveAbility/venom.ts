@@ -42,7 +42,6 @@ export default class Venom implements ContinuousEffect {
 			game.getCurrentBattle()?.getCurrentTurn()?.playerHand.value >
 			game.getCurrentBattle()?.getCurrentTurn()?.enemyHand.value
 		) {
-
 			enemySideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
 				return [...sideEffects, new Poisoned()];
 			});

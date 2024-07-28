@@ -60,8 +60,8 @@ export class Fight {
 			return this;
 		}
 
-		if(enemyHand.getIsBlackjack() === true && playerHand.getIsBlackjack() === false) {
-			if(playerHand.getValue() === 21) {
+		if (enemyHand.getIsBlackjack() === true && playerHand.getIsBlackjack() === false) {
+			if (playerHand.getValue() === 21) {
 				this.totalDamageToPlayer += 1;
 			}
 		}
@@ -87,12 +87,11 @@ export class Fight {
 			return this;
 		}
 
-		if(playerHand.getIsBlackjack() === true && enemyHand.getIsBlackjack() === false) {
-			if(enemyHand.getValue() === 21) {
+		if (playerHand.getIsBlackjack() === true && enemyHand.getIsBlackjack() === false) {
+			if (enemyHand.getValue() === 21) {
 				this.totalDamageToEnemy += 1;
 			}
 		}
-
 
 		this.totalDamageToEnemy +=
 			playerHand.getValue() +

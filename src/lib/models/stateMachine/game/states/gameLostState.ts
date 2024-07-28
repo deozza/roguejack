@@ -9,7 +9,6 @@ export default class GameLostState extends DefaultState implements StateInterfac
 	public onStateEnter(): void {
 		super.onStateEnter(this.name);
 		sceneStore.set(GameLostScreen);
-
 	}
 
 	public onStateExecute(): void {}

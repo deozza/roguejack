@@ -143,7 +143,6 @@
 	/>
 {/if}
 
-
 <section
 	class="container h-full mx-auto flex flex-col justify-center items-center"
 	id="battle-screen"
@@ -171,7 +170,7 @@
 			</div>
 
 			<div class="flex flex-col md:flex-row md:flex-wrap w-full items-center justify-center">
-				<CenterSide on:fight={() => fight()} on:newTurn={async () => await prepareNewTurn()}/>
+				<CenterSide on:fight={() => fight()} on:newTurn={async () => await prepareNewTurn()} />
 			</div>
 		</div>
 

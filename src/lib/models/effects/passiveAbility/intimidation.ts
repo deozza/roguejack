@@ -36,7 +36,6 @@ export default class Intimidation implements ContinuousEffect {
 			return [...sideEffects, new Scared()];
 		});
 
-
 		gameStore.addStatusToEnemy(new Scared());
 	}
 }

@@ -10,7 +10,7 @@ export default class Poisoned implements Status {
 	active: boolean = false;
 	defaultAmount: number = 1;
 	currentAmount: number = 1;
-	
+
 	public applyEffects(calledBy: 'player' | 'enemy') {
 		return [
 			{
@@ -50,7 +50,6 @@ export default class Poisoned implements Status {
 
 			gameStore.removeStatusFromPlayer(this);
 
-
 			return;
 		}
 
@@ -59,6 +58,5 @@ export default class Poisoned implements Status {
 		});
 
 		gameStore.removeStatusFromEnemy(this);
-
 	}
 }

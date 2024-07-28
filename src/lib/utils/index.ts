@@ -23,13 +23,12 @@ export const randomIntFromInterval = (min: number, max: number): number => {
 };
 
 export async function updateBattleState() {
-
 	let turnState: TurnMachineState = get(turnMachineState);
 	let game: Game = get(gameStore);
 
 	if (turnState.currentState.name === 'TurnEnemyDeckEmptyState') {
 		battleMachineState.update((state: BattleMachineState) => {
-			return state.listenToEvent({ name: 'WIN', data: null });;
+			return state.listenToEvent({ name: 'WIN', data: null });
 		});
 
 		await redirectToCamp();
@@ -39,12 +38,12 @@ export async function updateBattleState() {
 
 	if (turnState.currentState.name === 'TurnPlayerDeckEmptyState') {
 		battleMachineState.update((state: BattleMachineState) => {
-			return state.listenToEvent({ name: 'LOSE', data: null });;
+			return state.listenToEvent({ name: 'LOSE', data: null });
 		});
 
 		await delay(5000);
 		gameMachineState.update((state: GameMachineState) => {
-			return state.listenToEvent({ name: 'END_GAME', data: null });;
+			return state.listenToEvent({ name: 'END_GAME', data: null });
 		});
 
 		return;
@@ -52,7 +51,7 @@ export async function updateBattleState() {
 
 	if (game.getCurrentBattle()?.enemy.currentHealth <= 0) {
 		battleMachineState.update((state: BattleMachineState) => {
-			return state.listenToEvent({ name: 'WIN', data: null });;
+			return state.listenToEvent({ name: 'WIN', data: null });
 		});
 		await redirectToCamp();
 		return;
@@ -60,13 +59,13 @@ export async function updateBattleState() {
 
 	if (game.player.currentHealth <= 0) {
 		battleMachineState.update((state: BattleMachineState) => {
-			return state.listenToEvent({ name: 'LOSE', data: null });;
+			return state.listenToEvent({ name: 'LOSE', data: null });
 		});
 
 		await delay(5000);
-		
+
 		gameMachineState.update((state: GameMachineState) => {
-			return state.listenToEvent({ name: 'END_GAME', data: null });;
+			return state.listenToEvent({ name: 'END_GAME', data: null });
 		});
 		return;
 	}
@@ -75,13 +74,13 @@ export async function updateBattleState() {
 export async function redirectToCamp() {
 	await delay(5000);
 	battleMachineState.update((state: BattleMachineState) => {
-		return state.listenToEvent({ name: 'CAMP', data: null });;
+		return state.listenToEvent({ name: 'CAMP', data: null });
 	});
 
 	await delay(1000);
 
 	turnMachineState.update((state: TurnMachineState) => {
-		return state.listenToEvent({ name: 'RESET', data: null });;
+		return state.listenToEvent({ name: 'RESET', data: null });
 	});
 
 	scrollToElement('top');

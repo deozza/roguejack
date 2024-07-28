@@ -270,7 +270,6 @@ function createGameStore() {
 
 	const addStatusToPlayer = (statusToAdd: Status) => {
 		update((game) => {
-
 			const index: number = game.player.status.findIndex(
 				(status: Status) => status.technicalName === statusToAdd.technicalName
 			);
@@ -287,13 +286,17 @@ function createGameStore() {
 
 	const addStatusToEnemy = (statusToAdd: Status) => {
 		update((game) => {
-
-			const index: number = game.getCurrentBattle().enemy.status.findIndex(
-				(status: Status) => status.technicalName === statusToAdd.technicalName
-			);
+			const index: number = game
+				.getCurrentBattle()
+				.enemy.status.findIndex(
+					(status: Status) => status.technicalName === statusToAdd.technicalName
+				);
 			if (index === -1) {
 				statusToAdd.currentAmount = statusToAdd.defaultAmount;
-				game.getCurrentBattle().enemy.status = [...game.getCurrentBattle().enemy.status, statusToAdd];
+				game.getCurrentBattle().enemy.status = [
+					...game.getCurrentBattle().enemy.status,
+					statusToAdd
+				];
 				return game;
 			}
 
@@ -301,7 +304,7 @@ function createGameStore() {
 			return game;
 		});
 	};
-	
+
 	const removeStatusFromPlayer = (statusToRemove: Status) => {
 		update((game: Game) => {
 			const index = game.player.status.findIndex((status: Status) => status === statusToRemove);
@@ -316,11 +319,13 @@ function createGameStore() {
 
 			return game;
 		});
-	}
+	};
 
 	const removeStatusFromEnemy = (statusToRemove: Status) => {
 		update((game: Game) => {
-			const index = game.getCurrentBattle()?.enemy.status.findIndex((status: Status) => status === statusToRemove);
+			const index = game
+				.getCurrentBattle()
+				?.enemy.status.findIndex((status: Status) => status === statusToRemove);
 			if (index === -1) {
 				return game;
 			}
@@ -329,10 +334,10 @@ function createGameStore() {
 			if (game.getCurrentBattle().enemy.status[index].currentAmount <= 0) {
 				game.getCurrentBattle().enemy.status.splice(index, 1);
 			}
-			
+
 			return game;
 		});
-	}
+	};
 
 	return {
 		subscribe,

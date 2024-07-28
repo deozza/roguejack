@@ -24,7 +24,6 @@
 	const isEnemy: boolean = checkCharacterIsForEnnemy(user);
 
 	const dispatch = createEventDispatcher();
-
 </script>
 
 <div class="flex flex-col items-center justify-center md:h-full w-full md:w-4/12">
@@ -61,13 +60,12 @@
 			</div>
 
 			{#if user.status.length > 0}
-				<div class="flex flex-row items-center justify-start space-x-3 w-1/2 ">
+				<div class="flex flex-row items-center justify-start space-x-3 w-1/2">
 					{#each user.status as status}
 						<Status {status} />
 					{/each}
 				</div>
 			{/if}
-
 		</div>
 	</div>
 

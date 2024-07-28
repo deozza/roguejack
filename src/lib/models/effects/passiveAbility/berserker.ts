@@ -25,7 +25,6 @@ export default class Berserker implements ContinuousEffect {
 		if (calledBy === 'enemy') {
 			const character = game.getCurrentBattle()?.enemy;
 			if (character?.currentHealth / character?.maxHealth <= 0.5) {
-
 				gameStore.update((game: Game) => {
 					game.getCurrentBattle().getCurrentTurn().fight.bonusValueForEnemy += 2;
 					return game;
@@ -36,7 +35,6 @@ export default class Berserker implements ContinuousEffect {
 
 		const character = game.player;
 		if (character.currentHealth / character.maxHealth <= 0.5) {
-
 			gameStore.update((game: Game) => {
 				game.getCurrentBattle().getCurrentTurn().fight.bonusValueForPlayer += 2;
 				return game;

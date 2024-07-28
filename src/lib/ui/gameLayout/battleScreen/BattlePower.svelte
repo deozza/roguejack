@@ -25,18 +25,13 @@
 </script>
 
 {#key hand.value}
-
-	<div class="flex flex-row flex-wrap items-center justify-center m-4 text-4xl text-red-500"
-	>
+	<div class="flex flex-row flex-wrap items-center justify-center m-4 text-4xl text-red-500">
 		{#if currentStateName !== 'TurnDeckEmptyState'}
-			<p class="p"
-				in:fly={{ delay: 300, duration: 800 }} 	
-			>
+			<p class="p" in:fly={{ delay: 300, duration: 800 }}>
 				{hand.value + bonusValue}
 				{bonusDamage !== 0 ? `+ ${bonusDamage}` : ''}
 			</p>
 		{/if}
 		<Icon icon={iconByValue()} />
 	</div>
-
 {/key}

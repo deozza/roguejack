@@ -25,7 +25,6 @@ export default class Dodge implements ContinuousEffect {
 		if (calledBy === 'enemy') {
 			if (game.getCurrentBattle()?.getCurrentTurn()?.fight.playerHasWon) {
 				if (game.getCurrentBattle()?.getCurrentTurn()?.playerHand.cards.length >= 4) {
-
 					gameStore.update((game: Game) => {
 						game.getCurrentBattle().getCurrentTurn().fight.totalDamageToEnemy = 0;
 						return game;
@@ -37,7 +36,6 @@ export default class Dodge implements ContinuousEffect {
 
 		if (game.getCurrentBattle()?.getCurrentTurn()?.fight.enemyHasWon) {
 			if (game.getCurrentBattle()?.getCurrentTurn()?.enemyHand.cards.length >= 4) {
-
 				gameStore.update((game: Game) => {
 					game.getCurrentBattle().getCurrentTurn().fight.totalDamageToPlayer = 0;
 					return game;
