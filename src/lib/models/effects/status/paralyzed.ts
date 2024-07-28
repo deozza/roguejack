@@ -1,3 +1,5 @@
+import type { Game } from '$lib/models/game/model';
+import { gameStore } from '$lib/stores/game';
 import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 import { turnMachineState } from '$lib/stores/stateMachine/turn';
 import { delay } from '$lib/utils';
@@ -22,16 +24,10 @@ export default class Paralyzed implements Status {
 	}
 
 	public skipTurn() {
-		this.active = true;
-
 		turnMachineState.update((state) => {
 			state = state.listenToEvent({ name: 'DAMAGE', data: null });
 
 			return state;
-		});
-
-		delay(1000).then(() => {
-			this.active = false;
 		});
 	}
 
@@ -41,11 +37,16 @@ export default class Paralyzed implements Status {
 				return sideEffects.filter((effect) => effect.technicalName !== this.technicalName);
 			});
 
+			gameStore.removeStatusFromPlayer(this);
+
 			return;
 		}
 
 		enemySideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
 			return sideEffects.filter((effect) => effect.technicalName !== this.technicalName);
 		});
+
+		gameStore.removeStatusFromEnemy(this);
+
 	}
 }

@@ -2,7 +2,6 @@ import type { Game } from '$lib/models/game/model';
 import { get } from 'svelte/store';
 import type { ContinuousEffect } from '../interfaces';
 import { gameStore } from '$lib/stores/game';
-import { delay } from '$lib/utils';
 
 export default class Dodge implements ContinuousEffect {
 	id: string = crypto.randomUUID();
@@ -26,15 +25,10 @@ export default class Dodge implements ContinuousEffect {
 		if (calledBy === 'enemy') {
 			if (game.getCurrentBattle()?.getCurrentTurn()?.fight.playerHasWon) {
 				if (game.getCurrentBattle()?.getCurrentTurn()?.playerHand.cards.length >= 4) {
-					this.active = true;
 
 					gameStore.update((game: Game) => {
 						game.getCurrentBattle().getCurrentTurn().fight.totalDamageToEnemy = 0;
 						return game;
-					});
-
-					delay(1000).then(() => {
-						this.active = false;
 					});
 				}
 			}
@@ -43,15 +37,10 @@ export default class Dodge implements ContinuousEffect {
 
 		if (game.getCurrentBattle()?.getCurrentTurn()?.fight.enemyHasWon) {
 			if (game.getCurrentBattle()?.getCurrentTurn()?.enemyHand.cards.length >= 4) {
-				this.active = true;
 
 				gameStore.update((game: Game) => {
 					game.getCurrentBattle().getCurrentTurn().fight.totalDamageToPlayer = 0;
 					return game;
-				});
-
-				delay(1000).then(() => {
-					this.active = false;
 				});
 			}
 		}

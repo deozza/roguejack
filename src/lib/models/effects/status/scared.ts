@@ -34,7 +34,6 @@ export default class Scared implements Status {
 		if (calledBy === 'enemy') {
 			return;
 		}
-		this.active = true;
 
 		if (Math.random() >= 0.5) {
 			return;
@@ -77,11 +76,15 @@ export default class Scared implements Status {
 				return sideEffects.filter((effect) => effect.technicalName !== this.technicalName);
 			});
 
+			gameStore.removeStatusFromPlayer(this);
+
 			return;
 		}
 
 		enemySideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
 			return sideEffects.filter((effect) => effect.technicalName !== this.technicalName);
 		});
+
+		gameStore.removeStatusFromEnemy(this);
 	}
 }

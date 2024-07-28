@@ -8,6 +8,7 @@ import { getRandomEnemyByLevelAndType, type Enemy } from '$lib/models/characters
 import { EnnemyType } from '$lib/models/characters/types';
 import type { Player } from '$lib/models/characters/players';
 import type { ItemTypes } from '$lib/models/items/types';
+import type { Status } from '$lib/models/effects/interfaces';
 
 function createGameStore() {
 	const { subscribe, set, update } = writable<Game>(new Game());
@@ -266,6 +267,20 @@ function createGameStore() {
 			return game;
 		});
 	};
+	
+	const removeStatusFromPlayer = (status: Status) => {
+		update((game: Game) => {
+			game.player.status = game.player.status.filter((effect: Status) => effect.technicalName !== status.technicalName);
+			return game;
+		});
+	}
+
+	const removeStatusFromEnemy = (status: Status) => {
+		update((game: Game) => {
+			game.getCurrentBattle().enemy.status = game.getCurrentBattle().enemy.status.filter((effect: Status) => effect.technicalName !== status.technicalName);
+			return game;
+		});
+	}
 
 	return {
 		subscribe,
@@ -286,7 +301,9 @@ function createGameStore() {
 		removeFromInventory,
 		resolveFight,
 		addCardToDeck,
-		shuffleDeck
+		shuffleDeck,
+		removeStatusFromPlayer,
+		removeStatusFromEnemy
 	};
 }
 

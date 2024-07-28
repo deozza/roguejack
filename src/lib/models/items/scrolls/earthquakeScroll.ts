@@ -44,6 +44,11 @@ export default class EarthquakeScroll implements ScrollInterface {
 			playerSideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
 				return [...sideEffects, new Paralyzed()];
 			});
+
+			gameStore.update((game: Game) => {
+				game.player.status = [...game.player.status, new Paralyzed()];
+				return game;
+			})
 		}
 	}
 

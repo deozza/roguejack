@@ -4,7 +4,6 @@ import type { ContinuousEffect, Status } from '../interfaces';
 import { gameStore } from '$lib/stores/game';
 import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 import Bleeding from '../status/bleeding';
-import { delay } from '$lib/utils';
 
 export default class InflictWound implements ContinuousEffect {
 	id: string = crypto.randomUUID();
@@ -24,7 +23,6 @@ export default class InflictWound implements ContinuousEffect {
 	}
 
 	public onStateEnter_TurnLostState(calledBy: 'player' | 'enemy') {
-		this.active = true;
 		const game: Game = get(gameStore);
 		if (calledBy === 'enemy') {
 			if (
@@ -34,10 +32,11 @@ export default class InflictWound implements ContinuousEffect {
 				playerSideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
 					return [...sideEffects, new Bleeding()];
 				});
-
-				delay(1000).then(() => {
-					this.active = false;
-				});
+				
+				gameStore.update((game: Game) => {
+					game.player.status = [...game.player.status, new Bleeding()];
+					return game;
+				})
 			}
 			return;
 		}
@@ -46,14 +45,14 @@ export default class InflictWound implements ContinuousEffect {
 			game.getCurrentBattle()?.getCurrentTurn()?.playerHand.value >
 			game.getCurrentBattle()?.getCurrentTurn()?.enemyHand.value
 		) {
-			this.active = true;
-
 			enemySideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
 				return [...sideEffects, new Bleeding()];
 			});
-			delay(1000).then(() => {
-				this.active = false;
-			});
+
+			gameStore.update((game: Game) => {
+				game.getCurrentBattle().enemy.status = [...game.getCurrentBattle().enemy.status, new Bleeding()];
+				return game;
+			})
 		}
 
 		return;
