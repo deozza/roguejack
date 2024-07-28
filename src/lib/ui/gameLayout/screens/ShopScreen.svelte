@@ -34,15 +34,15 @@
 
 		switch (object.rarity) {
 			case Rarities.common:
-				return 3;
+				return 2;
 			case Rarities.uncommon:
-				return 5;
+				return 3;
 			case Rarities.rare:
-				return 10;
+				return 5;
 			case Rarities.epic:
-				return 15;
+				return 8;
 			case Rarities.legendary:
-				return 30;
+				return 13;
 			default:
 				return 0;
 		}
