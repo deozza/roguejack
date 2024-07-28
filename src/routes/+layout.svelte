@@ -23,15 +23,6 @@
 
 		pauseIcon = 'game-icons:pause-button';
 	}
-
-	function quit() {
-		$gameMachineState.listenToEvent({ name: 'QUIT_GAME', data: null });
-		$gameMachineState = $gameMachineState;
-
-		gameStore.reset();
-
-		enterPause();
-	}
 </script>
 
 <!-- App Shell -->
@@ -44,9 +35,11 @@
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				<span>v0.7.4</span>
-				<button class="btn" on:click={() => enterPause()}>
-					<Icon icon={pauseIcon} width="32" height="32" />
-				</button>
+				{#if $gameMachineState.currentState.name === 'GamePlayingState' || $gameMachineState.currentState.name === 'GamePausedState'}
+					<button class="btn" on:click={() => enterPause()}>
+						<Icon icon={pauseIcon} width="32" height="32" />
+					</button>
+				{/if}
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
