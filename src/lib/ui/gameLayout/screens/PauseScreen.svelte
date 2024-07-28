@@ -2,7 +2,6 @@
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
 	import { createEventDispatcher } from 'svelte';
 	import { page } from '$app/stores';
-	import { fade } from 'svelte/transition';
 
 	const dispatch = createEventDispatcher();
 </script>

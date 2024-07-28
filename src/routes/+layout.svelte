@@ -8,6 +8,10 @@
 	import PauseScreen from '$lib/ui/gameLayout/screens/PauseScreen.svelte';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
 	import { gameStore } from '$lib/stores/game';
+	import { turnMachineState } from '$lib/stores/stateMachine/turn';
+	import { TurnMachineState } from '$lib/models/stateMachine/turn/turnMachineState';
+	import { battleMachineState } from '$lib/stores/stateMachine/battle';
+	import { BattleMachineState } from '$lib/models/stateMachine/battle/battleMachineState';
 	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
 	let pauseIcon: string = 'game-icons:pause-button';
@@ -24,8 +28,9 @@
 	}
 
 	function quit() {
-		$gameMachineState.listenToEvent({ name: 'QUIT_GAME', data: null });
-		$gameMachineState = $gameMachineState;
+		$gameMachineState = $gameMachineState.listenToEvent({ name: 'QUIT_GAME', data: null });
+		turnMachineState.set(new TurnMachineState())
+		battleMachineState.set(new BattleMachineState());
 
 		gameStore.reset();
 
