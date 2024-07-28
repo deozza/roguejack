@@ -8,16 +8,19 @@
 	import { createEventDispatcher } from 'svelte';
 	import { gameStore } from '$lib/stores/game';
 	import CharacterPreview from './CharacterPreview.svelte';
-	import type { Character } from '$lib/models/characters';
+	import { checkCharacterIsForEnnemy, type Character } from '$lib/models/characters';
 	import type { ContinuousEffect, Status } from '$lib/models/effects/interfaces';
 	import { EnnemyType } from '$lib/models/characters/types';
+	import BattlePower from './BattlePower.svelte';
+	import type { Fight } from '$lib/models/fight/model';
 
 	export let user: Character;
 	export let userHand: Hand;
 	export let passiveEffects: Array<Status | ContinuousEffect> = [];
-
 	export let currentStateName: string;
-	export let isEnemy: boolean = false;
+	export let fight: Fight;
+
+	const isEnemy: boolean = checkCharacterIsForEnnemy(user);
 
 	const dispatch = createEventDispatcher();
 	let openedCharacterInfo: boolean = false;
@@ -117,4 +120,10 @@
 			{/each}
 		</div>
 	</div>
+	<BattlePower
+		hand={userHand}
+		bonusValue={isEnemy ? fight.bonusValueForEnemy : fight.bonusValueForPlayer}
+		bonusDamage={isEnemy ? fight.bonusDamageToPlayer : fight.bonusDamageToEnemy}
+		{currentStateName}
+	/>
 </div>

@@ -6,10 +6,8 @@
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
 	import CenterSide from '../battleScreen/CenterSide.svelte';
 	import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
-	import { fade } from 'svelte/transition';
 	import DiscardPreview from '../battleScreen/DiscardPreview.svelte';
 	import { delay, scrollToElement } from '$lib/utils';
-	import BattlePower from '../battleScreen/BattlePower.svelte';
 	import type { Fight } from '$lib/models/fight/model';
 
 	let openedEnemyDiscardView: boolean = false;
@@ -206,6 +204,7 @@
 			userHand={$gameStore.getCurrentBattle().getCurrentTurn().playerHand}
 			currentStateName={$turnMachineState.currentState.name}
 			passiveEffects={$playerSideEffectsStore}
+			fight={$gameStore.getCurrentBattle().getCurrentTurn().fight}
 			on:draw={() => drawCard()}
 			on:playerDiscardView={() => openPlayerDiscardView()}
 			on:updateBattleState={() => updateBattleState()}
@@ -218,19 +217,7 @@
 			</div>
 
 			<div class="flex flex-col md:flex-row md:flex-wrap w-full items-center justify-center">
-				<BattlePower
-					hand={$gameStore.getCurrentBattle().getCurrentTurn().playerHand}
-					bonusValue={$gameStore.getCurrentBattle().getCurrentTurn().fight.bonusValueForPlayer}
-					bonusDamage={$gameStore.getCurrentBattle().getCurrentTurn().fight.bonusDamageToEnemy}
-					currentStateName={$turnMachineState.currentState.name}
-				/>
 				<CenterSide on:fight={() => fight()} on:newTurn={async () => await prepareNewTurn()} />
-				<BattlePower
-					hand={$gameStore.getCurrentBattle().getCurrentTurn().enemyHand}
-					bonusValue={$gameStore.getCurrentBattle().getCurrentTurn().fight.bonusValueForEnemy}
-					bonusDamage={$gameStore.getCurrentBattle().getCurrentTurn().fight.bonusDamageToPlayer}
-					currentStateName={$turnMachineState.currentState.name}
-				/>
 			</div>
 		</div>
 
@@ -239,7 +226,7 @@
 			userHand={$gameStore.getCurrentBattle().getCurrentTurn().enemyHand}
 			currentStateName={$turnMachineState.currentState.name}
 			passiveEffects={$enemySideEffectsStore}
-			isEnemy={true}
+			fight={$gameStore.getCurrentBattle().getCurrentTurn().fight}
 			on:enemyDiscardView={() => openEnemyDiscardView()}
 		/>
 	</div>
