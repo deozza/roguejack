@@ -18,6 +18,7 @@
 	import Deck from '$lib/ui/deck/Deck.svelte';
 	import Discard from '$lib/ui/deck/Discard.svelte';
 	import { updateBattleState } from '$lib/utils';
+	import PlayerInfos from '$lib/ui/gameLayout/navbar/PlayerInfos.svelte';
 	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
 	let pauseIcon: string = 'game-icons:pause-button';
@@ -51,40 +52,7 @@
 		<AppBar padding="p-1 md:p-4">
 			<svelte:fragment slot="lead">
 				{#if $gameMachineState.currentState.name === 'GamePlayingState'}
-					<div
-						class="flex flex-row items-center justify-between space-x-5 w-full divide-x divide-surface-500"
-					>
-						<p class="flex flex-row items-center justify-center text-error-500">
-							<Icon icon="game-icons:hearts" width="16" height="16" />
-							{$gameStore.player.currentHealth}/{$gameStore.player.maxHealth}
-						</p>
-						<Deck deckSize={$gameStore.player.deck.cards.length} mini={true} />
-						<Discard discardSize={$gameStore.player.discard.cards.length} mini={true} />
-
-						<div class="flex flex-row items-center justify-start space-x-3">
-							{#each $gameStore.player.passiveAbilities as passiveAbility}
-								<PassiveAbility {passiveAbility} />
-							{/each}
-						</div>
-
-						{#if $gameStore.player.status.length > 0}
-							<div class="flex flex-row items-center justify-start space-x-3">
-								{#each $gameStore.player.status as status}
-									<Status {status} />
-								{/each}
-							</div>
-						{/if}
-
-						<div class="flex flex-row items-center justify-start space-x-3">
-							{#each $gameStore.player.inventory as item}
-								<Item
-									{item}
-									isEnemy={false}
-									on:updateBattleState={async () => await updateBattleState()}
-								/>
-							{/each}
-						</div>
-					</div>
+					<PlayerInfos />
 				{:else}
 					<strong class="text-xl uppercase">Dungeons and Jacks</strong>
 				{/if}
