@@ -2,6 +2,7 @@ import type { Face, Suit } from '$lib/models/card/types';
 import type { Player } from '$lib/models/characters/players';
 import { DefaultCharacter } from '$lib/models/characters';
 import MasteryOverDeath from '$lib/models/effects/passiveAbility/masteryOverDeath';
+import { Discard } from '$lib/models/discard/model';
 
 export default class Necromancer extends DefaultCharacter implements Player {
 	constructor() {
@@ -18,6 +19,7 @@ export default class Necromancer extends DefaultCharacter implements Player {
 		this.maxHealth = 15;
 		this.currentHealth = 15;
 		this.deck.generateDeck(deckSuits, deckValues);
+		this.discard = new Discard();
 		this.icon = 'game-icons:death-note';
 		this.passiveAbilities = [new MasteryOverDeath()];
 		this.inventory = [];

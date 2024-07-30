@@ -2,6 +2,7 @@ import type { Face, Suit } from '$lib/models/card/types';
 import type { Player } from '$lib/models/characters/players';
 import { DefaultCharacter } from '$lib/models/characters/';
 import Bravery from '$lib/models/effects/passiveAbility/bravery';
+import { Discard } from '$lib/models/discard/model';
 
 export default class Knight extends DefaultCharacter implements Player {
 	constructor() {
@@ -19,6 +20,7 @@ export default class Knight extends DefaultCharacter implements Player {
 		this.maxHealth = 20;
 		this.currentHealth = 20;
 		this.deck.generateDeck(deckSuits, deckValues);
+		this.discard = new Discard();
 		this.icon = 'game-icons:black-knight-helm';
 		this.passiveAbilities = [new Bravery()];
 		this.inventory = [];
