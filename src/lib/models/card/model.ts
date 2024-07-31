@@ -62,3 +62,9 @@ export const generateRandomCard = (): Card => {
 
 	return new Card(randomSuit as Suit, randomFace as Face);
 };
+
+export const getRandomSuit = (): Suit => {
+	const randomSuit = Object.keys(suits)[Math.floor(Math.random() * Object.keys(suits).length)];
+
+	return randomSuit as Suit;
+}

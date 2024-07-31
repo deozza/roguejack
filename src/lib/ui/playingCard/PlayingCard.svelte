@@ -11,6 +11,8 @@
 	class="inline-flex bg-white drop-shadow-2xl flex flex-col items-center justify-between rounded-xl card-hover p-2 min-h-32 min-w-24 {isEnemy
 		? '-ml-12'
 		: '-mr-12'} {card.suit}"
+	class:bg-white={card.suit !== 'grim-reaper'}
+	class:bg-black={card.suit === 'grim-reaper'}
 	in:fly={{ delay: 300, duration: 800 }}
 >
 
@@ -38,7 +40,6 @@
 
 <style>
 	.spade,
-	.grim-reaper,
 	.club {
 		color: black;
 	}

@@ -4,6 +4,7 @@ import { EnnemyType } from '$lib/models/characters/types';
 import { DefaultCharacter } from '$lib/models/characters';
 import Intimidation from '$lib/models/effects/passiveAbility/intimidation';
 import { Discard } from '$lib/models/discard/model';
+import { getRandomSuit } from '$lib/models/card/model';
 
 export default class Ghost extends DefaultCharacter implements Enemy {
 	minAttack: number;
@@ -15,11 +16,11 @@ export default class Ghost extends DefaultCharacter implements Enemy {
 	}
 
 	make() {
-		const deckSuits: Suit[] = ['heart'];
+		const deckSuits: Suit[] = [getRandomSuit()];
 		const deckValues: Face[] = ['A', '2', '4', '6', '8', '9', 'J', 'K'];
 
-		this.name = 'Myconid';
-		this.technicalName = 'myconid';
+		this.name = 'Ghost';
+		this.technicalName = 'ghost';
 		this.maxHealth = 7;
 		this.currentHealth = 7;
 		this.minAttack = 6;

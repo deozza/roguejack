@@ -4,6 +4,7 @@ import { EnnemyType } from '$lib/models/characters/types';
 import { DefaultCharacter } from '$lib/models/characters';
 import Undead from '$lib/models/effects/passiveAbility/undead';
 import { Discard } from '$lib/models/discard/model';
+import { getRandomSuit } from '$lib/models/card/model';
 
 export default class Zombie extends DefaultCharacter implements Enemy {
 	minAttack: number;
@@ -16,7 +17,7 @@ export default class Zombie extends DefaultCharacter implements Enemy {
 	}
 
 	make() {
-		const deckSuits: Suit[] = ['spade', 'club'];
+		const deckSuits: Suit[] = [getRandomSuit(), getRandomSuit()];
 		const deckValues: Face[] = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
 
 		this.name = 'Zombie';

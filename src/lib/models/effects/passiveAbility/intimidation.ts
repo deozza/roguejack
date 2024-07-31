@@ -6,10 +6,10 @@ import type { Game } from '$lib/models/game/model';
 
 export default class Intimidation implements ContinuousEffect {
 	id: string = crypto.randomUUID();
-	technicalName: string = 'bravery';
-	name: string = 'Bravery';
-	description: string = 'Generate a sword when facing a semiboss or a boss';
-	icon: string = 'game-icons:sword-brandish';
+	technicalName: string = 'intimidation';
+	name: string = 'Intimidation';
+	description: string = 'Scares the opponent';
+	icon: string = 'game-icons:screaming';
 	active: boolean = false;
 
 	public applyEffects(calledBy: 'player' | 'enemy') {
