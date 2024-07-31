@@ -1,12 +1,11 @@
 import type { Face, Suit } from '$lib/models/card/types';
-import { Enemy, type EnemyInterface } from '$lib/models/characters/enemies';
+import { Enemy } from '$lib/models/characters/enemies';
 import { EnnemyType } from '$lib/models/characters/types';
-import Berserker from '$lib/models/effects/passiveAbility/berserker';
 import { Discard } from '$lib/models/discard/model';
 import { getRandomSuit } from '$lib/models/card/model';
-import InflictWound from '$lib/models/effects/passiveAbility/inflictWound';
+import Petrification from '$lib/models/effects/passiveAbility/petrification';
 
-export default class Werewolf extends Enemy implements EnemyInterface {
+export default class Cockatrice extends Enemy {
 	minAttack: number;
 	type: EnnemyType;
 
@@ -20,18 +19,18 @@ export default class Werewolf extends Enemy implements EnemyInterface {
 		const deckSuits: Suit[] = [getRandomSuit(), getRandomSuit()];
 		const deckValues: Face[] = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
 
-		this.name = 'Werewolf';
-		this.technicalName = 'werewolf';
-		this.maxHealth = 25;
-		this.currentHealth = 25;
+		this.name = 'Cockatrice';
+		this.technicalName = 'cockatrice';
+		this.maxHealth = 17;
+		this.currentHealth = 17;
 		this.minAttack = 14;
-		this.level = 3;
+		this.level = 2;
 		this.type = EnnemyType.boss;
 		this.deck.generateDeck(deckSuits, deckValues);
-		this.passiveAbilities = [new Berserker(), new InflictWound()];
 		this.discard = new Discard();
 		this.inventory = [];
 		this.status = [];
 		this.armors = [];
+		this.passiveAbilities = [new Petrification()];
 	}
 }

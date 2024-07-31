@@ -30,7 +30,7 @@ export default class SharpSword implements ContinuousEffect {
 					?.enemyHand.cards.filter((card) => card.suit === 'spade').length === 0
 			) {
 				gameStore.update((game: Game) => {
-					game.getCurrentBattle().getCurrentTurn().fight.bonusValueForEnemy += 1;
+					game.getCurrentBattle().getCurrentTurn().fight.damageOfEnemy.bonusDamage += 1;
 					return game;
 				});
 			}
@@ -44,7 +44,7 @@ export default class SharpSword implements ContinuousEffect {
 				?.playerHand.cards.filter((card) => card.suit === 'spade').length === 0
 		) {
 			gameStore.update((game: Game) => {
-				game.getCurrentBattle().getCurrentTurn().fight.bonusValueForPlayer += 1;
+				game.getCurrentBattle().getCurrentTurn().fight.damageOfPlayer.bonusDamage += 1;
 				return game;
 			});
 		}

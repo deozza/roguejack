@@ -21,6 +21,9 @@ import ClubArmor from './armor/clubArmor';
 import HeartArmor from './armor/heartArmor';
 import SpadeArmor from './armor/spadeArmor';
 import DiamondArmor from './armor/diamondArmor';
+import LeatherArmor from './armor/leatherArmor';
+import BreastplateArmor from './armor/breastplateArmor';
+import PlateArmor from './armor/plateArmor';
 
 const items: ItemTypes[] = [
 	new PackOfCards(),
@@ -43,7 +46,10 @@ const items: ItemTypes[] = [
 	new ClubArmor(),
 	new HeartArmor(),
 	new SpadeArmor(),
-	new DiamondArmor()
+	new DiamondArmor(),
+	new LeatherArmor(),
+	new BreastplateArmor(),
+	new PlateArmor()
 ];
 
 export function getRandomItemByWeight(

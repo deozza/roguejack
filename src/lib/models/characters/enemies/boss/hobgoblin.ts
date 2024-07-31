@@ -5,8 +5,10 @@ import Berserker from '$lib/models/effects/passiveAbility/berserker';
 import { Discard } from '$lib/models/discard/model';
 import { getRandomSuit } from '$lib/models/card/model';
 import InflictWound from '$lib/models/effects/passiveAbility/inflictWound';
+import BreastplateArmor from '$lib/models/items/armor/breastplateArmor';
+import LeatherArmor from '$lib/models/items/armor/leatherArmor';
 
-export default class Werewolf extends Enemy implements EnemyInterface {
+export default class Hobgoblin extends Enemy implements EnemyInterface {
 	minAttack: number;
 	type: EnnemyType;
 
@@ -22,16 +24,16 @@ export default class Werewolf extends Enemy implements EnemyInterface {
 
 		this.name = 'Werewolf';
 		this.technicalName = 'werewolf';
-		this.maxHealth = 25;
-		this.currentHealth = 25;
-		this.minAttack = 14;
+		this.maxHealth = 10;
+		this.currentHealth = 10;
+		this.minAttack = 16;
 		this.level = 3;
 		this.type = EnnemyType.boss;
 		this.deck.generateDeck(deckSuits, deckValues);
-		this.passiveAbilities = [new Berserker(), new InflictWound()];
+		this.passiveAbilities = [];
 		this.discard = new Discard();
 		this.inventory = [];
 		this.status = [];
-		this.armors = [];
+		this.armors = [new BreastplateArmor(), new LeatherArmor()];
 	}
 }

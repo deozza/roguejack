@@ -7,7 +7,7 @@ export default class Berserker implements ContinuousEffect {
 	id: string = crypto.randomUUID();
 	technicalName: string = 'berserker';
 	name: string = 'Berserker';
-	description: string = 'Deal 1 more base power when low health.';
+	description: string = 'Deal 2 more base power when low health.';
 	icon: string = 'game-icons:enrage';
 	active: boolean = false;
 
@@ -26,7 +26,7 @@ export default class Berserker implements ContinuousEffect {
 			const character = game.getCurrentBattle()?.enemy;
 			if (character?.currentHealth / character?.maxHealth <= 0.5) {
 				gameStore.update((game: Game) => {
-					game.getCurrentBattle().getCurrentTurn().fight.bonusValueForEnemy += 2;
+					game.getCurrentBattle().getCurrentTurn().fight.damageOfEnemy.bonusValue += 2;
 					return game;
 				});
 			}
@@ -36,7 +36,7 @@ export default class Berserker implements ContinuousEffect {
 		const character = game.player;
 		if (character.currentHealth / character.maxHealth <= 0.5) {
 			gameStore.update((game: Game) => {
-				game.getCurrentBattle().getCurrentTurn().fight.bonusValueForPlayer += 2;
+				game.getCurrentBattle().getCurrentTurn().fight.damageOfPlayer.bonusValue += 2;
 				return game;
 			});
 		}

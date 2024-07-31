@@ -31,7 +31,7 @@ export default class Undead implements ContinuousEffect {
 						?.playerHand.cards.filter((card) => card.suit === 'club').length === 0
 				) {
 					gameStore.update((game: Game) => {
-						game.getCurrentBattle().getCurrentTurn().fight.totalDamageToEnemy = 0;
+						game.getCurrentBattle().getCurrentTurn().fight.damageOfPlayer.totalDamage = 0;
 						return game;
 					});
 				}
@@ -47,7 +47,7 @@ export default class Undead implements ContinuousEffect {
 					?.enemyHand.cards.filter((card) => card.suit === 'club').length === 0
 			) {
 				gameStore.update((game: Game) => {
-					game.getCurrentBattle().getCurrentTurn().fight.totalDamageToPlayer = 0;
+					game.getCurrentBattle().getCurrentTurn().fight.damageOfEnemy.totalDamage = 0;
 					return game;
 				});
 			}

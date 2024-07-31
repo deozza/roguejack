@@ -25,7 +25,7 @@ export default class MasteryOverDeath implements ContinuousEffect {
 		if (calledBy === 'enemy') {
 			if (game.getCurrentBattle()?.enemy.discard.cards.length >= 10) {
 				gameStore.update((game: Game) => {
-					game.getCurrentBattle().getCurrentTurn().fight.bonusValueForEnemy += 1;
+					game.getCurrentBattle().getCurrentTurn().fight.damageOfEnemy.bonusDamage += 1;
 					return game;
 				});
 			}
@@ -34,7 +34,7 @@ export default class MasteryOverDeath implements ContinuousEffect {
 
 		if (game.player.discard.cards.length >= 10) {
 			gameStore.update((game: Game) => {
-				game.getCurrentBattle().getCurrentTurn().fight.bonusValueForPlayer += 1;
+				game.getCurrentBattle().getCurrentTurn().fight.damageOfPlayer.bonusDamage += 1;
 				return game;
 			});
 		}

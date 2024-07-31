@@ -1,17 +1,27 @@
 import type { Enemy } from ".";
 import { EnnemyType } from "../types";
+import Cockatrice from "./boss/cockatrice";
+import FlyingSword from "./boss/flyingSword";
+import Hobgoblin from "./boss/hobgoblin";
 import Owlbear from "./boss/owlbear";
 import Werewolf from "./boss/werewolf";
 import Wolf from "./boss/wolf";
 import Boar from "./miniboss/boar";
+import Dryad from "./miniboss/dryad";
+import GiantCrab from "./miniboss/giantCrab";
 import GiantEagle from "./miniboss/giantEagle";
 import Goblin from "./miniboss/goblin";
 import Kobold from "./miniboss/kobold";
 import VampireBat from "./miniboss/vampireBat";
+import Worg from "./miniboss/worg";
 import Zombie from "./miniboss/zombie";
+import AxeBeak from "./standard/axeBeak";
+import CrawlingClaw from "./standard/crawlingClaw";
 import Ghost from "./standard/ghost";
+import Homonculus from "./standard/homonculus";
 import Myconid from "./standard/myconid";
 import Rat from "./standard/rat";
+import Skeleton from "./standard/skeleton";
 import Slime from "./standard/slime";
 import Snake from "./standard/snake";
 import Spider from "./standard/spider";
@@ -31,7 +41,17 @@ const enemyList: Enemy[] = [
 	new GiantEagle(),
 	new Myconid(),
 	new Goblin(),
-	new Ghost()
+	new Ghost(),
+	new Homonculus(),
+	new CrawlingClaw(),
+	new GiantCrab(),
+	new FlyingSword(),
+	new AxeBeak(),
+	new Skeleton(),
+	new Cockatrice(),
+	new Dryad(),
+	new Worg(),
+	new Hobgoblin()
 ];
 
 export function getRandomEnemyByLevelAndType(level: number, type: EnnemyType): Enemy {
