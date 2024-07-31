@@ -32,10 +32,10 @@ export default class DiamondArmor implements ArmorInterface {
 
 		if(calledBy === 'player') {
 			if(damage === null) {
-				damage = fight.totalDamageToPlayer;
+				damage = fight.damageOfEnemy;
 			}
 
-			if(damage.amount <= 0) {
+			if(damage.totalDamage <= 0) {
 				return damage;
 			}
 
@@ -44,12 +44,12 @@ export default class DiamondArmor implements ArmorInterface {
 			}
 			
 			if(enemyHand.cards.find(card => card.suit === suits.diamond)) {
-				if(damage.amount >= this.currentAmount) {
-					damage.amount -= this.currentAmount;
+				if(damage.totalDamage >= this.currentAmount) {
+					damage.totalDamage -= this.currentAmount;
 					this.currentAmount = 0;
 				}else{
-					this.currentAmount -= damage.amount;
-					damage.amount = 0;
+					this.currentAmount -= damage.totalDamage;
+					damage.totalDamage = 0;
 				}
 
 				gameStore.update((game: Game) => {
@@ -63,10 +63,10 @@ export default class DiamondArmor implements ArmorInterface {
 		}
 
 		if(damage === null) {
-			damage = fight.totalDamageToEnemy;
+			damage = fight.damageOfPlayer;
 		}
 
-		if(damage.amount <= 0){
+		if(damage.totalDamage <= 0){
 			return damage;
 		}
 
@@ -75,12 +75,12 @@ export default class DiamondArmor implements ArmorInterface {
 		}
 
 		if(playerHand.cards.find(card => card.suit === suits.diamond)) {
-			if(damage.amount > this.currentAmount) {
-				damage.amount -= this.currentAmount;
+			if(damage.totalDamage > this.currentAmount) {
+				damage.totalDamage -= this.currentAmount;
 				this.currentAmount = 0;
 			}else{
-				this.currentAmount -= damage.amount;
-				damage.amount = 0;
+				this.currentAmount -= damage.totalDamage;
+				damage.totalDamage = 0;
 			}
 
 			gameStore.update((game: Game) => {

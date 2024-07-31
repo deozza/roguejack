@@ -111,6 +111,11 @@ function createGameStore() {
 	const inflictDamagesToEnemy = (damage: Damage) => {
 		update((game) => {
 			game.getCurrentBattle().enemy.takeDamage(damage);
+			game.getCurrentBattle().enemy.armors.forEach((armor: ArmorInterface) => {
+				if(armor.currentAmount <= 0) {
+					game.getCurrentBattle().enemy.armors.splice(game.getCurrentBattle().enemy.armors.indexOf(armor), 1);
+				}
+			});
 			
 			return game;
 		});
@@ -119,6 +124,13 @@ function createGameStore() {
 	const inflictDamagesToPlayer = (damage: Damage) => {
 		update((game) => {
 			game.player.takeDamage(damage);
+
+			game.player.armors.forEach((armor: ArmorInterface) => {
+				if(armor.currentAmount <= 0) {
+					game.player.armors.splice(game.player.armors.indexOf(armor), 1);
+				}
+			});
+
 			return game;
 		});
 	};
@@ -303,9 +315,6 @@ function createGameStore() {
 			game.getCurrentBattle().getCurrentTurn().fight.setMultiplierForPlayer(playerHand);
 			game.getCurrentBattle().getCurrentTurn().fight.setTotalDamageOfPlayer(playerHand, enemyHand);
 			game.getCurrentBattle().getCurrentTurn().fight.setMultiplierForEnemy(enemyHand);
-
-
-			console.log(game);
 
 			return game;
 		});

@@ -2,9 +2,6 @@
 	import { gameStore } from '$lib/stores/game';
 	import { sceneStore } from '$lib/stores/scene';
 	import { fade } from 'svelte/transition';
-
-	$: console.log($gameStore)
-
 </script>
 
 <svelte:head>

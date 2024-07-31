@@ -15,13 +15,9 @@ export class Enemy extends DefaultCharacter {
 	
     public takeDamage(damage: Damage): DefaultCharacter {
 
-		console.log('Enemy takeDamage');
-        console.log(damage);
-
         this.armors.forEach((armor: ArmorInterface) => {
             damage = armor.applyEffects('enemy', damage);
         });
-        console.log(damage);
 
 		return super.takeDamage(damage);   
     }
