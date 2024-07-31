@@ -16,12 +16,12 @@ export default class DiamondArmor implements ArmorInterface {
 	effects: EffectInterface[] = [];
 	technicalName: string = 'diamondArmor';
 	name: string = 'Diamond armor';
-	description: string = 'Reduces damages of 1 point when opposing hand contains a diamond card.';
+	description: string = 'Reduces physical damages of 1 point when opposing hand contains a diamond card.';
 	icon: string = 'game-icons:chest-armor';
 	rarity: Rarities = Rarities.common;
 	weakToType: Types[] = [];
-	strongToType: Types[] = [];
-	resistantTo: Types[] = [];
+	resistantTo: Types[] = [Types.physical];
+	weakToCategory: Categories[] = [Categories.piercing];
 	defaultAmount = 3;
 	currentAmount: number = 3;
 
@@ -43,6 +43,10 @@ export default class DiamondArmor implements ArmorInterface {
 				return damage;
 			}
 			
+			if(this.resistantTo.includes(damage.type) === false && this.weakToCategory.includes(damage.category) === false) {
+				return damage;
+			}
+
 			if(enemyHand.cards.find(card => card.suit === suits.diamond)) {
 				if(damage.totalDamage >= this.currentAmount) {
 					damage.totalDamage -= this.currentAmount;

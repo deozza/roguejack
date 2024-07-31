@@ -15,12 +15,12 @@ export default class LeatherArmor implements ArmorInterface {
 	effects: EffectInterface[] = [];
 	technicalName: string = 'leatherArmor';
 	name: string = 'Leather armor';
-	description: string = 'Reduces damages of 1 point.';
+	description: string = 'Reduces physical damages of 1 point.';
 	icon: string = 'game-icons:chest-armor';
 	rarity: Rarities = Rarities.rare;
 	weakToType: Types[] = [];
-	strongToType: Types[] = [];
-	resistantTo: Types[] = [];
+	resistantTo: Types[] = [Types.physical];
+	weakToCategory: Categories[] = [Categories.piercing];
 	defaultAmount = 3;
 	currentAmount: number = 3;
 
@@ -39,6 +39,10 @@ export default class LeatherArmor implements ArmorInterface {
 			}
 
 			if(playerHand.getIsBusted() === true) {
+				return damage;
+			}
+
+			if(this.resistantTo.includes(damage.type) === false && this.weakToCategory.includes(damage.category) === false) {
 				return damage;
 			}
 			

@@ -16,12 +16,12 @@ export default class SpadeArmor implements ArmorInterface {
 	effects: EffectInterface[] = [];
 	technicalName: string = 'spadeArmor';
 	name: string = 'Spade armor';
-	description: string = 'Reduces damages of 1 point when opposing hand contains a spade card.';
+	description: string = 'Reduces physical damages of 1 point when opposing hand contains a spade card.';
 	icon: string = 'game-icons:chest-armor';
 	rarity: Rarities = Rarities.common;
 	weakToType: Types[] = [];
-	strongToType: Types[] = [];
-	resistantTo: Types[] = [];
+	resistantTo: Types[] = [Types.physical];
+	weakToCategory: Categories[] = [Categories.piercing];
 	defaultAmount = 3;
 	currentAmount: number = 3;
 
@@ -40,6 +40,10 @@ export default class SpadeArmor implements ArmorInterface {
 			}
 
 			if(playerHand.getIsBusted() === true) {
+				return damage;
+			}
+
+			if(this.resistantTo.includes(damage.type) === false && this.weakToCategory.includes(damage.category) === false) {
 				return damage;
 			}
 			

@@ -19,6 +19,7 @@ import AxeBeak from "./standard/axeBeak";
 import CrawlingClaw from "./standard/crawlingClaw";
 import Ghost from "./standard/ghost";
 import Homonculus from "./standard/homonculus";
+import LivingArmor from "./standard/livingArmor";
 import Myconid from "./standard/myconid";
 import Rat from "./standard/rat";
 import Skeleton from "./standard/skeleton";
@@ -51,7 +52,8 @@ const enemyList: Enemy[] = [
 	new Cockatrice(),
 	new Dryad(),
 	new Worg(),
-	new Hobgoblin()
+	new Hobgoblin(),
+	new LivingArmor()
 ];
 
 export function getRandomEnemyByLevelAndType(level: number, type: EnnemyType): Enemy {

@@ -30,6 +30,7 @@ export interface ArmorInterface extends ItemInterface {
 	applyEffects(calledBy: 'player' | 'enemy', damage: Damage | null): Damage;
 	category: Categories;
 	weakToType: Types[];
+	weakToCategory: Categories[];
 	resistantTo: Types[];
 }
 
