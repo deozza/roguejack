@@ -29,7 +29,7 @@ function createGameStore() {
 		update((game) => {
 			const nextBattleIndex: number = game.battles.length + 1;
 			let nextBattleEnemyType: EnnemyType = EnnemyType.standard;
-			let nextBattleEnemyLevel: number = Math.max(Math.floor(nextBattleIndex / 10), 1);
+			let nextBattleEnemyLevel: number = Math.max(Math.ceil(nextBattleIndex / 10), 1);
 
 			if (nextBattleIndex % 10 === 0) {
 				nextBattleEnemyType = EnnemyType.boss;
