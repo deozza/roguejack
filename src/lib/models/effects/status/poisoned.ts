@@ -1,3 +1,4 @@
+import { Damage } from '$lib/models/damage/model';
 import { gameStore } from '$lib/stores/game';
 import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 import type { ContinuousEffect, Status } from '../interfaces';
@@ -32,14 +33,20 @@ export default class Poisoned implements Status {
 		if (calledBy === 'enemy') {
 			return;
 		}
-		gameStore.inflictDamagesToPlayer(1);
+		const damage: Damage = new Damage();
+		damage.totalDamage = 1;
+
+		gameStore.inflictDamagesToPlayer(damage);
 	}
 
 	public onStateEnter_TurnEnemyDrawingState(calledBy: 'player' | 'enemy') {
 		if (calledBy === 'player') {
 			return;
 		}
-		gameStore.inflictDamagesToEnemy(1);
+		const damage: Damage = new Damage();
+		damage.totalDamage = 1;
+
+		gameStore.inflictDamagesToEnemy(damage);
 	}
 
 	public onStateExit_BattleWonState(calledBy: 'player' | 'enemy') {

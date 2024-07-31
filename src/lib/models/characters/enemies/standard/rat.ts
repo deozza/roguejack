@@ -20,8 +20,8 @@ export default class Rat extends Enemy implements EnemyInterface {
 
 		this.name = 'Rat';
 		this.technicalName = 'rat';
-		this.maxHealth = 2;
-		this.currentHealth = 2;
+		this.maxHealth = 3;
+		this.currentHealth = 3;
 		this.minAttack = 11;
 		this.level = 1;
 		this.type = EnnemyType.standard;

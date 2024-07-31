@@ -20,8 +20,8 @@ export default class Spider extends Enemy implements EnemyInterface {
 
 		this.name = 'Spider';
 		this.technicalName = 'spider';
-		this.maxHealth = 3;
-		this.currentHealth = 3;
+		this.maxHealth = 2;
+		this.currentHealth = 2;
 		this.minAttack = 11;
 		this.level = 1;
 		this.type = EnnemyType.standard;

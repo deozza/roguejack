@@ -1,3 +1,4 @@
+import { Damage } from '$lib/models/damage/model';
 import type { Game } from '$lib/models/game/model';
 import { gameStore } from '$lib/stores/game';
 import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
@@ -33,14 +34,21 @@ export default class Bleeding implements Status {
 		if (calledBy === 'enemy') {
 			return;
 		}
-		gameStore.inflictDamagesToPlayer(1);
+
+		const damage: Damage = new Damage();
+		damage.totalDamage = 1;
+
+		gameStore.inflictDamagesToPlayer(damage);
 	}
 
 	public onStateEnter_TurnEnemyInitState(calledBy: 'player' | 'enemy') {
 		if (calledBy === 'player') {
 			return;
 		}
-		gameStore.inflictDamagesToEnemy(1);
+		const damage: Damage = new Damage();
+		damage.totalDamage = 1;
+
+		gameStore.inflictDamagesToEnemy(damage);
 	}
 
 	public onStateExit_BattleWonState(calledBy: 'player' | 'enemy') {
