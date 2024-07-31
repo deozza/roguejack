@@ -7,22 +7,21 @@
 	import Healthbar from '../../character/Healthbar.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { gameStore } from '$lib/stores/game';
-	import { checkCharacterIsForEnnemy, type Character } from '$lib/models/characters';
-	import type { ContinuousEffect, Status as StatusInterface } from '$lib/models/effects/interfaces';
+	import { type CharacterInterface } from '$lib/models/characters';
 	import { EnnemyType } from '$lib/models/characters/types';
 	import BattlePower from './BattlePower.svelte';
 	import type { Fight } from '$lib/models/fight/model';
 	import PassiveAbility from '$lib/ui/effect/PassiveAbility.svelte';
 	import Status from '$lib/ui/effect/Status.svelte';
 	import { enemyHasAlreadyBeenDefeated } from '$lib/utils';
+	import { Enemy } from '$lib/models/characters/enemies';
 
-	export let user: Character;
+	export let user: CharacterInterface;
 	export let userHand: Hand;
-	export let passiveEffects: Array<StatusInterface | ContinuousEffect> = [];
 	export let currentStateName: string;
 	export let fight: Fight;
 
-	const isEnemy: boolean = checkCharacterIsForEnnemy(user);
+	const isEnemy: boolean = user instanceof Enemy;
 	const estimatedValue = (): string | null => {
 		if(isEnemy === false) {
 			return null;
@@ -118,8 +117,7 @@
 	</div>
 	<BattlePower
 		hand={userHand}
-		bonusValue={isEnemy ? fight.bonusValueForEnemy : fight.bonusValueForPlayer}
-		bonusDamage={isEnemy ? fight.bonusDamageToPlayer : fight.bonusDamageToEnemy}
+		damage={isEnemy ? fight.damageOfEnemy : fight.damageOfPlayer}
 		{currentStateName}
 		estimatedValue={estimatedValue()}
 	/>

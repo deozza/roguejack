@@ -2,11 +2,11 @@ import { Deck } from '$lib/models/deck/model';
 import { Discard } from '$lib/models/discard/model';
 import type { ItemTypes } from '$lib/models/items/types';
 import type { Status } from '$lib/models/effects/interfaces';
-import type { Enemy } from '$lib/models/characters/enemies';
 import type { ContinuousEffect } from '$lib/models/effects/interfaces';
 import type { ArmorInterface } from '../items/interfaces';
+import type { Damage } from '../damage/model';
 
-export interface Character {
+export interface CharacterInterface {
 	name: string;
 	technicalName: string;
 	level: number;
@@ -20,15 +20,15 @@ export interface Character {
 	passiveAbilities: Array<ContinuousEffect>;
 	armors: Array<ArmorInterface>;
 
-	takeDamage(damage: number): Character;
-	heal(heal: number): Character;
+	takeDamage(damage: Damage): CharacterInterface;
+	heal(heal: number): CharacterInterface;
 	getHealthColor(): string;
 	make(): void;
 	addToInventory(item: ItemTypes): DefaultCharacter;
 	removeItemFromInventory(item: ItemTypes): DefaultCharacter;
 }
 
-export class DefaultCharacter implements Character {
+export class DefaultCharacter implements CharacterInterface {
 	name: string = '';
 	technicalName: string = '';
 	level: number = 0;
@@ -44,8 +44,8 @@ export class DefaultCharacter implements Character {
 
 	constructor() {}
 
-	public takeDamage(damage: number): DefaultCharacter {
-		this.currentHealth = Math.max(0, this.currentHealth - damage);
+	public takeDamage(damage: Damage): DefaultCharacter {
+		this.currentHealth = Math.max(0, this.currentHealth - damage.totalDamage);
 		return this;
 	}
 	public heal(heal: number): DefaultCharacter {
@@ -81,6 +81,3 @@ export class DefaultCharacter implements Character {
 	make(): void {}
 }
 
-export function checkCharacterIsForEnnemy(character: Character): boolean {
-	return (character as Enemy).type !== undefined;
-}

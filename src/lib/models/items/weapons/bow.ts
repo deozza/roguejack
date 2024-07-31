@@ -1,3 +1,4 @@
+import { Damage } from '$lib/models/damage/model';
 import { Categories, Ranges, Types } from '$lib/models/effects/enums';
 import type { EffectInterface } from '$lib/models/effects/interfaces';
 import { Rarities } from '$lib/models/items/enums';
@@ -17,15 +18,19 @@ export default class Bow implements WeaponInterface {
 	range: Ranges = Ranges.far;
 	defaultAmount = 5;
 	currentAmount: number = 5;
+	baseDamage: number = 1;
 
 	applyEffects(calledBy: 'player' | 'enemy'): void {
+
+		const damage: Damage = new Damage().setDamageByItem(this);
+
 		if (calledBy === 'player') {
-			gameStore.inflictDamagesToEnemy(1);
+			gameStore.inflictDamagesToEnemy(damage);
 			return;
 		}
 
 		if (calledBy === 'enemy') {
-			gameStore.inflictDamagesToPlayer(1);
+			gameStore.inflictDamagesToPlayer(damage);
 			return;
 		}
 	}

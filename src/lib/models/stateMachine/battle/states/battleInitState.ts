@@ -5,7 +5,7 @@ import { gameMachineState } from '$lib/stores/stateMachine/game';
 import type { GameMachineState } from '../../game/gameMachineState';
 import type { Game } from '$lib/models/game/model';
 import { enemySideEffectsStore } from '$lib/stores/sideEffects';
-import type { Enemy } from '$lib/models/characters/enemies';
+import type { EnemyInterface } from '$lib/models/characters/enemies';
 import type { StateInterface } from '../../interfaces';
 
 export default class BattleInitState extends DefaultState implements StateInterface {
@@ -26,7 +26,7 @@ export default class BattleInitState extends DefaultState implements StateInterf
 
 		gameStore.createBattle();
 		const game: Game = get(gameStore);
-		const enemy: Enemy = game.getCurrentBattle()?.enemy as Enemy;
+		const enemy: EnemyInterface = game.getCurrentBattle()?.enemy as EnemyInterface;
 		if (enemy.passiveAbilities.length > 0) {
 			enemySideEffectsStore.set(enemy.passiveAbilities);
 		}

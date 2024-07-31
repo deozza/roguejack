@@ -1,4 +1,5 @@
-import { faces, suits } from '$lib/models/card/model';
+import { suits } from '$lib/models/card/model';
+import type { Damage } from '$lib/models/damage/model';
 import { Categories, Types } from '$lib/models/effects/enums';
 import type { EffectInterface } from '$lib/models/effects/interfaces';
 import type { Fight } from '$lib/models/fight/model';
@@ -24,27 +25,31 @@ export default class HeartArmor implements ArmorInterface {
 	defaultAmount = 3;
 	currentAmount: number = 3;
 
-	applyEffects(calledBy: 'player' | 'enemy'): void {
+	applyEffects(calledBy: 'player' | 'enemy', damage: Damage | null = null): Damage {
 		const fight: Fight = get(gameStore).getCurrentBattle().getCurrentTurn().fight;
 		const playerHand = get(gameStore).getCurrentBattle().getCurrentTurn().playerHand;
 		const enemyHand = get(gameStore).getCurrentBattle().getCurrentTurn().enemyHand;
 
 		if(calledBy === 'player') {
-			if(fight.totalDamageToPlayer <= 0) {
-				return;
+			if(damage === null) {
+				damage = fight.totalDamageToPlayer;
+			}
+
+			if(damage.amount <= 0) {
+				return damage;
 			}
 
 			if(playerHand.getIsBusted() === true) {
-				return;
+				return damage;
 			}
 			
 			if(enemyHand.cards.find(card => card.suit === suits.heart)) {
-				if(fight.totalDamageToPlayer > this.currentAmount) {
-					fight.totalDamageToPlayer -= this.currentAmount;
+				if(damage.amount >= this.currentAmount) {
+					damage.amount -= this.currentAmount;
 					this.currentAmount = 0;
 				}else{
-					this.currentAmount -= fight.totalDamageToPlayer;
-					fight.totalDamageToPlayer = 0;
+					this.currentAmount -= damage.amount;
+					damage.amount = 0;
 				}
 
 				gameStore.update((game: Game) => {
@@ -53,34 +58,38 @@ export default class HeartArmor implements ArmorInterface {
 				})
 			}
 
-			return;
+			return damage;
 
 		}
 
-		if(calledBy === 'enemy') {
-			if(fight.totalDamageToEnemy <= 0){
-				return;
-			}
-
-			if(enemyHand.getIsBusted() === true) {
-				return;
-			}
-
-			if(playerHand.cards.find(card => card.suit === suits.heart)) {
-				if(fight.totalDamageToEnemy > this.currentAmount) {
-					fight.totalDamageToEnemy -= this.currentAmount;
-					this.currentAmount = 0;
-				}else{
-					this.currentAmount -= fight.totalDamageToEnemy;
-					fight.totalDamageToEnemy = 0;
-				}
-
-				gameStore.update((game: Game) => {
-					game.getCurrentBattle().getCurrentTurn().fight = fight;
-					return game;
-				})
-			}
+		if(damage === null) {
+			damage = fight.totalDamageToEnemy;
 		}
+
+		if(damage.amount <= 0){
+			return damage;
+		}
+
+		if(enemyHand.getIsBusted() === true) {
+			return damage;
+		}
+
+		if(playerHand.cards.find(card => card.suit === suits.heart)) {
+			if(damage.amount > this.currentAmount) {
+				damage.amount -= this.currentAmount;
+				this.currentAmount = 0;
+			}else{
+				this.currentAmount -= damage.amount;
+				damage.amount = 0;
+			}
+
+			gameStore.update((game: Game) => {
+				game.getCurrentBattle().getCurrentTurn().fight = fight;
+				return game;
+			})
+		}
+
+		return damage;
 		
 	}
 

@@ -1,13 +1,13 @@
 import { describe, it, expect } from 'vitest';
 import { Battle } from './model';
 import Rat from '../characters/enemies/standard/rat';
-import type { Enemy } from '../characters/enemies';
+import type { EnemyInterface } from '../characters/enemies';
 import { Turn } from '../turn/model';
 import Slime from '../characters/enemies/standard/slime';
 
 describe('battle model test', () => {
 	it('add turn', () => {
-		const enemy: Enemy = new Slime();
+		const enemy: EnemyInterface = new Slime();
 		const battle: Battle = new Battle(enemy, 1);
 
 		expect(battle.turns.length).toBe(0);
@@ -19,7 +19,7 @@ describe('battle model test', () => {
 	});
 
 	it('get current turn', () => {
-		const enemy: Enemy = new Slime();
+		const enemy: EnemyInterface = new Slime();
 		const battle: Battle = new Battle(enemy, 1);
 
 		expect(battle.getCurrentTurn()).toBeNull();

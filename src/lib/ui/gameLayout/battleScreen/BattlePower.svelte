@@ -1,10 +1,10 @@
 <script lang="ts">
+	import type { Damage } from '$lib/models/damage/model';
 	import type { Hand } from '$lib/models/hand/model';
 	import Icon from '@iconify/svelte';
 	import { fly } from 'svelte/transition';
 	export let hand: Hand;
-	export let bonusValue: number;
-	export let bonusDamage: number;
+	export let damage: Damage;
 	export let currentStateName: string;
 	export let estimatedValue: string | null = null;
 
@@ -34,8 +34,8 @@
 				</p>
 			{:else}
 				<p class="p" in:fly={{ delay: 300, duration: 800 }}>
-					{hand.value + bonusValue}
-					{bonusDamage !== 0 ? `+ ${bonusDamage}` : ''}
+					{hand.value + damage.bonusValue}
+					{damage.bonusDamage !== 0 ? `+ ${damage.bonusDamage}` : ''}
 				</p>
 
 			{/if}

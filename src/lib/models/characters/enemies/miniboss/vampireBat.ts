@@ -1,12 +1,11 @@
 import type { Face, Suit } from '$lib/models/card/types';
-import { type Enemy } from '$lib/models/characters/enemies';
+import { Enemy, type EnemyInterface } from '$lib/models/characters/enemies';
 import { EnnemyType } from '$lib/models/characters/types';
-import { DefaultCharacter } from '$lib/models/characters';
 import Vampirism from '$lib/models/effects/passiveAbility/vampirism';
 import { Discard } from '$lib/models/discard/model';
 import { getRandomSuit } from '$lib/models/card/model';
 
-export default class VampireBat extends DefaultCharacter implements Enemy {
+export default class VampireBat extends Enemy implements EnemyInterface {
 	minAttack: number;
 	type: EnnemyType;
 

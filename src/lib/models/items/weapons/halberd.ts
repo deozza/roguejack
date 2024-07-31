@@ -1,3 +1,4 @@
+import { Damage } from '$lib/models/damage/model';
 import { Categories, Ranges, Types } from '$lib/models/effects/enums';
 import type { EffectInterface } from '$lib/models/effects/interfaces';
 import { Rarities } from '$lib/models/items/enums';
@@ -17,15 +18,18 @@ export default class Halberd implements WeaponInterface {
 	range: Ranges = Ranges.medium;
 	defaultAmount = 1;
 	currentAmount: number = 1;
+	baseDamage: number = 5;
 
 	applyEffects(calledBy: 'player' | 'enemy') {
+		const damage: Damage = new Damage().setDamageByItem(this);
+
 		if (calledBy === 'player') {
-			gameStore.inflictDamagesToEnemy(5);
+			gameStore.inflictDamagesToEnemy(damage);
 			return;
 		}
 
 		if (calledBy === 'enemy') {
-			gameStore.inflictDamagesToPlayer(5);
+			gameStore.inflictDamagesToPlayer(damage);
 			return;
 		}
 	}

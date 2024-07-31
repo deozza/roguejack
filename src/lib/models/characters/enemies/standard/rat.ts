@@ -1,12 +1,10 @@
 import type { Face, Suit } from '$lib/models/card/types';
-import { type Enemy } from '$lib/models/characters/enemies';
+import { Enemy, type EnemyInterface } from '$lib/models/characters/enemies';
 import { EnnemyType } from '$lib/models/characters/types';
-import { DefaultCharacter } from '$lib/models/characters';
 import { Discard } from '$lib/models/discard/model';
 import { getRandomSuit } from '$lib/models/card/model';
-import Intimidation from '$lib/models/effects/passiveAbility/intimidation';
 
-export default class Rat extends DefaultCharacter implements Enemy {
+export default class Rat extends Enemy implements EnemyInterface {
 	minAttack: number;
 	type: EnnemyType;
 
@@ -32,6 +30,6 @@ export default class Rat extends DefaultCharacter implements Enemy {
 		this.inventory = [];
 		this.status = [];
 		this.armors = [];
-		this.passiveAbilities = [new Intimidation()];
+		this.passiveAbilities = [];
 	}
 }

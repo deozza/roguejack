@@ -1,4 +1,4 @@
-import type { Character } from '$lib/models/characters';
+import type { CharacterInterface } from '$lib/models/characters';
 import Bleeding from '$lib/models/effects/status/bleeding';
 import { gameStore } from '$lib/stores/game';
 import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
@@ -14,10 +14,10 @@ export default class GameInitState extends DefaultState implements StateInterfac
 
 	public onStateExecute(data: object): void {
 		if (data.character === undefined || data.character === null) {
-			throw new Error('Character not selected');
+			throw new Error('CharacterInterface not selected');
 		}
 
-		const player: Character = data.character as Character;
+		const player: CharacterInterface = data.character as CharacterInterface;
 
 		playerSideEffectsStore.set([]);
 		enemySideEffectsStore.set([]);

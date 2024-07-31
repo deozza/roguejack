@@ -4,12 +4,14 @@ import { Game } from '$lib/models/game/model';
 import type { Hand } from '$lib/models/hand/model';
 import { Turn } from '$lib/models/turn/model';
 import { writable } from 'svelte/store';
-import { getRandomEnemyByLevelAndType, type Enemy } from '$lib/models/characters/enemies';
+import { type EnemyInterface } from '$lib/models/characters/enemies';
 import { EnnemyType } from '$lib/models/characters/types';
 import type { Player } from '$lib/models/characters/players';
 import type { ItemTypes } from '$lib/models/items/types';
 import type { Status } from '$lib/models/effects/interfaces';
 import type { ArmorInterface } from '$lib/models/items/interfaces';
+import type { Damage } from '$lib/models/damage/model';
+import { getRandomEnemyByLevelAndType } from '$lib/models/characters/enemies/enemyList';
 
 function createGameStore() {
 	const { subscribe, set, update } = writable<Game>(new Game());
@@ -39,7 +41,7 @@ function createGameStore() {
 				nextBattleEnemyType = EnnemyType.miniboss;
 			}
 
-			const enemy: Enemy = getRandomEnemyByLevelAndType(nextBattleEnemyLevel, nextBattleEnemyType);
+			const enemy: EnemyInterface = getRandomEnemyByLevelAndType(nextBattleEnemyLevel, nextBattleEnemyType);
 			enemy.deck.shuffleDeck();
 			const battle = new Battle(enemy, nextBattleIndex);
 			game.addBattle(battle);
@@ -106,16 +108,17 @@ function createGameStore() {
 		});
 	};
 
-	const inflictDamagesToEnemy = (damages: number) => {
+	const inflictDamagesToEnemy = (damage: Damage) => {
 		update((game) => {
-			game.getCurrentBattle().enemy.takeDamage(damages);
+			game.getCurrentBattle().enemy.takeDamage(damage);
+			
 			return game;
 		});
 	};
 
-	const inflictDamagesToPlayer = (damages: number) => {
+	const inflictDamagesToPlayer = (damage: Damage) => {
 		update((game) => {
-			game.player.takeDamage(damages);
+			game.player.takeDamage(damage);
 			return game;
 		});
 	};
@@ -296,27 +299,13 @@ function createGameStore() {
 			const enemyHand: Hand = game.getCurrentBattle().getCurrentTurn().enemyHand;
 
 			game.getCurrentBattle().getCurrentTurn().fight.setWinner(playerHand, enemyHand);
-			game.getCurrentBattle().getCurrentTurn().fight.setTotalDamageToEnemy(playerHand, enemyHand);
+			game.getCurrentBattle().getCurrentTurn().fight.setTotalDamageOfEnemy(playerHand, enemyHand);
 			game.getCurrentBattle().getCurrentTurn().fight.setMultiplierForPlayer(playerHand);
-			game.getCurrentBattle().getCurrentTurn().fight.setTotalDamageToPlayer(playerHand, enemyHand);
+			game.getCurrentBattle().getCurrentTurn().fight.setTotalDamageOfPlayer(playerHand, enemyHand);
 			game.getCurrentBattle().getCurrentTurn().fight.setMultiplierForEnemy(enemyHand);
 
 
-			game.player.armors.forEach((armor: ArmorInterface) => {
-				armor.applyEffects('player');
-
-				if(armor.currentAmount <= 0) {
-					game.player.armors = game.player.armors.filter((a: ArmorInterface) => a.technicalName !== armor.technicalName);
-				}
-			})
-
-			game.getCurrentBattle().enemy.armors.forEach((armor: ArmorInterface) => {
-				armor.applyEffects('enemy');
-
-				if(armor.currentAmount <= 0) {
-					game.getCurrentBattle().enemy.armors = game.getCurrentBattle().enemy.armors.filter((a: ArmorInterface) => a.technicalName !== armor.technicalName);
-				}
-			})
+			console.log(game);
 
 			return game;
 		});

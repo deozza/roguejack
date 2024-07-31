@@ -2,14 +2,14 @@ import { describe, it, expect } from 'vitest';
 import { Game } from './model';
 import { Battle } from '../battle/model';
 import Slime from '../characters/enemies/standard/slime';
-import type { Enemy } from '../characters/enemies';
+import type { EnemyInterface } from '../characters/enemies';
 
 describe('game model test', () => {
 	it('add battle', () => {
 		const game: Game = new Game();
 		expect(game.battles.length).toBe(0);
 
-		const enemy: Enemy = new Slime();
+		const enemy: EnemyInterface = new Slime();
 		const battle: Battle = new Battle(enemy, 1);
 		game.addBattle(battle);
 
@@ -20,7 +20,7 @@ describe('game model test', () => {
 		const game: Game = new Game();
 		expect(game.getCurrentBattle()).toBeNull();
 
-		const enemy: Enemy = new Slime();
+		const enemy: EnemyInterface = new Slime();
 		const battle: Battle = new Battle(enemy, 1);
 		game.addBattle(battle);
 

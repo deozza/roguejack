@@ -1,6 +1,7 @@
 import type { Categories, Ranges, Types } from '$lib/models/effects/enums';
 import type { EffectInterface } from '$lib/models/effects/interfaces';
 import type { Rarities } from '$lib/models/items/enums';
+import type { Damage } from '../damage/model';
 import type { ItemTypes } from './types';
 
 interface ItemInterface {
@@ -22,9 +23,11 @@ export interface WeaponInterface extends ItemInterface {
 	category: Categories;
 	type: Types;
 	range: Ranges;
+	baseDamage: number;
 }
 
 export interface ArmorInterface extends ItemInterface {
+	applyEffects(calledBy: 'player' | 'enemy', damage: Damage | null): Damage;
 	category: Categories;
 	weakToType: Types[];
 	resistantTo: Types[];
@@ -39,6 +42,7 @@ export interface ScrollInterface extends ItemInterface {
 	category: Categories;
 	type: Types;
 	range: Ranges;
+	baseDamage: number;
 }
 
 export interface AmuletInterface extends ItemInterface {

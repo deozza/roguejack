@@ -3,7 +3,6 @@
 	import PlayerSide from '../battleScreen/PlayerSide.svelte';
 	import { turnMachineState } from '$lib/stores/stateMachine/turn';
 	import CenterSide from '../battleScreen/CenterSide.svelte';
-	import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 	import DiscardPreview from '../battleScreen/DiscardPreview.svelte';
 	import { delay, scrollToElement, updateBattleState } from '$lib/utils';
 	import type { Fight } from '$lib/models/fight/model';
@@ -172,7 +171,6 @@
 			user={$gameStore.player}
 			userHand={$gameStore.getCurrentBattle().getCurrentTurn().playerHand}
 			currentStateName={$turnMachineState.currentState.name}
-			passiveEffects={$playerSideEffectsStore}
 			fight={$gameStore.getCurrentBattle().getCurrentTurn().fight}
 			on:draw={async () => await drawCard()}
 			on:playerDiscardView={() => openPlayerDiscardView()}
@@ -194,7 +192,6 @@
 			user={$gameStore.getCurrentBattle().enemy}
 			userHand={$gameStore.getCurrentBattle().getCurrentTurn().enemyHand}
 			currentStateName={$turnMachineState.currentState.name}
-			passiveEffects={$enemySideEffectsStore}
 			fight={$gameStore.getCurrentBattle().getCurrentTurn().fight}
 			on:enemyDiscardView={() => openEnemyDiscardView()}
 		/>

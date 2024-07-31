@@ -1,14 +1,9 @@
 import type { Hand } from '$lib/models/hand/model';
+import { Damage } from '../damage/model';
 
 export class Fight {
-	bonusValueForPlayer: number = 0;
-	bonusValueForEnemy: number = 0;
-	bonusDamageToPlayer: number = 0;
-	bonusDamageToEnemy: number = 0;
-	totalDamageToPlayer: number = 0;
-	totalDamageToEnemy: number = 0;
-	multiplierForPlayer: number = 1;
-	multiplierForEnemy: number = 1;
+	damageOfPlayer: Damage = new Damage();
+	damageOfEnemy: Damage = new Damage();
 	playerHasWon: boolean = false;
 	enemyHasWon: boolean = false;
 
@@ -38,8 +33,8 @@ export class Fight {
 		}
 
 		if (
-			playerHand.getValue() + this.bonusValueForPlayer >
-			enemyHand.getValue() + this.bonusValueForEnemy
+			playerHand.getValue() + this.damageOfPlayer.bonusValue >
+			enemyHand.getValue() + this.damageOfEnemy.bonusValue
 		) {
 			this.playerHasWon = true;
 			return this;
@@ -49,69 +44,69 @@ export class Fight {
 		}
 	}
 
-	public setTotalDamageToPlayer(playerHand: Hand, enemyHand: Hand): Fight {
+	public setTotalDamageOfEnemy(playerHand: Hand, enemyHand: Hand): Fight {
 		if (this.enemyHasWon === false) {
-			this.totalDamageToPlayer = 0;
+			this.damageOfEnemy.totalDamage = 0;
 			return this;
 		}
 
 		if (playerHand.getIsBusted()) {
-			this.totalDamageToPlayer += playerHand.getValue() - 21;
+			this.damageOfEnemy.totalDamage += playerHand.getValue() - 21;
 			return this;
 		}
 
 		if (enemyHand.getIsBlackjack() === true && playerHand.getIsBlackjack() === false) {
 			if (playerHand.getValue() === 21) {
-				this.totalDamageToPlayer += 1;
+				this.damageOfEnemy.totalDamage += 1;
 			}
 		}
 
-		this.totalDamageToPlayer +=
+		this.damageOfEnemy.totalDamage +=
 			enemyHand.getValue() +
-			this.bonusValueForEnemy +
-			this.bonusDamageToPlayer -
+			this.damageOfEnemy.bonusValue +
+			this.damageOfEnemy.bonusDamage -
 			playerHand.getValue() -
-			this.bonusValueForPlayer;
+			this.damageOfEnemy.bonusValue;
 		return this;
 	}
 
-	public setTotalDamageToEnemy(playerHand: Hand, enemyHand: Hand): Fight {
+	public setTotalDamageOfPlayer(playerHand: Hand, enemyHand: Hand): Fight {
 		if (this.playerHasWon === false) {
-			this.totalDamageToEnemy = 0;
+			this.damageOfPlayer.totalDamage = 0;
 
 			return this;
 		}
 
 		if (enemyHand.getIsBusted()) {
-			this.totalDamageToEnemy += enemyHand.getValue() - 21;
+			this.damageOfPlayer.totalDamage += enemyHand.getValue() - 21;
 			return this;
 		}
 
 		if (playerHand.getIsBlackjack() === true && enemyHand.getIsBlackjack() === false) {
 			if (enemyHand.getValue() === 21) {
-				this.totalDamageToEnemy += 1;
+				this.damageOfPlayer.totalDamage += 1;
 			}
 		}
 
-		this.totalDamageToEnemy +=
+		this.damageOfPlayer.totalDamage +=
 			playerHand.getValue() +
-			this.bonusValueForPlayer +
-			this.bonusDamageToEnemy -
+			this.damageOfPlayer.bonusValue +
+			this.damageOfPlayer.bonusDamage -
 			enemyHand.getValue() -
-			this.bonusValueForEnemy;
+			this.damageOfPlayer.bonusValue;
 		return this;
 	}
 
 	public setMultiplierForPlayer(playerHand: Hand): Fight {
 		if (this.playerHasWon && playerHand.getIsBlackjack()) {
-			this.multiplierForPlayer += 1;
+			this.damageOfPlayer.multiplier += 1;
 		}
 		return this;
 	}
 
 	public setMultiplierForEnemy(enemyHand: Hand): Fight {
 		if (this.enemyHasWon && enemyHand.getIsBlackjack()) {
-			this.multiplierForEnemy += 1;
+			this.damageOfPlayer.multiplier += 1;
 		}
 		return this;
 	}

@@ -1,12 +1,11 @@
 import type { Face, Suit } from '$lib/models/card/types';
-import { type Enemy } from '$lib/models/characters/enemies';
+import { Enemy, type EnemyInterface } from '$lib/models/characters/enemies';
 import { EnnemyType } from '$lib/models/characters/types';
-import { DefaultCharacter } from '$lib/models/characters';
 import Spore from '$lib/models/effects/passiveAbility/spore';
 import { Discard } from '$lib/models/discard/model';
 import { getRandomSuit } from '$lib/models/card/model';
 
-export default class Myconid extends DefaultCharacter implements Enemy {
+export default class Myconid extends Enemy implements EnemyInterface {
 	minAttack: number;
 	type: EnnemyType;
 

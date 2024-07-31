@@ -2,7 +2,6 @@
 	import { gameStore } from '$lib/stores/game';
 	import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
-	import { fade } from 'svelte/transition';
 
 	gameStore.reset();
 	playerSideEffectsStore.set([]);

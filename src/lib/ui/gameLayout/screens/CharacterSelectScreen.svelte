@@ -4,7 +4,8 @@
 	import { turnMachineState } from '$lib/stores/stateMachine/turn';
 	import Icon from '@iconify/svelte';
 	import DeckPreview from '../battleScreen/DeckPreview.svelte';
-	import { PlayerList, type Player } from '$lib/models/characters/players';
+	import { type Player } from '$lib/models/characters/players';
+	import { PlayerList } from '$lib/models/characters/players/playerList';
 
 	let selectedCharacter: Player = PlayerList[0];
 	let openedDeckPreview: boolean = false;

@@ -1,7 +1,7 @@
 import { browser } from '$app/environment';
 import type { Battle } from '$lib/models/battle/model';
-import type { Character } from '$lib/models/characters';
-import type { Enemy } from '$lib/models/characters/enemies';
+import type { CharacterInterface } from '$lib/models/characters';
+import type { EnemyInterface } from '$lib/models/characters/enemies';
 import type { Game } from '$lib/models/game/model';
 import type { BattleMachineState } from '$lib/models/stateMachine/battle/battleMachineState';
 import type { GameMachineState } from '$lib/models/stateMachine/game/gameMachineState';
@@ -75,21 +75,23 @@ export async function updateBattleState() {
 }
 
 export async function redirectToCamp() {
+	gameStore.endTurn();
+	turnMachineState.update((state: TurnMachineState) => {
+		return state.listenToEvent({ name: 'RESET', data: null });
+	});
+	
 	await delay(5000);
+
+	
+
 	battleMachineState.update((state: BattleMachineState) => {
 		return state.listenToEvent({ name: 'CAMP', data: null });
 	});
 
-	await delay(1000);
 
-	turnMachineState.update((state: TurnMachineState) => {
-		return state.listenToEvent({ name: 'RESET', data: null });
-	});
-
-	gameStore.endTurn();
 }
 
-export const enemyHasAlreadyBeenDefeated = (currentEnemy: Character): boolean => {
+export const enemyHasAlreadyBeenDefeated = (currentEnemy: CharacterInterface): boolean => {
 	let game: Game = get(gameStore);
 	let battle: Battle | undefined = game.battles.find((battle: Battle) => battle.enemy.technicalName === currentEnemy.technicalName);
 

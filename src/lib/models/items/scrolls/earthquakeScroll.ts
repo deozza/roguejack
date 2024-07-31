@@ -1,3 +1,4 @@
+import { Damage } from '$lib/models/damage/model';
 import { Categories, Ranges, Types } from '$lib/models/effects/enums';
 import type { ContinuousEffect, EffectInterface, Status } from '$lib/models/effects/interfaces';
 import Paralyzed from '$lib/models/effects/status/paralyzed';
@@ -20,13 +21,16 @@ export default class EarthquakeScroll implements ScrollInterface {
 	range: Ranges = Ranges.far;
 	rarity: Rarities = Rarities.legendary;
 	effects: EffectInterface[] = [];
+	baseDamage: number = 10;
 	defaultAmount = 1;
 	currentAmount: number = 1;
 
 	applyEffects(calledBy: 'player' | 'enemy'): void {
 		const game: Game = get(gameStore);
+		const damage: Damage = new Damage().setDamageByItem(this);
+
 		if (calledBy === 'player') {
-			gameStore.inflictDamagesToEnemy(10);
+			gameStore.inflictDamagesToEnemy(damage);
 			for (let i = 0; i < 5; i++) {
 				game.player.deck.drawTopCard;
 			}
@@ -37,7 +41,7 @@ export default class EarthquakeScroll implements ScrollInterface {
 		}
 
 		if (calledBy === 'enemy') {
-			gameStore.inflictDamagesToPlayer(10);
+			gameStore.inflictDamagesToPlayer(damage);
 			for (let i = 0; i < 5; i++) {
 				game.getCurrentBattle()?.enemy.deck.drawTopCard;
 			}
