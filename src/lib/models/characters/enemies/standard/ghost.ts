@@ -4,6 +4,7 @@ import { EnnemyType } from '$lib/models/characters/types';
 import Intimidation from '$lib/models/effects/passiveAbility/intimidation';
 import { Discard } from '$lib/models/discard/model';
 import { getRandomSuit } from '$lib/models/card/model';
+import Ethereal from '$lib/models/effects/passiveAbility/ethereal';
 
 export default class Ghost extends Enemy implements EnemyInterface {
 	minAttack: number;
@@ -22,11 +23,11 @@ export default class Ghost extends Enemy implements EnemyInterface {
 		this.technicalName = 'ghost';
 		this.maxHealth = 7;
 		this.currentHealth = 7;
-		this.minAttack = 6;
+		this.minAttack = 11;
 		this.level = 3;
 		this.type = EnnemyType.standard;
 		this.deck.generateDeck(deckSuits, deckValues);
-		this.passiveAbilities = [new Intimidation()];
+		this.passiveAbilities = [new Intimidation(), new Ethereal()];
 		this.discard = new Discard();
 		this.inventory = [];
 		this.status = [];

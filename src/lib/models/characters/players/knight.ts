@@ -2,11 +2,6 @@ import type { Face, Suit } from '$lib/models/card/types';
 import { Player, type PlayerInterface } from '$lib/models/characters/players';
 import Bravery from '$lib/models/effects/passiveAbility/bravery';
 import { Discard } from '$lib/models/discard/model';
-import Sword from '$lib/models/items/weapons/sword';
-import ClubArmor from '$lib/models/items/armor/clubArmor';
-import HeartArmor from '$lib/models/items/armor/heartArmor';
-import DiamondArmor from '$lib/models/items/armor/diamondArmor';
-import SpadeArmor from '$lib/models/items/armor/spadeArmor';
 
 export default class Knight extends Player implements PlayerInterface {
 	constructor() {
@@ -29,6 +24,6 @@ export default class Knight extends Player implements PlayerInterface {
 		this.passiveAbilities = [new Bravery()];
 		this.inventory = [];
 		this.status = [];
-		this.armors = [new ClubArmor(), new HeartArmor(), new DiamondArmor(), new SpadeArmor()];
+		this.armors = [];
 	}
 }

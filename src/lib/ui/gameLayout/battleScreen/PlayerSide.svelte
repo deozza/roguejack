@@ -15,6 +15,7 @@
 	import Status from '$lib/ui/effect/Status.svelte';
 	import { enemyHasAlreadyBeenDefeated } from '$lib/utils';
 	import { Enemy } from '$lib/models/characters/enemies';
+	import Armor from '$lib/ui/effect/Armor.svelte';
 
 	export let user: CharacterInterface;
 	export let userHand: Hand;
@@ -72,6 +73,14 @@
 					<PassiveAbility {passiveAbility} />
 				{/each}
 			</div>
+
+			{#if isEnemy }
+				<div class="flex flex-row items-center justify-start space-x-3 w-1/2">
+					{#each user.armors as armor}
+						<Armor {armor} />
+					{/each}
+				</div>
+			{/if}
 
 			{#if user.status.length > 0}
 				<div class="flex flex-row items-center justify-start space-x-3 w-1/2">

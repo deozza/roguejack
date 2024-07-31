@@ -9,7 +9,7 @@ export default class Scared implements Status {
 	technicalName: string = 'scared';
 	name: string = 'Scared';
 	description: string =
-		'Drawn card has a 50% chance to be immediately discard. Ends at the end of the battle';
+		'Drawn card has a 50% chance to be immediately discard. Lasts until an attack hits or at the end of the battle.';
 	icon: string = 'game-icons:surprised-skull';
 	active: boolean = false;
 	defaultAmount: number = 1;
@@ -27,7 +27,11 @@ export default class Scared implements Status {
 			},
 			{
 				state: 'onStateExit_BattleWonState',
-				callback: () => this.onStateExit_BattleWonState(calledBy)
+				callback: () => this.removeStatus(calledBy)
+			},
+			{
+				state: 'onStateEnter_TurnWonState',
+				callback: () => this.removeStatus(calledBy)
 			}
 		];
 	}
@@ -72,7 +76,7 @@ export default class Scared implements Status {
 		});
 	}
 
-	public onStateExit_BattleWonState(calledBy: 'player' | 'enemy') {
+	public removeStatus(calledBy: 'player' | 'enemy') {
 		if (calledBy === 'player') {
 			playerSideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
 				return sideEffects.filter((effect) => effect.technicalName !== this.technicalName);
