@@ -15,7 +15,7 @@ export default class Owlbear extends DefaultCharacter implements Enemy {
 	}
 
 	make() {
-		const deckSuits: Suit[] = ['spade', 'heart'];
+		const deckSuits: Suit[] = ['club', 'diamond'];
 		const deckValues: Face[] = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
 
 		this.name = 'Owlbear';
@@ -29,5 +29,6 @@ export default class Owlbear extends DefaultCharacter implements Enemy {
 		this.discard = new Discard();
 		this.inventory = [];
 		this.status = [];
+		this.armors = [];
 	}
 }

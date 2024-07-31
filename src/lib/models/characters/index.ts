@@ -4,6 +4,7 @@ import type { ItemTypes } from '$lib/models/items/types';
 import type { Status } from '$lib/models/effects/interfaces';
 import type { Enemy } from '$lib/models/characters/enemies';
 import type { ContinuousEffect } from '$lib/models/effects/interfaces';
+import type { ArmorInterface } from '../items/interfaces';
 
 export interface Character {
 	name: string;
@@ -17,11 +18,11 @@ export interface Character {
 	icon: string;
 	status: Array<Status>;
 	passiveAbilities: Array<ContinuousEffect>;
+	armors: Array<ArmorInterface>;
 
 	takeDamage(damage: number): Character;
 	heal(heal: number): Character;
 	getHealthColor(): string;
-	addToInventory(item: ItemTypes): Character;
 	make(): void;
 	addToInventory(item: ItemTypes): DefaultCharacter;
 	removeItemFromInventory(item: ItemTypes): DefaultCharacter;
@@ -39,6 +40,7 @@ export class DefaultCharacter implements Character {
 	icon: string = '';
 	status: Array<Status> = [];
 	passiveAbilities: Array<ContinuousEffect> = [];
+	armors: Array<ArmorInterface> = [];
 
 	constructor() {}
 

@@ -1,5 +1,5 @@
 import { Battle } from '$lib/models/battle/model';
-import type { Card } from '$lib/models/card/model';
+import { Card } from '$lib/models/card/model';
 import { Game } from '$lib/models/game/model';
 import type { Hand } from '$lib/models/hand/model';
 import { Turn } from '$lib/models/turn/model';
@@ -9,6 +9,7 @@ import { EnnemyType } from '$lib/models/characters/types';
 import type { Player } from '$lib/models/characters/players';
 import type { ItemTypes } from '$lib/models/items/types';
 import type { Status } from '$lib/models/effects/interfaces';
+import type { ArmorInterface } from '$lib/models/items/interfaces';
 
 function createGameStore() {
 	const { subscribe, set, update } = writable<Game>(new Game());
@@ -232,6 +233,41 @@ function createGameStore() {
 		});
 	};
 
+	const addToArmors = (armor: ArmorInterface, user: string) => {
+		update((game) => {
+			if (user === 'enemy') {
+				const index: number = game
+					.getCurrentBattle()
+					.enemy.armors.findIndex(
+						(a: ArmorInterface) => a.technicalName === armor.technicalName
+					);
+				if (index === -1) {
+					armor.currentAmount = armor.defaultAmount;
+					game.getCurrentBattle().enemy.armors = [
+						...game.getCurrentBattle().enemy.armors,
+						armor
+					];
+					return game;
+				}
+
+				game.getCurrentBattle().enemy.armors[index].currentAmount += armor.defaultAmount;
+				return game;
+			}
+
+			const index: number = game.player.armors.findIndex(
+				(a: ArmorInterface) => a.technicalName === armor.technicalName
+			);
+			if (index === -1) {
+				armor.currentAmount = armor.defaultAmount;
+				game.player.armors = [...game.player.armors, armor];
+				return game;
+			}
+
+			game.player.armors[index].currentAmount += armor.defaultAmount;
+			return game;
+		});
+	};
+
 	const addCardToDeck = (card: Card, user: string) => {
 		update((game) => {
 			if (user === 'player') {
@@ -264,6 +300,24 @@ function createGameStore() {
 			game.getCurrentBattle().getCurrentTurn().fight.setMultiplierForPlayer(playerHand);
 			game.getCurrentBattle().getCurrentTurn().fight.setTotalDamageToPlayer(playerHand, enemyHand);
 			game.getCurrentBattle().getCurrentTurn().fight.setMultiplierForEnemy(enemyHand);
+
+
+			game.player.armors.forEach((armor: ArmorInterface) => {
+				armor.applyEffects('player');
+
+				if(armor.currentAmount <= 0) {
+					game.player.armors = game.player.armors.filter((a: ArmorInterface) => a.technicalName !== armor.technicalName);
+				}
+			})
+
+			game.getCurrentBattle().enemy.armors.forEach((armor: ArmorInterface) => {
+				armor.applyEffects('enemy');
+
+				if(armor.currentAmount <= 0) {
+					game.getCurrentBattle().enemy.armors = game.getCurrentBattle().enemy.armors.filter((a: ArmorInterface) => a.technicalName !== armor.technicalName);
+				}
+			})
+
 			return game;
 		});
 	};
@@ -363,7 +417,8 @@ function createGameStore() {
 		addStatusToPlayer,
 		addStatusToEnemy,
 		removeStatusFromPlayer,
-		removeStatusFromEnemy
+		removeStatusFromEnemy,
+		addToArmors
 	};
 }
 

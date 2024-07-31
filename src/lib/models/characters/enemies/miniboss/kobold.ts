@@ -31,5 +31,6 @@ export default class Kobold extends DefaultCharacter implements Enemy {
 		this.discard = new Discard();
 		this.inventory = [];
 		this.status = [];
+		this.armors = [];
 	}
 }

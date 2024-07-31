@@ -2,18 +2,15 @@
 	import { gameStore } from '$lib/stores/game';
 	import { battleMachineState } from '$lib/stores/stateMachine/battle';
 	import { turnMachineState } from '$lib/stores/stateMachine/turn';
-	import Deck from '$lib/ui/deck/Deck.svelte';
-	import Discard from '$lib/ui/deck/Discard.svelte';
-	import { fade } from 'svelte/transition';
 	import DiscardPreview from '../battleScreen/DiscardPreview.svelte';
 	import DeckPreview from '../battleScreen/DeckPreview.svelte';
-	import Icon from '@iconify/svelte';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
 	import { randomIntFromInterval } from '$lib/utils';
 	import type { ItemTypes } from '$lib/models/items/types';
 	import { getRandomItemByWeight } from '$lib/models/items';
 	import { Rarities } from '$lib/models/items/enums';
 	import { EnnemyType } from '$lib/models/characters/types';
+	import { isArmor, type ArmorInterface } from '$lib/models/items/interfaces';
 
 	let openedDeckView: boolean = false;
 	let openedDiscardView: boolean = false;
@@ -44,7 +41,13 @@
 			goToNextState();
 			return;
 		}
-		gameStore.addToInventory(item, 'player');
+
+		if(isArmor(item)) {
+			const armor: ArmorInterface = item as ArmorInterface;
+			gameStore.addToArmors(armor, 'player');
+		}else {
+			gameStore.addToInventory(item, 'player');
+		}
 
 		goToNextState();
 	}

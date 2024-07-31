@@ -3,6 +3,7 @@ import type { Player } from '$lib/models/characters/players';
 import { DefaultCharacter } from '$lib/models/characters/';
 import Bravery from '$lib/models/effects/passiveAbility/bravery';
 import { Discard } from '$lib/models/discard/model';
+import ClubArmor from '$lib/models/items/armor/clubArmor';
 
 export default class Knight extends DefaultCharacter implements Player {
 	constructor() {
@@ -25,5 +26,6 @@ export default class Knight extends DefaultCharacter implements Player {
 		this.passiveAbilities = [new Bravery()];
 		this.inventory = [];
 		this.status = [];
+		this.armors = [];
 	}
 }

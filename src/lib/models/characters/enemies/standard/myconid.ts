@@ -15,7 +15,7 @@ export default class Myconid extends DefaultCharacter implements Enemy {
 	}
 
 	make() {
-		const deckSuits: Suit[] = ['club'];
+		const deckSuits: Suit[] = ['heart'];
 		const deckValues: Face[] = [
 			'A',
 			'2',
@@ -51,5 +51,6 @@ export default class Myconid extends DefaultCharacter implements Enemy {
 		this.discard = new Discard();
 		this.inventory = [];
 		this.status = [];
+		this.armors = [];
 	}
 }

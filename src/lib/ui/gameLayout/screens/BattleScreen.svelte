@@ -7,6 +7,8 @@
 	import DiscardPreview from '../battleScreen/DiscardPreview.svelte';
 	import { delay, scrollToElement, updateBattleState } from '$lib/utils';
 	import type { Fight } from '$lib/models/fight/model';
+	import { Card } from '$lib/models/card/model';
+	import type { Game } from '$lib/models/game/model';
 
 	let openedEnemyDiscardView: boolean = false;
 	let openedPlayerDiscardView: boolean = false;
@@ -16,6 +18,14 @@
 			$turnMachineState = $turnMachineState.listenToEvent({ name: 'DRAW', data: null });
 		} catch (e: any) {
 			if (e.message === 'PLAYER_EMPTY_DECK') {
+
+				const card: Card = new Card('grim-reaper', '0');
+
+				gameStore.update((game: Game) => {
+					game.getCurrentBattle().getCurrentTurn()?.playerHand.addCard(card);
+					return game;
+				});
+
 				$turnMachineState = $turnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
 
 				updateBattleState();
@@ -59,6 +69,12 @@
 			}
 		} catch (e: any) {
 			if (e.message === 'ENEMY_EMPTY_DECK') {
+				const card: Card = new Card('grim-reaper', '0');
+				gameStore.update((game: Game) => {
+					game.getCurrentBattle().getCurrentTurn().enemyHand.addCard(card);
+					return game;
+				});
+
 				$turnMachineState = $turnMachineState.listenToEvent({ name: 'DECK_EMPTY', data: null });
 
 				await updateBattleState();

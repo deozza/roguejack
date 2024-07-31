@@ -27,7 +27,7 @@ export interface WeaponInterface extends ItemInterface {
 export interface ArmorInterface extends ItemInterface {
 	category: Categories;
 	weakToType: Types[];
-	resitantTo: Types[];
+	resistantTo: Types[];
 }
 
 export interface ConsumableInterface extends ItemInterface {
@@ -44,3 +44,9 @@ export interface ScrollInterface extends ItemInterface {
 export interface AmuletInterface extends ItemInterface {
 	category: Categories;
 }
+
+
+export function isArmor(item: ItemInterface): item is ArmorInterface {
+	return (item as ArmorInterface).weakToType !== undefined;
+}
+

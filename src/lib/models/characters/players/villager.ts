@@ -22,5 +22,6 @@ export default class Villager extends DefaultCharacter implements Player {
 		this.icon = 'game-icons:farmer';
 		this.inventory = [];
 		this.status = [];
+		this.armors = [];
 	}
 }

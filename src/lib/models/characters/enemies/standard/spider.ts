@@ -15,7 +15,7 @@ export default class Spider extends DefaultCharacter implements Enemy {
 	}
 
 	make() {
-		const deckSuits: Suit[] = ['spade'];
+		const deckSuits: Suit[] = ['club'];
 		const deckValues: Face[] = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
 		this.name = 'Spider';
@@ -29,5 +29,6 @@ export default class Spider extends DefaultCharacter implements Enemy {
 		this.discard = new Discard();
 		this.inventory = [];
 		this.status = [];
+		this.armors = [];
 	}
 }

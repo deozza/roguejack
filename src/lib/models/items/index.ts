@@ -17,6 +17,10 @@ import Stick from './weapons/stick';
 import TwoHandedAxe from './weapons/twoHandedAxe';
 import Bow from './weapons/bow';
 import Crossbow from './weapons/crossbow';
+import ClubArmor from './armor/clubArmor';
+import HeartArmor from './armor/heartArmor';
+import SpadeArmor from './armor/spadeArmor';
+import DiamondArmor from './armor/diamondArmor';
 
 const items: ItemTypes[] = [
 	new PackOfCards(),
@@ -35,7 +39,11 @@ const items: ItemTypes[] = [
 	new TwoHandedAxe(),
 	new Bow(),
 	new Crossbow(),
-	new Crossbow()
+	new Crossbow(),
+	new ClubArmor(),
+	new HeartArmor(),
+	new SpadeArmor(),
+	new DiamondArmor()
 ];
 
 export function getRandomItemByWeight(

@@ -3,6 +3,7 @@
 	import { battleMachineState } from "$lib/stores/stateMachine/battle";
 	import Deck from "$lib/ui/deck/Deck.svelte";
 	import Discard from "$lib/ui/deck/Discard.svelte";
+	import Armor from "$lib/ui/effect/Armor.svelte";
 	import Item from "$lib/ui/effect/Item.svelte";
 	import PassiveAbility from "$lib/ui/effect/PassiveAbility.svelte";
 	import Status from "$lib/ui/effect/Status.svelte";
@@ -45,6 +46,14 @@
                 {item}
                 isEnemy={false}
                 on:updateBattleState={async () => await updateBattleState()}
+            />
+        {/each}
+    </div>
+
+    <div class="flex flex-row items-center justify-start space-x-3">
+        {#each $gameStore.player.armors as armor}
+            <Armor
+                {armor}
             />
         {/each}
     </div>
