@@ -14,6 +14,7 @@
 	import type { Fight } from '$lib/models/fight/model';
 	import PassiveAbility from '$lib/ui/effect/PassiveAbility.svelte';
 	import Status from '$lib/ui/effect/Status.svelte';
+	import { enemyHasAlreadyBeenDefeated } from '$lib/utils';
 
 	export let user: Character;
 	export let userHand: Hand;
@@ -22,6 +23,17 @@
 	export let fight: Fight;
 
 	const isEnemy: boolean = checkCharacterIsForEnnemy(user);
+	const estimatedValue = (): string | null => {
+		if(isEnemy === false) {
+			return null;
+		}
+
+		if(enemyHasAlreadyBeenDefeated(user)) {
+			return user.minAttack + ' ?';
+		}
+
+		return '?'
+	};
 
 	const dispatch = createEventDispatcher();
 </script>
@@ -29,21 +41,24 @@
 <div class="flex flex-col items-center justify-center md:h-full w-full md:w-4/12">
 	<div class="flex flex-col items-center justify-center w-1/2">
 		<h3
-			class="h3 uppercase flex flex-col items-center justify-center"
+			class="h3 uppercase flex flex-row flew-wrap items-center justify-center w-full"
 			class:text-orange-500={isEnemy &&
 				$gameStore.battles.length % 5 === 0 &&
 				$gameStore.battles.length % 10 !== 0}
 			class:text-red-500={isEnemy && $gameStore.battles.length % 10 === 0}
 		>
-			{#if isEnemy && user.type !== undefined && user.type !== null}
-				{#if user.type === EnnemyType.miniboss}
-					<Icon icon="game-icons:crown" width="24" height="24" />
+
+			<div class="flex flex-col items-center justify-center">
+				{#if isEnemy && user.type !== undefined && user.type !== null}
+					{#if user.type === EnnemyType.miniboss}
+						<Icon icon="game-icons:crown" width="24" height="24" />
+					{/if}
+					{#if user.type === EnnemyType.boss}
+						<Icon icon="game-icons:burning-skull" width="24" height="24" />
+					{/if}
 				{/if}
-				{#if user.type === EnnemyType.boss}
-					<Icon icon="game-icons:burning-skull" width="24" height="24" />
-				{/if}
-			{/if}
-			<span>{user.name}</span>
+				<span>{user.name}</span>
+			</div>
 		</h3>
 
 		<Healthbar
@@ -106,5 +121,6 @@
 		bonusValue={isEnemy ? fight.bonusValueForEnemy : fight.bonusValueForPlayer}
 		bonusDamage={isEnemy ? fight.bonusDamageToPlayer : fight.bonusDamageToEnemy}
 		{currentStateName}
+		estimatedValue={estimatedValue()}
 	/>
 </div>

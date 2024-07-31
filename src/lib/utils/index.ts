@@ -1,4 +1,7 @@
 import { browser } from '$app/environment';
+import type { Battle } from '$lib/models/battle/model';
+import type { Character } from '$lib/models/characters';
+import type { Enemy } from '$lib/models/characters/enemies';
 import type { Game } from '$lib/models/game/model';
 import type { BattleMachineState } from '$lib/models/stateMachine/battle/battleMachineState';
 import type { GameMachineState } from '$lib/models/stateMachine/game/gameMachineState';
@@ -84,4 +87,19 @@ export async function redirectToCamp() {
 	});
 
 	gameStore.endTurn();
+}
+
+export const enemyHasAlreadyBeenDefeated = (currentEnemy: Character): boolean => {
+	let game: Game = get(gameStore);
+	let battle: Battle | undefined = game.battles.find((battle: Battle) => battle.enemy.technicalName === currentEnemy.technicalName);
+
+	if(battle === undefined) {
+		return false;
+	}
+
+	if(battle.id === game.getCurrentBattle()?.id) {
+		return false;
+	}
+
+	return true;
 }

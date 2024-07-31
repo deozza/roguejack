@@ -6,6 +6,7 @@
 	export let bonusValue: number;
 	export let bonusDamage: number;
 	export let currentStateName: string;
+	export let estimatedValue: string | null = null;
 
 	const iconByValue = (): string => {
 		if (currentStateName === 'TurnDeckEmptyState') {
@@ -27,10 +28,17 @@
 {#key hand.value}
 	<div class="flex flex-row flex-wrap items-center justify-center m-4 text-4xl text-red-500">
 		{#if currentStateName !== 'TurnDeckEmptyState'}
-			<p class="p" in:fly={{ delay: 300, duration: 800 }}>
-				{hand.value + bonusValue}
-				{bonusDamage !== 0 ? `+ ${bonusDamage}` : ''}
-			</p>
+			{#if estimatedValue !== null && hand.value === 0}
+				<p class="p">
+					{ estimatedValue }
+				</p>
+			{:else}
+				<p class="p" in:fly={{ delay: 300, duration: 800 }}>
+					{hand.value + bonusValue}
+					{bonusDamage !== 0 ? `+ ${bonusDamage}` : ''}
+				</p>
+
+			{/if}
 		{/if}
 		<Icon icon={iconByValue()} />
 	</div>

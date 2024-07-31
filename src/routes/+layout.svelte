@@ -58,7 +58,7 @@
 				{/if}
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
-				<span>v0.8.1</span>
+				<span>v0.9.0</span>
 				<button class="btn" on:click={() => enterPause()}>
 					<Icon icon={pauseIcon} width="32" height="32" />
 				</button>
