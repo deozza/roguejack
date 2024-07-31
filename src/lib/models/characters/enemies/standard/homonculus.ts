@@ -16,7 +16,7 @@ export default class Homonculus extends Enemy implements EnemyInterface {
 
 	make() {
 		const deckSuits: Suit[] = [getRandomSuit()];
-		const deckValues: Face[] = ['4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+		const deckValues: Face[] = ['4', '5', '5', '6', '7', '7', '8', '9', '9', '10'];
 
 		this.name = 'Homonculus';
 		this.technicalName = 'homonculus';

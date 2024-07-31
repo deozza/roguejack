@@ -27,7 +27,7 @@ export default class Vampirism implements ContinuousEffect {
 				gameStore.update((game: Game) => {
 					game
 						.getCurrentBattle()
-						?.enemy.heal(game.getCurrentBattle().getCurrentTurn().fight.totalDamageToPlayer);
+						?.enemy.heal(game.getCurrentBattle().getCurrentTurn().fight.damageOfEnemy.totalDamage);
 					return game;
 				});
 			}
@@ -36,7 +36,7 @@ export default class Vampirism implements ContinuousEffect {
 
 		if (game.getCurrentBattle()?.getCurrentTurn()?.fight.playerHasWon) {
 			gameStore.update((game: Game) => {
-				game.player.heal(game.getCurrentBattle().getCurrentTurn().fight.totalDamageToEnemy);
+				game.player.heal(game.getCurrentBattle().getCurrentTurn().fight.damageOfPlayer.totalDamage);
 				return game;
 			});
 		}
