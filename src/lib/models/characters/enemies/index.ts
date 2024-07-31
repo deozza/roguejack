@@ -40,7 +40,15 @@ const enemyList: Enemy[] = [
 ];
 
 export function getRandomEnemyByLevelAndType(level: number, type: EnnemyType): Enemy {
-	const enemies = enemyList.filter((enemy) => enemy.level === level && enemy.type === type);
+
+	let enemies: Enemy[] = [];
+
+	if(type === EnnemyType.standard) {
+		enemies = enemyList.filter((enemy) => enemy.level >= (level - 1) && enemy.level <= level && enemy.type === type);
+	}else {
+		enemies = enemyList.filter((enemy) => enemy.level === level && enemy.type === type);
+	}
+
 	const enemy: Enemy = enemies[Math.floor(Math.random() * enemies.length)];
 	enemy.make();
 
