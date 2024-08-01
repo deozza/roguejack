@@ -45,7 +45,7 @@ export class DefaultCharacter implements CharacterInterface {
 	constructor() {}
 
 	public takeDamage(damage: Damage): DefaultCharacter {
-		this.currentHealth = Math.max(0, this.currentHealth - damage.totalDamage);
+		this.currentHealth = Math.max(0, this.currentHealth - (damage.totalDamage * damage.multiplier));
 		return this;
 	}
 	public heal(heal: number): DefaultCharacter {

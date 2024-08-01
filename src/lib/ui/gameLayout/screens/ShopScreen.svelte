@@ -65,7 +65,7 @@
 			return;
 		}
 
-		if (object.technicalName === 'packOfCards') {
+		if (object.technicalName.includes('ackOfCards')) {
 			object.applyEffects('player');
 			objectsToBuy = objectsToBuy.filter((objectToBuy) => objectToBuy.id !== object.id);
 			return;

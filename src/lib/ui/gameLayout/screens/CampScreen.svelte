@@ -8,14 +8,42 @@
 	import { randomIntFromInterval } from '$lib/utils';
 	import type { ItemTypes } from '$lib/models/items/types';
 	import { getRandomItemByWeight } from '$lib/models/items';
-	import { Rarities } from '$lib/models/items/enums';
+	import { defaultRaritiesWeights, Rarities, type RaritiesWeight } from '$lib/models/items/enums';
 	import { EnnemyType } from '$lib/models/characters/types';
-	import { isArmor, type ArmorInterface } from '$lib/models/items/interfaces';
+	import { isArmor, type ArmorInterface, type ConsumableInterface } from '$lib/models/items/interfaces';
+	import PackOfCards from '$lib/models/items/consumable/packOfCards';
+	import GreaterPackOfCards from '$lib/models/items/consumable/greaterPackOfCards';
+	import SuperiorPackOfCards from '$lib/models/items/consumable/superiorPackOfCards';
 
 	let openedDeckView: boolean = false;
 	let openedDiscardView: boolean = false;
+	let packOfCards: null | ConsumableInterface = getPackOfCards();
 	const objectToLoot: ItemTypes = getRandomItemByWeight();
 	const objectsFromLastEnemyInventory: ItemTypes[] = $gameStore.getCurrentBattle().enemy.inventory;
+
+	function getPackOfCards(): ConsumableInterface | null {
+		
+		const rarityWeightValue: number = randomIntFromInterval(1, 100);
+
+		const rarity: RaritiesWeight | undefined = defaultRaritiesWeights.find(
+			(rarity: RaritiesWeight) => rarity.weight >= rarityWeightValue
+		);
+
+		switch(rarity?.rarity) {
+			case Rarities.common:
+				return new PackOfCards()
+			case Rarities.uncommon:
+				return null;
+			case Rarities.rare:
+				return new GreaterPackOfCards();
+			case Rarities.epic:
+				return new SuperiorPackOfCards();
+			case Rarities.legendary:
+				return null;
+			default:
+				return null;
+		}
+	}
 
 	function openDeckView() {
 		openedDeckView = !openedDeckView;
@@ -37,7 +65,7 @@
 	}
 
 	function addToInventory(item: ItemTypes) {
-		if (item.technicalName === 'packOfCards') {
+		if (item.technicalName.includes('ackOfCards')) {
 			item.applyEffects('player');
 			goToNextState();
 			return;
@@ -133,20 +161,20 @@
 						>
 					</div>
 
-					{#if $gameStore.getCurrentBattle().enemy.type === EnnemyType.boss || $gameStore.getCurrentBattle().enemy.type === EnnemyType.miniboss}
+					{#if packOfCards !== null}
 						<div
 							class="flex flex-col items-center justify-around w-9/12 p-4 variant-ringed-success rounded-md text-center"
-							class:variant-ringed-tertiary={objectToLoot.rarity === Rarities.common}
-							class:variant-ringed-primary={objectToLoot.rarity === Rarities.uncommon}
-							class:variant-ringed-secondary={objectToLoot.rarity === Rarities.rare}
-							class:variant-ringed-warning={objectToLoot.rarity === Rarities.epic}
-							class:variant-ringed-danger={objectToLoot.rarity === Rarities.legendary}
+							class:variant-ringed-tertiary={packOfCards.rarity === Rarities.common}
+							class:variant-ringed-primary={packOfCards.rarity === Rarities.uncommon}
+							class:variant-ringed-secondary={packOfCards.rarity === Rarities.rare}
+							class:variant-ringed-warning={packOfCards.rarity === Rarities.epic}
+							class:variant-ringed-danger={packOfCards.rarity === Rarities.legendary}
 						>
-							<p class="p text-xl uppercase">{objectToLoot.name}</p>
-							<p class="p">{objectToLoot.description}</p>
+							<p class="p text-xl uppercase">{packOfCards.name}</p>
+							<p class="p">{packOfCards.description}</p>
 							<button
 								class="btn variant-ghost-success uppercase"
-								on:click={() => addToInventory(objectToLoot)}>loot</button
+								on:click={() => addToInventory(packOfCards)}>loot</button
 							>
 						</div>
 					{/if}
@@ -168,6 +196,24 @@
 							>
 						</div>
 					{/each}
+
+					{#if $gameStore.getCurrentBattle().enemy.type === EnnemyType.boss || $gameStore.getCurrentBattle().enemy.type === EnnemyType.miniboss}
+						<div
+							class="flex flex-col items-center justify-around w-9/12 p-4 variant-ringed-success rounded-md text-center"
+							class:variant-ringed-tertiary={objectToLoot.rarity === Rarities.common}
+							class:variant-ringed-primary={objectToLoot.rarity === Rarities.uncommon}
+							class:variant-ringed-secondary={objectToLoot.rarity === Rarities.rare}
+							class:variant-ringed-warning={objectToLoot.rarity === Rarities.epic}
+							class:variant-ringed-danger={objectToLoot.rarity === Rarities.legendary}
+						>
+							<p class="p text-xl uppercase">{objectToLoot.name}</p>
+							<p class="p">{objectToLoot.description}</p>
+							<button
+								class="btn variant-ghost-success uppercase"
+								on:click={() => addToInventory(objectToLoot)}>loot</button
+							>
+						</div>
+					{/if}
 
 					<button
 						class="btn rounded-md variant-filled-tertiary uppercase"
