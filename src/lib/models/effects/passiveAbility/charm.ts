@@ -2,8 +2,6 @@ import type { Game } from '$lib/models/game/model';
 import { get } from 'svelte/store';
 import type { ContinuousEffect, Status } from '../interfaces';
 import { gameStore } from '$lib/stores/game';
-import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
-import Paralyzed from '../status/paralyzed';
 import Charmed from '../status/charmed';
 
 export default class Charm implements ContinuousEffect {
@@ -41,10 +39,6 @@ export default class Charm implements ContinuousEffect {
 		}
 
 		if(Math.random() > 0.3) return;
-
-		playerSideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
-			return [...sideEffects, new Charmed()];
-		});
 
 		gameStore.addStatusToPlayer(new Charmed());
 	}

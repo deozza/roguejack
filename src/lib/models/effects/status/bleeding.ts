@@ -1,8 +1,6 @@
 import { Damage } from '$lib/models/damage/model';
-import type { Game } from '$lib/models/game/model';
 import { gameStore } from '$lib/stores/game';
-import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
-import type { ContinuousEffect, Status } from '../interfaces';
+import type {Status } from '../interfaces';
 
 export default class Bleeding implements Status {
 	technicalName: string = 'bleeding';
@@ -36,7 +34,7 @@ export default class Bleeding implements Status {
 		}
 
 		const damage: Damage = new Damage();
-		damage.totalDamage = 1;
+		damage.totalDamage = this.currentAmount;
 
 		gameStore.inflictDamagesToPlayer(damage);
 	}
@@ -46,33 +44,18 @@ export default class Bleeding implements Status {
 			return;
 		}
 		const damage: Damage = new Damage();
-		damage.totalDamage = 1;
+		damage.totalDamage = this.currentAmount;
 
 		gameStore.inflictDamagesToEnemy(damage);
 	}
 
 	public onStateExit_BattleWonState(calledBy: 'player' | 'enemy') {
 		if (calledBy === 'player') {
-			playerSideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
-				return sideEffects.filter((effect) => effect.technicalName !== this.technicalName);
-			});
-
-			gameStore.removeStatusFromPlayer(this);
+			gameStore.removeStatusFromPlayer(this, true);
 
 			return;
 		}
 
-		enemySideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
-			return sideEffects.filter((effect) => effect.technicalName !== this.technicalName);
-		});
-
-		gameStore.update((game: Game) => {
-			game.getCurrentBattle().enemy.status = game
-				.getCurrentBattle()
-				.enemy.status.filter((effect: Status) => effect.technicalName !== this.technicalName);
-			return game;
-		});
-
-		gameStore.removeStatusFromEnemy(this);
+		gameStore.removeStatusFromEnemy(this, true);
 	}
 }

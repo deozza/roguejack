@@ -1,11 +1,8 @@
 <script lang="ts">
 	import { gameStore } from '$lib/stores/game';
-	import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';
 
 	gameStore.reset();
-	playerSideEffectsStore.set([]);
-	enemySideEffectsStore.set([]);
 
 	function startNewGame() {
 		$gameMachineState = $gameMachineState.listenToEvent({ name: 'NEW_GAME', data: null });

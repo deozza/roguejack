@@ -1,7 +1,6 @@
 import type { Game } from '$lib/models/game/model';
 import { gameStore } from '$lib/stores/game';
-import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
-import type { ContinuousEffect, Status } from '../interfaces';
+import type { Status } from '../interfaces';
 import type { Hand } from '$lib/models/hand/model';
 import type { Card } from '$lib/models/card/model';
 
@@ -78,19 +77,11 @@ export default class Scared implements Status {
 
 	public removeStatus(calledBy: 'player' | 'enemy') {
 		if (calledBy === 'player') {
-			playerSideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
-				return sideEffects.filter((effect) => effect.technicalName !== this.technicalName);
-			});
-
-			gameStore.removeStatusFromPlayer(this);
+			gameStore.removeStatusFromPlayer(this, true);
 
 			return;
 		}
-
-		enemySideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
-			return sideEffects.filter((effect) => effect.technicalName !== this.technicalName);
-		});
-
-		gameStore.removeStatusFromEnemy(this);
+		
+		gameStore.removeStatusFromEnemy(this, true);
 	}
 }

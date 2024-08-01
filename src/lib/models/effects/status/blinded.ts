@@ -1,6 +1,5 @@
 import { gameStore } from '$lib/stores/game';
-import {playerSideEffectsStore } from '$lib/stores/sideEffects';
-import type { ContinuousEffect, Status } from '../interfaces';
+import type { Status } from '../interfaces';
 
 export default class Blinded implements Status {
 	technicalName: string = 'blinded';
@@ -30,11 +29,7 @@ export default class Blinded implements Status {
 
 	public removeStatus(calledBy: 'player' | 'enemy') {
 		if (calledBy === 'player') {
-			playerSideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
-				return sideEffects.filter((effect) => effect.technicalName !== this.technicalName);
-			});
-
-			gameStore.removeStatusFromPlayer(this);
+			gameStore.removeStatusFromPlayer(this, true);
 
 			return;
 		}

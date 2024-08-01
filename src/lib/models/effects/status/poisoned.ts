@@ -1,7 +1,6 @@
 import { Damage } from '$lib/models/damage/model';
 import { gameStore } from '$lib/stores/game';
-import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
-import type { ContinuousEffect, Status } from '../interfaces';
+import type { Status } from '../interfaces';
 
 export default class Poisoned implements Status {
 	technicalName: string = 'poisoned';
@@ -9,8 +8,8 @@ export default class Poisoned implements Status {
 	description: string = 'Inflicts 1 at each card drawn. Ends at the end of the battle';
 	icon: string = 'game-icons:poison-bottle';
 	active: boolean = false;
-	defaultAmount: number = 1;
-	currentAmount: number = 1;
+	defaultAmount: number = 2;
+	currentAmount: number = 2;
 
 	public applyEffects(calledBy: 'player' | 'enemy') {
 		return [
@@ -34,7 +33,7 @@ export default class Poisoned implements Status {
 			return;
 		}
 		const damage: Damage = new Damage();
-		damage.totalDamage = 1;
+		damage.totalDamage = this.currentAmount;
 
 		gameStore.inflictDamagesToPlayer(damage);
 	}
@@ -44,26 +43,17 @@ export default class Poisoned implements Status {
 			return;
 		}
 		const damage: Damage = new Damage();
-		damage.totalDamage = 1;
+		damage.totalDamage = this.currentAmount;
 
 		gameStore.inflictDamagesToEnemy(damage);
 	}
 
 	public onStateExit_BattleWonState(calledBy: 'player' | 'enemy') {
 		if (calledBy === 'player') {
-			playerSideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
-				return sideEffects.filter((effect) => effect.technicalName !== this.technicalName);
-			});
-
-			gameStore.removeStatusFromPlayer(this);
+			gameStore.removeStatusFromPlayer(this, true);
 
 			return;
 		}
-
-		enemySideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
-			return sideEffects.filter((effect) => effect.technicalName !== this.technicalName);
-		});
-
-		gameStore.removeStatusFromEnemy(this);
+		gameStore.removeStatusFromEnemy(this, true);
 	}
 }

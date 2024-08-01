@@ -1,7 +1,6 @@
 import { gameStore } from '$lib/stores/game';
-import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 import { turnMachineState } from '$lib/stores/stateMachine/turn';
-import type { ContinuousEffect, Status } from '../interfaces';
+import type { Status } from '../interfaces';
 
 export default class Paralyzed implements Status {
 	technicalName: string = 'paralyzed';
@@ -33,19 +32,11 @@ export default class Paralyzed implements Status {
 
 	public onStateExit_TurnFightingState(calledBy: 'player' | 'enemy') {
 		if (calledBy === 'player') {
-			playerSideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
-				return sideEffects.filter((effect) => effect.technicalName !== this.technicalName);
-			});
-
-			gameStore.removeStatusFromPlayer(this);
+			gameStore.removeStatusFromPlayer(this, true);
 
 			return;
 		}
 
-		enemySideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
-			return sideEffects.filter((effect) => effect.technicalName !== this.technicalName);
-		});
-
-		gameStore.removeStatusFromEnemy(this);
+		gameStore.removeStatusFromEnemy(this, true);
 	}
 }

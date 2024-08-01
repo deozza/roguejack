@@ -1,8 +1,7 @@
 import type { Game } from '$lib/models/game/model';
 import { gameStore } from '$lib/stores/game';
 import { get } from 'svelte/store';
-import type { ContinuousEffect, Status } from '../interfaces';
-import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
+import type { ContinuousEffect } from '../interfaces';
 import Blinded from '../status/blinded';
 
 export default class SmokeBurst implements ContinuousEffect {
@@ -35,10 +34,6 @@ export default class SmokeBurst implements ContinuousEffect {
 				return
 			}
 
-			playerSideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
-				return [...sideEffects, new Blinded()];
-			});
-
 			gameStore.addStatusToPlayer(new Blinded());
 			return;
 		}
@@ -46,11 +41,6 @@ export default class SmokeBurst implements ContinuousEffect {
 		if(game.getCurrentBattle()?.enemy.status.findIndex((status) => status.technicalName === this.technicalName) !== -1) {
 			return
 		}
-
-
-		enemySideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
-			return [...sideEffects, new Blinded()];
-		});
 
 		gameStore.addStatusToEnemy(new Blinded());
 

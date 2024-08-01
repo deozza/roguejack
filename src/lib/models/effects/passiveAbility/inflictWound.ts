@@ -1,8 +1,7 @@
 import type { Game } from '$lib/models/game/model';
 import { get } from 'svelte/store';
-import type { ContinuousEffect, Status } from '../interfaces';
+import type { ContinuousEffect } from '../interfaces';
 import { gameStore } from '$lib/stores/game';
-import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 import Bleeding from '../status/bleeding';
 
 export default class InflictWound implements ContinuousEffect {
@@ -29,10 +28,6 @@ export default class InflictWound implements ContinuousEffect {
 				game.getCurrentBattle()?.getCurrentTurn()?.enemyHand.value >
 				game.getCurrentBattle()?.getCurrentTurn()?.playerHand.value
 			) {
-				playerSideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
-					return [...sideEffects, new Bleeding()];
-				});
-
 				gameStore.addStatusToPlayer(new Bleeding());
 			}
 			return;
@@ -42,10 +37,6 @@ export default class InflictWound implements ContinuousEffect {
 			game.getCurrentBattle()?.getCurrentTurn()?.playerHand.value >
 			game.getCurrentBattle()?.getCurrentTurn()?.enemyHand.value
 		) {
-			enemySideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
-				return [...sideEffects, new Bleeding()];
-			});
-
 			gameStore.addStatusToEnemy(new Bleeding());
 		}
 

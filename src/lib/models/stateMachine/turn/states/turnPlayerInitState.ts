@@ -5,8 +5,6 @@ import { gameMachineState } from '$lib/stores/stateMachine/game';
 import type { BattleMachineState } from '../../battle/battleMachineState';
 import { battleMachineState } from '$lib/stores/stateMachine/battle';
 import { gameStore } from '$lib/stores/game';
-import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
-import type { ContinuousEffect, Status } from '$lib/models/effects/interfaces';
 import type { StateInterface } from '../../interfaces';
 
 export default class TurnPlayerInitState extends DefaultState implements StateInterface {

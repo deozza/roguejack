@@ -1,8 +1,7 @@
 import type { Game } from '$lib/models/game/model';
 import { gameStore } from '$lib/stores/game';
 import { get } from 'svelte/store';
-import type { ContinuousEffect, Status } from '../interfaces';
-import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
+import type { ContinuousEffect } from '../interfaces';
 import Poisoned from '../status/poisoned';
 
 export default class Venom implements ContinuousEffect {
@@ -29,10 +28,6 @@ export default class Venom implements ContinuousEffect {
 				game.getCurrentBattle()?.getCurrentTurn()?.enemyHand.value >
 				game.getCurrentBattle()?.getCurrentTurn()?.playerHand.value
 			) {
-				playerSideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
-					return [...sideEffects, new Poisoned()];
-				});
-
 				gameStore.addStatusToPlayer(new Poisoned());
 			}
 			return;
@@ -42,10 +37,6 @@ export default class Venom implements ContinuousEffect {
 			game.getCurrentBattle()?.getCurrentTurn()?.playerHand.value >
 			game.getCurrentBattle()?.getCurrentTurn()?.enemyHand.value
 		) {
-			enemySideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
-				return [...sideEffects, new Poisoned()];
-			});
-
 			gameStore.addStatusToEnemy(new Poisoned());
 		}
 

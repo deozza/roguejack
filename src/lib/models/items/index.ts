@@ -28,6 +28,10 @@ import GustOfWindScroll from './scrolls/gustOfWindScroll';
 import StrengthPotion from './consumable/strengthPotion';
 import GreaterStrengthPotion from './consumable/greaterStrengthPotion';
 import SuperiorStrengthPotion from './consumable/superiorStrengthPotion';
+import Antidote from './consumable/antidote';
+import GreaterAntidote from './consumable/greaterAntidote';
+import Bandage from './consumable/bandage';
+import GreaterBandage from './consumable/greaterBandage';
 
 const items: ItemTypes[] = [
 	new PackOfCards(),
@@ -57,7 +61,11 @@ const items: ItemTypes[] = [
 	new GustOfWindScroll(),
 	new StrengthPotion(),
 	new GreaterStrengthPotion(),
-	new SuperiorStrengthPotion()
+	new SuperiorStrengthPotion(),
+	new Antidote(),
+	new GreaterAntidote(),
+	new Bandage(),
+	new GreaterBandage()
 ];
 
 export function getRandomItemByWeight(

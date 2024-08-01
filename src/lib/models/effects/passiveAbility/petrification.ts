@@ -1,9 +1,7 @@
 import type { Game } from '$lib/models/game/model';
 import { get } from 'svelte/store';
-import type { ContinuousEffect, Status } from '../interfaces';
+import type { ContinuousEffect } from '../interfaces';
 import { gameStore } from '$lib/stores/game';
-import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
-import Bleeding from '../status/bleeding';
 import Paralyzed from '../status/paralyzed';
 
 export default class Petrification implements ContinuousEffect {
@@ -33,10 +31,6 @@ export default class Petrification implements ContinuousEffect {
 
 				if(Math.random() > 0.3) return;
 
-				playerSideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
-					return [...sideEffects, new Paralyzed()];
-				});
-
 				gameStore.addStatusToPlayer(new Paralyzed());
 			}
 			return;
@@ -47,10 +41,6 @@ export default class Petrification implements ContinuousEffect {
 			game.getCurrentBattle()?.getCurrentTurn()?.enemyHand.value
 		) {
 			if(Math.random() > 0.3) return;
-
-			enemySideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
-				return [...sideEffects, new Paralyzed()];
-			});
 
 			gameStore.addStatusToEnemy(new Paralyzed());
 		}

@@ -15,7 +15,7 @@
 	let openedDeckView: boolean = false;
 	let openedDiscardView: boolean = false;
 	const objectToLoot: ItemTypes = getRandomItemByWeight();
-	const objectsFromLastEnemyInventory: ItemTypes[] = gameStore.getCurrentBattle().enemy.inventory;
+	const objectsFromLastEnemyInventory: ItemTypes[] = $gameStore.getCurrentBattle().enemy.inventory;
 
 	function openDeckView() {
 		openedDeckView = !openedDeckView;

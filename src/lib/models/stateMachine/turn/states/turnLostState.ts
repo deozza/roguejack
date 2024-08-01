@@ -1,6 +1,3 @@
-import type { ContinuousEffect, Status } from '$lib/models/effects/interfaces';
-import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
-import { get } from 'svelte/store';
 import { DefaultState } from '../..';
 import type { StateInterface } from '../../interfaces';
 

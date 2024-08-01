@@ -389,12 +389,16 @@ function createGameStore() {
 		});
 	};
 
-	const removeStatusFromPlayer = (statusToRemove: Status) => {
+	const removeStatusFromPlayer = (statusToRemove: Status, removeAll: boolean = false) => {
 		update((game: Game) => {
 			const index = game.player.status.findIndex((status: Status) => status.technicalName === statusToRemove.technicalName);
 
 			if (index === -1) {
 				return game;
+			}
+
+			if(removeAll === true) {
+				game.player.status[index].currentAmount = 0;				
 			}
 
 			game.player.status[index].currentAmount -= 1;
@@ -406,13 +410,17 @@ function createGameStore() {
 		});
 	};
 
-	const removeStatusFromEnemy = (statusToRemove: Status) => {
+	const removeStatusFromEnemy = (statusToRemove: Status, removeAll: boolean = false) => {
 		update((game: Game) => {
 			const index = game
 				.getCurrentBattle()
 				?.enemy.status.findIndex((status: Status) => status.technicalName === statusToRemove.technicalName);
 			if (index === -1) {
 				return game;
+			}
+
+			if(removeAll === true) {
+				game.plagetCurrentBattle().enemyyer.status[index].currentAmount = 0;
 			}
 
 			game.plagetCurrentBattle().enemyyer.status[index].currentAmount -= 1;

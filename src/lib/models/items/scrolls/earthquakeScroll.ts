@@ -1,12 +1,11 @@
 import { Damage } from '$lib/models/damage/model';
 import { Categories, Ranges, Types } from '$lib/models/effects/enums';
-import type { ContinuousEffect, EffectInterface, Status } from '$lib/models/effects/interfaces';
+import type { EffectInterface } from '$lib/models/effects/interfaces';
 import Paralyzed from '$lib/models/effects/status/paralyzed';
 import type { Game } from '$lib/models/game/model';
 import { Rarities } from '$lib/models/items/enums';
 import type { ScrollInterface } from '$lib/models/items/interfaces';
 import { gameStore } from '$lib/stores/game';
-import { enemySideEffectsStore, playerSideEffectsStore } from '$lib/stores/sideEffects';
 import { get } from 'svelte/store';
 
 export default class EarthquakeScroll implements ScrollInterface {
@@ -34,9 +33,7 @@ export default class EarthquakeScroll implements ScrollInterface {
 			for (let i = 0; i < 5; i++) {
 				game.player.deck.drawTopCard;
 			}
-			enemySideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
-				return [...sideEffects, new Paralyzed()];
-			});
+			
 			gameStore.addStatusToEnemy(new Paralyzed());
 		}
 
@@ -45,10 +42,6 @@ export default class EarthquakeScroll implements ScrollInterface {
 			for (let i = 0; i < 5; i++) {
 				game.getCurrentBattle()?.enemy.deck.drawTopCard;
 			}
-
-			playerSideEffectsStore.update((sideEffects: Array<Status | ContinuousEffect>) => {
-				return [...sideEffects, new Paralyzed()];
-			});
 
 			gameStore.addStatusToPlayer(new Paralyzed());
 		}
