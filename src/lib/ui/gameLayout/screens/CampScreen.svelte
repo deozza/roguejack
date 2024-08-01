@@ -17,9 +17,26 @@
 
 	let openedDeckView: boolean = false;
 	let openedDiscardView: boolean = false;
-	let packOfCards: null | ConsumableInterface = getPackOfCards();
-	const objectToLoot: ItemTypes = getRandomItemByWeight();
-	const objectsFromLastEnemyInventory: ItemTypes[] = $gameStore.getCurrentBattle().enemy.inventory;
+	let objectsToLoot: ItemTypes[] = getAllObjectsToLoot();
+
+	function getAllObjectsToLoot(): ItemTypes[] {
+
+		let objectsToLoot: ItemTypes[] = [];
+
+		const packOfCards: ConsumableInterface | null = getPackOfCards();
+		if(packOfCards !== null) {
+			objectsToLoot = [...objectsToLoot, packOfCards];
+		}
+
+		if($gameStore.getCurrentBattle()?.enemy.type === EnnemyType.boss || $gameStore.getCurrentBattle()?.enemy.type === EnnemyType.miniboss) {
+			objectsToLoot = [...objectsToLoot, getRandomItemByWeight()];
+		}
+
+		objectsToLoot = [...objectsToLoot, ...$gameStore.getCurrentBattle().enemy.inventory];
+
+		return objectsToLoot
+
+	}
 
 	function getPackOfCards(): ConsumableInterface | null {
 		
@@ -67,16 +84,18 @@
 	function addToInventory(item: ItemTypes) {
 		if (item.technicalName.includes('ackOfCards')) {
 			item.applyEffects('player');
-			return;
+		} else {
+			if(isArmor(item)) {
+				const armor: ArmorInterface = item as ArmorInterface;
+				gameStore.addToArmors(armor, 'player');
+			}else {
+				gameStore.addToInventory(item, 'player');
+			}
 		}
 
-		if(isArmor(item)) {
-			const armor: ArmorInterface = item as ArmorInterface;
-			gameStore.addToArmors(armor, 'player');
-		}else {
-			gameStore.addToInventory(item, 'player');
-		}
-	}
+		objectsToLoot = objectsToLoot.filter(
+			(objectsToLoot) => objectsToLoot.technicalName !== item.technicalName
+		);	}
 
 	function goToNextState() {
 		if ($gameStore.battles.length % 10 === 0) {
@@ -158,25 +177,7 @@
 						>
 					</div>
 
-					{#if packOfCards !== null}
-						<div
-							class="flex flex-col items-center justify-around w-9/12 p-4 variant-ringed-success rounded-md text-center"
-							class:variant-ringed-tertiary={packOfCards.rarity === Rarities.common}
-							class:variant-ringed-primary={packOfCards.rarity === Rarities.uncommon}
-							class:variant-ringed-secondary={packOfCards.rarity === Rarities.rare}
-							class:variant-ringed-warning={packOfCards.rarity === Rarities.epic}
-							class:variant-ringed-danger={packOfCards.rarity === Rarities.legendary}
-						>
-							<p class="p text-xl uppercase">{packOfCards.name}</p>
-							<p class="p">{packOfCards.description}</p>
-							<button
-								class="btn variant-ghost-success uppercase"
-								on:click={() => addToInventory(packOfCards)}>loot</button
-							>
-						</div>
-					{/if}
-
-					{#each objectsFromLastEnemyInventory as objectToLoot} 
+					{#each objectsToLoot as objectToLoot} 
 						<div
 							class="flex flex-col items-center justify-around w-9/12 p-4 variant-ringed-success rounded-md text-center"
 							class:variant-ringed-tertiary={objectToLoot.rarity === Rarities.common}
@@ -193,24 +194,6 @@
 							>
 						</div>
 					{/each}
-
-					{#if $gameStore.getCurrentBattle().enemy.type === EnnemyType.boss || $gameStore.getCurrentBattle().enemy.type === EnnemyType.miniboss}
-						<div
-							class="flex flex-col items-center justify-around w-9/12 p-4 variant-ringed-success rounded-md text-center"
-							class:variant-ringed-tertiary={objectToLoot.rarity === Rarities.common}
-							class:variant-ringed-primary={objectToLoot.rarity === Rarities.uncommon}
-							class:variant-ringed-secondary={objectToLoot.rarity === Rarities.rare}
-							class:variant-ringed-warning={objectToLoot.rarity === Rarities.epic}
-							class:variant-ringed-danger={objectToLoot.rarity === Rarities.legendary}
-						>
-							<p class="p text-xl uppercase">{objectToLoot.name}</p>
-							<p class="p">{objectToLoot.description}</p>
-							<button
-								class="btn variant-ghost-success uppercase"
-								on:click={() => addToInventory(objectToLoot)}>loot</button
-							>
-						</div>
-					{/if}
 
 					<button
 						class="btn rounded-md variant-filled-tertiary uppercase"
