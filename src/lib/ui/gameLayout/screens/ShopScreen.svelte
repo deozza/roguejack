@@ -2,10 +2,7 @@
 	import { gameStore } from '$lib/stores/game';
 	import { battleMachineState } from '$lib/stores/stateMachine/battle';
 	import { turnMachineState } from '$lib/stores/stateMachine/turn';
-	import Deck from '$lib/ui/deck/Deck.svelte';
-	import Discard from '$lib/ui/deck/Discard.svelte';
 	import Icon from '@iconify/svelte';
-	import { fade } from 'svelte/transition';
 	import DiscardPreview from '../battleScreen/DiscardPreview.svelte';
 	import DeckPreview from '../battleScreen/DeckPreview.svelte';
 	import { gameMachineState } from '$lib/stores/stateMachine/game';

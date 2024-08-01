@@ -5,7 +5,8 @@ import type { Status } from '../interfaces';
 export default class Charmed implements Status {
 	technicalName: string = 'charmeed';
 	name: string = 'Charmed';
-	description: string = 'Turns damage to 0. Ends at the end of the battle. 50% chance to end at the end of the turn.';
+	description: string =
+		'Turns damage to 0. Ends at the end of the battle. 50% chance to end at the end of the turn.';
 	icon: string = 'game-icons:nested-hearts';
 	active: boolean = false;
 	defaultAmount: number = 1;
@@ -13,7 +14,10 @@ export default class Charmed implements Status {
 
 	public applyEffects(calledBy: 'player' | 'enemy') {
 		return [
-			{ state: 'onStateEnter_TurnFightingState', callback: () => this.onStateEnter_TurnFightingState(calledBy) },
+			{
+				state: 'onStateEnter_TurnFightingState',
+				callback: () => this.onStateEnter_TurnFightingState(calledBy)
+			},
 			{
 				state: 'onStateExit_TurnDamageState',
 				callback: () => this.couldRemoveStatus(calledBy)
@@ -26,14 +30,14 @@ export default class Charmed implements Status {
 	}
 
 	public onStateEnter_TurnFightingState(calledBy: 'player' | 'enemy') {
-		if(calledBy === 'player') {
+		if (calledBy === 'player') {
 			gameStore.update((game: Game) => {
 				game.getCurrentBattle().getCurrentTurn().fight.damageOfEnemy.totalDamage = 0;
 				return game;
 			});
 		}
 
-		if(calledBy === 'enemy') {
+		if (calledBy === 'enemy') {
 			gameStore.update((game: Game) => {
 				game.getCurrentBattle().getCurrentTurn().fight.damageOfPlayer.totalDamage = 0;
 				return game;
@@ -42,7 +46,7 @@ export default class Charmed implements Status {
 	}
 
 	public couldRemoveStatus(calledBy: 'player' | 'enemy') {
-		if(Math.random() > 0.5) {
+		if (Math.random() > 0.5) {
 			this.removeStatus(calledBy);
 		}
 	}

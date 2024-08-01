@@ -16,7 +16,8 @@ export default class ClubArmor implements ArmorInterface {
 	effects: EffectInterface[] = [];
 	technicalName: string = 'clubArmor';
 	name: string = 'Club armor';
-	description: string = 'Reduces physical damages of 1 point when opposing hand contains a club card.';
+	description: string =
+		'Reduces physical damages of 1 point when opposing hand contains a club card.';
 	icon: string = 'game-icons:chest-armor';
 	rarity: Rarities = Rarities.common;
 	weakToType: Types[] = [];
@@ -30,28 +31,31 @@ export default class ClubArmor implements ArmorInterface {
 		const playerHand = get(gameStore).getCurrentBattle().getCurrentTurn().playerHand;
 		const enemyHand = get(gameStore).getCurrentBattle().getCurrentTurn().enemyHand;
 
-		if(calledBy === 'player') {
-			if(damage === null) {
+		if (calledBy === 'player') {
+			if (damage === null) {
 				damage = fight.damageOfEnemy;
 			}
 
-			if(damage.totalDamage <= 0) {
+			if (damage.totalDamage <= 0) {
 				return damage;
 			}
 
-			if(playerHand.getIsBusted() === true) {
+			if (playerHand.getIsBusted() === true) {
 				return damage;
 			}
 
-			if(this.resistantTo.includes(damage.type) === false && this.weakToCategory.includes(damage.category) === false) {
+			if (
+				this.resistantTo.includes(damage.type) === false &&
+				this.weakToCategory.includes(damage.category) === false
+			) {
 				return damage;
 			}
-			
-			if(enemyHand.cards.find(card => card.suit === suits.club)) {
-				if(damage.totalDamage >= this.currentAmount) {
+
+			if (enemyHand.cards.find((card) => card.suit === suits.club)) {
+				if (damage.totalDamage >= this.currentAmount) {
 					damage.totalDamage -= this.currentAmount;
 					this.currentAmount = 0;
-				}else{
+				} else {
 					this.currentAmount -= damage.totalDamage;
 					damage.totalDamage = 0;
 				}
@@ -59,30 +63,29 @@ export default class ClubArmor implements ArmorInterface {
 				gameStore.update((game: Game) => {
 					game.getCurrentBattle().getCurrentTurn().fight = fight;
 					return game;
-				})
+				});
 			}
 
 			return damage;
-
 		}
 
-		if(damage === null) {
+		if (damage === null) {
 			damage = fight.damageOfPlayer;
 		}
 
-		if(damage.totalDamage <= 0){
+		if (damage.totalDamage <= 0) {
 			return damage;
 		}
 
-		if(enemyHand.getIsBusted() === true) {
+		if (enemyHand.getIsBusted() === true) {
 			return damage;
 		}
 
-		if(playerHand.cards.find(card => card.suit === suits.club)) {
-			if(damage.totalDamage > this.currentAmount) {
+		if (playerHand.cards.find((card) => card.suit === suits.club)) {
+			if (damage.totalDamage > this.currentAmount) {
 				damage.totalDamage -= this.currentAmount;
 				this.currentAmount = 0;
-			}else{
+			} else {
 				this.currentAmount -= damage.totalDamage;
 				damage.totalDamage = 0;
 			}
@@ -90,11 +93,10 @@ export default class ClubArmor implements ArmorInterface {
 			gameStore.update((game: Game) => {
 				game.getCurrentBattle().getCurrentTurn().fight = fight;
 				return game;
-			})
+			});
 		}
 
 		return damage;
-		
 	}
 
 	make(): ArmorInterface {

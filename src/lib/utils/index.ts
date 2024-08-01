@@ -79,29 +79,27 @@ export async function redirectToCamp() {
 	turnMachineState.update((state: TurnMachineState) => {
 		return state.listenToEvent({ name: 'RESET', data: null });
 	});
-	
-	await delay(5000);
 
-	
+	await delay(5000);
 
 	battleMachineState.update((state: BattleMachineState) => {
 		return state.listenToEvent({ name: 'CAMP', data: null });
 	});
-
-
 }
 
 export const enemyHasAlreadyBeenDefeated = (currentEnemy: CharacterInterface): boolean => {
 	let game: Game = get(gameStore);
-	let battle: Battle | undefined = game.battles.find((battle: Battle) => battle.enemy.technicalName === currentEnemy.technicalName);
+	let battle: Battle | undefined = game.battles.find(
+		(battle: Battle) => battle.enemy.technicalName === currentEnemy.technicalName
+	);
 
-	if(battle === undefined) {
+	if (battle === undefined) {
 		return false;
 	}
 
-	if(battle.id === game.getCurrentBattle()?.id) {
+	if (battle.id === game.getCurrentBattle()?.id) {
 		return false;
 	}
 
 	return true;
-}
+};

@@ -1,6 +1,6 @@
 import { Damage } from '$lib/models/damage/model';
 import { gameStore } from '$lib/stores/game';
-import type {Status } from '../interfaces';
+import type { Status } from '../interfaces';
 
 export default class Bleeding implements Status {
 	technicalName: string = 'bleeding';

@@ -50,8 +50,6 @@ export interface AmuletInterface extends ItemInterface {
 	category: Categories;
 }
 
-
 export function isArmor(item: ItemInterface): item is ArmorInterface {
 	return (item as ArmorInterface).weakToType !== undefined;
 }
-

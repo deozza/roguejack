@@ -19,12 +19,12 @@ export default class Antidote implements ConsumableInterface {
 	currentAmount: number = 1;
 
 	applyEffects(calledBy: 'player' | 'enemy'): void {
-		if(calledBy === 'player') {
-			gameStore.removeStatusFromPlayer(new Poisoned())
+		if (calledBy === 'player') {
+			gameStore.removeStatusFromPlayer(new Poisoned());
 		}
 
-		if(calledBy === 'enemy') {
-			gameStore.removeStatusFromEnemy(new Poisoned())
+		if (calledBy === 'enemy') {
+			gameStore.removeStatusFromEnemy(new Poisoned());
 		}
 	}
 

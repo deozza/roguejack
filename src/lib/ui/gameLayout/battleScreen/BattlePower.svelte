@@ -7,7 +7,7 @@
 	export let damage: Damage;
 	export let currentStateName: string;
 	export let estimatedValue: string | null = null;
-	export let hidden : boolean = false;
+	export let hidden: boolean = false;
 
 	const iconByValue = (): string => {
 		if (currentStateName === 'TurnDeckEmptyState') {
@@ -31,14 +31,13 @@
 		{#if currentStateName !== 'TurnDeckEmptyState'}
 			{#if estimatedValue !== null && (hand.value === 0 || hidden)}
 				<p class="p">
-					{ estimatedValue }
+					{estimatedValue}
 				</p>
 			{:else}
 				<p class="p" in:fly={{ delay: 300, duration: 800 }}>
 					{hand.value + damage.bonusValue}
 					{damage.bonusDamage !== 0 ? `+ ${damage.bonusDamage}` : ''}
 				</p>
-
 			{/if}
 		{/if}
 		<Icon icon={iconByValue()} />

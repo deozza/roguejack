@@ -29,17 +29,22 @@ export default class SmokeBurst implements ContinuousEffect {
 		const game: Game = get(gameStore);
 
 		if (calledBy === 'enemy') {
-			
-			if(game.player.status.findIndex((status) => status.technicalName === this.technicalName) !== -1) {
-				return
+			if (
+				game.player.status.findIndex((status) => status.technicalName === this.technicalName) !== -1
+			) {
+				return;
 			}
 
 			gameStore.addStatusToPlayer(new Blinded());
 			return;
 		}
 
-		if(game.getCurrentBattle()?.enemy.status.findIndex((status) => status.technicalName === this.technicalName) !== -1) {
-			return
+		if (
+			game
+				.getCurrentBattle()
+				?.enemy.status.findIndex((status) => status.technicalName === this.technicalName) !== -1
+		) {
+			return;
 		}
 
 		gameStore.addStatusToEnemy(new Blinded());

@@ -19,13 +19,12 @@ export default class GreaterAntidote implements ConsumableInterface {
 	currentAmount: number = 1;
 
 	applyEffects(calledBy: 'player' | 'enemy'): void {
-		if(calledBy === 'player') {
-			
-			gameStore.removeStatusFromPlayer(new Poisoned(), true)
+		if (calledBy === 'player') {
+			gameStore.removeStatusFromPlayer(new Poisoned(), true);
 		}
 
-		if(calledBy === 'enemy') {
-			gameStore.removeStatusFromEnemy(new Poisoned(), true)
+		if (calledBy === 'enemy') {
+			gameStore.removeStatusFromEnemy(new Poisoned(), true);
 		}
 	}
 
