@@ -67,7 +67,6 @@
 	function addToInventory(item: ItemTypes) {
 		if (item.technicalName.includes('ackOfCards')) {
 			item.applyEffects('player');
-			goToNextState();
 			return;
 		}
 
@@ -77,8 +76,6 @@
 		}else {
 			gameStore.addToInventory(item, 'player');
 		}
-
-		goToNextState();
 	}
 
 	function goToNextState() {
