@@ -48,15 +48,15 @@
 
 		switch(rarity?.rarity) {
 			case Rarities.common:
-				return new PackOfCards()
+				return null
 			case Rarities.uncommon:
 				return null;
 			case Rarities.rare:
-				return new GreaterPackOfCards();
+				return new PackOfCards();
 			case Rarities.epic:
-				return new SuperiorPackOfCards();
+				return new GreaterPackOfCards();
 			case Rarities.legendary:
-				return null;
+				return new SuperiorPackOfCards();
 			default:
 				return null;
 		}
