@@ -174,11 +174,11 @@ function createGameStore() {
 			const healNumber: number = Math.floor((game.player.maxHealth / 100) * percentage);
 
 			if (user === 'player') {
+				game.player.maxHealth += healNumber;
 				game.player.heal(healNumber);
-				game.player.currentHealth += healNumber;
 			} else {
+				game.getCurrentBattle().enemy.maxHealth += healNumber;
 				game.getCurrentBattle().enemy.heal(healNumber);
-				game.getCurrentBattle().enemy.currentHealth += healNumber;
 			}
 
 			return game;
