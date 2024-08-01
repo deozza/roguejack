@@ -169,6 +169,22 @@ function createGameStore() {
 		});
 	};
 
+	const addHealthPercentages = (percentage: number, user: string) => {
+		update((game) => {
+			const healNumber: number = Math.floor((game.player.maxHealth / 100) * percentage);
+
+			if (user === 'player') {
+				game.player.heal(healNumber);
+				game.player.currentHealth += healNumber;
+			} else {
+				game.getCurrentBattle().enemy.heal(healNumber);
+				game.getCurrentBattle().enemy.currentHealth += healNumber;
+			}
+
+			return game;
+		});
+	};
+
 	const recycleDiscard = (numberOfCards: number, user: string) => {
 		update((game) => {
 			if (user === 'player') {
@@ -432,7 +448,8 @@ function createGameStore() {
 		addStatusToEnemy,
 		removeStatusFromPlayer,
 		removeStatusFromEnemy,
-		addToArmors
+		addToArmors,
+		addHealthPercentages
 	};
 }
 

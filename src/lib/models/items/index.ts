@@ -24,6 +24,10 @@ import DiamondArmor from './armor/diamondArmor';
 import LeatherArmor from './armor/leatherArmor';
 import BreastplateArmor from './armor/breastplateArmor';
 import PlateArmor from './armor/plateArmor';
+import GustOfWindScroll from './scrolls/gustOfWindScroll';
+import StrengthPotion from './consumable/strengthPotion';
+import GreaterStrengthPotion from './consumable/greaterStrengthPotion';
+import SuperiorStrengthPotion from './consumable/superiorStrengthPotion';
 
 const items: ItemTypes[] = [
 	new PackOfCards(),
@@ -49,7 +53,11 @@ const items: ItemTypes[] = [
 	new DiamondArmor(),
 	new LeatherArmor(),
 	new BreastplateArmor(),
-	new PlateArmor()
+	new PlateArmor(),
+	new GustOfWindScroll(),
+	new StrengthPotion(),
+	new GreaterStrengthPotion(),
+	new SuperiorStrengthPotion()
 ];
 
 export function getRandomItemByWeight(
