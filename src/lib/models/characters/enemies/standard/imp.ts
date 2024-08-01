@@ -1,12 +1,12 @@
 import type { Face, Suit } from '$lib/models/card/types';
 import { Enemy, type EnemyInterface } from '$lib/models/characters/enemies';
 import { EnnemyType } from '$lib/models/characters/types';
+import Intimidation from '$lib/models/effects/passiveAbility/intimidation';
 import { Discard } from '$lib/models/discard/model';
 import { getRandomSuit } from '$lib/models/card/model';
-import PlateArmor from '$lib/models/items/armor/plateArmor';
-import SmokeBurst from '$lib/models/effects/passiveAbility/smokeBurst';
+import Ethereal from '$lib/models/effects/passiveAbility/ethereal';
 
-export default class SmokeMephit extends Enemy implements EnemyInterface {
+export default class Imp extends Enemy implements EnemyInterface {
 	minAttack: number;
 	type: EnnemyType;
 
@@ -17,21 +17,20 @@ export default class SmokeMephit extends Enemy implements EnemyInterface {
 
 	make() {
 		const deckSuits: Suit[] = [getRandomSuit(), getRandomSuit()];
-		const deckValues: Face[] = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+		const deckValues: Face[] = ['A', '2', '4', '6', '8', '9', 'J', 'K'];
 
-		this.name = 'Smoke Mephit';
-		this.technicalName = 'smokeMephit';
-		this.maxHealth = 15;
-		this.currentHealth = 15;
+		this.name = 'Imp';
+		this.technicalName = 'imp';
+		this.maxHealth = 10;
+		this.currentHealth = 10;
 		this.minAttack = 12;
 		this.level = 4;
 		this.type = EnnemyType.standard;
 		this.deck.generateDeck(deckSuits, deckValues);
-		this.passiveAbilities = [];
+		this.passiveAbilities = [new Ethereal()];
 		this.discard = new Discard();
 		this.inventory = [];
 		this.status = [];
 		this.armors = [];
-		this.passiveAbilities = [new SmokeBurst()];
 	}
 }

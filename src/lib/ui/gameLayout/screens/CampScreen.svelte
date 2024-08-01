@@ -15,6 +15,7 @@
 	let openedDeckView: boolean = false;
 	let openedDiscardView: boolean = false;
 	const objectToLoot: ItemTypes = getRandomItemByWeight();
+	const objectsFromLastEnemyInventory: ItemTypes[] = gameStore.getCurrentBattle().enemy.inventory;
 
 	function openDeckView() {
 		openedDeckView = !openedDeckView;
@@ -149,6 +150,24 @@
 							>
 						</div>
 					{/if}
+
+					{#each objectsFromLastEnemyInventory as objectToLoot} 
+						<div
+							class="flex flex-col items-center justify-around w-9/12 p-4 variant-ringed-success rounded-md text-center"
+							class:variant-ringed-tertiary={objectToLoot.rarity === Rarities.common}
+							class:variant-ringed-primary={objectToLoot.rarity === Rarities.uncommon}
+							class:variant-ringed-secondary={objectToLoot.rarity === Rarities.rare}
+							class:variant-ringed-warning={objectToLoot.rarity === Rarities.epic}
+							class:variant-ringed-danger={objectToLoot.rarity === Rarities.legendary}
+						>
+							<p class="p text-xl uppercase">{objectToLoot.name}</p>
+							<p class="p">{objectToLoot.description}</p>
+							<button
+								class="btn variant-ghost-success uppercase"
+								on:click={() => addToInventory(objectToLoot)}>loot</button
+							>
+						</div>
+					{/each}
 
 					<button
 						class="btn rounded-md variant-filled-tertiary uppercase"

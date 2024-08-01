@@ -53,19 +53,23 @@ export class DefaultCharacter implements CharacterInterface {
 		return this;
 	}
 	public getHealthColor(): string {
-		if (this.currentHealth / this.maxHealth > 0.75) {
+		if (this.getHealthPercentage() > 0.75) {
 			return 'bg-green-500';
 		}
 
-		if (this.currentHealth / this.maxHealth > 0.5) {
+		if (this.getHealthPercentage() > 0.5) {
 			return 'bg-yellow-500';
 		}
 
-		if (this.currentHealth / this.maxHealth > 0.25) {
+		if (this.getHealthPercentage() > 0.25) {
 			return 'bg-orange-500';
 		}
 
 		return 'bg-red-500';
+	}
+
+	public getHealthPercentage(): number {
+		return (this.currentHealth / this.maxHealth) * 100;
 	}
 
 	public addToInventory(item: ItemTypes): DefaultCharacter {

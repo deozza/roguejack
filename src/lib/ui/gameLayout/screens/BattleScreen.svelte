@@ -8,6 +8,8 @@
 	import type { Fight } from '$lib/models/fight/model';
 	import { Card } from '$lib/models/card/model';
 	import type { Game } from '$lib/models/game/model';
+	import type { ItemTypes } from '$lib/models/items/types';
+	import { enemyUsingItemStore } from '$lib/stores/sideEffects';
 
 	let openedEnemyDiscardView: boolean = false;
 	let openedPlayerDiscardView: boolean = false;
@@ -58,6 +60,15 @@
 				$gameStore.getCurrentBattle()?.enemy.minAttack
 			) {
 				await delay(1000);
+
+				//if enemy has less than 50% health and 50% chance, then use item
+				if($gameStore.getCurrentBattle()?.enemy.getHealthPercentage() <= 0.5 && Math.random() > 0.5) {
+					if($gameStore.getCurrentBattle()?.enemy.inventory.length > 0) {
+						enemyUseItem();
+						break;
+					}
+				}
+
 				$turnMachineState = $turnMachineState.listenToEvent({ name: 'DRAW', data: null });
 
 				if ($gameStore.getCurrentBattle()?.getCurrentTurn()?.enemyHand.getIsBusted() === true) {
@@ -92,6 +103,18 @@
 		$turnMachineState = $turnMachineState.listenToEvent({ name: 'FIGHT', data: null });
 
 		await calculateAndApplyDamages();
+	}
+
+	async function enemyUseItem() {
+		const item: ItemTypes = $gameStore.getCurrentBattle().enemy.inventory[0];
+
+		enemyUsingItemStore.set(item);
+
+		$turnMachineState = $turnMachineState.listenToEvent({ name: 'USE_ITEM', data: null });
+
+		$turnMachineState = $turnMachineState.listenToEvent({ name: 'PLAY', data: null });
+
+		await updateBattleState();
 	}
 
 	async function calculateAndApplyDamages() {

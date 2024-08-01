@@ -16,6 +16,7 @@
 	import { enemyHasAlreadyBeenDefeated } from '$lib/utils';
 	import { Enemy } from '$lib/models/characters/enemies';
 	import Armor from '$lib/ui/effect/Armor.svelte';
+	import Item from '$lib/ui/effect/Item.svelte';
 
 	export let user: CharacterInterface;
 	export let userHand: Hand;
@@ -91,6 +92,17 @@
 				<div class="flex flex-row items-center justify-start space-x-3 w-1/2">
 					{#each user.armors as armor}
 						<Armor {armor} />
+					{/each}
+				</div>
+				
+				
+				
+				<div class="flex flex-row items-center justify-start space-x-3">
+					{#each user.inventory as item}
+						<Item
+							{item}
+							{isEnemy}
+						/>
 					{/each}
 				</div>
 			{/if}

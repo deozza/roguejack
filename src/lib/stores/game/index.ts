@@ -234,14 +234,30 @@ function createGameStore() {
 
 	const removeFromInventory = (object: ItemTypes, user: string) => {
 		update((game) => {
-			const index = game.player.inventory.findIndex((item) => item === object);
+
+			if(user === 'player') {
+
+				const index = game.player.inventory.findIndex((item) => item === object);
+				if (index === -1) {
+					return game;
+				}
+
+				game.player.inventory[index].currentAmount -= 1;
+				if (game.player.inventory[index].currentAmount <= 0) {
+					game.player.inventory.splice(index, 1);
+				}
+
+				return game;
+			}
+
+			const index = game.getCurrentBattle().enemy.inventory.findIndex((item) => item === object);
 			if (index === -1) {
 				return game;
 			}
 
-			game.player.inventory[index].currentAmount -= 1;
-			if (game.player.inventory[index].currentAmount <= 0) {
-				game.player.inventory.splice(index, 1);
+			game.getCurrentBattle().enemy.inventory[index].currentAmount -= 1;
+			if (game.getCurrentBattle().enemy.inventory[index].currentAmount <= 0) {
+				game.getCurrentBattle().enemy.inventory.splice(index, 1);
 			}
 
 			return game;
