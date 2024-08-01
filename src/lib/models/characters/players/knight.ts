@@ -2,6 +2,7 @@ import type { Face, Suit } from '$lib/models/card/types';
 import { Player, type PlayerInterface } from '$lib/models/characters/players';
 import Bravery from '$lib/models/effects/passiveAbility/bravery';
 import { Discard } from '$lib/models/discard/model';
+import Blinded from '$lib/models/effects/status/blinded';
 
 export default class Knight extends Player implements PlayerInterface {
 	constructor() {

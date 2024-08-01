@@ -7,6 +7,7 @@
 	export let damage: Damage;
 	export let currentStateName: string;
 	export let estimatedValue: string | null = null;
+	export let hidden : boolean = false;
 
 	const iconByValue = (): string => {
 		if (currentStateName === 'TurnDeckEmptyState') {
@@ -28,7 +29,7 @@
 {#key hand.value}
 	<div class="flex flex-row flex-wrap items-center justify-center m-4 text-4xl text-red-500">
 		{#if currentStateName !== 'TurnDeckEmptyState'}
-			{#if estimatedValue !== null && hand.value === 0}
+			{#if estimatedValue !== null && (hand.value === 0 || hidden)}
 				<p class="p">
 					{ estimatedValue }
 				</p>

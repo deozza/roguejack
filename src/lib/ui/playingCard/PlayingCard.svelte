@@ -5,6 +5,15 @@
 
 	export let card: Card;
 	export let isEnemy: boolean = false;
+	export let hidden: boolean = false;
+
+	$: shouldBeHidden = (): boolean => {
+		if(hidden === false) {
+			return false;
+		}
+
+		return Math.random() > 0.25;
+	};
 </script>
 
 <div
@@ -23,6 +32,14 @@
 		<Icon icon={ 'game-icons:grim-reaper'} height=64 width=64 />
 		<div class="flex flex-row items-center self-end backward diamond">
 			<Icon icon={ 'game-icons:grim-reaper'} />
+		</div>
+	{:else if shouldBeHidden()}
+		<div class="flex flex-row items-center self-start">
+			<span class="font-semibold">? </span>
+		</div>
+		<span class="h1 font-semibold">? </span>
+		<div class="flex flex-row items-center self-end">
+			<span class="font-semibold">? </span>
 		</div>
 	{:else}
 

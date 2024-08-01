@@ -24,6 +24,7 @@ import Myconid from "./standard/myconid";
 import Rat from "./standard/rat";
 import Skeleton from "./standard/skeleton";
 import Slime from "./standard/slime";
+import SmokeMephit from "./standard/smokeMephit";
 import Snake from "./standard/snake";
 import Spider from "./standard/spider";
 
@@ -53,7 +54,8 @@ const enemyList: Enemy[] = [
 	new Dryad(),
 	new Worg(),
 	new Hobgoblin(),
-	new LivingArmor()
+	new LivingArmor(),
+	new SmokeMephit()
 ];
 
 export function getRandomEnemyByLevelAndType(level: number, type: EnnemyType): Enemy {

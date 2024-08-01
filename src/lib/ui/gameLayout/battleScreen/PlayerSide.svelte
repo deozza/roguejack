@@ -23,8 +23,13 @@
 	export let fight: Fight;
 
 	const isEnemy: boolean = user instanceof Enemy;
-	const estimatedValue = (): string | null => {
+
+	$: estimatedValue = (): string | null => {
 		if(isEnemy === false) {
+			if(user.status.findIndex((status) => status.technicalName === 'blinded') !== -1) {
+				return '?';
+			}
+
 			return null;
 		}
 
@@ -33,6 +38,14 @@
 		}
 
 		return '?'
+	};
+
+	$: shouldHideCard = (): boolean => {
+		if(user.status.findIndex((status) => status.technicalName === 'blinded') !== -1) {
+			return true;
+		}
+
+		return false;
 	};
 
 	const dispatch = createEventDispatcher();
@@ -120,7 +133,7 @@
 				: 'flex-row'} items-center justify-start w-1/2 md:w-8/12 mx-5"
 		>
 			{#each userHand.cards as card}
-				<PlayingCard {card} {isEnemy} />
+				<PlayingCard {card} {isEnemy} hidden={shouldHideCard()} />
 			{/each}
 		</div>
 	</div>
@@ -129,5 +142,6 @@
 		damage={isEnemy ? fight.damageOfEnemy : fight.damageOfPlayer}
 		{currentStateName}
 		estimatedValue={estimatedValue()}
+		hidden={shouldHideCard()}
 	/>
 </div>
