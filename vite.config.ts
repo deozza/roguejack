@@ -8,7 +8,7 @@ export default defineConfig({
 		sentrySvelteKit({
 			sourceMapsUploadOptions: {
 				org: 'letsjam',
-				project: 'roguejack'
+				project: 'dungeons and jacks'
 			}
 		}),
 		sveltekit(),

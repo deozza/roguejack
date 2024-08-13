@@ -2,7 +2,7 @@ import { handleErrorWithSentry, replayIntegration } from '@sentry/sveltekit';
 import * as Sentry from '@sentry/sveltekit';
 
 Sentry.init({
-	dsn: 'https://f30853e3060f4e1b8c531ee938d6de7d@glitchtip.letsjam.dev/3',
+	dsn: 'http://c73d6afb97c446ddaabf63021c343031@glitchtip-z8og84wk8swossg8w080cc0w.51.38.53.214.sslip.io/3',
 	tracesSampleRate: 1.0,
 
 	// This sets the sample rate to be 10%. You may want this to be 100% while
