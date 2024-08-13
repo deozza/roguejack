@@ -81,7 +81,7 @@ export default class Scared implements Status {
 
 			return;
 		}
-		
+
 		gameStore.removeStatusFromEnemy(this, true);
 	}
 }

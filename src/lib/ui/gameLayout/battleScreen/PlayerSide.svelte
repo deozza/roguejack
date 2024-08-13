@@ -26,23 +26,23 @@
 	const isEnemy: boolean = user instanceof Enemy;
 
 	$: estimatedValue = (): string | null => {
-		if(isEnemy === false) {
-			if(user.status.findIndex((status) => status.technicalName === 'blinded') !== -1) {
+		if (isEnemy === false) {
+			if (user.status.findIndex((status) => status.technicalName === 'blinded') !== -1) {
 				return '?';
 			}
 
 			return null;
 		}
 
-		if(enemyHasAlreadyBeenDefeated(user)) {
+		if (enemyHasAlreadyBeenDefeated(user)) {
 			return user.minAttack + ' ?';
 		}
 
-		return '?'
+		return '?';
 	};
 
 	$: shouldHideCard = (): boolean => {
-		if(user.status.findIndex((status) => status.technicalName === 'blinded') !== -1) {
+		if (user.status.findIndex((status) => status.technicalName === 'blinded') !== -1) {
 			return true;
 		}
 
@@ -61,7 +61,6 @@
 				$gameStore.battles.length % 10 !== 0}
 			class:text-red-500={isEnemy && $gameStore.battles.length % 10 === 0}
 		>
-
 			<div class="flex flex-col items-center justify-center">
 				{#if isEnemy && user.type !== undefined && user.type !== null}
 					{#if user.type === EnnemyType.miniboss}
@@ -88,21 +87,16 @@
 				{/each}
 			</div>
 
-			{#if isEnemy }
+			{#if isEnemy}
 				<div class="flex flex-row items-center justify-start space-x-3 w-1/2">
 					{#each user.armors as armor}
 						<Armor {armor} />
 					{/each}
 				</div>
-				
-				
-				
+
 				<div class="flex flex-row items-center justify-start space-x-3">
 					{#each user.inventory as item}
-						<Item
-							{item}
-							{isEnemy}
-						/>
+						<Item {item} {isEnemy} />
 					{/each}
 				</div>
 			{/if}

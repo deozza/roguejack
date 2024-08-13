@@ -24,21 +24,24 @@ export default class Charm implements ContinuousEffect {
 	public onStateExit_TurnPlayerDrawingState(calledBy: 'player' | 'enemy') {
 		const game: Game = get(gameStore);
 
-		if(calledBy === 'player') {
+		if (calledBy === 'player') {
 			return;
 		}
 
-		if(game.player.status.findIndex((status) => status.technicalName === 'charmed') !== -1) {
+		if (game.player.status.findIndex((status) => status.technicalName === 'charmed') !== -1) {
 			return;
 		}
 
 		if (
-			game.getCurrentBattle()?.getCurrentTurn()?.playerHand.cards.findIndex((card) => card.suit === 'heart') === -1
+			game
+				.getCurrentBattle()
+				?.getCurrentTurn()
+				?.playerHand.cards.findIndex((card) => card.suit === 'heart') === -1
 		) {
 			return;
 		}
 
-		if(Math.random() > 0.3) return;
+		if (Math.random() > 0.3) return;
 
 		gameStore.addStatusToPlayer(new Charmed());
 	}

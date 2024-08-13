@@ -12,7 +12,21 @@ export class Card {
 	public face: Face | null = null;
 }
 
-export type Face = '0' | 'A' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | 'J' | 'Q' | 'K';
+export type Face =
+	| '0'
+	| 'A'
+	| '2'
+	| '3'
+	| '4'
+	| '5'
+	| '6'
+	| '7'
+	| '8'
+	| '9'
+	| '10'
+	| 'J'
+	| 'Q'
+	| 'K';
 
 export type Suit = 'grim-reaper' | 'heart' | 'diamond' | 'club' | 'spade';
 
@@ -67,4 +81,4 @@ export const getRandomSuit = (): Suit => {
 	const randomSuit = Object.keys(suits)[Math.floor(Math.random() * Object.keys(suits).length)];
 
 	return randomSuit as Suit;
-}
+};

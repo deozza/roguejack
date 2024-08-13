@@ -17,7 +17,23 @@ export default class FlyingSword extends Enemy implements EnemyInterface {
 
 	make() {
 		const deckSuits: Suit[] = ['spade', getRandomSuit()];
-		const deckValues: Face[] = ['A', '5', '5', '6', '6', '6', '7', '7', '7', '7', '8', '8', '8', '8', '8'];
+		const deckValues: Face[] = [
+			'A',
+			'5',
+			'5',
+			'6',
+			'6',
+			'6',
+			'7',
+			'7',
+			'7',
+			'7',
+			'8',
+			'8',
+			'8',
+			'8',
+			'8'
+		];
 
 		this.name = 'Flying sword';
 		this.technicalName = 'flyingSword';

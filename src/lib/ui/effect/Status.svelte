@@ -14,10 +14,7 @@
 	}
 </script>
 
-<div
-	class="card p-4 variant-filled-primary z-10 max-w-48"
-	data-popup={status.technicalName}
->
+<div class="card p-4 variant-filled-primary z-10 max-w-48" data-popup={status.technicalName}>
 	<p class="bold text-lg text-center">{status.name}</p>
 	<p class="p">{status.description}</p>
 	<div class="arrow variant-filled-primary" />

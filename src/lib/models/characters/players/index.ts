@@ -5,12 +5,11 @@ import { DefaultCharacter, type CharacterInterface } from '..';
 export interface PlayerInterface extends CharacterInterface {}
 
 export class Player extends DefaultCharacter {
-    public takeDamage(damage: Damage): DefaultCharacter {
-        this.armors.forEach((armor: ArmorInterface) => {
-            damage = armor.applyEffects('player', damage);
-        });
+	public takeDamage(damage: Damage): DefaultCharacter {
+		this.armors.forEach((armor: ArmorInterface) => {
+			damage = armor.applyEffects('player', damage);
+		});
 
-		return super.takeDamage(damage);   
-    }
+		return super.takeDamage(damage);
+	}
 }
-

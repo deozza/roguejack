@@ -8,7 +8,7 @@
 	export let hidden: boolean = false;
 
 	$: shouldBeHidden = (): boolean => {
-		if(hidden === false) {
+		if (hidden === false) {
 			return false;
 		}
 
@@ -24,14 +24,13 @@
 	class:bg-black={card.suit === 'grim-reaper'}
 	in:fly={{ delay: 300, duration: 800 }}
 >
-
 	{#if card.suit === 'grim-reaper'}
 		<div class="flex flex-row items-center self-start backward diamond">
-			<Icon icon={ 'game-icons:grim-reaper'} />
+			<Icon icon={'game-icons:grim-reaper'} />
 		</div>
-		<Icon icon={ 'game-icons:grim-reaper'} height=64 width=64 />
+		<Icon icon={'game-icons:grim-reaper'} height="64" width="64" />
 		<div class="flex flex-row items-center self-end backward diamond">
-			<Icon icon={ 'game-icons:grim-reaper'} />
+			<Icon icon={'game-icons:grim-reaper'} />
 		</div>
 	{:else if shouldBeHidden()}
 		<div class="flex flex-row items-center self-start">
@@ -42,10 +41,9 @@
 			<span class="font-semibold">? </span>
 		</div>
 	{:else}
-
 		<div class="flex flex-row items-center self-start">
 			<span class="font-semibold">{card.face} </span>
-			<Icon icon={ 'bi:suit-' + card.suit + '-fill'} />
+			<Icon icon={'bi:suit-' + card.suit + '-fill'} />
 		</div>
 		<span class="h1 font-semibold">{card.face} </span>
 		<div class="flex flex-row items-center self-end">

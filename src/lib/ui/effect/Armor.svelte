@@ -14,10 +14,7 @@
 	}
 </script>
 
-<div
-	class="card p-4 variant-filled-primary z-10 max-w-48"
-	data-popup={armor.technicalName}
->
+<div class="card p-4 variant-filled-primary z-10 max-w-48" data-popup={armor.technicalName}>
 	<p class="bold text-lg text-center">{armor.name}</p>
 	<p class="p">{armor.description}</p>
 	<div class="arrow variant-filled-primary" />

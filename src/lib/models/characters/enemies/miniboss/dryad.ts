@@ -16,7 +16,34 @@ export default class Dryad extends Enemy implements EnemyInterface {
 
 	make() {
 		const deckSuits: Suit[] = ['heart'];
-		const deckValues: Face[] = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+		const deckValues: Face[] = [
+			'A',
+			'2',
+			'3',
+			'4',
+			'5',
+			'6',
+			'7',
+			'8',
+			'9',
+			'10',
+			'J',
+			'Q',
+			'K',
+			'A',
+			'2',
+			'3',
+			'4',
+			'5',
+			'6',
+			'7',
+			'8',
+			'9',
+			'10',
+			'J',
+			'Q',
+			'K'
+		];
 
 		this.name = 'Dryad';
 		this.technicalName = 'dryad';

@@ -19,7 +19,6 @@
 			$turnMachineState = $turnMachineState.listenToEvent({ name: 'DRAW', data: null });
 		} catch (e: any) {
 			if (e.message === 'PLAYER_EMPTY_DECK') {
-
 				const card: Card = new Card('grim-reaper', '0');
 
 				gameStore.update((game: Game) => {
@@ -62,8 +61,11 @@
 				await delay(1000);
 
 				//if enemy has less than 50% health and 50% chance, then use item
-				if($gameStore.getCurrentBattle()?.enemy.getHealthPercentage() <= 0.5 && Math.random() > 0.5) {
-					if($gameStore.getCurrentBattle()?.enemy.inventory.length > 0) {
+				if (
+					$gameStore.getCurrentBattle()?.enemy.getHealthPercentage() <= 0.5 &&
+					Math.random() > 0.5
+				) {
+					if ($gameStore.getCurrentBattle()?.enemy.inventory.length > 0) {
 						enemyUseItem();
 						break;
 					}

@@ -2,10 +2,7 @@ import type { Game } from '$lib/models/game/model';
 import { gameStore } from '$lib/stores/game';
 import { get } from 'svelte/store';
 import type { ContinuousEffect } from '../interfaces';
-import {
-	enemyUsingItemStore,
-	playerUsingItemStore
-} from '$lib/stores/sideEffects';
+import { enemyUsingItemStore, playerUsingItemStore } from '$lib/stores/sideEffects';
 import Poisoned from '../status/poisoned';
 import type { ItemTypes } from '$lib/models/items/types';
 

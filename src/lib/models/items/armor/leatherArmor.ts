@@ -29,27 +29,30 @@ export default class LeatherArmor implements ArmorInterface {
 		const playerHand = get(gameStore).getCurrentBattle().getCurrentTurn().playerHand;
 		const enemyHand = get(gameStore).getCurrentBattle().getCurrentTurn().enemyHand;
 
-		if(calledBy === 'player') {
-			if(damage === null) {
+		if (calledBy === 'player') {
+			if (damage === null) {
 				damage = fight.damageOfEnemy;
 			}
 
-			if(damage.totalDamage <= 0) {
+			if (damage.totalDamage <= 0) {
 				return damage;
 			}
 
-			if(playerHand.getIsBusted() === true) {
+			if (playerHand.getIsBusted() === true) {
 				return damage;
 			}
 
-			if(this.resistantTo.includes(damage.type) === false && this.weakToCategory.includes(damage.category) === false) {
+			if (
+				this.resistantTo.includes(damage.type) === false &&
+				this.weakToCategory.includes(damage.category) === false
+			) {
 				return damage;
 			}
-			
-			if(damage.totalDamage >= this.currentAmount) {
+
+			if (damage.totalDamage >= this.currentAmount) {
 				damage.totalDamage -= this.currentAmount;
 				this.currentAmount = 0;
-			}else{
+			} else {
 				this.currentAmount -= damage.totalDamage;
 				damage.totalDamage = 0;
 			}
@@ -57,28 +60,27 @@ export default class LeatherArmor implements ArmorInterface {
 			gameStore.update((game: Game) => {
 				game.getCurrentBattle().getCurrentTurn().fight = fight;
 				return game;
-			})
+			});
 
 			return damage;
-
 		}
 
-		if(damage === null) {
+		if (damage === null) {
 			damage = fight.damageOfPlayer;
 		}
 
-		if(damage.totalDamage <= 0){
+		if (damage.totalDamage <= 0) {
 			return damage;
 		}
 
-		if(enemyHand.getIsBusted() === true) {
+		if (enemyHand.getIsBusted() === true) {
 			return damage;
 		}
 
-		if(damage.totalDamage > this.currentAmount) {
+		if (damage.totalDamage > this.currentAmount) {
 			damage.totalDamage -= this.currentAmount;
 			this.currentAmount = 0;
-		}else{
+		} else {
 			this.currentAmount -= damage.totalDamage;
 			damage.totalDamage = 0;
 		}
@@ -86,10 +88,9 @@ export default class LeatherArmor implements ArmorInterface {
 		gameStore.update((game: Game) => {
 			game.getCurrentBattle().getCurrentTurn().fight = fight;
 			return game;
-		})
+		});
 
 		return damage;
-		
 	}
 
 	make(): ArmorInterface {

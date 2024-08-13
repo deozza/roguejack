@@ -28,8 +28,7 @@ export default class Petrification implements ContinuousEffect {
 				game.getCurrentBattle()?.getCurrentTurn()?.enemyHand.value >
 				game.getCurrentBattle()?.getCurrentTurn()?.playerHand.value
 			) {
-
-				if(Math.random() > 0.3) return;
+				if (Math.random() > 0.3) return;
 
 				gameStore.addStatusToPlayer(new Paralyzed());
 			}
@@ -40,7 +39,7 @@ export default class Petrification implements ContinuousEffect {
 			game.getCurrentBattle()?.getCurrentTurn()?.playerHand.value >
 			game.getCurrentBattle()?.getCurrentTurn()?.enemyHand.value
 		) {
-			if(Math.random() > 0.3) return;
+			if (Math.random() > 0.3) return;
 
 			gameStore.addStatusToEnemy(new Paralyzed());
 		}

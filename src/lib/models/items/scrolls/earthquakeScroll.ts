@@ -33,7 +33,7 @@ export default class EarthquakeScroll implements ScrollInterface {
 			for (let i = 0; i < 5; i++) {
 				game.player.deck.drawTopCard;
 			}
-			
+
 			gameStore.addStatusToEnemy(new Paralyzed());
 		}
 

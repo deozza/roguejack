@@ -12,13 +12,12 @@ export interface EnemyInterface extends CharacterInterface {
 export class Enemy extends DefaultCharacter {
 	minAttack: number = 0;
 	type: EnnemyType = EnnemyType.standard;
-	
-    public takeDamage(damage: Damage): DefaultCharacter {
 
-        this.armors.forEach((armor: ArmorInterface) => {
-            damage = armor.applyEffects('enemy', damage);
-        });
+	public takeDamage(damage: Damage): DefaultCharacter {
+		this.armors.forEach((armor: ArmorInterface) => {
+			damage = armor.applyEffects('enemy', damage);
+		});
 
-		return super.takeDamage(damage);   
-    }
+		return super.takeDamage(damage);
+	}
 }

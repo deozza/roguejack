@@ -8,57 +8,64 @@
 	import { randomIntFromInterval } from '$lib/utils';
 	import type { ItemTypes } from '$lib/models/items/types';
 	import { getRandomItemByWeight } from '$lib/models/items';
-	import { defaultRaritiesWeights, Rarities, type RaritiesWeight } from '$lib/models/items/enums';
+	import { type RaritiesWeight, Rarities } from '$lib/models/items/enums';
 	import { EnnemyType } from '$lib/models/characters/types';
-	import { isArmor, type ArmorInterface, type ConsumableInterface } from '$lib/models/items/interfaces';
-	import PackOfCards from '$lib/models/items/consumable/packOfCards';
-	import GreaterPackOfCards from '$lib/models/items/consumable/greaterPackOfCards';
-	import SuperiorPackOfCards from '$lib/models/items/consumable/superiorPackOfCards';
+	import { isArmor, type ArmorInterface } from '$lib/models/items/interfaces';
 
 	let openedDeckView: boolean = false;
 	let openedDiscardView: boolean = false;
 	let objectsToLoot: ItemTypes[] = getAllObjectsToLoot();
 
 	function getAllObjectsToLoot(): ItemTypes[] {
-
 		let objectsToLoot: ItemTypes[] = [];
 
-		const packOfCards: ConsumableInterface | null = getPackOfCards();
-		if(packOfCards !== null) {
-			objectsToLoot = [...objectsToLoot, packOfCards];
+		const randomCommonItem: ItemTypes | null = getPossibleRandomItem();
+		if (randomCommonItem !== null) {
+			objectsToLoot = [...objectsToLoot, randomCommonItem];
 		}
 
-		if($gameStore.getCurrentBattle()?.enemy.type === EnnemyType.boss || $gameStore.getCurrentBattle()?.enemy.type === EnnemyType.miniboss) {
+		if (
+			$gameStore.getCurrentBattle()?.enemy.type === EnnemyType.boss ||
+			$gameStore.getCurrentBattle()?.enemy.type === EnnemyType.miniboss
+		) {
 			objectsToLoot = [...objectsToLoot, getRandomItemByWeight()];
 		}
 
 		objectsToLoot = [...objectsToLoot, ...$gameStore.getCurrentBattle().enemy.inventory];
 
-		return objectsToLoot
-
+		return objectsToLoot;
 	}
 
-	function getPackOfCards(): ConsumableInterface | null {
-		
-		const rarityWeightValue: number = randomIntFromInterval(1, 100);
+	function getPossibleRandomItem(): ItemTypes | null {
+		let defaultRaritiesWeights: RaritiesWeight[] = [{ rarity: Rarities.common, weight: 40 }];
 
-		const rarity: RaritiesWeight | undefined = defaultRaritiesWeights.find(
-			(rarity: RaritiesWeight) => rarity.weight >= rarityWeightValue
-		);
+		if ($gameStore.battles.length > 10) {
+			defaultRaritiesWeights = [
+				...defaultRaritiesWeights,
+				{ rarity: Rarities.uncommon, weight: 70 }
+			];
+		}
 
-		switch(rarity?.rarity) {
-			case Rarities.common:
-				return new PackOfCards()
-			case Rarities.uncommon:
-				return null;
-			case Rarities.rare:
-				return new GreaterPackOfCards();
-			case Rarities.epic:
-				return new SuperiorPackOfCards();
-			case Rarities.legendary:
-				return null;
-			default:
-				return null;
+		if ($gameStore.battles.length > 20) {
+			defaultRaritiesWeights = [...defaultRaritiesWeights, { rarity: Rarities.rare, weight: 85 }];
+		}
+
+		if ($gameStore.battles.length > 30) {
+			defaultRaritiesWeights = [...defaultRaritiesWeights, { rarity: Rarities.epic, weight: 95 }];
+		}
+
+		if ($gameStore.battles.length > 40) {
+			defaultRaritiesWeights = [
+				...defaultRaritiesWeights,
+				{ rarity: Rarities.uncommon, weight: 100 }
+			];
+		}
+
+		try {
+			const item: ItemTypes = getRandomItemByWeight(defaultRaritiesWeights);
+			return item;
+		} catch (e) {
+			return null;
 		}
 	}
 
@@ -85,17 +92,18 @@
 		if (item.technicalName.includes('ackOfCards')) {
 			item.applyEffects('player');
 		} else {
-			if(isArmor(item)) {
+			if (isArmor(item)) {
 				const armor: ArmorInterface = item as ArmorInterface;
 				gameStore.addToArmors(armor, 'player');
-			}else {
+			} else {
 				gameStore.addToInventory(item, 'player');
 			}
 		}
 
 		objectsToLoot = objectsToLoot.filter(
 			(objectsToLoot) => objectsToLoot.technicalName !== item.technicalName
-		);	}
+		);
+	}
 
 	function goToNextState() {
 		if ($gameStore.battles.length % 10 === 0) {
@@ -177,7 +185,7 @@
 						>
 					</div>
 
-					{#each objectsToLoot as objectToLoot} 
+					{#each objectsToLoot as objectToLoot}
 						<div
 							class="flex flex-col items-center justify-around w-9/12 p-4 variant-ringed-success rounded-md text-center"
 							class:variant-ringed-tertiary={objectToLoot.rarity === Rarities.common}

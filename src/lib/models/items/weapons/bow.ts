@@ -21,7 +21,6 @@ export default class Bow implements WeaponInterface {
 	baseDamage: number = 1;
 
 	applyEffects(calledBy: 'player' | 'enemy'): void {
-
 		const damage: Damage = new Damage().setDamageByItem(this);
 
 		if (calledBy === 'player') {

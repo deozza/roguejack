@@ -21,35 +21,34 @@ export default class Ethereal implements ContinuousEffect {
 	}
 
 	public onStateEnter_TurnPlayerUsingItemState(calledBy: 'player' | 'enemy') {
-		if(calledBy === 'enemy') {
+		if (calledBy === 'enemy') {
 			playerUsingItemStore.update((item: ItemTypes | null) => {
-
-				if(item === null) {
+				if (item === null) {
 					return item;
 				}
 
-				if(item.baseDamage === undefined || item.type === undefined) {
+				if (item.baseDamage === undefined || item.type === undefined) {
 					return item;
 				}
 
-				if(item.type === Types.physical) {
+				if (item.type === Types.physical) {
 					item.baseDamage = 0;
 				}
 				return item;
 			});
 		}
-		
-		if(calledBy === 'player') {
+
+		if (calledBy === 'player') {
 			enemyUsingItemStore.update((item: ItemTypes | null) => {
-				if(item === null) {
+				if (item === null) {
 					return item;
 				}
 
-				if(item.baseDamage === undefined || item.type === undefined) {
+				if (item.baseDamage === undefined || item.type === undefined) {
 					return item;
 				}
 
-				if(item.type === Types.physical) {
+				if (item.type === Types.physical) {
 					item.baseDamage = 0;
 				}
 				return item;
@@ -57,6 +56,5 @@ export default class Ethereal implements ContinuousEffect {
 		}
 
 		return;
-
 	}
 }

@@ -20,12 +20,12 @@ export default class Bandage implements ConsumableInterface {
 	currentAmount: number = 1;
 
 	applyEffects(calledBy: 'player' | 'enemy'): void {
-		if(calledBy === 'player') {
-			gameStore.removeStatusFromPlayer(new Bleeding())
+		if (calledBy === 'player') {
+			gameStore.removeStatusFromPlayer(new Bleeding());
 		}
 
-		if(calledBy === 'enemy') {
-			gameStore.removeStatusFromEnemy(new Bleeding())
+		if (calledBy === 'enemy') {
+			gameStore.removeStatusFromEnemy(new Bleeding());
 		}
 	}
 

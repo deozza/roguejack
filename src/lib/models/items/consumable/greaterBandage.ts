@@ -20,12 +20,12 @@ export default class GreaterBandage implements ConsumableInterface {
 	currentAmount: number = 1;
 
 	applyEffects(calledBy: 'player' | 'enemy'): void {
-		if(calledBy === 'player') {
-			gameStore.removeStatusFromPlayer(new Bleeding(), true)
+		if (calledBy === 'player') {
+			gameStore.removeStatusFromPlayer(new Bleeding(), true);
 		}
 
-		if(calledBy === 'enemy') {
-			gameStore.removeStatusFromEnemy(new Bleeding(), true)
+		if (calledBy === 'enemy') {
+			gameStore.removeStatusFromEnemy(new Bleeding(), true);
 		}
 	}
 

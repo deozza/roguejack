@@ -29,10 +29,9 @@ export default class GustOfWindScroll implements ScrollInterface {
 			gameStore.update((game: Game) => {
 				for (let i = 0; i < 5; i++) {
 					const card: Card | null = game.getCurrentBattle().enemy.deck.drawTopCard();
-					if(card) {
+					if (card) {
 						game.getCurrentBattle().enemy.discard.discardCard(card);
 					}
-
 				}
 				return game;
 			});
@@ -42,7 +41,7 @@ export default class GustOfWindScroll implements ScrollInterface {
 			gameStore.update((game: Game) => {
 				for (let i = 0; i < 5; i++) {
 					const card: Card | null = game.player.deck.drawTopCard();
-					if(card) {
+					if (card) {
 						game.player.discard.discardCard(card);
 					}
 				}

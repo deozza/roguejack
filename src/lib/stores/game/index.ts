@@ -41,7 +41,10 @@ function createGameStore() {
 				nextBattleEnemyType = EnnemyType.miniboss;
 			}
 
-			const enemy: EnemyInterface = getRandomEnemyByLevelAndType(nextBattleEnemyLevel, nextBattleEnemyType);
+			const enemy: EnemyInterface = getRandomEnemyByLevelAndType(
+				nextBattleEnemyLevel,
+				nextBattleEnemyType
+			);
 			enemy.deck.shuffleDeck();
 			const battle = new Battle(enemy, nextBattleIndex);
 			game.addBattle(battle);
@@ -112,11 +115,13 @@ function createGameStore() {
 		update((game) => {
 			game.getCurrentBattle().enemy.takeDamage(damage);
 			game.getCurrentBattle().enemy.armors.forEach((armor: ArmorInterface) => {
-				if(armor.currentAmount <= 0) {
-					game.getCurrentBattle().enemy.armors.splice(game.getCurrentBattle().enemy.armors.indexOf(armor), 1);
+				if (armor.currentAmount <= 0) {
+					game
+						.getCurrentBattle()
+						.enemy.armors.splice(game.getCurrentBattle().enemy.armors.indexOf(armor), 1);
 				}
 			});
-			
+
 			return game;
 		});
 	};
@@ -126,7 +131,7 @@ function createGameStore() {
 			game.player.takeDamage(damage);
 
 			game.player.armors.forEach((armor: ArmorInterface) => {
-				if(armor.currentAmount <= 0) {
+				if (armor.currentAmount <= 0) {
 					game.player.armors.splice(game.player.armors.indexOf(armor), 1);
 				}
 			});
@@ -250,9 +255,7 @@ function createGameStore() {
 
 	const removeFromInventory = (object: ItemTypes, user: string) => {
 		update((game) => {
-
-			if(user === 'player') {
-
+			if (user === 'player') {
 				const index = game.player.inventory.findIndex((item) => item === object);
 				if (index === -1) {
 					return game;
@@ -285,15 +288,10 @@ function createGameStore() {
 			if (user === 'enemy') {
 				const index: number = game
 					.getCurrentBattle()
-					.enemy.armors.findIndex(
-						(a: ArmorInterface) => a.technicalName === armor.technicalName
-					);
+					.enemy.armors.findIndex((a: ArmorInterface) => a.technicalName === armor.technicalName);
 				if (index === -1) {
 					armor.currentAmount = armor.defaultAmount;
-					game.getCurrentBattle().enemy.armors = [
-						...game.getCurrentBattle().enemy.armors,
-						armor
-					];
+					game.getCurrentBattle().enemy.armors = [...game.getCurrentBattle().enemy.armors, armor];
 					return game;
 				}
 
@@ -391,14 +389,16 @@ function createGameStore() {
 
 	const removeStatusFromPlayer = (statusToRemove: Status, removeAll: boolean = false) => {
 		update((game: Game) => {
-			const index = game.player.status.findIndex((status: Status) => status.technicalName === statusToRemove.technicalName);
+			const index = game.player.status.findIndex(
+				(status: Status) => status.technicalName === statusToRemove.technicalName
+			);
 
 			if (index === -1) {
 				return game;
 			}
 
-			if(removeAll === true) {
-				game.player.status[index].currentAmount = 0;				
+			if (removeAll === true) {
+				game.player.status[index].currentAmount = 0;
 			}
 
 			game.player.status[index].currentAmount -= 1;
@@ -414,12 +414,14 @@ function createGameStore() {
 		update((game: Game) => {
 			const index = game
 				.getCurrentBattle()
-				?.enemy.status.findIndex((status: Status) => status.technicalName === statusToRemove.technicalName);
+				?.enemy.status.findIndex(
+					(status: Status) => status.technicalName === statusToRemove.technicalName
+				);
 			if (index === -1) {
 				return game;
 			}
 
-			if(removeAll === true) {
+			if (removeAll === true) {
 				game.plagetCurrentBattle().enemyyer.status[index].currentAmount = 0;
 			}
 
