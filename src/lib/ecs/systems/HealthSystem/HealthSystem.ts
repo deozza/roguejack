@@ -30,9 +30,12 @@ export default class HealthSystem extends AbstractSystem {
             return;
         }
 
-        healthComponent.currentHealth = Math.max(healthComponent.currentHealth - damageComponent.damage, 0);
+        if(damageComponent.resolved === true) {
+            return;
+        }
 
-        this.gameLoop.removeComponent(entity, DamageComponent);
+        healthComponent.currentHealth = Math.max(healthComponent.currentHealth - damageComponent.damage, 0);
+        damageComponent.resolved = true;
     }
 
     private heal(entity: Entity): void {

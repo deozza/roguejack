@@ -9,19 +9,6 @@
 
 </script>
 
-<!-- App Shell -->
-<AppShell>
-	<svelte:fragment slot="header">
-		<!-- App Bar -->
-		<AppBar padding="p-1 md:p-4">
-			<svelte:fragment slot="lead">
-                <strong class="text-xl uppercase">Dungeons and Jacks</strong>
-			</svelte:fragment>
-			<svelte:fragment slot="trail">
-				<span>v0.11</span>
-			</svelte:fragment>
-		</AppBar>
-	</svelte:fragment>
-
+<main class='w-full h-screen flex flex-row items-center justify-center'>
 	<slot />
-</AppShell>
+</main>

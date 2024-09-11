@@ -1,5 +1,6 @@
 <script lang="ts">
 	import AttackComponent from "$lib/ecs/components/ActorComponents/AttackComponent";
+	import DamageComponent from "$lib/ecs/components/ActorComponents/DamageComponent";
 	import DeckComponent from "$lib/ecs/components/ActorComponents/DeckComponent";
 	import DiscardableCardComponent from "$lib/ecs/components/ActorComponents/DiscardableCardComponent";
 	import DiscardComponent from "$lib/ecs/components/ActorComponents/DiscardComponent";
@@ -8,11 +9,18 @@
 	import FightFlag from "$lib/ecs/components/ActorComponents/FightFlag";
 	import HandComponent from "$lib/ecs/components/ActorComponents/HandComponent";
 	import HealthComponent from "$lib/ecs/components/ActorComponents/HealthComponent";
+	import TurnFlag from "$lib/ecs/components/ActorComponents/TurnFlag";
 	import type { Entity } from "$lib/ecs/entities";
 	import { System } from "$lib/ecs/systems";
 	import GameLoop from "$lib/game/GameLoop";
 	import Card from "$lib/modeles/Card";
 	import { SuitEnum, ValueEnum } from "$lib/modeles/Card";
+	import Healthbar from "$lib/ui/Actor/Healthbar.svelte";
+	import PlayingCard from "$lib/ui/Card/PlayingCard.svelte";
+	import Deck from "$lib/ui/Pile/Deck.svelte";
+	import Discard from "$lib/ui/Pile/Discard.svelte";
+	import Hand from "$lib/ui/Pile/Hand.svelte";
+	import { fade, fly } from "svelte/transition";
 
 	let gameLoop: GameLoop = new GameLoop();
 
@@ -54,6 +62,8 @@
 	gameLoop.addComponent(player, new AttackComponent());
 	gameLoop.addComponent(enemy, new AttackComponent());
 
+	gameLoop.addComponent(player, new TurnFlag());
+
 	gameLoop.addSystem(System.Health);
 	gameLoop.addSystem(System.Draw);
 	gameLoop.addSystem(System.Discard);
@@ -70,17 +80,47 @@
 		gameLoop.addComponent(player, new DrawFlag());
 	}
 
-	function fight() {
+	async function fight() {
+		gameLoop.removeComponent(player, TurnFlag);
+		gameLoop.update();
+
 		gameLoop.addComponent(player, new FightFlag());
 		gameLoop.update();
 
+		gameLoop.addComponent(enemy, new TurnFlag());
+		gameLoop.update();
 
-		while(gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, AttackComponent)?.attack <= gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, EnemyComponent)?.minAttack) {
+		enemyAutoDraw();
+	}
+
+	function enemyAutoDraw() {
+		let intervalId = setInterval(function(){
 			gameLoop.addComponent(enemy, new DrawFlag());
 			gameLoop.update();
-		}
+			if (gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, AttackComponent)?.attack >= gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, EnemyComponent)?.minAttack) {
+				clearInterval(intervalId)
+				fightEngage();
+				fightResolve();
+			}
+		}, 500);
+	}
 
-		gameLoop.addComponent(enemy, new FightFlag());
+	function fightEngage() {
+		gameLoop.removeComponent(enemy, TurnFlag);
+		gameLoop.update();
+
+		setInterval(() => {
+			gameLoop.addComponent(enemy, new FightFlag());
+			gameLoop.update();
+		}, 1000);
+	}
+
+	function fightResolve() {
+		setTimeout(() => {
+			gameLoop.removeComponent(player, DamageComponent);
+			gameLoop.removeComponent(enemy, DamageComponent);
+		}, 5000);
+
 		gameLoop.update();
 	}
 
@@ -95,6 +135,9 @@
             gameLoop.addComponent(enemy, new DiscardableCardComponent(gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, HandComponent)?.cards[0]));
             gameLoop.update();
         }
+
+		gameLoop.addComponent(player, new TurnFlag());
+		gameLoop.update();
 	}
 
 </script>
@@ -111,32 +154,61 @@
 	/>
 </svelte:head>
 
-<div class="w-full flex flex-row items-center justify-between">
-	<div>
-		<p>Player</p>
-		<p>Health: {gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, HealthComponent)?.currentHealth}</p>
-		{#each gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, HandComponent)?.cards as card}
-			<p>{card.value} of {card.suit}</p>
-		{/each}
+<div class="aspect-video w-11/12 flex flex-row items-center justify-between">
+	<div class="flex flex-row items-center justify-start space-x-5 w-full">
+		<div class="flex flex-col items-center space-y-5">
+			{#if gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, DamageComponent) !== undefined 
+				&& gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, DamageComponent).resolved === true
+				&& gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, DamageComponent).damage > 0
+			}
+				<p in:fly={{ y: 10, duration: 2000 }} out:fade class="h3 text-red-500">- {gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, DamageComponent)?.damage}</p>
+			{/if}
+			<Healthbar currentHealth={gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, HealthComponent)?.currentHealth} maxHealth={gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, HealthComponent)?.maxHealth} />
+			<button on:click={() => drawCard()}>
+				<Deck deckSize={gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, DeckComponent)?.cards.length} on:click={() => drawCard()}/>
+			</button>
+			<Discard deckSize={gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, DiscardComponent)?.cards.length} />	
+		</div>
 
-		<p>deck : {gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, DeckComponent)?.cards.length}</p>
-		<p>discard : {gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, DiscardComponent)?.cards.length}</p>
-		
-		<p>power : {gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, AttackComponent)?.attack}</p>
+		<div class="flex flex-col items-start space-y-5">
+			<Hand>
+				{#each gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, HandComponent)?.cards as card}
+					<PlayingCard {card} />
+				{/each}
+			</Hand>
 
-		<button on:click={() => drawCard()}>Draw</button>
-		<button on:click={() => fight()}>fight</button>
-		<button on:click={() => nextTurn()}>next turn</button>
+			<p>Power : {gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, AttackComponent)?.attack}</p>
+		</div>
 		
 	</div>
-	<div>
-		<p>Enemy</p>
-		<p>Health: {gameLoop.getSystem(System.Health)?.getComponentFromEntity(enemy, HealthComponent)?.currentHealth}</p>
-		{#each gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, HandComponent)?.cards as card}
-			<p>{card.value} of {card.suit}</p>
-		{/each}
-		<p>deck : {gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, DeckComponent)?.cards.length}</p>
-		<p>discard : {gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, DiscardComponent)?.cards.length}</p>
+	<div class="w-4/12">
+		{#if gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, FightFlag) !== undefined}
+			<button on:click={() => fight()} >Fight</button>
+		{/if}
+		<button on:click={() => nextTurn()} >EndTurn</button>
+
+	</div>
+	<div class="flex flex-row-reverse items-center justify-start space-x-5 w-full">
+		<div class="flex flex-col items-center space-y-5">
+			{#if gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, DamageComponent) !== undefined 
+				&& gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, DamageComponent).resolved === true
+				&& gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, DamageComponent).damage > 0
+			}
+				<p in:fly={{ y: 10, duration: 2000 }} out:fade class="h3 text-red-500">- {gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, DamageComponent)?.damage}</p>
+			{/if}
+			<Healthbar currentHealth={gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, HealthComponent)?.currentHealth} maxHealth={gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, HealthComponent)?.maxHealth} />
+			<Deck deckSize={gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, DeckComponent)?.cards.length}/>
+			<Discard deckSize={gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, DiscardComponent)?.cards.length} />	
+		</div>
+		<div class="flex flex-col items-start space-y-5">
+			<Hand>
+				{#each gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, HandComponent)?.cards as card}
+					<PlayingCard {card} isEnemy={gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, EnemyComponent) !== undefined} />
+				{/each}
+			</Hand>
+
+			<p>{gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, AttackComponent)?.attack}</p>
+		</div>
 
 	</div>
 </div>
