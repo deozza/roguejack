@@ -12,9 +12,11 @@
 	import TurnFlag from "$lib/ecs/components/ActorComponents/TurnFlag";
 	import type { Entity } from "$lib/ecs/entities";
 	import { System } from "$lib/ecs/systems";
+	import ActorObservableSystem from "$lib/ecs/systems/ActorObservableSystem/ActorObservableSystem";
 	import GameLoop from "$lib/game/GameLoop";
 	import Card from "$lib/modeles/Card";
 	import { SuitEnum, ValueEnum } from "$lib/modeles/Card";
+	import Damage from "$lib/ui/Actor/Damage.svelte";
 	import Healthbar from "$lib/ui/Actor/Healthbar.svelte";
 	import PlayingCard from "$lib/ui/Card/PlayingCard.svelte";
 	import Deck from "$lib/ui/Pile/Deck.svelte";
@@ -157,17 +159,13 @@
 <div class="aspect-video w-11/12 flex flex-row items-center justify-between">
 	<div class="flex flex-row items-center justify-start space-x-5 w-full">
 		<div class="flex flex-col items-center space-y-5">
-			{#if gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, DamageComponent) !== undefined 
-				&& gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, DamageComponent).resolved === true
-				&& gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, DamageComponent).damage > 0
-			}
-				<p in:fly={{ y: 10, duration: 2000 }} out:fade class="h3 text-red-500">- {gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, DamageComponent)?.damage}</p>
-			{/if}
-			<Healthbar currentHealth={gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, HealthComponent)?.currentHealth} maxHealth={gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, HealthComponent)?.maxHealth} />
+			<Damage actorObsverbaleSystem={gameLoop?.getSystem(System.ActorObservable)} actor={player} />
+
+			<Healthbar actorObservableSystem={gameLoop?.getSystem(System.ActorObservable)} actor={player} />
 			<button on:click={() => drawCard()}>
-				<Deck deckSize={gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, DeckComponent)?.cards.length} on:click={() => drawCard()}/>
+				<Deck actorObservableSystem={gameLoop?.getSystem(System.ActorObservable)} actor={player} on:click={() => drawCard()}/>
 			</button>
-			<Discard deckSize={gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, DiscardComponent)?.cards.length} />	
+			<Discard actorObservableSystem={gameLoop?.getSystem(System.ActorObservable)} actor={player} />	
 		</div>
 
 		<div class="flex flex-col items-start space-y-5">
@@ -190,15 +188,10 @@
 	</div>
 	<div class="flex flex-row-reverse items-center justify-start space-x-5 w-full">
 		<div class="flex flex-col items-center space-y-5">
-			{#if gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, DamageComponent) !== undefined 
-				&& gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, DamageComponent).resolved === true
-				&& gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, DamageComponent).damage > 0
-			}
-				<p in:fly={{ y: 10, duration: 2000 }} out:fade class="h3 text-red-500">- {gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, DamageComponent)?.damage}</p>
-			{/if}
-			<Healthbar currentHealth={gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, HealthComponent)?.currentHealth} maxHealth={gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, HealthComponent)?.maxHealth} />
-			<Deck deckSize={gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, DeckComponent)?.cards.length}/>
-			<Discard deckSize={gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, DiscardComponent)?.cards.length} />	
+			<Damage actorObsverbaleSystem={gameLoop?.getSystem(System.ActorObservable)} actor={enemy} />
+			<Healthbar actorObservableSystem={gameLoop?.getSystem(System.ActorObservable)} actor={enemy} />
+			<Deck actorObservableSystem={gameLoop?.getSystem(System.ActorObservable)} actor={enemy}/>
+			<Discard actorObservableSystem={gameLoop?.getSystem(System.ActorObservable)} actor={enemy} />	
 		</div>
 		<div class="flex flex-col items-start space-y-5">
 			<Hand>
