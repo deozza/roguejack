@@ -9,6 +9,7 @@ import DiscardComponent from '$lib/ecs/components/ActorComponents/DiscardCompone
 import Card from '$lib/modeles/Card';
 import DamageComponent from '$lib/ecs/components/ActorComponents/DamageComponent';
 import HealthSystem from '../HealthSystem/HealthSystem';
+import EnemyComponent from '$lib/ecs/components/ActorComponents/EnemyComponent';
 
 
 function createGameLoop(cards: Card[] = []): GameLoop {
@@ -411,5 +412,32 @@ describe('ActorObservableSystem hasActorBeenDamaged', () => {
         gameLoop.update();
 
         expect(actorObservableSystem.hasActorBeenDamaged(entity)).toBe(false);
+    });
+});
+
+describe('ActorObservableSystem isEnemy', () => {
+    it('returns false if component is not found', () => {
+        const gameLoop: GameLoop = createGameLoop();
+        const newEntity: Entity = gameLoop.addEntity();
+
+        const actorObservableSystem: ActorObservableSystem = new ActorObservableSystem();
+
+        gameLoop.addSystem(actorObservableSystem);
+
+        expect(actorObservableSystem.isEnemy(newEntity)).toBe(false);
+    });
+
+    it('returns true if component is found', () => {
+        const gameLoop: GameLoop = createGameLoop();
+        const newEntity: Entity = gameLoop.addEntity();
+
+        const actorObservableSystem: ActorObservableSystem = new ActorObservableSystem();
+
+        gameLoop.addSystem(actorObservableSystem);
+
+        const enemyComponent: EnemyComponent = new EnemyComponent('base', 1, 1);
+        gameLoop.addComponent(newEntity, enemyComponent);
+
+        expect(actorObservableSystem.isEnemy(newEntity)).toBe(true);
     });
 });

@@ -1,6 +1,7 @@
 import DamageComponent from "$lib/ecs/components/ActorComponents/DamageComponent";
 import DeckComponent from "$lib/ecs/components/ActorComponents/DeckComponent";
 import DiscardComponent from "$lib/ecs/components/ActorComponents/DiscardComponent";
+import EnemyComponent from "$lib/ecs/components/ActorComponents/EnemyComponent";
 import HandComponent from "$lib/ecs/components/ActorComponents/HandComponent";
 import HealthComponent from "$lib/ecs/components/ActorComponents/HealthComponent";
 import type { Entity } from "$lib/ecs/entities";
@@ -104,6 +105,11 @@ export default class ActorObservableSystem extends AbstractSystem {
         } catch(e) {
             return false;
         }
+    }
+
+    public isEnemy(actor: Entity): boolean {
+        return this.getComponentFromEntity(actor, EnemyComponent) !== undefined;
+
     }
 
 }

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import DrawCommand from "$lib/commands/draw/DrawCommand";
 	import AttackComponent from "$lib/ecs/components/ActorComponents/AttackComponent";
 	import DamageComponent from "$lib/ecs/components/ActorComponents/DamageComponent";
 	import DeckComponent from "$lib/ecs/components/ActorComponents/DeckComponent";
@@ -77,10 +78,6 @@
 		gameLoop.update();
 		gameLoop = gameLoop;
 	}, 16);
-
-	function drawCard() {
-		gameLoop.addComponent(player, new DrawFlag());
-	}
 
 	async function fight() {
 		gameLoop.removeComponent(player, TurnFlag);
@@ -162,19 +159,14 @@
 			<Damage actorObsverbaleSystem={gameLoop?.getSystem(System.ActorObservable)} actor={player} />
 
 			<Healthbar actorObservableSystem={gameLoop?.getSystem(System.ActorObservable)} actor={player} />
-			<button on:click={() => drawCard()}>
-				<Deck actorObservableSystem={gameLoop?.getSystem(System.ActorObservable)} actor={player} on:click={() => drawCard()}/>
+			<button on:click={() => new DrawCommand(gameLoop).execute(player)}>
+				<Deck actorObservableSystem={gameLoop?.getSystem(System.ActorObservable)} actor={player}/>
 			</button>
 			<Discard actorObservableSystem={gameLoop?.getSystem(System.ActorObservable)} actor={player} />	
 		</div>
 
 		<div class="flex flex-col items-start space-y-5">
-			<Hand>
-				{#each gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, HandComponent)?.cards as card}
-					<PlayingCard {card} />
-				{/each}
-			</Hand>
-
+			<Hand actorObservableSystem={gameLoop?.getSystem(System.ActorObservable)} actor={player} />
 			<p>Power : {gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(player, AttackComponent)?.attack}</p>
 		</div>
 		
@@ -194,12 +186,7 @@
 			<Discard actorObservableSystem={gameLoop?.getSystem(System.ActorObservable)} actor={enemy} />	
 		</div>
 		<div class="flex flex-col items-start space-y-5">
-			<Hand>
-				{#each gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, HandComponent)?.cards as card}
-					<PlayingCard {card} isEnemy={gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, EnemyComponent) !== undefined} />
-				{/each}
-			</Hand>
-
+			<Hand actorObservableSystem={gameLoop?.getSystem(System.ActorObservable)} actor={enemy} />
 			<p>{gameLoop.getSystem(System.ActorObservable)?.getComponentFromEntity(enemy, AttackComponent)?.attack}</p>
 		</div>
 
