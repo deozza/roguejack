@@ -6,9 +6,9 @@ import DamageComponent from '$lib/ecs/components/ActorComponents/DamageComponent
 import HealthComponent from '$lib/ecs/components/ActorComponents/HealthComponent';
 import HealComponent from '$lib/ecs/components/ActorComponents/HealComponent';
 
-describe('HealthSystem tests', () => {
-	it('add system to GameLoop', () => {
-		const gameLoop: GameLoop = new GameLoop();
+describe('HealthSystem system', () => {
+    it('add system to GameLoop', () => {
+        const gameLoop: GameLoop = new GameLoop();
         const healthSystem: HealthSystem = new HealthSystem();
 
         gameLoop.addSystem(healthSystem);
@@ -22,9 +22,11 @@ describe('HealthSystem tests', () => {
         gameLoop.addComponent(entity1, healthComponent);
 
         expect(gameLoop.systems.get(healthSystem)?.size).toBe(1);
-	});
+    });
+});
 
-	it('update health according to damageComponent', () => {
+describe('HealthSystem update inflictDamage', () => {
+    it('update health according to damageComponent', () => {
         const gameLoop: GameLoop = new GameLoop();
         const healthSystem: HealthSystem = new HealthSystem();
 
@@ -40,14 +42,15 @@ describe('HealthSystem tests', () => {
 
         expect((healthSystem.getComponentFromEntity(entity1, HealthComponent) as HealthComponent).currentHealth).toBe(10);
         expect(healthSystem.getComponentFromEntity(entity1, DamageComponent)).not.toBeUndefined();
+        expect((healthSystem.getComponentFromEntity(entity1, DamageComponent) as DamageComponent).resolved).toBe(false);
 
         gameLoop.update();
 
         expect((healthSystem.getComponentFromEntity(entity1, HealthComponent) as HealthComponent).currentHealth).toBe(5);
-        expect(healthSystem.getComponentFromEntity(entity1, DamageComponent)).toBeUndefined();
-	});
+        expect((healthSystem.getComponentFromEntity(entity1, DamageComponent) as DamageComponent).resolved).toBe(true);
+    });
 
-	it('no over damages', () => {
+    it('no over damages', () => {
         const gameLoop: GameLoop = new GameLoop();
         const healthSystem: HealthSystem = new HealthSystem();
 
@@ -67,10 +70,9 @@ describe('HealthSystem tests', () => {
         gameLoop.update();
 
         expect((healthSystem.getComponentFromEntity(entity1, HealthComponent) as HealthComponent).currentHealth).toBe(0);
-        expect(healthSystem.getComponentFromEntity(entity1, DamageComponent)).toBeUndefined();
-	});
+    });
 
-	it('update health according to healComponent', () => {
+    it('removes component after 5 updates', () => {
         const gameLoop: GameLoop = new GameLoop();
         const healthSystem: HealthSystem = new HealthSystem();
 
@@ -79,7 +81,61 @@ describe('HealthSystem tests', () => {
         const entity1: Entity = gameLoop.addEntity();
 
         const healthComponent: HealthComponent = new HealthComponent(10);
-		healthComponent.currentHealth = 5;
+        gameLoop.addComponent(entity1, healthComponent);
+
+        const damageComponent: DamageComponent = new DamageComponent(5);
+        gameLoop.addComponent(entity1, damageComponent);
+
+        expect(healthSystem.getComponentFromEntity(entity1, DamageComponent)).not.toBeUndefined();
+        expect((healthSystem.getComponentFromEntity(entity1, DamageComponent) as DamageComponent).resolved).toBe(false);
+
+        gameLoop.update();
+
+        expect(healthSystem.getComponentFromEntity(entity1, DamageComponent)).not.toBeUndefined();
+        expect((healthSystem.getComponentFromEntity(entity1, DamageComponent) as DamageComponent).resolved).toBe(true);
+
+        gameLoop.update();
+
+        expect(healthSystem.getComponentFromEntity(entity1, DamageComponent)).not.toBeUndefined();
+        expect((healthSystem.getComponentFromEntity(entity1, DamageComponent) as DamageComponent).resolved).toBe(true);
+
+        gameLoop.update();
+
+        expect(healthSystem.getComponentFromEntity(entity1, DamageComponent)).not.toBeUndefined();
+        expect((healthSystem.getComponentFromEntity(entity1, DamageComponent) as DamageComponent).resolved).toBe(true);
+
+        gameLoop.update();
+
+        expect(healthSystem.getComponentFromEntity(entity1, DamageComponent)).not.toBeUndefined();
+        expect((healthSystem.getComponentFromEntity(entity1, DamageComponent) as DamageComponent).resolved).toBe(true);
+
+        gameLoop.update();
+
+        expect(healthSystem.getComponentFromEntity(entity1, DamageComponent)).not.toBeUndefined();
+        expect((healthSystem.getComponentFromEntity(entity1, DamageComponent) as DamageComponent).resolved).toBe(true);
+
+        gameLoop.update();
+
+        expect(healthSystem.getComponentFromEntity(entity1, DamageComponent)).not.toBeUndefined();
+        expect((healthSystem.getComponentFromEntity(entity1, DamageComponent) as DamageComponent).resolved).toBe(true);
+
+        gameLoop.update();
+
+        expect(healthSystem.getComponentFromEntity(entity1, DamageComponent)).toBeUndefined();
+    });
+});
+
+describe('HealthSystem update heal', () => {
+    it('update health according to healComponent', () => {
+        const gameLoop: GameLoop = new GameLoop();
+        const healthSystem: HealthSystem = new HealthSystem();
+
+        gameLoop.addSystem(healthSystem);
+
+        const entity1: Entity = gameLoop.addEntity();
+
+        const healthComponent: HealthComponent = new HealthComponent(10);
+        healthComponent.currentHealth = 5;
         gameLoop.addComponent(entity1, healthComponent);
 
         const healComponent: HealComponent = new HealComponent(3);
@@ -91,10 +147,9 @@ describe('HealthSystem tests', () => {
         gameLoop.update();
 
         expect((healthSystem.getComponentFromEntity(entity1, HealthComponent) as HealthComponent).currentHealth).toBe(8);
-        expect(healthSystem.getComponentFromEntity(entity1, HealComponent)).toBeUndefined();
-	});
+    });
 
-	it('no overheal', () => {
+    it('no overheal', () => {
         const gameLoop: GameLoop = new GameLoop();
         const healthSystem: HealthSystem = new HealthSystem();
 
@@ -103,7 +158,7 @@ describe('HealthSystem tests', () => {
         const entity1: Entity = gameLoop.addEntity();
 
         const healthComponent: HealthComponent = new HealthComponent(10);
-		healthComponent.currentHealth = 5;
+        healthComponent.currentHealth = 5;
         gameLoop.addComponent(entity1, healthComponent);
 
         const healComponent: HealComponent = new HealComponent(10);
@@ -115,6 +170,57 @@ describe('HealthSystem tests', () => {
         gameLoop.update();
 
         expect((healthSystem.getComponentFromEntity(entity1, HealthComponent) as HealthComponent).currentHealth).toBe(10);
+    });
+
+    it('removes component after 5 updates', () => {
+        const gameLoop: GameLoop = new GameLoop();
+        const healthSystem: HealthSystem = new HealthSystem();
+
+        gameLoop.addSystem(healthSystem);
+
+        const entity1: Entity = gameLoop.addEntity();
+
+        const healthComponent: HealthComponent = new HealthComponent(10);
+        gameLoop.addComponent(entity1, healthComponent);
+
+        const healComponent: HealComponent = new HealComponent(10);
+        gameLoop.addComponent(entity1, healComponent);
+
+        expect(healthSystem.getComponentFromEntity(entity1, HealComponent)).not.toBeUndefined();
+        expect((healthSystem.getComponentFromEntity(entity1, HealComponent) as HealComponent).resolved).toBe(false);
+
+        gameLoop.update();
+
+        expect(healthSystem.getComponentFromEntity(entity1, HealComponent)).not.toBeUndefined();
+        expect((healthSystem.getComponentFromEntity(entity1, HealComponent) as HealComponent).resolved).toBe(true);
+
+        gameLoop.update();
+
+        expect(healthSystem.getComponentFromEntity(entity1, HealComponent)).not.toBeUndefined();
+        expect((healthSystem.getComponentFromEntity(entity1, HealComponent) as HealComponent).resolved).toBe(true);
+
+        gameLoop.update();
+
+        expect(healthSystem.getComponentFromEntity(entity1, HealComponent)).not.toBeUndefined();
+        expect((healthSystem.getComponentFromEntity(entity1, HealComponent) as HealComponent).resolved).toBe(true);
+
+        gameLoop.update();
+
+        expect(healthSystem.getComponentFromEntity(entity1, HealComponent)).not.toBeUndefined();
+        expect((healthSystem.getComponentFromEntity(entity1, HealComponent) as HealComponent).resolved).toBe(true);
+
+        gameLoop.update();
+
+        expect(healthSystem.getComponentFromEntity(entity1, HealComponent)).not.toBeUndefined();
+        expect((healthSystem.getComponentFromEntity(entity1, HealComponent) as HealComponent).resolved).toBe(true);
+
+        gameLoop.update();
+
+        expect(healthSystem.getComponentFromEntity(entity1, HealComponent)).not.toBeUndefined();
+        expect((healthSystem.getComponentFromEntity(entity1, HealComponent) as HealComponent).resolved).toBe(true);
+
+        gameLoop.update();
+
         expect(healthSystem.getComponentFromEntity(entity1, HealComponent)).toBeUndefined();
-	});
+    });
 });

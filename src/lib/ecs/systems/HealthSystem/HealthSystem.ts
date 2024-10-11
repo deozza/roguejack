@@ -6,6 +6,9 @@ import AbstractSystem from "../AbstractSystem";
 
 export default class HealthSystem extends AbstractSystem {
     public requiredComponents: Set<Function> = new Set([HealthComponent]);
+    private deltaDamage: number = 0;
+    private deltaHeal: number = 0;
+
     constructor() {
         super();
     }
@@ -31,6 +34,14 @@ export default class HealthSystem extends AbstractSystem {
         }
 
         if(damageComponent.resolved === true) {
+            if(this.deltaDamage < 5) {
+
+                this.deltaDamage += 1;
+                return;
+            }
+
+            this.gameLoop.removeComponent(entity, DamageComponent);
+            this.deltaDamage = 0;
             return;
         }
 
@@ -46,7 +57,18 @@ export default class HealthSystem extends AbstractSystem {
             return;
         }
 
+        if(healComponent.resolved === true) {
+            if(this.deltaHeal < 5) {
+                this.deltaHeal += 1;
+                return;
+            }
+
+            this.gameLoop.removeComponent(entity, HealComponent);
+            this.deltaHeal = 0;
+            return;
+        }
+
         healthComponent.currentHealth = Math.min(healthComponent.currentHealth + healComponent.healPoints, healthComponent.maxHealth);
-        this.gameLoop.removeComponent(entity, HealComponent);
+        healComponent.resolved = true;
     }
 }
